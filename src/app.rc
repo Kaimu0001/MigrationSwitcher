@@ -1,0 +1,36 @@
+// =============================================================================
+// app.rc
+// ビジュアルスタイル（Common Controls v6）適用のためのマニフェスト埋め込み
+// =============================================================================
+#include <windows.h>
+#include "resource.h"
+
+IDM_APP_MANIFEST 24 "app.manifest"
+
+VS_VERSION_INFO VERSIONINFO
+FILEVERSION     1,0,0,0
+PRODUCTVERSION  1,0,0,0
+FILEFLAGSMASK   0x3fL
+FILEFLAGS       0x0L
+FILEOS          VOS_NT_WINDOWS32
+FILETYPE        VFT_APP
+FILESUBTYPE     VFT2_UNKNOWN
+BEGIN
+    BLOCK "StringFileInfo"
+    BEGIN
+        BLOCK "041104b0"
+        BEGIN
+            VALUE "CompanyName",      "Migration Tools"
+            VALUE "FileDescription",  "CopyMigration Switcher - Migration Switch Tool"
+            VALUE "FileVersion",      "1.0.0.0"
+            VALUE "InternalName",     "MigrationSwitcher"
+            VALUE "OriginalFilename", "MigrationSwitcher.exe"
+            VALUE "ProductName",      "CopyMigration Switcher"
+            VALUE "ProductVersion",   "1.0.0.0"
+        END
+    END
+    BLOCK "VarFileInfo"
+    BEGIN
+        VALUE "Translation", 0x0411, 1200
+    END
+END

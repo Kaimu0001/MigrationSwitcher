@@ -1,0 +1,22 @@
+# ビルド生成物
+build/
+*.o
+*.obj
+*.exe
+*.pdb
+*.ilk
+
+# 実行時生成物（config.ini には API キーが平文で入るため必ず除外）
+config.ini
+*.log
+reports/
+backups/
+*.bak
+*.undobak
+
+# エディタ / OS
+.vs/
+.vscode/
+*.user
+Thumbs.db
+desktop.ini
