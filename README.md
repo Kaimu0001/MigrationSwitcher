@@ -7,6 +7,10 @@
 
 ---
 
+## 0. ソースファイルの文字コード
+
+ソースファイルは **UTF-8（BOM 付き）/ CRLF** で保存されています。ビルド時に実行文字セットを CP932 に指定しているため（MinGW: `-fexec-charset=CP932` / MSVC: `/execution-charset:.932`）、生成される exe 内の ANSI 文字列は従来と同じです。
+
 ## 1. ビルド方法
 
 ### 1.1 MinGW-w64 / MSYS2（推奨）
@@ -29,7 +33,7 @@ sudo apt-get install -y mingw-w64
 make CROSS=x86_64-w64-mingw32-
 ```
 
-ソースは Shift_JIS のため、`Makefile` は `-finput-charset=CP932 -fexec-charset=CP932` を指定しています。
+ソースは UTF-8 のため、`Makefile` は `-finput-charset=UTF-8 -fexec-charset=CP932` を指定しています。
 
 ### 1.2 CMake（MSVC / MinGW 共通）
 
@@ -38,7 +42,7 @@ make CROSS=x86_64-w64-mingw32-
 | 設定箇所 | 設定値 |
 |---|---|
 | C/C++ → プリプロセッサ → プリプロセッサの定義 | `UNICODE;_UNICODE` |
-| C/C++ → コマンド ライン → 追加オプション | `/source-charset:.932 /execution-charset:.932` |
+| C/C++ → コマンド ライン → 追加オプション | `/source-charset:utf-8 /execution-charset:.932` |
 | リンカー → 入力 → 追加の依存ファイル | `comctl32.lib;comdlg32.lib;shlwapi.lib;ole32.lib;shell32.lib;gdi32.lib;user32.lib;advapi32.lib;winhttp.lib` |
 | リンカー → システム → サブシステム | `Windows (/SUBSYSTEM:WINDOWS)` |
 | リンカー → マニフェスト ファイル → マニフェストの生成 | `いいえ (/MANIFEST:NO)` |
@@ -58,8 +62,8 @@ make CROSS=x86_64-w64-mingw32-
 
 
 
-> **ソースファイルの文字コードは Shift_JIS (CP932)、改行は CRLF** です。
-> `CMakeLists.txt` は MSVC に `/source-charset:.932 /execution-charset:.932` を指定しているため、
+> **ソースファイルは UTF-8（BOM 付き）、改行は CRLF** です。バッチファイル (`*.bat`) のみ cmd.exe の都合で CP932 で、`.gitattributes` の `working-tree-encoding` によりリポジトリには UTF-8 で格納されます。
+> `CMakeLists.txt` は MSVC に `/source-charset:utf-8 /execution-charset:.932` を指定しているため、
 > そのまま `cmake` でビルドできます（VS2022 で手動プロジェクトを作る場合も同じ指定が必要です）。
 > リンクには `comdlg32`（ファイルダイアログ）と `winhttp`（AI 連携）が必要です。
 
@@ -99,7 +103,7 @@ build_test\Release\ms_test.exe
 | 設定箇所 | 設定値 |
 |---|---|
 | C/C++ → プリプロセッサ → プリプロセッサの定義 | `UNICODE;_UNICODE;MS_BUILD_CONSOLE_TESTS` |
-| C/C++ → コマンド ライン → 追加オプション | `/source-charset:.932 /execution-charset:.932` |
+| C/C++ → コマンド ライン → 追加オプション | `/source-charset:utf-8 /execution-charset:.932` |
 | C/C++ → 全般 → 追加のインクルード ディレクトリ | `..\src` |
 | リンカー → 入力 → 追加の依存ファイル | `comctl32.lib;comdlg32.lib;shlwapi.lib;ole32.lib;shell32.lib;gdi32.lib;user32.lib;advapi32.lib;winhttp.lib` |
 | リンカー → システム → サブシステム | `コンソール (/SUBSYSTEM:CONSOLE)` |

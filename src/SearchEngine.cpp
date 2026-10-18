@@ -1,4 +1,4 @@
-// =============================================================================
+ï»¿// =============================================================================
 // SearchEngine.cpp
 // =============================================================================
 #include "SearchEngine.h"
@@ -56,7 +56,7 @@ namespace {
 struct CondDirective {
     int          line = 0;
     std::wstring kind;   // if / ifdef / ifndef / else / elif / endif
-    std::wstring rest;   // w—ß‚ÌŒã‚ëiƒ}ƒNƒ–¼‚â®j
+    std::wstring rest;   // æŒ‡ä»¤ã®å¾Œã‚ï¼ˆãƒã‚¯ãƒ­åã‚„å¼ï¼‰
 };
 
 bool IsIfKind(const std::wstring& k)
@@ -74,7 +74,7 @@ bool IsIdentCh(wchar_t c)
     return false;
 }
 
-// "#ifdef NAME" ‚Ì‚æ‚¤‚Èw—ßs‚ğ kind / rest ‚É•ª‰ğ‚·‚é
+// "#ifdef NAME" ã®ã‚ˆã†ãªæŒ‡ä»¤è¡Œã‚’ kind / rest ã«åˆ†è§£ã™ã‚‹
 bool ParseDirective(const std::wstring& raw, std::wstring& kind, std::wstring& rest)
 {
     std::wstring t = util::TrimLeft(raw);
@@ -118,9 +118,9 @@ void CollectConditionals(const std::vector<std::wstring>& lines,
     }
 }
 
-// include guardi#ifndef G / #define G c #endifj‚ğ\¬‚·‚és”Ô†‚ğW‚ß‚éB
-// include guard ‚Íƒtƒ@ƒCƒ‹‘S‘Ì‚ğ•ï‚Ş‚¾‚¯‚ÅˆÚsƒXƒCƒbƒ`‚Å‚Í‚È‚¢‚½‚ßA
-// uŠù‘¶ƒRƒ“ƒpƒCƒ‹ƒXƒCƒbƒ`‹ß–Tv‚ÌŒx‘ÎÛ‚©‚çœŠO‚·‚éB
+// include guardï¼ˆ#ifndef G / #define G â€¦ #endifï¼‰ã‚’æ§‹æˆã™ã‚‹è¡Œç•ªå·ã‚’é›†ã‚ã‚‹ã€‚
+// include guard ã¯ãƒ•ã‚¡ã‚¤ãƒ«å…¨ä½“ã‚’åŒ…ã‚€ã ã‘ã§ç§»è¡Œã‚¹ã‚¤ãƒƒãƒã§ã¯ãªã„ãŸã‚ã€
+// ã€Œæ—¢å­˜ã‚³ãƒ³ãƒ‘ã‚¤ãƒ«ã‚¹ã‚¤ãƒƒãƒè¿‘å‚ã€ã®è­¦å‘Šå¯¾è±¡ã‹ã‚‰é™¤å¤–ã™ã‚‹ã€‚
 void CollectIncludeGuardLines(const std::vector<std::wstring>& lines,
                               const std::vector<CondDirective>& conds,
                               std::set<int>& out)
@@ -135,14 +135,14 @@ void CollectIncludeGuardLines(const std::vector<std::wstring>& lines,
     } else if (first.kind == L"if") {
         size_t q = first.rest.find(L"defined");
         if (q == std::wstring::npos) return;
-        if (q == 0 || first.rest[q - 1] != L'!') return;   // !defined(NAME) ‚Ì‚İ
+        if (q == 0 || first.rest[q - 1] != L'!') return;   // !defined(NAME) ã®ã¿
         std::wstring after = util::Trim(first.rest.substr(q + 7));
         if (!after.empty() && after[0] == L'(') after = after.substr(1);
         guard = LeadingIdentifier(after);
     }
     if (guard.empty()) return;
 
-    // #ifndef ‚Ì’¼ŒãiŸ‚ÌğŒw—ß‚æ‚è‘Oj‚É #define GUARD ‚ª‚ ‚é‚±‚Æ
+    // #ifndef ã®ç›´å¾Œï¼ˆæ¬¡ã®æ¡ä»¶æŒ‡ä»¤ã‚ˆã‚Šå‰ï¼‰ã« #define GUARD ãŒã‚ã‚‹ã“ã¨
     int define_line = 0;
     for (int ln = first.line + 1; ln <= (int)lines.size(); ++ln) {
         std::wstring kind, rest;
@@ -156,7 +156,7 @@ void CollectIncludeGuardLines(const std::vector<std::wstring>& lines,
     }
     if (define_line == 0) return;
 
-    // Å‰‚Ì #ifndef ‚É‘Î‰‚·‚é #endif ‚ğ‹‚ßA‚»‚ê‚ªÅŒã‚ÌğŒw—ß‚Å‚ ‚é‚±‚Æ
+    // æœ€åˆã® #ifndef ã«å¯¾å¿œã™ã‚‹ #endif ã‚’æ±‚ã‚ã€ãã‚ŒãŒæœ€å¾Œã®æ¡ä»¶æŒ‡ä»¤ã§ã‚ã‚‹ã“ã¨
     int depth = 0, end_line = 0;
     for (size_t i = 0; i < conds.size(); ++i) {
         if (IsIfKind(conds[i].kind)) ++depth;
@@ -176,10 +176,10 @@ void CollectIncludeGuardLines(const std::vector<std::wstring>& lines,
 std::wstring MakeDetail(int line, const std::wstring& kind, const std::wstring& rest,
                         bool inside)
 {
-    std::wstring d = std::to_wstring(line) + L" s–Ú‚Ì #" + kind;
+    std::wstring d = std::to_wstring(line) + L" è¡Œç›®ã® #" + kind;
     if (!rest.empty()) d += L" " + rest;
-    if (inside) d += L" ‚Ì“à‘¤‚Å‚·B";
-    else        d += L" ‚ª‘ÎÛs‚Ì‹ß–T‚É‚ ‚è‚Ü‚·B";
+    if (inside) d += L" ã®å†…å´ã§ã™ã€‚";
+    else        d += L" ãŒå¯¾è±¡è¡Œã®è¿‘å‚ã«ã‚ã‚Šã¾ã™ã€‚";
     return d;
 }
 
@@ -204,7 +204,7 @@ bool SearchEngine::DetectNearbyPreprocessor(const std::wstring& text,
     std::set<int> guard_lines;
     CollectIncludeGuardLines(lines, conds, guard_lines);
 
-    // (1) ‘ÎÛs‚ªŠù‘¶‚ÌğŒƒuƒƒbƒN‚Ì“à‘¤‚É‚ ‚é‚©i“ñdƒlƒXƒg‚ÌŠëŒ¯‚ªÅ‚à‚‚¢j
+    // (1) å¯¾è±¡è¡ŒãŒæ—¢å­˜ã®æ¡ä»¶ãƒ–ãƒ­ãƒƒã‚¯ã®å†…å´ã«ã‚ã‚‹ã‹ï¼ˆäºŒé‡ãƒã‚¹ãƒˆã®å±é™ºãŒæœ€ã‚‚é«˜ã„ï¼‰
     int depth = 0;
     int last_if_line = 0;
     std::wstring last_if_kind, last_if_rest;
@@ -227,7 +227,7 @@ bool SearchEngine::DetectNearbyPreprocessor(const std::wstring& text,
         return true;
     }
 
-    // (2) ‹ß–Ti}scan_linesj‚ÉŠù‘¶‚ÌğŒw—ß‚ª‚ ‚é‚©iinclude guard ‚ÍœŠOj
+    // (2) è¿‘å‚ï¼ˆÂ±scan_linesï¼‰ã«æ—¢å­˜ã®æ¡ä»¶æŒ‡ä»¤ãŒã‚ã‚‹ã‹ï¼ˆinclude guard ã¯é™¤å¤–ï¼‰
     int from = start_line - scan_lines;
     if (from < 1) from = 1;
     int to = end_line + scan_lines;
@@ -293,7 +293,7 @@ std::wstring SearchEngine::ApplyReplacements(const std::wstring& text,
                                              std::vector<MatchResult>& matches,
                                              const std::wstring& replacement)
 {
-    // Œã•û‚©‚ç’uŠ·‚µ‚ÄƒIƒtƒZƒbƒg‚Ì‚¸‚ê‚ğ–h‚®
+    // å¾Œæ–¹ã‹ã‚‰ç½®æ›ã—ã¦ã‚ªãƒ•ã‚»ãƒƒãƒˆã®ãšã‚Œã‚’é˜²ã
     std::vector<MatchResult*> sorted;
     sorted.reserve(matches.size());
     for (size_t i = 0; i < matches.size(); ++i)
@@ -318,7 +318,7 @@ std::wstring SearchEngine::ApplyReplacementsEach(const std::wstring& text,
                                                  const std::vector<MatchResult>& matches,
                                                  const std::vector<std::wstring>& blocks)
 {
-    // Œã•û‚©‚ç’uŠ·‚µ‚ÄƒIƒtƒZƒbƒg‚Ì‚¸‚ê‚ğ–h‚®
+    // å¾Œæ–¹ã‹ã‚‰ç½®æ›ã—ã¦ã‚ªãƒ•ã‚»ãƒƒãƒˆã®ãšã‚Œã‚’é˜²ã
     std::vector<size_t> order;
     order.reserve(matches.size());
     for (size_t i = 0; i < matches.size(); ++i) {
@@ -349,21 +349,21 @@ std::wstring SearchEngine::IndentHintAt(const std::wstring& text, const MatchRes
     std::wstring indent;
     for (size_t i = ls; i < m.start_offset && i < text.size(); ++i) {
         if (text[i] == L' ' || text[i] == L'\t') indent += text[i];
-        else return std::wstring();     // s“ª‚©‚çˆê’v‰ÓŠ‚Ü‚Å‚É‹ó”’ˆÈŠO‚ª‚ ‚é = ƒCƒ“ƒfƒ“ƒg‚Å‚Í‚È‚¢
+        else return std::wstring();     // è¡Œé ­ã‹ã‚‰ä¸€è‡´ç®‡æ‰€ã¾ã§ã«ç©ºç™½ä»¥å¤–ãŒã‚ã‚‹ = ã‚¤ãƒ³ãƒ‡ãƒ³ãƒˆã§ã¯ãªã„
     }
     return indent;
 }
 
 
 // -----------------------------------------------------------------------------
-// —Ş—ˆê’vŒŸõ
+// é¡ä¼¼ä¸€è‡´æ¤œç´¢
 // -----------------------------------------------------------------------------
 std::wstring SearchEngine::NormalizeForSimilar(const std::wstring& s)
 {
     std::wstring out;
     out.reserve(s.size());
     size_t i = 0;
-    while (i < s.size() && (s[i] == L' ' || s[i] == L'\t')) ++i;   // æ“ª‚Ì‹ó”’‚ğœ‹
+    while (i < s.size() && (s[i] == L' ' || s[i] == L'\t')) ++i;   // å…ˆé ­ã®ç©ºç™½ã‚’é™¤å»
     for (; i < s.size(); ++i) {
         wchar_t c = s[i];
         if (c == L' ' || c == L'\t') {
@@ -405,11 +405,11 @@ int SearchEngine::SimilarityPercent(const std::wstring& a, const std::wstring& b
     return pct;
 }
 
-// ³‹K‰»•¶š—ñ‚ÆA³‹K‰»‘O‚Ì¶ƒIƒtƒZƒbƒg‚Æ‚Ì‘Î‰•\
+// æ­£è¦åŒ–æ–‡å­—åˆ—ã¨ã€æ­£è¦åŒ–å‰ã®ç”Ÿã‚ªãƒ•ã‚»ãƒƒãƒˆã¨ã®å¯¾å¿œè¡¨
 struct SimilarNorm {
     std::wstring          norm;
-    std::vector<size_t>   begin;   // norm[i] ‚É‘Î‰‚·‚é¶ƒeƒLƒXƒg‚ÌŠJnˆÊ’u
-    std::vector<size_t>   end;     // norm[i] ‚É‘Î‰‚·‚é¶ƒeƒLƒXƒg‚ÌI—¹ˆÊ’ui”r‘¼j
+    std::vector<size_t>   begin;   // norm[i] ã«å¯¾å¿œã™ã‚‹ç”Ÿãƒ†ã‚­ã‚¹ãƒˆã®é–‹å§‹ä½ç½®
+    std::vector<size_t>   end;     // norm[i] ã«å¯¾å¿œã™ã‚‹ç”Ÿãƒ†ã‚­ã‚¹ãƒˆã®çµ‚äº†ä½ç½®ï¼ˆæ’ä»–ï¼‰
 };
 
 static void NormalizeWithMap(const std::wstring& raw, SimilarNorm& out)
@@ -433,7 +433,7 @@ static void NormalizeWithMap(const std::wstring& raw, SimilarNorm& out)
             out.end.push_back(i + 1);
         }
     }
-    // ––”ö‚Ì‹ó”’‚ğœ‹ibegin/end ‚à‘µ‚¦‚éj
+    // æœ«å°¾ã®ç©ºç™½ã‚’é™¤å»ï¼ˆbegin/end ã‚‚æƒãˆã‚‹ï¼‰
     while (!out.norm.empty() && out.norm[out.norm.size() - 1] == L' ') {
         out.norm.erase(out.norm.size() - 1);
         out.begin.pop_back();
@@ -448,7 +448,7 @@ std::vector<MatchResult> SearchEngine::SearchSimilar(const std::wstring& text,
 {
     std::vector<MatchResult> results;
     if (pattern.empty() || text.empty()) return results;
-    if (pattern.find(L'\n') != std::wstring::npos) return results;   // •¡”s‚Í‘ÎÛŠO
+    if (pattern.find(L'\n') != std::wstring::npos) return results;   // è¤‡æ•°è¡Œã¯å¯¾è±¡å¤–
     if (threshold_percent < 1)   threshold_percent = 1;
     if (threshold_percent > 100) threshold_percent = 100;
 
@@ -460,12 +460,12 @@ std::vector<MatchResult> SearchEngine::SearchSimilar(const std::wstring& text,
     for (size_t li = 0; li < lines.size(); ++li) {
         const std::wstring& raw = lines[li];
         if (raw.empty()) continue;
-        if (raw.find(pattern) != std::wstring::npos) continue;   // Š®‘Sˆê’v‚Í‘ÎÛŠO
+        if (raw.find(pattern) != std::wstring::npos) continue;   // å®Œå…¨ä¸€è‡´ã¯å¯¾è±¡å¤–
 
         SimilarNorm sn;
         NormalizeWithMap(raw, sn);
         if (sn.norm.empty()) continue;
-        // ˆÀ‰¿‚È–‘OƒtƒBƒ‹ƒ^: ’·‚³‚ª—£‚ê‚·‚¬‚Ä‚¢‚és‚ÍœŠO
+        // å®‰ä¾¡ãªäº‹å‰ãƒ•ã‚£ãƒ«ã‚¿: é•·ã•ãŒé›¢ã‚Œã™ãã¦ã„ã‚‹è¡Œã¯é™¤å¤–
         double ratio = (double)sn.norm.size() / (double)np.size();
         if (ratio < 0.5 || ratio > 2.5) continue;
 
@@ -500,7 +500,7 @@ std::vector<MatchResult> SearchEngine::SearchSimilar(const std::wstring& text,
         m.selected = false;
         m.status = MatchStatus::Warning;
         wchar_t buf[160];
-        swprintf(buf, 160, L"—Ş—ˆê’viˆê’v—¦ %d%%jB•\‹L‚ªˆÙ‚È‚é‚½‚ß“à—e‚ğŠm”F‚µ‚Ä‚­‚¾‚³‚¢B", best);
+        swprintf(buf, 160, L"é¡ä¼¼ä¸€è‡´ï¼ˆä¸€è‡´ç‡ %d%%ï¼‰ã€‚è¡¨è¨˜ãŒç•°ãªã‚‹ãŸã‚å†…å®¹ã‚’ç¢ºèªã—ã¦ãã ã•ã„ã€‚", best);
         m.warning_flags.push_back(buf);
         results.push_back(m);
     }

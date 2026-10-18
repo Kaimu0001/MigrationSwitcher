@@ -1,8 +1,8 @@
-// =============================================================================
+ï»¿// =============================================================================
 // ResultExporter.h
-// Œã‘±”Å‹@”\: ŒŸõŒ‹‰Ê‚ÌƒGƒNƒXƒ|[ƒgiCSV / Markdown / JSONj
-// İŒv‘ 6.5.4uŒŸõŒ‹‰Êv‚ÌŠO•”o—ÍBCSV ‚Í Excel ‚ÅŠJ‚¯‚é‚æ‚¤
-// UTF-8 (BOM) / Shift_JIS / EUC-JP ‚ğ‘I‘ğ‚Å‚«‚éB
+// å¾Œç¶šç‰ˆæ©Ÿèƒ½: æ¤œç´¢çµæœã®ã‚¨ã‚¯ã‚¹ãƒãƒ¼ãƒˆï¼ˆCSV / Markdown / JSONï¼‰
+// è¨­è¨ˆæ›¸ 6.5.4ã€Œæ¤œç´¢çµæœã€ã®å¤–éƒ¨å‡ºåŠ›ã€‚CSV ã¯ Excel ã§é–‹ã‘ã‚‹ã‚ˆã†
+// UTF-8 (BOM) / Shift_JIS / EUC-JP ã‚’é¸æŠã§ãã‚‹ã€‚
 // =============================================================================
 #pragma once
 
@@ -21,7 +21,7 @@ enum class ExportFormat {
 
 class ResultExporter {
 public:
-    // CSV ‚ÌƒtƒB[ƒ‹ƒh‚ğƒGƒXƒP[ƒv‚·‚éi, " ‰üs ‚ğŠÜ‚Şê‡‚Í " ‚ÅˆÍ‚Şj
+    // CSV ã®ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ã‚’ã‚¨ã‚¹ã‚±ãƒ¼ãƒ—ã™ã‚‹ï¼ˆ, " æ”¹è¡Œ ã‚’å«ã‚€å ´åˆã¯ " ã§å›²ã‚€ï¼‰
     static std::wstring CsvEscape(const std::wstring& s);
     static const wchar_t* FormatName(ExportFormat f);
     static const wchar_t* ExtensionOf(ExportFormat f);
@@ -34,7 +34,7 @@ public:
                                   const std::wstring& operation_id);
 
     // encoding_mode: auto / utf8 / utf8bom / sjis / eucjp
-    //   CSV ‚Í Excel Œü‚¯‚É UTF-8 BOM ‚ğŠù’è‚Æ‚·‚éB
+    //   CSV ã¯ Excel å‘ã‘ã« UTF-8 BOM ã‚’æ—¢å®šã¨ã™ã‚‹ã€‚
     static bool Export(const std::wstring& path,
                        const std::vector<MatchResult>& matches,
                        const std::wstring& operation_id,

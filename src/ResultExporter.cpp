@@ -1,4 +1,4 @@
-// =============================================================================
+ï»¿// =============================================================================
 // ResultExporter.cpp
 // =============================================================================
 #include "ResultExporter.h"
@@ -17,7 +17,7 @@ const wchar_t* ResultExporter::FormatName(ExportFormat f)
     case ExportFormat::Csv:      return L"CSV";
     case ExportFormat::Markdown: return L"Markdown";
     case ExportFormat::Json:     return L"JSON";
-    default:                     return L"(•s–¾)";
+    default:                     return L"(ä¸æ˜)";
     }
 }
 
@@ -54,21 +54,21 @@ std::wstring ResultExporter::CsvEscape(const std::wstring& s)
 static std::wstring MatchTypeName(const MatchResult& m)
 {
     switch (m.match_type) {
-    case MatchType::Exact:      return L"Š®‘Sˆê’v";
-    case MatchType::Normalized: return L"³‹K‰»ˆê’v";
-    case MatchType::Similar:    return L"—Ş—ˆê’v";
-    default:                    return L"•s–¾";
+    case MatchType::Exact:      return L"å®Œå…¨ä¸€è‡´";
+    case MatchType::Normalized: return L"æ­£è¦åŒ–ä¸€è‡´";
+    case MatchType::Similar:    return L"é¡ä¼¼ä¸€è‡´";
+    default:                    return L"ä¸æ˜";
     }
 }
 
 static std::wstring MatchStatusName(const MatchResult& m)
 {
     switch (m.status) {
-    case MatchStatus::Target:   return L"‘ÎÛ";
-    case MatchStatus::Excluded: return L"œŠO";
-    case MatchStatus::Warning:  return L"Œx";
-    case MatchStatus::Error:    return L"ƒGƒ‰[";
-    default:                    return L"•s–¾";
+    case MatchStatus::Target:   return L"å¯¾è±¡";
+    case MatchStatus::Excluded: return L"é™¤å¤–";
+    case MatchStatus::Warning:  return L"è­¦å‘Š";
+    case MatchStatus::Error:    return L"ã‚¨ãƒ©ãƒ¼";
+    default:                    return L"ä¸æ˜";
     }
 }
 
@@ -76,7 +76,7 @@ std::wstring ResultExporter::BuildCsv(const std::vector<MatchResult>& matches,
                                       const std::wstring& operation_id)
 {
     std::wstring out;
-    out += L"No,‘I‘ğ,ƒtƒ@ƒCƒ‹–¼,ƒtƒ‹ƒpƒX,s”Ô†,—ñ”Ô†,ˆê’ví•Ê,ˆê’v—¦(%),ó‘Ô,ˆê’v•¶š—ñ,Œx\n";
+    out += L"No,é¸æŠ,ãƒ•ã‚¡ã‚¤ãƒ«å,ãƒ•ãƒ«ãƒ‘ã‚¹,è¡Œç•ªå·,åˆ—ç•ªå·,ä¸€è‡´ç¨®åˆ¥,ä¸€è‡´ç‡(%),çŠ¶æ…‹,ä¸€è‡´æ–‡å­—åˆ—,è­¦å‘Š\n";
     for (size_t i = 0; i < matches.size(); ++i) {
         const MatchResult& m = matches[i];
         std::wstring warns;
@@ -85,7 +85,7 @@ std::wstring ResultExporter::BuildCsv(const std::vector<MatchResult>& matches,
             warns += m.warning_flags[k];
         }
         out += std::to_wstring(m.match_id) + L",";
-        out += std::wstring(m.selected ? L"›" : L"") + L",";
+        out += std::wstring(m.selected ? L"â—‹" : L"") + L",";
         out += CsvEscape(util::GetFileNameOf(m.file_path)) + L",";
         out += CsvEscape(m.file_path) + L",";
         out += std::to_wstring(m.start_line) + L",";
@@ -104,10 +104,10 @@ std::wstring ResultExporter::BuildMarkdown(const std::vector<MatchResult>& match
                                            const std::wstring& operation_id)
 {
     std::wstring md;
-    md += L"# ŒŸõŒ‹‰Ê\n\n";
-    md += L"- ‘€ì ID: " + operation_id + L"\n";
-    md += L"- Œ”: " + std::to_wstring((int)matches.size()) + L" Œ\n\n";
-    md += L"| No | ‘I‘ğ | ƒtƒ@ƒCƒ‹–¼ | s | —ñ | ˆê’ví•Ê | ˆê’v—¦ | ó‘Ô | ˆê’v•¶š—ñ |\n";
+    md += L"# æ¤œç´¢çµæœ\n\n";
+    md += L"- æ“ä½œ ID: " + operation_id + L"\n";
+    md += L"- ä»¶æ•°: " + std::to_wstring((int)matches.size()) + L" ä»¶\n\n";
+    md += L"| No | é¸æŠ | ãƒ•ã‚¡ã‚¤ãƒ«å | è¡Œ | åˆ— | ä¸€è‡´ç¨®åˆ¥ | ä¸€è‡´ç‡ | çŠ¶æ…‹ | ä¸€è‡´æ–‡å­—åˆ— |\n";
     md += L"|---:|:---:|---|---:|---:|---|---:|---|---|\n";
     for (size_t i = 0; i < matches.size(); ++i) {
         const MatchResult& m = matches[i];
@@ -119,7 +119,7 @@ std::wstring ResultExporter::BuildMarkdown(const std::vector<MatchResult>& match
             else cell += c;
         }
         md += L"| " + std::to_wstring(m.match_id) +
-              L" | " + (m.selected ? L"›" : L"") +
+              L" | " + (m.selected ? L"â—‹" : L"") +
               L" | " + util::GetFileNameOf(m.file_path) +
               L" | " + std::to_wstring(m.start_line) +
               L" | " + std::to_wstring(m.start_column) +
@@ -186,7 +186,7 @@ bool ResultExporter::Export(const std::wstring& path,
     out_error.clear();
     std::wstring dir = util::GetDirectoryOf(path);
     if (!dir.empty() && !util::EnsureDirectory(dir)) {
-        out_error = L"o—ÍæƒtƒHƒ‹ƒ_‚ğì¬‚Å‚«‚Ü‚¹‚ñ: " + dir;
+        out_error = L"å‡ºåŠ›å…ˆãƒ•ã‚©ãƒ«ãƒ€ã‚’ä½œæˆã§ãã¾ã›ã‚“: " + dir;
         return false;
     }
 
@@ -198,7 +198,7 @@ bool ResultExporter::Export(const std::wstring& path,
     default:                     text = BuildCsv(matches, operation_id); break;
     }
 
-    // JSON ‚Íd—lã BOM ‚ğ•t‚¯‚È‚¢BCSV ‚Í Excel Œü‚¯‚É UTF-8 BOM ‚ğŠù’è‚Æ‚·‚éB
+    // JSON ã¯ä»•æ§˜ä¸Š BOM ã‚’ä»˜ã‘ãªã„ã€‚CSV ã¯ Excel å‘ã‘ã« UTF-8 BOM ã‚’æ—¢å®šã¨ã™ã‚‹ã€‚
     std::wstring mode = util::ToUpper(encoding_mode);
     TextEncoding enc = TextEncoding::UTF8BOM;
     bool with_bom = true;
@@ -215,7 +215,7 @@ bool ResultExporter::Export(const std::wstring& path,
     }
 
     if (!FileManager::WriteTextAtomic(path, text, enc, with_bom, NewlineKind::CRLF, out_error)) {
-        if (out_error.empty()) out_error = L"ƒtƒ@ƒCƒ‹‚ğ‘‚«‚ß‚Ü‚¹‚ñ: " + path;
+        if (out_error.empty()) out_error = L"ãƒ•ã‚¡ã‚¤ãƒ«ã‚’æ›¸ãè¾¼ã‚ã¾ã›ã‚“: " + path;
         return false;
     }
     return true;

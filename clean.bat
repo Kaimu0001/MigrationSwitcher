@@ -1,11 +1,11 @@
 @echo off
 rem ===========================================================================
-rem  Migration Switcher - ¶¬•¨‚Ìíœ
+rem  Migration Switcher - ç”Ÿæˆç‰©ã®å‰Šé™¤
 rem
-rem    clean.bat          build ƒtƒHƒ‹ƒ_‚ğíœiƒrƒ‹ƒh¶¬•¨‚ÆƒeƒXƒg¶¬•¨j
-rem    clean.bat all      config.ini / reports / backups / *.log ‚àíœ
+rem    clean.bat          build ãƒ•ã‚©ãƒ«ãƒ€ã‚’å‰Šé™¤ï¼ˆãƒ“ãƒ«ãƒ‰ç”Ÿæˆç‰©ã¨ãƒ†ã‚¹ãƒˆç”Ÿæˆç‰©ï¼‰
+rem    clean.bat all      config.ini / reports / backups / *.log ã‚‚å‰Šé™¤
 rem
-rem  ƒ\[ƒX (src\ / test\ / docs\) ‚Ííœ‚µ‚Ü‚¹‚ñB
+rem  ã‚½ãƒ¼ã‚¹ (src\ / test\ / docs\) ã¯å‰Šé™¤ã—ã¾ã›ã‚“ã€‚
 rem ===========================================================================
 setlocal
 chcp 932 >nul
@@ -13,28 +13,28 @@ set "ROOT=%~dp0"
 if "%ROOT:~-1%"=="\" set "ROOT=%ROOT:~0,-1%"
 
 echo ============================================================
-echo  Migration Switcher - ¶¬•¨‚Ìíœ
+echo  Migration Switcher - ç”Ÿæˆç‰©ã®å‰Šé™¤
 echo ============================================================
-echo  ƒ‹[ƒg: %ROOT%
+echo  ãƒ«ãƒ¼ãƒˆ: %ROOT%
 
 if exist "%ROOT%\build" (
-  echo  - build\ ‚ğíœ‚µ‚Ä‚¢‚Ü‚·
+  echo  - build\ ã‚’å‰Šé™¤ã—ã¦ã„ã¾ã™
   rmdir /s /q "%ROOT%\build"
 ) else (
-  echo  - build\ ‚Í‘¶İ‚µ‚Ü‚¹‚ñ
+  echo  - build\ ã¯å­˜åœ¨ã—ã¾ã›ã‚“
 )
 
 if /i "%~1"=="all" (
   if exist "%ROOT%\config.ini" (
-    echo  - config.ini ‚ğíœ‚µ‚Ä‚¢‚Ü‚·iAPI ƒL[‚ªŠÜ‚Ü‚ê‚Ü‚·j
+    echo  - config.ini ã‚’å‰Šé™¤ã—ã¦ã„ã¾ã™ï¼ˆAPI ã‚­ãƒ¼ãŒå«ã¾ã‚Œã¾ã™ï¼‰
     del /q "%ROOT%\config.ini" >nul 2>nul
   )
   if exist "%ROOT%\reports" (
-    echo  - reports\ ‚ğíœ‚µ‚Ä‚¢‚Ü‚·
+    echo  - reports\ ã‚’å‰Šé™¤ã—ã¦ã„ã¾ã™
     rmdir /s /q "%ROOT%\reports"
   )
   if exist "%ROOT%\backups" (
-    echo  - backups\ ‚ğíœ‚µ‚Ä‚¢‚Ü‚·
+    echo  - backups\ ã‚’å‰Šé™¤ã—ã¦ã„ã¾ã™
     rmdir /s /q "%ROOT%\backups"
   )
   if exist "%ROOT%\*.log" del /q "%ROOT%\*.log" >nul 2>nul
@@ -42,9 +42,9 @@ if /i "%~1"=="all" (
   if exist "%ROOT%\*.undobak" del /q "%ROOT%\*.undobak" >nul 2>nul
 ) else (
   echo.
-  echo  config.ini / reports\ / backups\ ‚àíœ‚·‚éê‡‚Í  clean.bat all
+  echo  config.ini / reports\ / backups\ ã‚‚å‰Šé™¤ã™ã‚‹å ´åˆã¯  clean.bat all
 )
 
 echo.
-echo  Š®—¹‚µ‚Ü‚µ‚½B
+echo  å®Œäº†ã—ã¾ã—ãŸã€‚
 exit /b 0

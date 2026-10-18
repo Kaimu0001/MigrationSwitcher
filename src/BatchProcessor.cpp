@@ -1,4 +1,4 @@
-// =============================================================================
+ï»¿// =============================================================================
 // BatchProcessor.cpp
 // =============================================================================
 #include "BatchProcessor.h"
@@ -16,7 +16,7 @@
 namespace ms {
 
 // -----------------------------------------------------------------------------
-// è‡1-4: ‘–¸EŠg’£qƒtƒBƒ‹ƒ^EŒŸõEW–ñ
+// æ‰‹é †1-4: èµ°æŸ»ãƒ»æ‹¡å¼µå­ãƒ•ã‚£ãƒ«ã‚¿ãƒ»æ¤œç´¢ãƒ»é›†ç´„
 // -----------------------------------------------------------------------------
 bool BatchProcessor::SearchFolder(const std::wstring& folder,
                                   const std::vector<std::wstring>& extensions,
@@ -30,7 +30,7 @@ bool BatchProcessor::SearchFolder(const std::wstring& folder,
     out = BatchSearchResult();
     out_error.clear();
 
-    // è‡1-2: ƒtƒHƒ‹ƒ_”z‰º‚ğ‘–¸‚µAŠg’£qƒtƒBƒ‹ƒ^‚Å‘ÎÛ’Šo
+    // æ‰‹é †1-2: ãƒ•ã‚©ãƒ«ãƒ€é…ä¸‹ã‚’èµ°æŸ»ã—ã€æ‹¡å¼µå­ãƒ•ã‚£ãƒ«ã‚¿ã§å¯¾è±¡æŠ½å‡º
     ScanResult scan;
     FolderScanner::Scan(folder, extensions, include_subdirs, scan);
     out.errors    = scan.errors;
@@ -40,11 +40,11 @@ bool BatchProcessor::SearchFolder(const std::wstring& folder,
     out.scanned_count = (int)scan.files.size();
 
     if (scan.files.empty()) {
-        out_error = L"‘ÎÛƒtƒHƒ‹ƒ_‚ÉğŒ‚Éˆê’v‚·‚éƒtƒ@ƒCƒ‹‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñ‚Å‚µ‚½B";
+        out_error = L"å¯¾è±¡ãƒ•ã‚©ãƒ«ãƒ€ã«æ¡ä»¶ã«ä¸€è‡´ã™ã‚‹ãƒ•ã‚¡ã‚¤ãƒ«ãŒè¦‹ã¤ã‹ã‚Šã¾ã›ã‚“ã§ã—ãŸã€‚";
         return false;
     }
 
-    // è‡3-4: Šeƒtƒ@ƒCƒ‹‚ğŒŸõ‚µAƒqƒbƒgˆê——‚ÖW–ñ
+    // æ‰‹é †3-4: å„ãƒ•ã‚¡ã‚¤ãƒ«ã‚’æ¤œç´¢ã—ã€ãƒ’ãƒƒãƒˆä¸€è¦§ã¸é›†ç´„
     int total = (int)scan.files.size();
     int done = 0;
     int global_id = 0;
@@ -56,7 +56,7 @@ bool BatchProcessor::SearchFolder(const std::wstring& folder,
         std::wstring text;
         FileInfo info;
         if (!FileManager::ReadText(path, encoding_mode, text, info)) {
-            out.errors.push_back(L"“Ç‚İæ‚è‚É¸”s‚µ‚Ü‚µ‚½: " + path);
+            out.errors.push_back(L"èª­ã¿å–ã‚Šã«å¤±æ•—ã—ã¾ã—ãŸ: " + path);
             ++done;
             continue;
         }
@@ -74,7 +74,7 @@ bool BatchProcessor::SearchFolder(const std::wstring& folder,
             e.hit_count = (int)found.size();
             e.selected_count = (int)found.size();
             e.selected = true;
-            e.status = L"‘Ò‹@";
+            e.status = L"å¾…æ©Ÿ";
             out.entries.push_back(e);
 
             out.matches.insert(out.matches.end(), found.begin(), found.end());
@@ -89,7 +89,7 @@ bool BatchProcessor::SearchFolder(const std::wstring& folder,
 }
 
 // -----------------------------------------------------------------------------
-// è‡7-8: ˆêŠ‡ƒoƒbƒNƒAƒbƒv‚ÆˆêŠ‡•ÏŠ·
+// æ‰‹é †7-8: ä¸€æ‹¬ãƒãƒƒã‚¯ã‚¢ãƒƒãƒ—ã¨ä¸€æ‹¬å¤‰æ›
 // -----------------------------------------------------------------------------
 bool BatchProcessor::ExecuteBatch(const OperationContext& ctx,
                                   const std::wstring& encoding_mode,
@@ -113,7 +113,7 @@ bool BatchProcessor::ExecuteBatch(const OperationContext& ctx,
     out.folder       = ctx.target_folder;
     out.status       = L"Success";
 
-    // ƒtƒ@ƒCƒ‹’PˆÊ‚Éˆê’v‰ÓŠ‚ğ‚Ü‚Æ‚ß‚é
+    // ãƒ•ã‚¡ã‚¤ãƒ«å˜ä½ã«ä¸€è‡´ç®‡æ‰€ã‚’ã¾ã¨ã‚ã‚‹
     std::map<std::wstring, std::vector<size_t> > by_file;
     for (size_t i = 0; i < matches.size(); ++i)
         by_file[matches[i].file_path].push_back(i);
@@ -128,7 +128,7 @@ bool BatchProcessor::ExecuteBatch(const OperationContext& ctx,
         std::map<std::wstring, std::vector<size_t> >::iterator it = by_file.find(e.path);
         if (it == by_file.end()) { ++done; continue; }
 
-        // ‚±‚Ìƒtƒ@ƒCƒ‹‚Å‘I‘ğ‚³‚ê‚Ä‚¢‚éˆê’v‰ÓŠ‚ğ’Šo
+        // ã“ã®ãƒ•ã‚¡ã‚¤ãƒ«ã§é¸æŠã•ã‚Œã¦ã„ã‚‹ä¸€è‡´ç®‡æ‰€ã‚’æŠ½å‡º
         std::vector<size_t> idx;
         for (size_t k = 0; k < it->second.size(); ++k) {
             size_t mi = it->second[k];
@@ -139,22 +139,22 @@ bool BatchProcessor::ExecuteBatch(const OperationContext& ctx,
         fr.file_path = e.path;
 
         if (!e.selected || idx.empty()) {
-            e.status = L"‘ÎÛŠO";
+            e.status = L"å¯¾è±¡å¤–";
             fr.status = L"Skipped";
-            fr.error  = L"‘ÎÛ‚Æ‚µ‚Ä‘I‘ğ‚³‚ê‚Ä‚¢‚Ü‚¹‚ñB";
+            fr.error  = L"å¯¾è±¡ã¨ã—ã¦é¸æŠã•ã‚Œã¦ã„ã¾ã›ã‚“ã€‚";
             out.files.push_back(fr);
             ++out.skipped_count;
             ++done;
             continue;
         }
 
-        // è‡5‘Š“–: ŒŸõŒ‹‰Ê‚ÌÄŒŸØi–{Às‚Ì‚İBŒŸõŒã‚Éƒtƒ@ƒCƒ‹‚ª•ÏX‚³‚ê‚Ä‚¢‚È‚¢‚©j
+        // æ‰‹é †5ç›¸å½“: æ¤œç´¢çµæœã®å†æ¤œè¨¼ï¼ˆæœ¬å®Ÿè¡Œã®ã¿ã€‚æ¤œç´¢å¾Œã«ãƒ•ã‚¡ã‚¤ãƒ«ãŒå¤‰æ›´ã•ã‚Œã¦ã„ãªã„ã‹ï¼‰
         if (!dry_run) {
             std::wstring current;
             FileInfo cur_info;
             if (!FileManager::ReadText(e.path, encoding_mode, current, cur_info)) {
-                e.status = L"¸”s";
-                e.error  = L"“Ç‚İæ‚è‚É¸”s‚µ‚Ü‚µ‚½B";
+                e.status = L"å¤±æ•—";
+                e.error  = L"èª­ã¿å–ã‚Šã«å¤±æ•—ã—ã¾ã—ãŸã€‚";
                 fr.status = L"Failed";
                 fr.error  = e.error;
                 out.files.push_back(fr);
@@ -163,8 +163,8 @@ bool BatchProcessor::ExecuteBatch(const OperationContext& ctx,
                 continue;
             }
             if (current != e.text) {
-                e.status = L"•ÏXŒŸo";
-                e.error  = L"ŒŸõŒã‚Éƒtƒ@ƒCƒ‹‚ª•ÏX‚³‚ê‚Ä‚¢‚Ü‚·BÄŒŸõ‚µ‚Ä‚­‚¾‚³‚¢B";
+                e.status = L"å¤‰æ›´æ¤œå‡º";
+                e.error  = L"æ¤œç´¢å¾Œã«ãƒ•ã‚¡ã‚¤ãƒ«ãŒå¤‰æ›´ã•ã‚Œã¦ã„ã¾ã™ã€‚å†æ¤œç´¢ã—ã¦ãã ã•ã„ã€‚";
                 fr.status = L"Skipped";
                 fr.error  = e.error;
                 out.files.push_back(fr);
@@ -174,7 +174,7 @@ bool BatchProcessor::ExecuteBatch(const OperationContext& ctx,
             }
         }
 
-        // •ÏXŒã“à—e‚Ì¶¬iˆê’v‰ÓŠ‚²‚Æ‚ÌƒuƒƒbƒN‚ğ“K—pj
+        // å¤‰æ›´å¾Œå†…å®¹ã®ç”Ÿæˆï¼ˆä¸€è‡´ç®‡æ‰€ã”ã¨ã®ãƒ–ãƒ­ãƒƒã‚¯ã‚’é©ç”¨ï¼‰
         std::vector<MatchResult> file_matches;
         std::vector<std::wstring> file_blocks;
         for (size_t k = 0; k < idx.size(); ++k) {
@@ -184,7 +184,7 @@ bool BatchProcessor::ExecuteBatch(const OperationContext& ctx,
         std::wstring after =
             PreviewGenerator::BuildAfterTextEach(e.text, file_matches, file_blocks);
 
-        // ƒXƒCƒbƒ`’è‹`ƒwƒbƒ_‚Ì #include ‚ğ’Ç‰Á‚·‚é
+        // ã‚¹ã‚¤ãƒƒãƒå®šç¾©ãƒ˜ãƒƒãƒ€ã® #include ã‚’è¿½åŠ ã™ã‚‹
         if (ctx.add_switch_header_include && !ctx.switch_header_path.empty()) {
             std::wstring inc =
                 SwitchHeaderManager::MakeIncludePath(e.path, ctx.switch_header_path);
@@ -192,7 +192,7 @@ bool BatchProcessor::ExecuteBatch(const OperationContext& ctx,
             int line = 0;
             std::wstring ierr;
             if (!SwitchHeaderManager::EnsureInclude(after, inc, added, line, ierr)) {
-                e.status = L"¸”s";
+                e.status = L"å¤±æ•—";
                 e.error  = ierr;
                 fr.status = L"Failed";
                 fr.error  = ierr;
@@ -205,9 +205,9 @@ bool BatchProcessor::ExecuteBatch(const OperationContext& ctx,
             e.include_line = line;
         }
 
-        // ---- ƒhƒ‰ƒCƒ‰ƒ“: ƒoƒbƒNƒAƒbƒv‚à‘‚«Š·‚¦‚às‚í‚È‚¢i6.11j----
+        // ---- ãƒ‰ãƒ©ã‚¤ãƒ©ãƒ³: ãƒãƒƒã‚¯ã‚¢ãƒƒãƒ—ã‚‚æ›¸ãæ›ãˆã‚‚è¡Œã‚ãªã„ï¼ˆ6.11ï¼‰----
         if (dry_run) {
-            e.status = L"ƒhƒ‰ƒCƒ‰ƒ“";
+            e.status = L"ãƒ‰ãƒ©ã‚¤ãƒ©ãƒ³";
             fr.status = L"DryRun";
             fr.replaced_count = (int)idx.size();
             for (size_t k = 0; k < idx.size(); ++k)
@@ -219,12 +219,12 @@ bool BatchProcessor::ExecuteBatch(const OperationContext& ctx,
             continue;
         }
 
-        // è‡7: ˆêŠ‡ƒoƒbƒNƒAƒbƒv
+        // æ‰‹é †7: ä¸€æ‹¬ãƒãƒƒã‚¯ã‚¢ãƒƒãƒ—
         std::wstring backup_path;
         if (ctx.create_backup) {
             std::wstring err;
             if (!BackupManager::CreateBackup(e.path, backup_dir, backup_path, err)) {
-                e.status = L"¸”s";
+                e.status = L"å¤±æ•—";
                 e.error  = err;
                 fr.status = L"Failed";
                 fr.error  = err;
@@ -236,7 +236,7 @@ bool BatchProcessor::ExecuteBatch(const OperationContext& ctx,
             fr.backup_file_path = backup_path;
         }
 
-        // è‡8: ˆêŠ‡•ÏŠ·
+        // æ‰‹é †8: ä¸€æ‹¬å¤‰æ›
         std::wstring err;
         FileInfo cur_info;
         FileManager::Inspect(e.path, encoding_mode);
@@ -244,16 +244,16 @@ bool BatchProcessor::ExecuteBatch(const OperationContext& ctx,
 
         if (!FileManager::WriteTextAtomic(e.path, after, cur_info.encoding,
                                           cur_info.has_bom, cur_info.newline, err)) {
-            // •œ‹Œˆ—i19.1j
+            // å¾©æ—§å‡¦ç†ï¼ˆ19.1ï¼‰
             if (!backup_path.empty() && util::PathExists(backup_path)) {
                 std::wstring rerr;
                 if (FileManager::CopyFileTo(backup_path, e.path, rerr)) {
-                    err += L"iƒoƒbƒNƒAƒbƒv‚©‚ç•œ‹Œ‚µ‚Ü‚µ‚½j";
+                    err += L"ï¼ˆãƒãƒƒã‚¯ã‚¢ãƒƒãƒ—ã‹ã‚‰å¾©æ—§ã—ã¾ã—ãŸï¼‰";
                 } else {
-                    err += L"i©“®•œ‹Œ‚É‚à¸”s‚µ‚Ü‚µ‚½: " + backup_path + L"j";
+                    err += L"ï¼ˆè‡ªå‹•å¾©æ—§ã«ã‚‚å¤±æ•—ã—ã¾ã—ãŸ: " + backup_path + L"ï¼‰";
                 }
             }
-            e.status = L"¸”s";
+            e.status = L"å¤±æ•—";
             e.error  = err;
             fr.status = L"Failed";
             fr.error  = err;
@@ -263,8 +263,8 @@ bool BatchProcessor::ExecuteBatch(const OperationContext& ctx,
             continue;
         }
 
-        // ¬Œ÷
-        e.status = L"¬Œ÷";
+        // æˆåŠŸ
+        e.status = L"æˆåŠŸ";
         e.error.clear();
         fr.status = L"Success";
         fr.replaced_count = (int)idx.size();

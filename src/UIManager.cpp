@@ -1,6 +1,6 @@
-// =============================================================================
+ï»¿// =============================================================================
 // UIManager.cpp
-// İŒv‘ 5Íu‰æ–ÊİŒvv/ 17.2.1u’Ç‰ÁUIv/ 7.2.1 UIManager
+// è¨­è¨ˆæ›¸ 5ç« ã€Œç”»é¢è¨­è¨ˆã€/ 17.2.1ã€Œè¿½åŠ UIã€/ 7.2.1 UIManager
 // =============================================================================
 #include "App.h"
 #include "resource.h"
@@ -20,11 +20,11 @@ static const wchar_t* kMainClass = L"MS_MainWindowClass";
 static const wchar_t* kPageClass = L"MS_PageWindowClass";
 
 // -----------------------------------------------------------------------------
-// ¶¬ƒwƒ‹ƒp
+// ç”Ÿæˆãƒ˜ãƒ«ãƒ‘
 // -----------------------------------------------------------------------------
-// winuser.h ‚Ì IDC_ARROW / IDI_APPLICATION ‚Í UNICODE ‚Ì—L–³‚É‚æ‚Á‚Ä
-// LPSTR / LPWSTR ‚Ì‚Ç‚¿‚ç‚Ö“WŠJ‚³‚ê‚é‚©‚ª•Ï‚í‚éBVS2022 ‚ÌƒvƒƒWƒFƒNƒg‚Å
-// UNICODE ‚ª–¢’è‹`‚Å‚àƒRƒ“ƒpƒCƒ‹‚Å‚«‚é‚æ‚¤AƒƒCƒh”Å‚ğ–¾¦“I‚Ég‚¤B
+// winuser.h ã® IDC_ARROW / IDI_APPLICATION ã¯ UNICODE ã®æœ‰ç„¡ã«ã‚ˆã£ã¦
+// LPSTR / LPWSTR ã®ã©ã¡ã‚‰ã¸å±•é–‹ã•ã‚Œã‚‹ã‹ãŒå¤‰ã‚ã‚‹ã€‚VS2022 ã®ãƒ—ãƒ­ã‚¸ã‚§ã‚¯ãƒˆã§
+// UNICODE ãŒæœªå®šç¾©ã§ã‚‚ã‚³ãƒ³ãƒ‘ã‚¤ãƒ«ã§ãã‚‹ã‚ˆã†ã€ãƒ¯ã‚¤ãƒ‰ç‰ˆã‚’æ˜ç¤ºçš„ã«ä½¿ã†ã€‚
 static LPCWSTR kIdcArrow       = MAKEINTRESOURCEW(32512);   // IDC_ARROW
 static LPCWSTR kIdiApplication = MAKEINTRESOURCEW(32512);   // IDI_APPLICATION
 static void SetWndFont(HWND h, HFONT f)
@@ -87,7 +87,7 @@ static HWND MakeEdit(HWND parent, int id, DWORD style, HFONT font)
 }
 
 // -----------------------------------------------------------------------------
-// ƒ‰ƒCƒtƒTƒCƒNƒ‹
+// ãƒ©ã‚¤ãƒ•ã‚µã‚¤ã‚¯ãƒ«
 // -----------------------------------------------------------------------------
 App::App()
     : hInst_(nullptr), hWnd_(nullptr), hStatus_(nullptr), hProgress_(nullptr),
@@ -197,11 +197,11 @@ LRESULT CALLBACK App::WndProcStatic(HWND hWnd, UINT msg, WPARAM wp, LPARAM lp)
 }
 
 // -----------------------------------------------------------------------------
-// ƒ^ƒuƒy[ƒW‚ÌƒEƒBƒ“ƒhƒEƒvƒƒV[ƒWƒƒ
-//   ƒy[ƒWã‚ÌƒRƒ“ƒgƒ[ƒ‹iƒ{ƒ^ƒ“ / ƒ‰ƒWƒI / ƒ`ƒFƒbƒN / ListViewj‚ª‘—‚é
-//   WM_COMMAND ‚Æ WM_NOTIFY ‚ÍueƒEƒBƒ“ƒhƒEvˆ¶‚É“Í‚­Bƒy[ƒW‚Ìe‚Í hWnd_ ‚Å‚Í
-//   ‚È‚­ƒy[ƒW©g‚È‚Ì‚ÅA‚±‚±‚Åó‚¯æ‚Á‚ÄƒAƒvƒŠ–{‘Ì‚Ìƒnƒ“ƒhƒ‰‚Ö“]‘—‚·‚éB
-//   i“]‘—‚µ‚È‚¢‚Æƒy[ƒWã‚Ìƒ{ƒ^ƒ“‚âƒ‰ƒWƒI‚ª–³”½‰‚É‚È‚éj
+// ã‚¿ãƒ–ãƒšãƒ¼ã‚¸ã®ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ãƒ—ãƒ­ã‚·ãƒ¼ã‚¸ãƒ£
+//   ãƒšãƒ¼ã‚¸ä¸Šã®ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ«ï¼ˆãƒœã‚¿ãƒ³ / ãƒ©ã‚¸ã‚ª / ãƒã‚§ãƒƒã‚¯ / ListViewï¼‰ãŒé€ã‚‹
+//   WM_COMMAND ã¨ WM_NOTIFY ã¯ã€Œè¦ªã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã€å®›ã«å±Šãã€‚ãƒšãƒ¼ã‚¸ã®è¦ªã¯ hWnd_ ã§ã¯
+//   ãªããƒšãƒ¼ã‚¸è‡ªèº«ãªã®ã§ã€ã“ã“ã§å—ã‘å–ã£ã¦ã‚¢ãƒ—ãƒªæœ¬ä½“ã®ãƒãƒ³ãƒ‰ãƒ©ã¸è»¢é€ã™ã‚‹ã€‚
+//   ï¼ˆè»¢é€ã—ãªã„ã¨ãƒšãƒ¼ã‚¸ä¸Šã®ãƒœã‚¿ãƒ³ã‚„ãƒ©ã‚¸ã‚ªãŒç„¡åå¿œã«ãªã‚‹ï¼‰
 // -----------------------------------------------------------------------------
 LRESULT CALLBACK App::PageWndProcStatic(HWND hWnd, UINT msg, WPARAM wp, LPARAM lp)
 {
@@ -305,7 +305,7 @@ void App::ApplyFont(HWND h, bool mono)
 }
 
 // -----------------------------------------------------------------------------
-// 9.1 ƒAƒvƒŠ‹N“®ƒtƒ[
+// 9.1 ã‚¢ãƒ—ãƒªèµ·å‹•æ™‚ãƒ•ãƒ­ãƒ¼
 // -----------------------------------------------------------------------------
 void App::OnCreate()
 {
@@ -324,24 +324,24 @@ void App::OnCreate()
 
 void App::CreateControls()
 {
-    // ---- ƒEƒBƒ“ƒhƒEã•”ií•\¦j----
-    hLblFile_    = MakeStatic(hWnd_, L"‘ÎÛƒtƒ@ƒCƒ‹", IDC_LBL_FILE, hFontUi_);
+    // ---- ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ä¸Šéƒ¨ï¼ˆå¸¸æ™‚è¡¨ç¤ºï¼‰----
+    hLblFile_    = MakeStatic(hWnd_, L"å¯¾è±¡ãƒ•ã‚¡ã‚¤ãƒ«", IDC_LBL_FILE, hFontUi_);
     hTargetEdit_ = MakeEdit(hWnd_, IDC_EDIT_TARGETFILE, ES_AUTOHSCROLL, hFontUi_);
-    hBrowseBtn_  = MakeButton(hWnd_, L"QÆ...", IDC_BTN_BROWSE, BS_PUSHBUTTON, hFontUi_);
+    hBrowseBtn_  = MakeButton(hWnd_, L"å‚ç…§...", IDC_BTN_BROWSE, BS_PUSHBUTTON, hFontUi_);
 
-    hLblSwitch_     = MakeStatic(hWnd_, L"ƒXƒCƒbƒ`–¼", IDC_LBL_SWITCH, hFontUi_);
+    hLblSwitch_     = MakeStatic(hWnd_, L"ã‚¹ã‚¤ãƒƒãƒå", IDC_LBL_SWITCH, hFontUi_);
     hSwitchEdit_    = MakeEdit(hWnd_, IDC_EDIT_SWITCHNAME, ES_AUTOHSCROLL | ES_UPPERCASE, hFontUi_);
     hLblHintSwitch_ = MakeStatic(hWnd_, L"", IDC_LBL_HINT_SWITCH, hFontUi_);
 
-    // ---- ƒ^ƒuƒRƒ“ƒgƒ[ƒ‹ ----
+    // ---- ã‚¿ãƒ–ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ« ----
     hTab_ = ::CreateWindowExW(0, WC_TABCONTROLW, L"",
         WS_CHILD | WS_VISIBLE | WS_CLIPCHILDREN | TCS_TABS | TCS_SINGLELINE,
         0, 0, 10, 10, hWnd_, (HMENU)IDC_TAB_MAIN, hInst_, nullptr);
     ApplyFont(hTab_);
 
     static const wchar_t* titles[PG_COUNT] = {
-        L"Šî–{İ’è", L"ˆêŠ‡ˆ—", L"ŒŸõğŒ", L"‹ŒƒR[ƒh", L"VƒR[ƒh",
-        L"ŒŸõŒ‹‰Ê", L"ƒvƒŒƒrƒ…[", L"ƒXƒCƒbƒ`ŠÇ—", L"ƒVƒXƒeƒ€î•ñ", L"ƒƒO"
+        L"åŸºæœ¬è¨­å®š", L"ä¸€æ‹¬å‡¦ç†", L"æ¤œç´¢æ¡ä»¶", L"æ—§ã‚³ãƒ¼ãƒ‰", L"æ–°ã‚³ãƒ¼ãƒ‰",
+        L"æ¤œç´¢çµæœ", L"ãƒ—ãƒ¬ãƒ“ãƒ¥ãƒ¼", L"ã‚¹ã‚¤ãƒƒãƒç®¡ç†", L"ã‚·ã‚¹ãƒ†ãƒ æƒ…å ±", L"ãƒ­ã‚°"
     };
     for (int i = 0; i < PG_COUNT; ++i) {
         TCITEMW item;
@@ -369,13 +369,13 @@ void App::CreateControls()
     CreateSystemPage();
     CreateLogPage();
 
-    // ---- ‰º•”ƒ{ƒ^ƒ“ ----
-    hBtnSearch_  = MakeButton(hWnd_, L"ŒŸõ",     IDC_BTN_SEARCH,  BS_PUSHBUTTON | BS_DEFPUSHBUTTON, hFontUi_);
-    hBtnPreview_ = MakeButton(hWnd_, L"ƒvƒŒƒrƒ…[", IDC_BTN_PREVIEW, BS_PUSHBUTTON, hFontUi_);
-    hBtnDryRun_  = MakeButton(hWnd_, L"ƒhƒ‰ƒCƒ‰ƒ“", IDC_BTN_DRYRUN,  BS_PUSHBUTTON, hFontUi_);
-    hBtnExecute_ = MakeButton(hWnd_, L"Às",     IDC_BTN_EXECUTE, BS_PUSHBUTTON, hFontUi_);
-    hBtnUndo_    = MakeButton(hWnd_, L"Œ³‚É–ß‚·", IDC_BTN_UNDO,    BS_PUSHBUTTON, hFontUi_);
-    hBtnExit_    = MakeButton(hWnd_, L"I—¹",     IDC_BTN_EXIT,    BS_PUSHBUTTON, hFontUi_);
+    // ---- ä¸‹éƒ¨ãƒœã‚¿ãƒ³ ----
+    hBtnSearch_  = MakeButton(hWnd_, L"æ¤œç´¢",     IDC_BTN_SEARCH,  BS_PUSHBUTTON | BS_DEFPUSHBUTTON, hFontUi_);
+    hBtnPreview_ = MakeButton(hWnd_, L"ãƒ—ãƒ¬ãƒ“ãƒ¥ãƒ¼", IDC_BTN_PREVIEW, BS_PUSHBUTTON, hFontUi_);
+    hBtnDryRun_  = MakeButton(hWnd_, L"ãƒ‰ãƒ©ã‚¤ãƒ©ãƒ³", IDC_BTN_DRYRUN,  BS_PUSHBUTTON, hFontUi_);
+    hBtnExecute_ = MakeButton(hWnd_, L"å®Ÿè¡Œ",     IDC_BTN_EXECUTE, BS_PUSHBUTTON, hFontUi_);
+    hBtnUndo_    = MakeButton(hWnd_, L"å…ƒã«æˆ»ã™", IDC_BTN_UNDO,    BS_PUSHBUTTON, hFontUi_);
+    hBtnExit_    = MakeButton(hWnd_, L"çµ‚äº†",     IDC_BTN_EXIT,    BS_PUSHBUTTON, hFontUi_);
 
     hProgress_ = ::CreateWindowExW(0, PROGRESS_CLASSW, L"",
         WS_CHILD | WS_VISIBLE | PBS_SMOOTH,
@@ -395,75 +395,75 @@ void App::CreateBasicPage()
 {
     HWND p = hPage_[PG_BASIC];
 
-    hGrpStyle_ = MakeGroup(p, L"’uŠ·•û®", IDC_GRP_STYLE, hFontUi_);
-    hRadStyle_[0] = MakeRadio(p, L"#ifdef ƒXƒCƒbƒ`^VƒR[ƒh^#else^‹ŒƒR[ƒh^#endif  i•û®A: VƒR[ƒh—Dæj",
+    hGrpStyle_ = MakeGroup(p, L"ç½®æ›æ–¹å¼", IDC_GRP_STYLE, hFontUi_);
+    hRadStyle_[0] = MakeRadio(p, L"#ifdef ã‚¹ã‚¤ãƒƒãƒï¼æ–°ã‚³ãƒ¼ãƒ‰ï¼#elseï¼æ—§ã‚³ãƒ¼ãƒ‰ï¼#endif  ï¼ˆæ–¹å¼A: æ–°ã‚³ãƒ¼ãƒ‰å„ªå…ˆï¼‰",
                               IDC_RAD_STYLE_A, WS_GROUP, hFontUi_);
-    hRadStyle_[1] = MakeRadio(p, L"#ifndef ƒXƒCƒbƒ`^‹ŒƒR[ƒh^#else^VƒR[ƒh^#endif  i•û®B: ‹ŒƒR[ƒh—Dæj",
+    hRadStyle_[1] = MakeRadio(p, L"#ifndef ã‚¹ã‚¤ãƒƒãƒï¼æ—§ã‚³ãƒ¼ãƒ‰ï¼#elseï¼æ–°ã‚³ãƒ¼ãƒ‰ï¼#endif  ï¼ˆæ–¹å¼B: æ—§ã‚³ãƒ¼ãƒ‰å„ªå…ˆï¼‰",
                               IDC_RAD_STYLE_B, 0, hFontUi_);
-    hRadStyle_[2] = MakeRadio(p, L"ƒRƒƒ“ƒg•t‚«•û®  i•û®C: ƒŒƒrƒ…[«d‹j",
+    hRadStyle_[2] = MakeRadio(p, L"ã‚³ãƒ¡ãƒ³ãƒˆä»˜ãæ–¹å¼  ï¼ˆæ–¹å¼C: ãƒ¬ãƒ“ãƒ¥ãƒ¼æ€§é‡è¦–ï¼‰",
                               IDC_RAD_STYLE_C, 0, hFontUi_);
-    hRadStyle_[3] = MakeRadio(p, L"ŠJnI—¹ƒRƒƒ“ƒg•û®  i•û®D: Œã‚©‚çÄŒŸo‚µ‚â‚·‚¢j",
+    hRadStyle_[3] = MakeRadio(p, L"é–‹å§‹çµ‚äº†ã‚³ãƒ¡ãƒ³ãƒˆæ–¹å¼  ï¼ˆæ–¹å¼D: å¾Œã‹ã‚‰å†æ¤œå‡ºã—ã‚„ã™ã„ï¼‰",
                               IDC_RAD_STYLE_D, 0, hFontUi_);
 
     hLblTemplate_ = MakeStatic(p,
-        L"ƒeƒ“ƒvƒŒ[ƒg•û®i${SWITCH} / ${OLD_CODE} / ${NEW_CODE} / ${DATE} / ${USER} / ${FILE}j",
+        L"ãƒ†ãƒ³ãƒ—ãƒ¬ãƒ¼ãƒˆæ–¹å¼ï¼ˆ${SWITCH} / ${OLD_CODE} / ${NEW_CODE} / ${DATE} / ${USER} / ${FILE}ï¼‰",
         IDC_LBL_TEMPLATE, hFontUi_);
     hEditTemplate_ = MakeEdit(p, IDC_EDIT_TEMPLATE,
         ES_MULTILINE | ES_AUTOVSCROLL | WS_VSCROLL | ES_WANTRETURN, hFontMono_);
 
-    hGrpOption_ = MakeGroup(p, L"ƒIƒvƒVƒ‡ƒ“", IDC_GRP_OPTION, hFontUi_);
-    hChkBackup_      = MakeCheck(p, L"ƒoƒbƒNƒAƒbƒv‚ğì¬‚·‚é",       IDC_CHK_BACKUP,      hFontUi_);
-    hChkReport_      = MakeCheck(p, L"HTML·•ªƒŒƒ|[ƒg‚ğo—Í‚·‚é",   IDC_CHK_REPORT,      hFontUi_);
-    hChkLog_         = MakeCheck(p, L"ÀsƒƒO‚ğo—Í‚·‚é",           IDC_CHK_LOG,         hFontUi_);
-    hChkOpenReport_  = MakeCheck(p, L"ÀsŒã‚ÉƒŒƒ|[ƒg‚ğŠJ‚­",       IDC_CHK_OPENREPORT,  hFontUi_);
-    hChkDryRunOnly_  = MakeCheck(p, L"ƒhƒ‰ƒCƒ‰ƒ“‚Ì‚İiÀs‚ğ—}~j", IDC_CHK_DRYRUNONLY,  hFontUi_);
-    hChkAutoIndent_  = MakeCheck(p, L"ƒCƒ“ƒfƒ“ƒg‚ğ©“®’²®‚·‚é",     IDC_CHK_AUTOINDENT,  hFontUi_);
-    hChkWarnComment_ = MakeCheck(p, L"ƒRƒƒ“ƒg“à‚Ìˆê’v‚ğŒx‚·‚é",   IDC_CHK_WARNCOMMENT, hFontUi_);
-    hChkWarnPreproc_ = MakeCheck(p, L"Šù‘¶ƒRƒ“ƒpƒCƒ‹ƒXƒCƒbƒ`‹ß–T‚ğŒx‚·‚é", IDC_CHK_WARNPREPROC, hFontUi_);
+    hGrpOption_ = MakeGroup(p, L"ã‚ªãƒ—ã‚·ãƒ§ãƒ³", IDC_GRP_OPTION, hFontUi_);
+    hChkBackup_      = MakeCheck(p, L"ãƒãƒƒã‚¯ã‚¢ãƒƒãƒ—ã‚’ä½œæˆã™ã‚‹",       IDC_CHK_BACKUP,      hFontUi_);
+    hChkReport_      = MakeCheck(p, L"HTMLå·®åˆ†ãƒ¬ãƒãƒ¼ãƒˆã‚’å‡ºåŠ›ã™ã‚‹",   IDC_CHK_REPORT,      hFontUi_);
+    hChkLog_         = MakeCheck(p, L"å®Ÿè¡Œãƒ­ã‚°ã‚’å‡ºåŠ›ã™ã‚‹",           IDC_CHK_LOG,         hFontUi_);
+    hChkOpenReport_  = MakeCheck(p, L"å®Ÿè¡Œå¾Œã«ãƒ¬ãƒãƒ¼ãƒˆã‚’é–‹ã",       IDC_CHK_OPENREPORT,  hFontUi_);
+    hChkDryRunOnly_  = MakeCheck(p, L"ãƒ‰ãƒ©ã‚¤ãƒ©ãƒ³ã®ã¿ï¼ˆå®Ÿè¡Œã‚’æŠ‘æ­¢ï¼‰", IDC_CHK_DRYRUNONLY,  hFontUi_);
+    hChkAutoIndent_  = MakeCheck(p, L"ã‚¤ãƒ³ãƒ‡ãƒ³ãƒˆã‚’è‡ªå‹•èª¿æ•´ã™ã‚‹",     IDC_CHK_AUTOINDENT,  hFontUi_);
+    hChkWarnComment_ = MakeCheck(p, L"ã‚³ãƒ¡ãƒ³ãƒˆå†…ã®ä¸€è‡´ã‚’è­¦å‘Šã™ã‚‹",   IDC_CHK_WARNCOMMENT, hFontUi_);
+    hChkWarnPreproc_ = MakeCheck(p, L"æ—¢å­˜ã‚³ãƒ³ãƒ‘ã‚¤ãƒ«ã‚¹ã‚¤ãƒƒãƒè¿‘å‚ã‚’è­¦å‘Šã™ã‚‹", IDC_CHK_WARNPREPROC, hFontUi_);
 
-    hGrpAi_ = MakeGroup(p, L"AI ˜AŒgi•ÏXd—l‘ / ŒŸ¸d—l‘‚Ì¶¬j", IDC_GRP_AI, hFontUi_);
-    hLblAiProvider_ = MakeStatic(p, L"API í•Ê", IDC_LBL_AIPROVIDER, hFontUi_);
+    hGrpAi_ = MakeGroup(p, L"AI é€£æºï¼ˆå¤‰æ›´ä»•æ§˜æ›¸ / æ¤œæŸ»ä»•æ§˜æ›¸ã®ç”Ÿæˆï¼‰", IDC_GRP_AI, hFontUi_);
+    hLblAiProvider_ = MakeStatic(p, L"API ç¨®åˆ¥", IDC_LBL_AIPROVIDER, hFontUi_);
     hCmbAiProvider_ = ::CreateWindowExW(0, L"COMBOBOX", L"",
         WS_CHILD | WS_VISIBLE | WS_TABSTOP | CBS_DROPDOWNLIST | WS_VSCROLL,
         0, 0, 10, 200, p, (HMENU)IDC_CMB_AIPROVIDER, hInst_, nullptr);
     ApplyFont(hCmbAiProvider_);
-    ::SendMessageW(hCmbAiProvider_, CB_ADDSTRING, 0, (LPARAM)L"Genspark APIiŠù’èj");
-    ::SendMessageW(hCmbAiProvider_, CB_ADDSTRING, 0, (LPARAM)L"OpenAI ŒİŠ· APIiGPT / Azure / Ollama “™j");
+    ::SendMessageW(hCmbAiProvider_, CB_ADDSTRING, 0, (LPARAM)L"Genspark APIï¼ˆæ—¢å®šï¼‰");
+    ::SendMessageW(hCmbAiProvider_, CB_ADDSTRING, 0, (LPARAM)L"OpenAI äº’æ› APIï¼ˆGPT / Azure / Ollama ç­‰ï¼‰");
     ::SendMessageW(hCmbAiProvider_, CB_SETCURSEL, 0, 0);
 
-    hLblAiKey_      = MakeStatic(p, L"API ƒL[", IDC_LBL_AIKEY, hFontUi_);
+    hLblAiKey_      = MakeStatic(p, L"API ã‚­ãƒ¼", IDC_LBL_AIKEY, hFontUi_);
     hEditAiKey_     = MakeEdit(p, IDC_EDIT_AIKEY, ES_AUTOHSCROLL | ES_PASSWORD, hFontUi_);
-    hBtnAiTest_     = MakeButton(p, L"Ú‘±ƒeƒXƒg", IDC_BTN_AITEST, BS_PUSHBUTTON, hFontUi_);
-    hLblAiEndpoint_ = MakeStatic(p, L"ƒGƒ“ƒhƒ|ƒCƒ“ƒg", IDC_LBL_AIENDPOINT, hFontUi_);
+    hBtnAiTest_     = MakeButton(p, L"æ¥ç¶šãƒ†ã‚¹ãƒˆ", IDC_BTN_AITEST, BS_PUSHBUTTON, hFontUi_);
+    hLblAiEndpoint_ = MakeStatic(p, L"ã‚¨ãƒ³ãƒ‰ãƒã‚¤ãƒ³ãƒˆ", IDC_LBL_AIENDPOINT, hFontUi_);
     hEditAiEndpoint_= MakeEdit(p, IDC_EDIT_AIENDPOINT, ES_AUTOHSCROLL, hFontUi_);
-    hLblAiModel_    = MakeStatic(p, L"ƒ‚ƒfƒ‹", IDC_LBL_AIMODEL, hFontUi_);
+    hLblAiModel_    = MakeStatic(p, L"ãƒ¢ãƒ‡ãƒ«", IDC_LBL_AIMODEL, hFontUi_);
     hEditAiModel_   = MakeEdit(p, IDC_EDIT_AIMODEL, ES_AUTOHSCROLL, hFontUi_);
-    hLblAiTimeout_  = MakeStatic(p, L"ƒ^ƒCƒ€ƒAƒEƒg(•b)", IDC_LBL_AITIMEOUT, hFontUi_);
+    hLblAiTimeout_  = MakeStatic(p, L"ã‚¿ã‚¤ãƒ ã‚¢ã‚¦ãƒˆ(ç§’)", IDC_LBL_AITIMEOUT, hFontUi_);
     hEditAiTimeout_ = MakeEdit(p, IDC_EDIT_AITIMEOUT, ES_AUTOHSCROLL | ES_NUMBER, hFontUi_);
 
-    hGrpHit_ = MakeGroup(p, L"ƒqƒbƒg‚Ì“®ì", IDC_GRP_HIT, hFontUi_);
-    hRadHit_[0] = MakeRadio(p, L"1Œ‚Ìê‡‚Ì‚İ©“®‘I‘ğ",     IDC_RAD_HIT_AUTO,   WS_GROUP, hFontUi_);
-    hRadHit_[1] = MakeRadio(p, L"Å‰‚Ì1Œ‚ğ‘ÎÛ‚É‚·‚é",     IDC_RAD_HIT_FIRST,  0, hFontUi_);
-    hRadHit_[2] = MakeRadio(p, L"‚·‚×‚Ä‚Ìˆê’v‚ğ‘ÎÛ‚É‚·‚é", IDC_RAD_HIT_ALL,    0, hFontUi_);
-    hRadHit_[3] = MakeRadio(p, L"ƒ†[ƒU[‚ªˆê——‚©‚ç‘I‘ğ‚·‚é", IDC_RAD_HIT_MANUAL, 0, hFontUi_);
+    hGrpHit_ = MakeGroup(p, L"ãƒ’ãƒƒãƒˆæ™‚ã®å‹•ä½œ", IDC_GRP_HIT, hFontUi_);
+    hRadHit_[0] = MakeRadio(p, L"1ä»¶ã®å ´åˆã®ã¿è‡ªå‹•é¸æŠ",     IDC_RAD_HIT_AUTO,   WS_GROUP, hFontUi_);
+    hRadHit_[1] = MakeRadio(p, L"æœ€åˆã®1ä»¶ã‚’å¯¾è±¡ã«ã™ã‚‹",     IDC_RAD_HIT_FIRST,  0, hFontUi_);
+    hRadHit_[2] = MakeRadio(p, L"ã™ã¹ã¦ã®ä¸€è‡´ã‚’å¯¾è±¡ã«ã™ã‚‹", IDC_RAD_HIT_ALL,    0, hFontUi_);
+    hRadHit_[3] = MakeRadio(p, L"ãƒ¦ãƒ¼ã‚¶ãƒ¼ãŒä¸€è¦§ã‹ã‚‰é¸æŠã™ã‚‹", IDC_RAD_HIT_MANUAL, 0, hFontUi_);
 }
 
 // -----------------------------------------------------------------------------
-// 17.2.1 ’Ç‰ÁUIiˆêŠ‡ˆ—ƒ^ƒuj
+// 17.2.1 è¿½åŠ UIï¼ˆä¸€æ‹¬å‡¦ç†ã‚¿ãƒ–ï¼‰
 // -----------------------------------------------------------------------------
 void App::CreateBatchPage()
 {
     HWND p = hPage_[PG_BATCH];
 
-    hGrpTargetKind_ = MakeGroup(p, L"‘ÎÛí•Ê", IDC_GRP_TARGETKIND, hFontUi_);
-    hRadTargetKind_[0] = MakeRadio(p, L"’Pˆêƒtƒ@ƒCƒ‹", IDC_RAD_TARGET_FILE,   WS_GROUP, hFontUi_);
-    hRadTargetKind_[1] = MakeRadio(p, L"ƒtƒHƒ‹ƒ_",     IDC_RAD_TARGET_FOLDER, 0, hFontUi_);
+    hGrpTargetKind_ = MakeGroup(p, L"å¯¾è±¡ç¨®åˆ¥", IDC_GRP_TARGETKIND, hFontUi_);
+    hRadTargetKind_[0] = MakeRadio(p, L"å˜ä¸€ãƒ•ã‚¡ã‚¤ãƒ«", IDC_RAD_TARGET_FILE,   WS_GROUP, hFontUi_);
+    hRadTargetKind_[1] = MakeRadio(p, L"ãƒ•ã‚©ãƒ«ãƒ€",     IDC_RAD_TARGET_FOLDER, 0, hFontUi_);
 
-    hLblFolder_       = MakeStatic(p, L"‘ÎÛƒtƒHƒ‹ƒ_", IDC_LBL_FOLDER, hFontUi_);
+    hLblFolder_       = MakeStatic(p, L"å¯¾è±¡ãƒ•ã‚©ãƒ«ãƒ€", IDC_LBL_FOLDER, hFontUi_);
     hFolderEdit_      = MakeEdit(p, IDC_EDIT_FOLDER, ES_AUTOHSCROLL, hFontUi_);
-    hFolderBrowseBtn_ = MakeButton(p, L"QÆ...", IDC_BTN_FOLDERBROWSE, BS_PUSHBUTTON, hFontUi_);
+    hFolderBrowseBtn_ = MakeButton(p, L"å‚ç…§...", IDC_BTN_FOLDERBROWSE, BS_PUSHBUTTON, hFontUi_);
 
-    hGrpExtFilter_ = MakeGroup(p, L"Šg’£qƒtƒBƒ‹ƒ^", IDC_GRP_EXTFILTER, hFontUi_);
+    hGrpExtFilter_ = MakeGroup(p, L"æ‹¡å¼µå­ãƒ•ã‚£ãƒ«ã‚¿", IDC_GRP_EXTFILTER, hFontUi_);
     std::vector<std::wstring> cand = FolderScanner::CandidateExtensions();
     std::vector<std::wstring> defs = FolderScanner::DefaultExtensions();
     for (size_t i = 0; i < cand.size() && i < 6; ++i) {
@@ -472,12 +472,12 @@ void App::CreateBatchPage()
         hChkExt_[i] = MakeCheck(p, cand[i].c_str(), IDC_CHK_EXT_BASE + (int)i, hFontUi_);
         SetChecked(hChkExt_[i], on);
     }
-    hChkSubdirs_ = MakeCheck(p, L"ƒTƒuƒtƒHƒ‹ƒ_‚ğŠÜ‚ß‚é", IDC_CHK_SUBDIRS, hFontUi_);
+    hChkSubdirs_ = MakeCheck(p, L"ã‚µãƒ–ãƒ•ã‚©ãƒ«ãƒ€ã‚’å«ã‚ã‚‹", IDC_CHK_SUBDIRS, hFontUi_);
     SetChecked(hChkSubdirs_, true);
 
-    hBtnScan_        = MakeButton(p, L"‘–¸", IDC_BTN_SCAN, BS_PUSHBUTTON, hFontUi_);
-    hBtnFileSelAll_  = MakeButton(p, L"‚·‚×‚Ä‘I‘ğ", IDC_BTN_FILESELALL, BS_PUSHBUTTON, hFontUi_);
-    hBtnFileSelNone_ = MakeButton(p, L"‚·‚×‚Ä‰ğœ", IDC_BTN_FILESELNONE, BS_PUSHBUTTON, hFontUi_);
+    hBtnScan_        = MakeButton(p, L"èµ°æŸ»", IDC_BTN_SCAN, BS_PUSHBUTTON, hFontUi_);
+    hBtnFileSelAll_  = MakeButton(p, L"ã™ã¹ã¦é¸æŠ", IDC_BTN_FILESELALL, BS_PUSHBUTTON, hFontUi_);
+    hBtnFileSelNone_ = MakeButton(p, L"ã™ã¹ã¦è§£é™¤", IDC_BTN_FILESELNONE, BS_PUSHBUTTON, hFontUi_);
     hLblScanInfo_    = MakeStatic(p, L"", IDC_LBL_SCANINFO, hFontUi_);
 
     hListFiles_ = ::CreateWindowExW(WS_EX_CLIENTEDGE, WC_LISTVIEWW, L"",
@@ -491,11 +491,11 @@ void App::CreateBatchPage()
     struct Col { const wchar_t* name; int width; int fmt; };
     static const Col cols[] = {
         { L"No",        44,  LVCFMT_RIGHT  },
-        { L"ƒtƒ@ƒCƒ‹–¼",260, LVCFMT_LEFT   },
-        { L"ƒtƒHƒ‹ƒ_",  300, LVCFMT_LEFT   },
-        { L"ƒqƒbƒg",    60,  LVCFMT_RIGHT  },
-        { L"’uŠ·‘ÎÛ",  76,  LVCFMT_RIGHT  },
-        { L"ó‘Ô",      110, LVCFMT_LEFT   },
+        { L"ãƒ•ã‚¡ã‚¤ãƒ«å",260, LVCFMT_LEFT   },
+        { L"ãƒ•ã‚©ãƒ«ãƒ€",  300, LVCFMT_LEFT   },
+        { L"ãƒ’ãƒƒãƒˆ",    60,  LVCFMT_RIGHT  },
+        { L"ç½®æ›å¯¾è±¡",  76,  LVCFMT_RIGHT  },
+        { L"çŠ¶æ…‹",      110, LVCFMT_LEFT   },
     };
     for (int i = 0; i < (int)(sizeof(cols) / sizeof(cols[0])); ++i) {
         LVCOLUMNW c;
@@ -531,11 +531,11 @@ void App::CreateResultPage()
 {
     HWND p = hPage_[PG_RESULT];
 
-    hBtnSelectAll_ = MakeButton(p, L"‚·‚×‚Ä‘I‘ğ",   IDC_BTN_SELECTALL, BS_PUSHBUTTON, hFontUi_);
-    hBtnClearSel_  = MakeButton(p, L"‘I‘ğ‚ğ‰ğœ",   IDC_BTN_CLEARSEL,  BS_PUSHBUTTON, hFontUi_);
-    hBtnExportCsv_ = MakeButton(p, L"CSVo—Í",      IDC_BTN_EXPORTCSV,  BS_PUSHBUTTON, hFontUi_);
-    hBtnExportMd_  = MakeButton(p, L"Markdowno—Í", IDC_BTN_EXPORTMD,   BS_PUSHBUTTON, hFontUi_);
-    hBtnExportJson_= MakeButton(p, L"JSONo—Í",     IDC_BTN_EXPORTJSON, BS_PUSHBUTTON, hFontUi_);
+    hBtnSelectAll_ = MakeButton(p, L"ã™ã¹ã¦é¸æŠ",   IDC_BTN_SELECTALL, BS_PUSHBUTTON, hFontUi_);
+    hBtnClearSel_  = MakeButton(p, L"é¸æŠã‚’è§£é™¤",   IDC_BTN_CLEARSEL,  BS_PUSHBUTTON, hFontUi_);
+    hBtnExportCsv_ = MakeButton(p, L"CSVå‡ºåŠ›",      IDC_BTN_EXPORTCSV,  BS_PUSHBUTTON, hFontUi_);
+    hBtnExportMd_  = MakeButton(p, L"Markdownå‡ºåŠ›", IDC_BTN_EXPORTMD,   BS_PUSHBUTTON, hFontUi_);
+    hBtnExportJson_= MakeButton(p, L"JSONå‡ºåŠ›",     IDC_BTN_EXPORTJSON, BS_PUSHBUTTON, hFontUi_);
     hLblResultInfo_ = MakeStatic(p, L"", IDC_LBL_RESULTINFO, hFontUi_);
 
     hListView_ = ::CreateWindowExW(WS_EX_CLIENTEDGE, WC_LISTVIEWW, L"",
@@ -549,14 +549,14 @@ void App::CreateResultPage()
     struct Col { const wchar_t* name; int width; int fmt; };
     static const Col cols[] = {
         { L"No",        44,  LVCFMT_RIGHT  },
-        { L"‘I‘ğ",      48,  LVCFMT_CENTER },
-        { L"ƒtƒ@ƒCƒ‹–¼",190, LVCFMT_LEFT   },
-        { L"s”Ô†",    62,  LVCFMT_RIGHT  },
-        { L"—ñ”Ô†",    62,  LVCFMT_RIGHT  },
-        { L"ˆê’ví•Ê",  82,  LVCFMT_LEFT   },
-        { L"ˆê’v—¦",    58,  LVCFMT_RIGHT  },
-        { L"ó‘Ô",      64,  LVCFMT_LEFT   },
-        { L"ƒvƒŒƒrƒ…[",330, LVCFMT_LEFT   },
+        { L"é¸æŠ",      48,  LVCFMT_CENTER },
+        { L"ãƒ•ã‚¡ã‚¤ãƒ«å",190, LVCFMT_LEFT   },
+        { L"è¡Œç•ªå·",    62,  LVCFMT_RIGHT  },
+        { L"åˆ—ç•ªå·",    62,  LVCFMT_RIGHT  },
+        { L"ä¸€è‡´ç¨®åˆ¥",  82,  LVCFMT_LEFT   },
+        { L"ä¸€è‡´ç‡",    58,  LVCFMT_RIGHT  },
+        { L"çŠ¶æ…‹",      64,  LVCFMT_LEFT   },
+        { L"ãƒ—ãƒ¬ãƒ“ãƒ¥ãƒ¼",330, LVCFMT_LEFT   },
     };
     for (int i = 0; i < (int)(sizeof(cols) / sizeof(cols[0])); ++i) {
         LVCOLUMNW c;
@@ -579,14 +579,14 @@ void App::CreatePreviewPage()
         0, 0, 10, 200, p, (HMENU)IDC_CMB_PREVIEWMODE, hInst_, nullptr);
     ApplyFont(hCmbPreviewMode_);
     static const wchar_t* modes[4] = {
-        L"‘OŒã”äŠr•\¦", L"’Pƒ•\¦", L"¶‰E”äŠr•\¦", L"HTML•\¦iƒuƒ‰ƒEƒU‚ÅŠJ‚­j"
+        L"å‰å¾Œæ¯”è¼ƒè¡¨ç¤º", L"å˜ç´”è¡¨ç¤º", L"å·¦å³æ¯”è¼ƒè¡¨ç¤º", L"HTMLè¡¨ç¤ºï¼ˆãƒ–ãƒ©ã‚¦ã‚¶ã§é–‹ãï¼‰"
     };
     for (int i = 0; i < 4; ++i)
         ::SendMessageW(hCmbPreviewMode_, CB_ADDSTRING, 0, (LPARAM)modes[i]);
     ::SendMessageW(hCmbPreviewMode_, CB_SETCURSEL, 0, 0);
 
-    hBtnOpenHtml_ = MakeButton(p, L"HTMLƒŒƒ|[ƒg‚ğŠJ‚­", IDC_BTN_OPENHTML, BS_PUSHBUTTON, hFontUi_);
-    hBtnWinMerge_ = MakeButton(p, L"WinMerge ‚Å”äŠr", IDC_BTN_WINMERGE, BS_PUSHBUTTON, hFontUi_);
+    hBtnOpenHtml_ = MakeButton(p, L"HTMLãƒ¬ãƒãƒ¼ãƒˆã‚’é–‹ã", IDC_BTN_OPENHTML, BS_PUSHBUTTON, hFontUi_);
+    hBtnWinMerge_ = MakeButton(p, L"WinMerge ã§æ¯”è¼ƒ", IDC_BTN_WINMERGE, BS_PUSHBUTTON, hFontUi_);
 
     hPreviewEdit_ = MakeEdit(p, IDC_EDIT_PREVIEW,
         ES_MULTILINE | ES_READONLY | ES_AUTOVSCROLL | ES_AUTOHSCROLL |
@@ -595,38 +595,38 @@ void App::CreatePreviewPage()
 
 
 // -----------------------------------------------------------------------------
-// ƒXƒCƒbƒ`ŠÇ—ƒ^ƒuiƒXƒCƒbƒ`’è‹`ƒwƒbƒ_‚ÌˆêŒ³ŠÇ—j
+// ã‚¹ã‚¤ãƒƒãƒç®¡ç†ã‚¿ãƒ–ï¼ˆã‚¹ã‚¤ãƒƒãƒå®šç¾©ãƒ˜ãƒƒãƒ€ã®ä¸€å…ƒç®¡ç†ï¼‰
 // -----------------------------------------------------------------------------
 void App::CreateSwitchPage()
 {
     HWND p = hPage_[PG_SWITCH];
 
-    hLblSwHeader_        = MakeStatic(p, L"ƒXƒCƒbƒ`’è‹`ƒwƒbƒ_", IDC_LBL_SWHEADER, hFontUi_);
+    hLblSwHeader_        = MakeStatic(p, L"ã‚¹ã‚¤ãƒƒãƒå®šç¾©ãƒ˜ãƒƒãƒ€", IDC_LBL_SWHEADER, hFontUi_);
     hSwHeaderEdit_       = MakeEdit(p, IDC_EDIT_SWHEADER, ES_AUTOHSCROLL | ES_READONLY, hFontUi_);
-    hBtnSwHeaderBrowse_  = MakeButton(p, L"QÆ...", IDC_BTN_SWHEADERBROWSE, BS_PUSHBUTTON, hFontUi_);
-    hBtnSwHeaderLoad_    = MakeButton(p, L"“Ç",    IDC_BTN_SWHEADERLOAD,   BS_PUSHBUTTON, hFontUi_);
+    hBtnSwHeaderBrowse_  = MakeButton(p, L"å‚ç…§...", IDC_BTN_SWHEADERBROWSE, BS_PUSHBUTTON, hFontUi_);
+    hBtnSwHeaderLoad_    = MakeButton(p, L"èª­è¾¼",    IDC_BTN_SWHEADERLOAD,   BS_PUSHBUTTON, hFontUi_);
 
-    hGrpSwAuto_ = MakeGroup(p, L"©“®‰»ƒIƒvƒVƒ‡ƒ“iÀs‚É“K—pj", IDC_GRP_SWAUTO, hFontUi_);
+    hGrpSwAuto_ = MakeGroup(p, L"è‡ªå‹•åŒ–ã‚ªãƒ—ã‚·ãƒ§ãƒ³ï¼ˆå®Ÿè¡Œæ™‚ã«é©ç”¨ï¼‰", IDC_GRP_SWAUTO, hFontUi_);
     hChkManageSwHeader_ = MakeCheck(p,
-        L"Às‚ÉƒXƒCƒbƒ`’è‹`ƒwƒbƒ_‚ğ¶¬^XV‚·‚éiƒXƒCƒbƒ`‚Ì’è‹`‚ğ 1 ƒtƒ@ƒCƒ‹‚ÖW–ñj",
+        L"å®Ÿè¡Œæ™‚ã«ã‚¹ã‚¤ãƒƒãƒå®šç¾©ãƒ˜ãƒƒãƒ€ã‚’ç”Ÿæˆï¼æ›´æ–°ã™ã‚‹ï¼ˆã‚¹ã‚¤ãƒƒãƒã®å®šç¾©ã‚’ 1 ãƒ•ã‚¡ã‚¤ãƒ«ã¸é›†ç´„ï¼‰",
         IDC_CHK_MANAGESWHEADER, hFontUi_);
     hChkAddInclude_ = MakeCheck(p,
-        L"‘ÎÛƒtƒ@ƒCƒ‹‚Ö #include ‚ğ’Ç‰Á‚·‚éid•¡’Ç‰Á‚Í‚µ‚Ü‚¹‚ñj",
+        L"å¯¾è±¡ãƒ•ã‚¡ã‚¤ãƒ«ã¸ #include ã‚’è¿½åŠ ã™ã‚‹ï¼ˆé‡è¤‡è¿½åŠ ã¯ã—ã¾ã›ã‚“ï¼‰",
         IDC_CHK_ADDINCLUDE, hFontUi_);
 
-    hLblSwHeaderName_ = MakeStatic(p, L"ƒwƒbƒ_ƒtƒ@ƒCƒ‹–¼", IDC_LBL_SWHEADERNAME, hFontUi_);
+    hLblSwHeaderName_ = MakeStatic(p, L"ãƒ˜ãƒƒãƒ€ãƒ•ã‚¡ã‚¤ãƒ«å", IDC_LBL_SWHEADERNAME, hFontUi_);
     hEditSwHeaderName_ = MakeEdit(p, IDC_EDIT_SWHEADERNAME, ES_AUTOHSCROLL, hFontUi_);
-    hLblSwHeaderDir_ = MakeStatic(p, L"o—ÍæƒtƒHƒ‹ƒ_", IDC_LBL_SWHEADERDIR, hFontUi_);
+    hLblSwHeaderDir_ = MakeStatic(p, L"å‡ºåŠ›å…ˆãƒ•ã‚©ãƒ«ãƒ€", IDC_LBL_SWHEADERDIR, hFontUi_);
     hEditSwHeaderDir_ = MakeEdit(p, IDC_EDIT_SWHEADERDIR, ES_AUTOHSCROLL, hFontUi_);
-    hBtnSwHeaderDir_ = MakeButton(p, L"QÆ...", IDC_BTN_SWHEADERDIR, BS_PUSHBUTTON, hFontUi_);
-    hLblSwMemo_ = MakeStatic(p, L"ƒXƒCƒbƒ`‚Ìà–¾", IDC_LBL_SWMEMO, hFontUi_);
+    hBtnSwHeaderDir_ = MakeButton(p, L"å‚ç…§...", IDC_BTN_SWHEADERDIR, BS_PUSHBUTTON, hFontUi_);
+    hLblSwMemo_ = MakeStatic(p, L"ã‚¹ã‚¤ãƒƒãƒã®èª¬æ˜", IDC_LBL_SWMEMO, hFontUi_);
     hEditSwMemo_ = MakeEdit(p, IDC_EDIT_SWMEMO, ES_AUTOHSCROLL, hFontUi_);
 
-    hBtnSwCreate_  = MakeButton(p, L"ƒwƒbƒ_‚ğ¡‚·‚®¶¬/XV", IDC_BTN_SWCREATE, BS_PUSHBUTTON, hFontUi_);
-    hBtnSwEnable_  = MakeButton(p, L"—LŒø‰»",     IDC_BTN_SWENABLE,  BS_PUSHBUTTON, hFontUi_);
-    hBtnSwDisable_ = MakeButton(p, L"–³Œø‰»",     IDC_BTN_SWDISABLE, BS_PUSHBUTTON, hFontUi_);
-    hBtnSwRemove_  = MakeButton(p, L"‘I‘ğ‚ğíœ", IDC_BTN_SWREMOVE,  BS_PUSHBUTTON, hFontUi_);
-    hBtnSwOpen_    = MakeButton(p, L"ƒwƒbƒ_‚ğŠJ‚­", IDC_BTN_SWOPEN,  BS_PUSHBUTTON, hFontUi_);
+    hBtnSwCreate_  = MakeButton(p, L"ãƒ˜ãƒƒãƒ€ã‚’ä»Šã™ãç”Ÿæˆ/æ›´æ–°", IDC_BTN_SWCREATE, BS_PUSHBUTTON, hFontUi_);
+    hBtnSwEnable_  = MakeButton(p, L"æœ‰åŠ¹åŒ–",     IDC_BTN_SWENABLE,  BS_PUSHBUTTON, hFontUi_);
+    hBtnSwDisable_ = MakeButton(p, L"ç„¡åŠ¹åŒ–",     IDC_BTN_SWDISABLE, BS_PUSHBUTTON, hFontUi_);
+    hBtnSwRemove_  = MakeButton(p, L"é¸æŠã‚’å‰Šé™¤", IDC_BTN_SWREMOVE,  BS_PUSHBUTTON, hFontUi_);
+    hBtnSwOpen_    = MakeButton(p, L"ãƒ˜ãƒƒãƒ€ã‚’é–‹ã", IDC_BTN_SWOPEN,  BS_PUSHBUTTON, hFontUi_);
     hLblSwInfo_    = MakeStatic(p, L"", IDC_LBL_SWINFO, hFontUi_);
 
     hListSwitches_ = ::CreateWindowExW(WS_EX_CLIENTEDGE, WC_LISTVIEWW, L"",
@@ -640,10 +640,10 @@ void App::CreateSwitchPage()
     struct Col { const wchar_t* name; int width; int fmt; };
     static const Col cols[] = {
         { L"No",        44,  LVCFMT_RIGHT },
-        { L"ƒXƒCƒbƒ`–¼",   190, LVCFMT_LEFT  },
-        { L"ó‘Ô",      90,  LVCFMT_LEFT  },
-        { L"“o˜^Œ³",    150, LVCFMT_LEFT  },
-        { L"à–¾ / XV", 420, LVCFMT_LEFT  },
+        { L"ã‚¹ã‚¤ãƒƒãƒå",   190, LVCFMT_LEFT  },
+        { L"çŠ¶æ…‹",      90,  LVCFMT_LEFT  },
+        { L"ç™»éŒ²å…ƒ",    150, LVCFMT_LEFT  },
+        { L"èª¬æ˜ / æ›´æ–°", 420, LVCFMT_LEFT  },
     };
     for (int i = 0; i < (int)(sizeof(cols) / sizeof(cols[0])); ++i) {
         LVCOLUMNW c;
@@ -659,53 +659,53 @@ void App::CreateSwitchPage()
 
 
 // =============================================================================
-// ŒŸõğŒƒ^ƒuiŒã‘±”Å: —Ş—ˆê’v / w’ès”ÍˆÍ / ŠÖ”’PˆÊ / o—ÍŒ`® / WinMerge / Undoj
+// æ¤œç´¢æ¡ä»¶ã‚¿ãƒ–ï¼ˆå¾Œç¶šç‰ˆ: é¡ä¼¼ä¸€è‡´ / æŒ‡å®šè¡Œç¯„å›² / é–¢æ•°å˜ä½ / å‡ºåŠ›å½¢å¼ / WinMerge / Undoï¼‰
 // =============================================================================
 void App::CreateSearchPage()
 {
     HWND p = hPage_[PG_SEARCH];
 
-    hGrpSimilar_ = MakeGroup(p, L"—Ş—ˆê’vŒŸõi‹ó”’‚Ì—h‚ê‚ğ‹–—ej", IDC_GRP_SIMILAR, hFontUi_);
-    hChkSimilar_ = MakeCheck(p, L"—Ş—ˆê’vŒŸõ‚ğ—LŒø‚É‚·‚éi’uŠ·‘ÎÛ‚Ö‚Í©“®‘I‘ğ‚³‚ê‚Ü‚¹‚ñj",
+    hGrpSimilar_ = MakeGroup(p, L"é¡ä¼¼ä¸€è‡´æ¤œç´¢ï¼ˆç©ºç™½ã®æºã‚Œã‚’è¨±å®¹ï¼‰", IDC_GRP_SIMILAR, hFontUi_);
+    hChkSimilar_ = MakeCheck(p, L"é¡ä¼¼ä¸€è‡´æ¤œç´¢ã‚’æœ‰åŠ¹ã«ã™ã‚‹ï¼ˆç½®æ›å¯¾è±¡ã¸ã¯è‡ªå‹•é¸æŠã•ã‚Œã¾ã›ã‚“ï¼‰",
                              IDC_CHK_SIMILAR, hFontUi_);
-    hLblSimThreshold_ = MakeStatic(p, L"ˆê’v—¦‚Ì‚µ‚«‚¢’l(%)", IDC_LBL_SIMTHRESHOLD, hFontUi_);
+    hLblSimThreshold_ = MakeStatic(p, L"ä¸€è‡´ç‡ã®ã—ãã„å€¤(%)", IDC_LBL_SIMTHRESHOLD, hFontUi_);
     hEditSimThreshold_ = MakeEdit(p, IDC_EDIT_SIMTHRESHOLD, ES_AUTOHSCROLL | ES_NUMBER, hFontUi_);
 
-    hGrpLineRange_ = MakeGroup(p, L"w’ès”ÍˆÍŒŸõ", IDC_GRP_LINERANGE, hFontUi_);
-    hChkLineRange_ = MakeCheck(p, L"w’è‚µ‚½s”ÍˆÍ‚¾‚¯‚ğŒŸõ‚·‚é", IDC_CHK_LINERANGE, hFontUi_);
-    hLblLineFrom_  = MakeStatic(p, L"ŠJns", IDC_LBL_LINEFROM, hFontUi_);
+    hGrpLineRange_ = MakeGroup(p, L"æŒ‡å®šè¡Œç¯„å›²æ¤œç´¢", IDC_GRP_LINERANGE, hFontUi_);
+    hChkLineRange_ = MakeCheck(p, L"æŒ‡å®šã—ãŸè¡Œç¯„å›²ã ã‘ã‚’æ¤œç´¢ã™ã‚‹", IDC_CHK_LINERANGE, hFontUi_);
+    hLblLineFrom_  = MakeStatic(p, L"é–‹å§‹è¡Œ", IDC_LBL_LINEFROM, hFontUi_);
     hEditLineFrom_ = MakeEdit(p, IDC_EDIT_LINEFROM, ES_AUTOHSCROLL | ES_NUMBER, hFontUi_);
-    hLblLineTo_    = MakeStatic(p, L"I—¹s", IDC_LBL_LINETO, hFontUi_);
+    hLblLineTo_    = MakeStatic(p, L"çµ‚äº†è¡Œ", IDC_LBL_LINETO, hFontUi_);
     hEditLineTo_   = MakeEdit(p, IDC_EDIT_LINETO, ES_AUTOHSCROLL | ES_NUMBER, hFontUi_);
 
-    hGrpFuncScope_ = MakeGroup(p, L"ŠÖ”’PˆÊŒŸõ", IDC_GRP_FUNCSCOPE, hFontUi_);
-    hChkFuncScope_ = MakeCheck(p, L"w’è‚µ‚½ŠÖ”‚Ì–{‘Ìi{ } ‚Ì’†j‚¾‚¯‚ğŒŸõ‚·‚é",
+    hGrpFuncScope_ = MakeGroup(p, L"é–¢æ•°å˜ä½æ¤œç´¢", IDC_GRP_FUNCSCOPE, hFontUi_);
+    hChkFuncScope_ = MakeCheck(p, L"æŒ‡å®šã—ãŸé–¢æ•°ã®æœ¬ä½“ï¼ˆ{ } ã®ä¸­ï¼‰ã ã‘ã‚’æ¤œç´¢ã™ã‚‹",
                                IDC_CHK_FUNCSCOPE, hFontUi_);
-    hLblFuncName_  = MakeStatic(p, L"ŠÖ”–¼", IDC_LBL_FUNCNAME, hFontUi_);
+    hLblFuncName_  = MakeStatic(p, L"é–¢æ•°å", IDC_LBL_FUNCNAME, hFontUi_);
     hEditFuncName_ = MakeEdit(p, IDC_EDIT_FUNCNAME, ES_AUTOHSCROLL, hFontUi_);
 
-    hGrpOutput_ = MakeGroup(p, L"o—ÍŒ`®", IDC_GRP_OUTPUT, hFontUi_);
-    hChkReportMd_   = MakeCheck(p, L"Markdown ƒŒƒ|[ƒg‚ào—Í‚·‚é (.md)", IDC_CHK_REPORTMD, hFontUi_);
-    hChkReportJson_ = MakeCheck(p, L"JSON ƒŒƒ|[ƒg‚ào—Í‚·‚é (.json)", IDC_CHK_REPORTJSON, hFontUi_);
-    hLblEncoding_   = MakeStatic(p, L"•¶šƒR[ƒh", IDC_LBL_ENCODING, hFontUi_);
+    hGrpOutput_ = MakeGroup(p, L"å‡ºåŠ›å½¢å¼", IDC_GRP_OUTPUT, hFontUi_);
+    hChkReportMd_   = MakeCheck(p, L"Markdown ãƒ¬ãƒãƒ¼ãƒˆã‚‚å‡ºåŠ›ã™ã‚‹ (.md)", IDC_CHK_REPORTMD, hFontUi_);
+    hChkReportJson_ = MakeCheck(p, L"JSON ãƒ¬ãƒãƒ¼ãƒˆã‚‚å‡ºåŠ›ã™ã‚‹ (.json)", IDC_CHK_REPORTJSON, hFontUi_);
+    hLblEncoding_   = MakeStatic(p, L"æ–‡å­—ã‚³ãƒ¼ãƒ‰", IDC_LBL_ENCODING, hFontUi_);
     hCmbEncoding_ = ::CreateWindowExW(0, L"COMBOBOX", L"",
         WS_CHILD | WS_VISIBLE | WS_TABSTOP | CBS_DROPDOWNLIST | WS_VSCROLL,
         0, 0, 10, 200, p, (HMENU)IDC_CMB_ENCODING, hInst_, nullptr);
     ApplyFont(hCmbEncoding_);
     static const wchar_t* encs[5] = {
-        L"©“®”»’è", L"UTF-8", L"UTF-8 (BOM)", L"Shift_JIS", L"EUC-JP"
+        L"è‡ªå‹•åˆ¤å®š", L"UTF-8", L"UTF-8 (BOM)", L"Shift_JIS", L"EUC-JP"
     };
     for (int i = 0; i < 5; ++i)
         ::SendMessageW(hCmbEncoding_, CB_ADDSTRING, 0, (LPARAM)encs[i]);
     ::SendMessageW(hCmbEncoding_, CB_SETCURSEL, 0, 0);
 
-    hGrpWinMerge_ = MakeGroup(p, L"WinMerge ˜AŒg", IDC_GRP_WINMERGE, hFontUi_);
-    hLblWinMerge_ = MakeStatic(p, L"WinMergeU.exe ‚ÌƒpƒX", IDC_LBL_WINMERGE, hFontUi_);
+    hGrpWinMerge_ = MakeGroup(p, L"WinMerge é€£æº", IDC_GRP_WINMERGE, hFontUi_);
+    hLblWinMerge_ = MakeStatic(p, L"WinMergeU.exe ã®ãƒ‘ã‚¹", IDC_LBL_WINMERGE, hFontUi_);
     hEditWinMerge_ = MakeEdit(p, IDC_EDIT_WINMERGE, ES_AUTOHSCROLL, hFontUi_);
-    hBtnWinMergeBrowse_ = MakeButton(p, L"QÆ...", IDC_BTN_WINMERGEBROWSE, BS_PUSHBUTTON, hFontUi_);
+    hBtnWinMergeBrowse_ = MakeButton(p, L"å‚ç…§...", IDC_BTN_WINMERGEBROWSE, BS_PUSHBUTTON, hFontUi_);
 
-    hGrpUndoOpt_ = MakeGroup(p, L"UndoiŒ³‚É–ß‚·j", IDC_GRP_UNDOOPT, hFontUi_);
-    hLblUndoMax_ = MakeStatic(p, L"•Û‚·‚é‘€ì¢‘ã”", IDC_LBL_UNDOMAX, hFontUi_);
+    hGrpUndoOpt_ = MakeGroup(p, L"Undoï¼ˆå…ƒã«æˆ»ã™ï¼‰", IDC_GRP_UNDOOPT, hFontUi_);
+    hLblUndoMax_ = MakeStatic(p, L"ä¿æŒã™ã‚‹æ“ä½œä¸–ä»£æ•°", IDC_LBL_UNDOMAX, hFontUi_);
     hEditUndoMax_ = MakeEdit(p, IDC_EDIT_UNDOMAX, ES_AUTOHSCROLL | ES_NUMBER, hFontUi_);
 
     hLblSearchInfo_ = MakeStatic(p, L"", IDC_LBL_SEARCHINFO, hFontUi_);
@@ -714,55 +714,55 @@ void App::CreateSearchPage()
 void App::CreateLogPage()
 {
     HWND p = hPage_[PG_LOG];
-    hBtnClearLog_ = MakeButton(p, L"ƒƒO‚ğƒNƒŠƒA", IDC_BTN_CLEARLOG, BS_PUSHBUTTON, hFontUi_);
+    hBtnClearLog_ = MakeButton(p, L"ãƒ­ã‚°ã‚’ã‚¯ãƒªã‚¢", IDC_BTN_CLEARLOG, BS_PUSHBUTTON, hFontUi_);
     hLogEdit_ = MakeEdit(p, IDC_EDIT_LOG,
         ES_MULTILINE | ES_READONLY | ES_AUTOVSCROLL | ES_AUTOHSCROLL |
         WS_VSCROLL | WS_HSCROLL, hFontMono_);
 }
 
 // -----------------------------------------------------------------------------
-// ƒVƒXƒeƒ€î•ñƒ^ƒui•ÏXd—l‘ / ŒŸ¸d—l‘‚Ì¶¬j
+// ã‚·ã‚¹ãƒ†ãƒ æƒ…å ±ã‚¿ãƒ–ï¼ˆå¤‰æ›´ä»•æ§˜æ›¸ / æ¤œæŸ»ä»•æ§˜æ›¸ã®ç”Ÿæˆï¼‰
 // -----------------------------------------------------------------------------
 void App::CreateSystemPage()
 {
     HWND p = hPage_[PG_SYSTEM];
 
-    hLblSysName_     = MakeStatic(p, L"ƒVƒXƒeƒ€–¼", IDC_LBL_SYSNAME, hFontUi_);
+    hLblSysName_     = MakeStatic(p, L"ã‚·ã‚¹ãƒ†ãƒ å", IDC_LBL_SYSNAME, hFontUi_);
     hEditSysName_    = MakeEdit(p, IDC_EDIT_SYSNAME, ES_AUTOHSCROLL, hFontUi_);
-    hLblSysOverview_ = MakeStatic(p, L"ƒVƒXƒeƒ€ŠT—v", IDC_LBL_SYSOVERVIEW, hFontUi_);
+    hLblSysOverview_ = MakeStatic(p, L"ã‚·ã‚¹ãƒ†ãƒ æ¦‚è¦", IDC_LBL_SYSOVERVIEW, hFontUi_);
     hEditSysOverview_= MakeEdit(p, IDC_EDIT_SYSOVERVIEW,
         ES_MULTILINE | ES_AUTOVSCROLL | WS_VSCROLL | ES_WANTRETURN, hFontUi_);
-    hLblSysPurpose_  = MakeStatic(p, L"–Ú“I", IDC_LBL_SYSPURPOSE, hFontUi_);
+    hLblSysPurpose_  = MakeStatic(p, L"ç›®çš„", IDC_LBL_SYSPURPOSE, hFontUi_);
     hEditSysPurpose_ = MakeEdit(p, IDC_EDIT_SYSPURPOSE,
         ES_MULTILINE | ES_AUTOVSCROLL | WS_VSCROLL | ES_WANTRETURN, hFontUi_);
-    hLblSysMod_      = MakeStatic(p, L"C³‰ÓŠŠT—v", IDC_LBL_SYSMOD, hFontUi_);
+    hLblSysMod_      = MakeStatic(p, L"ä¿®æ­£ç®‡æ‰€æ¦‚è¦", IDC_LBL_SYSMOD, hFontUi_);
     hEditSysMod_     = MakeEdit(p, IDC_EDIT_SYSMOD,
         ES_MULTILINE | ES_AUTOVSCROLL | WS_VSCROLL | ES_WANTRETURN, hFontUi_);
-    hLblSysExtra_    = MakeStatic(p, L"’Ç‰Áw¦i”CˆÓj", IDC_LBL_SYSEXTRA, hFontUi_);
+    hLblSysExtra_    = MakeStatic(p, L"è¿½åŠ æŒ‡ç¤ºï¼ˆä»»æ„ï¼‰", IDC_LBL_SYSEXTRA, hFontUi_);
     hEditSysExtra_   = MakeEdit(p, IDC_EDIT_SYSEXTRA,
         ES_MULTILINE | ES_AUTOVSCROLL | WS_VSCROLL | ES_WANTRETURN, hFontUi_);
 
-    hBtnSpecChange_  = MakeButton(p, L"•ÏXd—l‘‚ğ¶¬", IDC_BTN_SPECCHANGE, BS_PUSHBUTTON, hFontUi_);
-    hBtnSpecInspect_ = MakeButton(p, L"ŒŸ¸d—l‘‚ğ¶¬", IDC_BTN_SPECINSPECT, BS_PUSHBUTTON, hFontUi_);
-    hBtnSpecBoth_    = MakeButton(p, L"—¼•û‚ğ¶¬", IDC_BTN_SPECBOTH, BS_PUSHBUTTON, hFontUi_);
-    hChkAiOpenReport_= MakeCheck(p, L"¶¬Œã‚ÉƒŒƒ|[ƒg‚ğŠJ‚­", IDC_CHK_AIOPENREPORT, hFontUi_);
-    hBtnSpecOpen_    = MakeButton(p, L"ƒŒƒ|[ƒg‚ğŠJ‚­", IDC_BTN_SPECOPEN, BS_PUSHBUTTON, hFontUi_);
+    hBtnSpecChange_  = MakeButton(p, L"å¤‰æ›´ä»•æ§˜æ›¸ã‚’ç”Ÿæˆ", IDC_BTN_SPECCHANGE, BS_PUSHBUTTON, hFontUi_);
+    hBtnSpecInspect_ = MakeButton(p, L"æ¤œæŸ»ä»•æ§˜æ›¸ã‚’ç”Ÿæˆ", IDC_BTN_SPECINSPECT, BS_PUSHBUTTON, hFontUi_);
+    hBtnSpecBoth_    = MakeButton(p, L"ä¸¡æ–¹ã‚’ç”Ÿæˆ", IDC_BTN_SPECBOTH, BS_PUSHBUTTON, hFontUi_);
+    hChkAiOpenReport_= MakeCheck(p, L"ç”Ÿæˆå¾Œã«ãƒ¬ãƒãƒ¼ãƒˆã‚’é–‹ã", IDC_CHK_AIOPENREPORT, hFontUi_);
+    hBtnSpecOpen_    = MakeButton(p, L"ãƒ¬ãƒãƒ¼ãƒˆã‚’é–‹ã", IDC_BTN_SPECOPEN, BS_PUSHBUTTON, hFontUi_);
     hLblSpecInfo_    = MakeStatic(p, L"", IDC_LBL_SPECINFO, hFontUi_);
 
-    // AI ˜AŒg‚ªg‚¦‚È‚¢ŠÂ‹«Œü‚¯: ˆË—Š•¶‚ğ txt ‚Åo—Í‚·‚é
-    hBtnPromptChange_  = MakeButton(p, L"ƒvƒƒ“ƒvƒgtxti•ÏXd—l‘j", IDC_BTN_PROMPTCHANGE,  BS_PUSHBUTTON, hFontUi_);
-    hBtnPromptInspect_ = MakeButton(p, L"ƒvƒƒ“ƒvƒgtxtiŒŸ¸d—l‘j", IDC_BTN_PROMPTINSPECT, BS_PUSHBUTTON, hFontUi_);
-    hBtnPromptBoth_    = MakeButton(p, L"—¼•û‚Ìƒvƒƒ“ƒvƒgtxt",        IDC_BTN_PROMPTBOTH,    BS_PUSHBUTTON, hFontUi_);
+    // AI é€£æºãŒä½¿ãˆãªã„ç’°å¢ƒå‘ã‘: ä¾é ¼æ–‡ã‚’ txt ã§å‡ºåŠ›ã™ã‚‹
+    hBtnPromptChange_  = MakeButton(p, L"ãƒ—ãƒ­ãƒ³ãƒ—ãƒˆtxtï¼ˆå¤‰æ›´ä»•æ§˜æ›¸ï¼‰", IDC_BTN_PROMPTCHANGE,  BS_PUSHBUTTON, hFontUi_);
+    hBtnPromptInspect_ = MakeButton(p, L"ãƒ—ãƒ­ãƒ³ãƒ—ãƒˆtxtï¼ˆæ¤œæŸ»ä»•æ§˜æ›¸ï¼‰", IDC_BTN_PROMPTINSPECT, BS_PUSHBUTTON, hFontUi_);
+    hBtnPromptBoth_    = MakeButton(p, L"ä¸¡æ–¹ã®ãƒ—ãƒ­ãƒ³ãƒ—ãƒˆtxt",        IDC_BTN_PROMPTBOTH,    BS_PUSHBUTTON, hFontUi_);
 
-    // AI ƒ`ƒƒƒbƒg‚Ì‰ñ“š‚ğ“\‚è•t‚¯‚ÄƒŒƒ|[ƒg‰»‚·‚é
-    hBtnMakeChange_  = MakeButton(p, L"‚±‚Ì“à—e‚ğ•ÏXd—l‘‚É‚·‚é", IDC_BTN_MAKECHANGE,  BS_PUSHBUTTON, hFontUi_);
-    hBtnMakeInspect_ = MakeButton(p, L"‚±‚Ì“à—e‚ğŒŸ¸d—l‘‚É‚·‚é", IDC_BTN_MAKEINSPECT, BS_PUSHBUTTON, hFontUi_);
+    // AI ãƒãƒ£ãƒƒãƒˆã®å›ç­”ã‚’è²¼ã‚Šä»˜ã‘ã¦ãƒ¬ãƒãƒ¼ãƒˆåŒ–ã™ã‚‹
+    hBtnMakeChange_  = MakeButton(p, L"ã“ã®å†…å®¹ã‚’å¤‰æ›´ä»•æ§˜æ›¸ã«ã™ã‚‹", IDC_BTN_MAKECHANGE,  BS_PUSHBUTTON, hFontUi_);
+    hBtnMakeInspect_ = MakeButton(p, L"ã“ã®å†…å®¹ã‚’æ¤œæŸ»ä»•æ§˜æ›¸ã«ã™ã‚‹", IDC_BTN_MAKEINSPECT, BS_PUSHBUTTON, hFontUi_);
     hLblPasteNote_   = MakeStatic(p,
-        L"iAPI ‚ğg‚í‚È‚¢ê‡‚ÍAo—Í‚µ‚½ txt ‚ğ AI ƒ`ƒƒƒbƒg‚Ö“\‚èA•Ô‚Á‚Ä‚«‚½‰ñ“š‚ğ‰º‚Ì—“‚Ö“\‚è•t‚¯‚Äƒ{ƒ^ƒ“‚ğ‰Ÿ‚µ‚Ä‚­‚¾‚³‚¢j",
+        L"ï¼ˆAPI ã‚’ä½¿ã‚ãªã„å ´åˆã¯ã€å‡ºåŠ›ã—ãŸ txt ã‚’ AI ãƒãƒ£ãƒƒãƒˆã¸è²¼ã‚Šã€è¿”ã£ã¦ããŸå›ç­”ã‚’ä¸‹ã®æ¬„ã¸è²¼ã‚Šä»˜ã‘ã¦ãƒœã‚¿ãƒ³ã‚’æŠ¼ã—ã¦ãã ã•ã„ï¼‰",
         IDC_LBL_PASTENOTE, hFontUi_);
 
     hLblSpecOutNote_ = MakeStatic(p,
-        L"o—ÍiAI ‚Ì¶¬Œ‹‰Ê / AI ƒ`ƒƒƒbƒg‚Ì‰ñ“š‚ğ‚±‚±‚É“\‚è•t‚¯j",
+        L"å‡ºåŠ›ï¼ˆAI ã®ç”Ÿæˆçµæœ / AI ãƒãƒ£ãƒƒãƒˆã®å›ç­”ã‚’ã“ã“ã«è²¼ã‚Šä»˜ã‘ï¼‰",
         IDC_LBL_SPECOUTNOTE, hFontUi_);
     hEditSpecOut_ = MakeEdit(p, IDC_EDIT_SPECOUT,
         ES_MULTILINE | ES_AUTOVSCROLL | ES_AUTOHSCROLL |
@@ -770,7 +770,7 @@ void App::CreateSystemPage()
 }
 
 // -----------------------------------------------------------------------------
-// ƒŒƒCƒAƒEƒg
+// ãƒ¬ã‚¤ã‚¢ã‚¦ãƒˆ
 // -----------------------------------------------------------------------------
 void App::LayoutPage(int index, const RECT& rc)
 {
@@ -817,14 +817,14 @@ void App::LayoutPage(int index, const RECT& rc)
         ::MoveWindow(hRadHit_[2], rx, gy + 66, rw, 18, TRUE);
         ::MoveWindow(hRadHit_[3], rx, gy + 88, rw, 18, TRUE);
 
-        // ---- AI ˜AŒgid—l‘¶¬j----
+        // ---- AI é€£æºï¼ˆä»•æ§˜æ›¸ç”Ÿæˆï¼‰----
         int ay = gy + hh + 10;
         if (ay + aih > H - M) ay = H - M - aih;
         if (ay < gy + 96 + 10) ay = gy + 96 + 10;
         ::MoveWindow(hGrpAi_, M, ay, gw, aih, TRUE);
         ::MoveWindow(hLblAiProvider_, rx, ay + 22, 96, 18, TRUE);
-        // API í•ÊƒRƒ“ƒ{‚ÆuÚ‘±ƒeƒXƒgvƒ{ƒ^ƒ“‚ªƒOƒ‹[ƒv“à‚Éû‚Ü‚é‚æ‚¤•‚ğ”z•ª‚·‚éB
-        // iˆÈ‘O‚Íƒ{ƒ^ƒ“‰E’[‚ªƒOƒ‹[ƒv‰E’[‚ğ–ñ 92px ‰z‚¦‚Ä‰æ–ÊŠO‚Éo‚Ä‚¢‚½j
+        // API ç¨®åˆ¥ã‚³ãƒ³ãƒœã¨ã€Œæ¥ç¶šãƒ†ã‚¹ãƒˆã€ãƒœã‚¿ãƒ³ãŒã‚°ãƒ«ãƒ¼ãƒ—å†…ã«åã¾ã‚‹ã‚ˆã†å¹…ã‚’é…åˆ†ã™ã‚‹ã€‚
+        // ï¼ˆä»¥å‰ã¯ãƒœã‚¿ãƒ³å³ç«¯ãŒã‚°ãƒ«ãƒ¼ãƒ—å³ç«¯ã‚’ç´„ 92px è¶Šãˆã¦ç”»é¢å¤–ã«å‡ºã¦ã„ãŸï¼‰
         const int aiBtnW = 112;
         const int aiGap  = 12;
         int aiComboW = gw - 28 - 96 - aiGap - aiBtnW;
@@ -843,7 +843,7 @@ void App::LayoutPage(int index, const RECT& rc)
         ::MoveWindow(hEditAiTimeout_, rx + 96 + mw2 + 126, ay + 102, 70, 22, TRUE);
         break;
     }
-    case PG_BATCH: {   // 17.2.1 ’Ç‰ÁUI
+    case PG_BATCH: {   // 17.2.1 è¿½åŠ UI
         int gw = W - M * 2;
         int y = M;
 
@@ -1039,7 +1039,7 @@ void App::LayoutPage(int index, const RECT& rc)
         ::MoveWindow(hEditSysExtra_, M, y + 18, gw, xh, TRUE);
         y += xh + 18 + 6;
 
-        // s1: API ‚Å¶¬
+        // è¡Œ1: API ã§ç”Ÿæˆ
         ::MoveWindow(hBtnSpecChange_, M, y, 150, 26, TRUE);
         ::MoveWindow(hBtnSpecInspect_, M + 156, y, 150, 26, TRUE);
         ::MoveWindow(hBtnSpecBoth_, M + 312, y, 120, 26, TRUE);
@@ -1051,7 +1051,7 @@ void App::LayoutPage(int index, const RECT& rc)
         ::MoveWindow(hLblSpecInfo_, lx, y + 5, lw, 18, TRUE);
         y += 26 + 6;
 
-        // s2: ƒvƒƒ“ƒvƒg txt o—Í / “\‚è•t‚¯‚½‰ñ“š‚ÌƒŒƒ|[ƒg‰»
+        // è¡Œ2: ãƒ—ãƒ­ãƒ³ãƒ—ãƒˆ txt å‡ºåŠ› / è²¼ã‚Šä»˜ã‘ãŸå›ç­”ã®ãƒ¬ãƒãƒ¼ãƒˆåŒ–
         ::MoveWindow(hBtnPromptChange_, M, y, 180, 26, TRUE);
         ::MoveWindow(hBtnPromptInspect_, M + 186, y, 180, 26, TRUE);
         ::MoveWindow(hBtnPromptBoth_, M + 372, y, 150, 26, TRUE);
@@ -1174,7 +1174,7 @@ void App::LayoutControls()
 }
 
 // -----------------------------------------------------------------------------
-// İ’èƒtƒ@ƒCƒ‹ Ì ‰æ–Ê
+// è¨­å®šãƒ•ã‚¡ã‚¤ãƒ« â‡” ç”»é¢
 // -----------------------------------------------------------------------------
 void App::LoadConfigToUi()
 {
@@ -1198,7 +1198,7 @@ void App::LoadConfigToUi()
     SetEditText(hFolderEdit_, cfg_.last_target_folder);
     SetChecked(hChkSubdirs_, cfg_.include_subdirs);
 
-    // Šg’£qƒtƒBƒ‹ƒ^
+    // æ‹¡å¼µå­ãƒ•ã‚£ãƒ«ã‚¿
     std::vector<std::wstring> cand = FolderScanner::CandidateExtensions();
     for (size_t i = 0; i < cand.size() && i < 6; ++i) {
         bool on = false;
@@ -1224,14 +1224,14 @@ void App::LoadConfigToUi()
     SetEditText(hEditSwHeaderDir_,  cfg_.switch_header_dir);
     SetEditText(hEditSwMemo_,       cfg_.switch_memo);
 
-    // ---- AI ˜AŒg ----
+    // ---- AI é€£æº ----
     ::SendMessageW(hCmbAiProvider_, CB_SETCURSEL,
                    (cfg_.ai_provider == 1) ? 1 : 0, 0);
     LoadAiFieldsFromConfig(cfg_.ai_provider);
     SetEditText(hEditAiTimeout_,  std::to_wstring(cfg_.ai_timeout_sec > 0 ? cfg_.ai_timeout_sec : 600));
     SetChecked(hChkAiOpenReport_, cfg_.ai_open_report);
 
-    // ---- ƒVƒXƒeƒ€î•ñ ----
+    // ---- ã‚·ã‚¹ãƒ†ãƒ æƒ…å ± ----
     SetEditText(hEditSysName_,      cfg_.sys_name);
     SetEditText(hEditSysOverview_,  cfg_.sys_overview);
     SetEditText(hEditSysPurpose_,   cfg_.sys_purpose);
@@ -1239,7 +1239,7 @@ void App::LoadConfigToUi()
     SetEditText(hEditSysExtra_,     cfg_.sys_extra);
     last_spec_report_path_ = cfg_.last_spec_report_path;
     if (!last_spec_report_path_.empty())
-        SetEditText(hLblSpecInfo_, L"‘O‰ñ‚Ìo—Í: " + last_spec_report_path_);
+        SetEditText(hLblSpecInfo_, L"å‰å›ã®å‡ºåŠ›: " + last_spec_report_path_);
 
     suppress_events_ = false;
     OnTargetKindChanged();
@@ -1282,7 +1282,7 @@ void App::SaveUiToConfig()
     cfg_.switch_memo = util::Trim(GetEditText(hEditSwMemo_));
     cfg_.last_switch_header_path = CurrentSwitchHeaderPath();
 
-    // ---- AI ˜AŒg ----
+    // ---- AI é€£æº ----
     cfg_.ai_provider = (int)::SendMessageW(hCmbAiProvider_, CB_GETCURSEL, 0, 0);
     if (cfg_.ai_provider < 0 || cfg_.ai_provider > 1) cfg_.ai_provider = 0;
     SaveAiFieldsToConfig(cfg_.ai_provider);
@@ -1293,7 +1293,7 @@ void App::SaveUiToConfig()
     cfg_.ai_timeout_sec = tmo;
     cfg_.ai_open_report = IsChecked(hChkAiOpenReport_);
 
-    // ---- ƒVƒXƒeƒ€î•ñ ----
+    // ---- ã‚·ã‚¹ãƒ†ãƒ æƒ…å ± ----
     cfg_.sys_name         = util::Trim(GetEditText(hEditSysName_));
     cfg_.sys_overview     = util::Trim(GetEditText(hEditSysOverview_));
     cfg_.sys_purpose      = util::Trim(GetEditText(hEditSysPurpose_));
@@ -1307,7 +1307,7 @@ void App::SaveUiToConfig()
 }
 
 // -----------------------------------------------------------------------------
-// ƒƒbƒZ[ƒWˆ—
+// ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸å‡¦ç†
 // -----------------------------------------------------------------------------
 LRESULT App::WndProc(HWND hWnd, UINT msg, WPARAM wp, LPARAM lp)
 {
@@ -1375,7 +1375,7 @@ void App::OnDropFiles(HDROP hDrop)
 
     DWORD attr = ::GetFileAttributesW(buf);
     if (attr != INVALID_FILE_ATTRIBUTES && (attr & FILE_ATTRIBUTE_DIRECTORY)) {
-        // ƒtƒHƒ‹ƒ_‚ªƒhƒƒbƒv‚³‚ê‚½ê‡‚ÍˆêŠ‡ˆ—ƒ‚[ƒh‚Ö
+        // ãƒ•ã‚©ãƒ«ãƒ€ãŒãƒ‰ãƒ­ãƒƒãƒ—ã•ã‚ŒãŸå ´åˆã¯ä¸€æ‹¬å‡¦ç†ãƒ¢ãƒ¼ãƒ‰ã¸
         SetRadioGroup(hRadTargetKind_, 2, 1);
         SetEditText(hFolderEdit_, buf);
         OnTargetKindChanged();
@@ -1401,7 +1401,7 @@ void App::OnTabChange()
         ::ShowWindow(hPage_[i], (i == sel) ? SW_SHOW : SW_HIDE);
     if (sel == PG_RESULT) UpdateSelectionColumn();
     if (sel == PG_SYSTEM && !last_spec_report_path_.empty())
-        SetEditText(hLblSpecInfo_, L"o—Í: " + last_spec_report_path_);
+        SetEditText(hLblSpecInfo_, L"å‡ºåŠ›: " + last_spec_report_path_);
     if (sel == PG_SWITCH) {
         RefreshResolvedHeaderPath();
         if (util::PathExists(CurrentSwitchHeaderPath())) DoSwitchHeaderLoad();
@@ -1439,8 +1439,8 @@ void App::OnNotify(NMHDR* nm)
 
 void App::OnCommand(int id, int code, HWND ctrl)
 {
-    // ---- ƒIƒvƒVƒ‡ƒ“‚Ìƒ`ƒFƒbƒNó‘Ô‚ğ‘¦À‚É•Û‘¶‚·‚é ----
-    // i•Û‘¶‚ÍI—¹‚Ì‚İ‚¾‚Á‚½‚½‚ßAƒ`ƒFƒbƒN‚ğ•t‚¯‚Ä‚àŸ‰ñ‹N“®‚É–ß‚Á‚Ä‚¢‚½j
+    // ---- ã‚ªãƒ—ã‚·ãƒ§ãƒ³ã®ãƒã‚§ãƒƒã‚¯çŠ¶æ…‹ã‚’å³åº§ã«ä¿å­˜ã™ã‚‹ ----
+    // ï¼ˆä¿å­˜ã¯çµ‚äº†æ™‚ã®ã¿ã ã£ãŸãŸã‚ã€ãƒã‚§ãƒƒã‚¯ã‚’ä»˜ã‘ã¦ã‚‚æ¬¡å›èµ·å‹•æ™‚ã«æˆ»ã£ã¦ã„ãŸï¼‰
     if (!suppress_events_ &&
         (id == IDC_CHK_WARNCOMMENT || id == IDC_CHK_WARNPREPROC ||
          id == IDC_CHK_BACKUP || id == IDC_CHK_REPORT || id == IDC_CHK_LOG ||
@@ -1448,7 +1448,7 @@ void App::OnCommand(int id, int code, HWND ctrl)
         SaveUiToConfig();
     }
 
-    // ---- Œã‘±”Å: ŒŸõğŒ / ƒGƒNƒXƒ|[ƒg / WinMerge ˜AŒg ----
+    // ---- å¾Œç¶šç‰ˆ: æ¤œç´¢æ¡ä»¶ / ã‚¨ã‚¯ã‚¹ãƒãƒ¼ãƒˆ / WinMerge é€£æº ----
     if (id == IDC_CHK_SIMILAR || id == IDC_CHK_LINERANGE || id == IDC_CHK_FUNCSCOPE ||
         id == IDC_CHK_REPORTMD || id == IDC_CHK_REPORTJSON) {
         SaveSearchOptionsToConfig();
@@ -1503,8 +1503,8 @@ void App::OnCommand(int id, int code, HWND ctrl)
     default: break;
     }
 
-    // ƒ‰ƒWƒIƒ{ƒ^ƒ“: ƒ_ƒCƒAƒƒOˆÈŠO‚ÌƒEƒBƒ“ƒhƒE‚Å‚Í©“®“I‚É‘¼‚ªŠO‚ê‚È‚¢‚½‚ßA
-    // ‚±‚±‚Å–¾¦“I‚ÉƒOƒ‹[ƒv‚Ìƒ`ƒFƒbƒN‚ğ•t‚¯‘Ö‚¦‚éB
+    // ãƒ©ã‚¸ã‚ªãƒœã‚¿ãƒ³: ãƒ€ã‚¤ã‚¢ãƒ­ã‚°ä»¥å¤–ã®ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã§ã¯è‡ªå‹•çš„ã«ä»–ãŒå¤–ã‚Œãªã„ãŸã‚ã€
+    // ã“ã“ã§æ˜ç¤ºçš„ã«ã‚°ãƒ«ãƒ¼ãƒ—ã®ãƒã‚§ãƒƒã‚¯ã‚’ä»˜ã‘æ›¿ãˆã‚‹ã€‚
     if (id >= IDC_RAD_STYLE_A && id <= IDC_RAD_STYLE_D) {
         if (code == BN_CLICKED) SetRadioGroup(hRadStyle_, 4, id - IDC_RAD_STYLE_A);
         return;
@@ -1536,9 +1536,9 @@ void App::OnCommand(int id, int code, HWND ctrl)
             SetEditText(hLblHintSwitch_, L"");
         } else {
             ValidationResult vr = ValidationManager::ValidateSwitchName(name);
-            if (!vr.ok) SetEditText(hLblHintSwitch_, L"~ " + vr.error);
-            else if (!vr.warnings.empty()) SetEditText(hLblHintSwitch_, L"¢ " + vr.warnings[0]);
-            else SetEditText(hLblHintSwitch_, L"› g—p‰Â”\‚ÈƒXƒCƒbƒ`–¼‚Å‚·");
+            if (!vr.ok) SetEditText(hLblHintSwitch_, L"Ã— " + vr.error);
+            else if (!vr.warnings.empty()) SetEditText(hLblHintSwitch_, L"â–³ " + vr.warnings[0]);
+            else SetEditText(hLblHintSwitch_, L"â—‹ ä½¿ç”¨å¯èƒ½ãªã‚¹ã‚¤ãƒƒãƒåã§ã™");
         }
         return;
     }
@@ -1575,7 +1575,7 @@ void App::OnCommand(int id, int code, HWND ctrl)
 }
 
 // -----------------------------------------------------------------------------
-// ¬•¨ƒwƒ‹ƒp
+// å°ç‰©ãƒ˜ãƒ«ãƒ‘
 // -----------------------------------------------------------------------------
 std::wstring App::GetEditText(HWND h) const
 {
@@ -1640,13 +1640,13 @@ void App::AppendLog(const std::wstring& line)
 
 void App::ShowError(const std::wstring& m)
 {
-    ::MessageBoxW(hWnd_, m.c_str(), L"CopyMigration Switcher - ƒGƒ‰[",
+    ::MessageBoxW(hWnd_, m.c_str(), L"CopyMigration Switcher - ã‚¨ãƒ©ãƒ¼",
                   MB_ICONERROR | MB_OK);
 }
 
 void App::ShowWarn(const std::wstring& m)
 {
-    ::MessageBoxW(hWnd_, m.c_str(), L"CopyMigration Switcher - Œx",
+    ::MessageBoxW(hWnd_, m.c_str(), L"CopyMigration Switcher - è­¦å‘Š",
                   MB_ICONWARNING | MB_OK);
 }
 
@@ -1658,7 +1658,7 @@ void App::ShowInfo(const std::wstring& m)
 
 bool App::Confirm(const std::wstring& m)
 {
-    return ::MessageBoxW(hWnd_, m.c_str(), L"CopyMigration Switcher - Šm”F",
+    return ::MessageBoxW(hWnd_, m.c_str(), L"CopyMigration Switcher - ç¢ºèª",
                          MB_ICONQUESTION | MB_YESNO | MB_DEFBUTTON2) == IDYES;
 }
 
@@ -1674,11 +1674,11 @@ void App::UpdateInputInfo()
     std::wstring newc = util::NormalizeNewlines(GetEditText(hNewEdit_));
 
     wchar_t buf[256];
-    swprintf(buf, 256, L"s”: %d / •¶š”: %diƒ^ƒuE”¼ŠpƒXƒy[ƒX‚Í‚»‚Ì‚Ü‚Ü•Û‚³‚ê‚Ü‚·j",
+    swprintf(buf, 256, L"è¡Œæ•°: %d / æ–‡å­—æ•°: %dï¼ˆã‚¿ãƒ–ãƒ»åŠè§’ã‚¹ãƒšãƒ¼ã‚¹ã¯ãã®ã¾ã¾ä¿æŒã•ã‚Œã¾ã™ï¼‰",
              util::CountLines(oldc), (int)oldc.size());
     SetEditText(hLblOldInfo_, buf);
 
-    swprintf(buf, 256, L"s”: %d / •¶š”: %d",
+    swprintf(buf, 256, L"è¡Œæ•°: %d / æ–‡å­—æ•°: %d",
              util::CountLines(newc), (int)newc.size());
     SetEditText(hLblNewInfo_, buf);
 }

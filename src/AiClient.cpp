@@ -1,4 +1,4 @@
-// =============================================================================
+ï»¿// =============================================================================
 // AiClient.cpp
 // =============================================================================
 #include "AiClient.h"
@@ -26,10 +26,10 @@ std::wstring AiClient::DefaultTaskType()
     return L"super_agent";
 }
 
-// OpenAI ŒİŠ· API ‚Ì URL ‚ğ‘g‚İ—§‚Ä‚éB
+// OpenAI äº’æ› API ã® URL ã‚’çµ„ã¿ç«‹ã¦ã‚‹ã€‚
 //   ".../v1"                      -> ".../v1/chat/completions"
-//   ".../v1/chat/completions"     -> ‚»‚Ì‚Ü‚Ü
-//   Azure ‚Ì‚æ‚¤‚É api-version •t‚«‚ÌŠ®‘S URL -> ‚»‚Ì‚Ü‚Ü
+//   ".../v1/chat/completions"     -> ãã®ã¾ã¾
+//   Azure ã®ã‚ˆã†ã« api-version ä»˜ãã®å®Œå…¨ URL -> ãã®ã¾ã¾
 std::wstring AiClient::ResolveOpenAiUrl(const std::wstring& endpoint)
 {
     std::wstring url = endpoint.empty() ? DefaultOpenAiEndpoint() : endpoint;
@@ -57,9 +57,9 @@ bool AiClient::ParseOpenAiResponse(const std::string& json,
 {
     out_text.clear();
     out_error.clear();
-    if (json.empty()) { out_error = L"API ‚©‚ç‹ó‚Ì‰“š‚ª•Ô‚è‚Ü‚µ‚½B"; return false; }
+    if (json.empty()) { out_error = L"API ã‹ã‚‰ç©ºã®å¿œç­”ãŒè¿”ã‚Šã¾ã—ãŸã€‚"; return false; }
 
-    // {"error":{"message":"..."}} Œ`®
+    // {"error":{"message":"..."}} å½¢å¼
     if (json.find("\"error\"") != std::string::npos) {
         std::wstring msg;
         if (JsonFindString(json, "message", msg) && !msg.empty()) {
@@ -67,19 +67,19 @@ bool AiClient::ParseOpenAiResponse(const std::string& json,
             return false;
         }
     }
-    // ’Êí: choices[0].message.content
+    // é€šå¸¸: choices[0].message.content
     std::wstring content;
     if (JsonFindString(json, "content", content) && !content.empty()) {
         out_text = content;
         return true;
     }
-    // ‹Œ completions Œ`®: choices[0].text
+    // æ—§ completions å½¢å¼: choices[0].text
     std::wstring legacy;
     if (JsonFindString(json, "text", legacy) && !legacy.empty()) {
         out_text = legacy;
         return true;
     }
-    out_error = L"API ‚Ì‰“š‚©‚ç–{•¶‚ğæ‚èo‚¹‚Ü‚¹‚ñ‚Å‚µ‚½B";
+    out_error = L"API ã®å¿œç­”ã‹ã‚‰æœ¬æ–‡ã‚’å–ã‚Šå‡ºã›ã¾ã›ã‚“ã§ã—ãŸã€‚";
     return false;
 }
 
@@ -171,9 +171,9 @@ static bool Hex4(const std::string& s, size_t pos, unsigned& out)
     return true;
 }
 
-// JSON •¶š—ñƒŠƒeƒ‰ƒ‹‚Ì’†giƒGƒXƒP[ƒvÏ‚İj‚ğ UTF-8 ƒoƒCƒg—ñ‚Ö–ß‚µA
-// ÅŒã‚É UTF-16(wstring) ‚Ö•ÏŠ·‚·‚éB
-// ¦ 1 ƒoƒCƒg‚¸‚Â wchar_t ‰»‚·‚é‚Æ“ú–{Œê‚ª‰ó‚ê‚é‚½‚ßA•K‚¸ƒoƒCƒg—ñ‚Å‘g‚İ—§‚Ä‚éB
+// JSON æ–‡å­—åˆ—ãƒªãƒ†ãƒ©ãƒ«ã®ä¸­èº«ï¼ˆã‚¨ã‚¹ã‚±ãƒ¼ãƒ—æ¸ˆã¿ï¼‰ã‚’ UTF-8 ãƒã‚¤ãƒˆåˆ—ã¸æˆ»ã—ã€
+// æœ€å¾Œã« UTF-16(wstring) ã¸å¤‰æ›ã™ã‚‹ã€‚
+// â€» 1 ãƒã‚¤ãƒˆãšã¤ wchar_t åŒ–ã™ã‚‹ã¨æ—¥æœ¬èªãŒå£Šã‚Œã‚‹ãŸã‚ã€å¿…ãšãƒã‚¤ãƒˆåˆ—ã§çµ„ã¿ç«‹ã¦ã‚‹ã€‚
 std::wstring AiClient::JsonUnescape(const std::string& s)
 {
     std::string out;   // UTF-8
@@ -213,7 +213,7 @@ std::wstring AiClient::JsonUnescape(const std::string& s)
     return Utf8Decode(out);
 }
 
-// "key" ‚ğ’T‚µA‚»‚Ì’l‚ª•¶š—ñ‚È‚ç out ‚É“ü‚ê‚Ä true
+// "key" ã‚’æ¢ã—ã€ãã®å€¤ãŒæ–‡å­—åˆ—ãªã‚‰ out ã«å…¥ã‚Œã¦ true
 bool AiClient::JsonFindString(const std::string& json, const char* key, std::wstring& out)
 {
     std::string pat = std::string("\"") + key + "\"";
@@ -240,7 +240,7 @@ bool AiClient::JsonFindString(const std::string& json, const char* key, std::wst
     return false;
 }
 
-// "key": [ "first", ... ] ‚ÌÅ‰‚Ì—v‘f‚ğæ‚èo‚·
+// "key": [ "first", ... ] ã®æœ€åˆã®è¦ç´ ã‚’å–ã‚Šå‡ºã™
 bool AiClient::JsonFindFirstArrayString(const std::string& json, const char* key, std::wstring& out)
 {
     std::string pat = std::string("\"") + key + "\"";
@@ -329,7 +329,7 @@ std::string AiClient::BuildRequestBody(const AiSettings& st, const std::wstring&
 }
 
 // -----------------------------------------------------------------------------
-// À‘—MiWinHTTP + SSEj
+// å®Ÿé€ä¿¡ï¼ˆWinHTTP + SSEï¼‰
 // -----------------------------------------------------------------------------
 static bool CrackEndpoint(const std::wstring& url, std::wstring& host, int& port,
                           std::wstring& path, bool& secure)
@@ -351,7 +351,7 @@ static bool CrackEndpoint(const std::wstring& url, std::wstring& host, int& port
     return !host.empty();
 }
 
-// JSON ‚ğ POST ‚µ‚Ä‰“š–{•¶iUTF-8 •¶š—ñj‚ğŠÛ‚²‚Æó‚¯æ‚éi”ñƒXƒgƒŠ[ƒ~ƒ“ƒOj
+// JSON ã‚’ POST ã—ã¦å¿œç­”æœ¬æ–‡ï¼ˆUTF-8 æ–‡å­—åˆ—ï¼‰ã‚’ä¸¸ã”ã¨å—ã‘å–ã‚‹ï¼ˆéã‚¹ãƒˆãƒªãƒ¼ãƒŸãƒ³ã‚°ï¼‰
 static bool HttpPostJson(const std::wstring& url, const std::wstring& extra_headers,
                          const std::string& body, std::wstring& out_body,
                          std::wstring& out_error, int timeout_sec,
@@ -361,21 +361,21 @@ static bool HttpPostJson(const std::wstring& url, const std::wstring& extra_head
     int  port = 0;
     bool secure = true;
     if (!CrackEndpoint(url, host, port, path, secure)) {
-        out_error = L"ƒGƒ“ƒhƒ|ƒCƒ“ƒg‚ÌŒ`®‚ª•s³‚Å‚·: " + url;
+        out_error = L"ã‚¨ãƒ³ãƒ‰ãƒã‚¤ãƒ³ãƒˆã®å½¢å¼ãŒä¸æ­£ã§ã™: " + url;
         return false;
     }
 
     HINTERNET hSession = ::WinHttpOpen(L"CopyMigrationSwitcher/1.0",
                                        WINHTTP_ACCESS_TYPE_DEFAULT_PROXY,
                                        WINHTTP_NO_PROXY_NAME, WINHTTP_NO_PROXY_BYPASS, 0);
-    if (!hSession) { out_error = L"WinHTTP ƒZƒbƒVƒ‡ƒ“‚ğì¬‚Å‚«‚Ü‚¹‚ñ‚Å‚µ‚½B"; return false; }
+    if (!hSession) { out_error = L"WinHTTP ã‚»ãƒƒã‚·ãƒ§ãƒ³ã‚’ä½œæˆã§ãã¾ã›ã‚“ã§ã—ãŸã€‚"; return false; }
     int tmo = (timeout_sec > 0 ? timeout_sec : 600) * 1000;
     ::WinHttpSetTimeouts(hSession, 30000, 30000, 30000, tmo);
 
     HINTERNET hConnect = ::WinHttpConnect(hSession, host.c_str(), (INTERNET_PORT)port, 0);
     if (!hConnect) {
         ::WinHttpCloseHandle(hSession);
-        out_error = L"Ú‘±æ‚É“’B‚Å‚«‚Ü‚¹‚ñ: " + host;
+        out_error = L"æ¥ç¶šå…ˆã«åˆ°é”ã§ãã¾ã›ã‚“: " + host;
         return false;
     }
     DWORD flags = secure ? WINHTTP_FLAG_SECURE : 0;
@@ -384,7 +384,7 @@ static bool HttpPostJson(const std::wstring& url, const std::wstring& extra_head
                                           WINHTTP_DEFAULT_ACCEPT_TYPES, flags);
     if (!hReq) {
         ::WinHttpCloseHandle(hConnect); ::WinHttpCloseHandle(hSession);
-        out_error = L"HTTP ƒŠƒNƒGƒXƒg‚ğì¬‚Å‚«‚Ü‚¹‚ñ‚Å‚µ‚½B";
+        out_error = L"HTTP ãƒªã‚¯ã‚¨ã‚¹ãƒˆã‚’ä½œæˆã§ãã¾ã›ã‚“ã§ã—ãŸã€‚";
         return false;
     }
 
@@ -396,7 +396,7 @@ static bool HttpPostJson(const std::wstring& url, const std::wstring& extra_head
                               (DWORD)body.size(), 0) ||
         !::WinHttpReceiveResponse(hReq, nullptr)) {
         DWORD e = ::GetLastError();
-        out_error = L"API ‚Ö‚Ì‘—M‚É¸”s‚µ‚Ü‚µ‚½ (WinHTTP error " +
+        out_error = L"API ã¸ã®é€ä¿¡ã«å¤±æ•—ã—ã¾ã—ãŸ (WinHTTP error " +
                     std::to_wstring((int)e) + L")";
         ::WinHttpCloseHandle(hReq); ::WinHttpCloseHandle(hConnect); ::WinHttpCloseHandle(hSession);
         return false;
@@ -426,9 +426,9 @@ static bool HttpPostJson(const std::wstring& url, const std::wstring& extra_head
         std::wstring detail;
         std::wstring tmp;
         if (AiClient::ParseOpenAiResponse(raw, tmp, detail) == false && !detail.empty()) {
-            out_error = L"API ‚ª HTTP " + std::to_wstring((int)status) + L" ‚ğ•Ô‚µ‚Ü‚µ‚½B\n" + detail;
+            out_error = L"API ãŒ HTTP " + std::to_wstring((int)status) + L" ã‚’è¿”ã—ã¾ã—ãŸã€‚\n" + detail;
         } else {
-            out_error = L"API ‚ª HTTP " + std::to_wstring((int)status) + L" ‚ğ•Ô‚µ‚Ü‚µ‚½B";
+            out_error = L"API ãŒ HTTP " + std::to_wstring((int)status) + L" ã‚’è¿”ã—ã¾ã—ãŸã€‚";
         }
         return false;
     }
@@ -442,12 +442,12 @@ bool AiClient::AskOpenAiCompat(const AiSettings& st, const std::wstring& prompt,
     out_text.clear();
     out_error.clear();
     if (st.api_key.empty()) {
-        out_error = L"API ƒL[‚ªİ’è‚³‚ê‚Ä‚¢‚Ü‚¹‚ñBuŠî–{İ’èvƒ^ƒu‚Ì AI ˜AŒg‚Å“ü—Í‚µ‚Ä‚­‚¾‚³‚¢B";
+        out_error = L"API ã‚­ãƒ¼ãŒè¨­å®šã•ã‚Œã¦ã„ã¾ã›ã‚“ã€‚ã€ŒåŸºæœ¬è¨­å®šã€ã‚¿ãƒ–ã® AI é€£æºã§å…¥åŠ›ã—ã¦ãã ã•ã„ã€‚";
         return false;
     }
     if (st.model.empty()) {
-        out_error = L"ƒ‚ƒfƒ‹–¼‚ªİ’è‚³‚ê‚Ä‚¢‚Ü‚¹‚ñBuŠî–{İ’èvƒ^ƒu‚Ì AI ˜AŒg‚Å“ü—Í‚µ‚Ä‚­‚¾‚³‚¢B\n"
-                    L"i—á: gpt-4o-mini / gpt-4o / g—p‚·‚éƒT[ƒrƒX‚Ìƒ‚ƒfƒ‹–¼j";
+        out_error = L"ãƒ¢ãƒ‡ãƒ«åãŒè¨­å®šã•ã‚Œã¦ã„ã¾ã›ã‚“ã€‚ã€ŒåŸºæœ¬è¨­å®šã€ã‚¿ãƒ–ã® AI é€£æºã§å…¥åŠ›ã—ã¦ãã ã•ã„ã€‚\n"
+                    L"ï¼ˆä¾‹: gpt-4o-mini / gpt-4o / ä½¿ç”¨ã™ã‚‹ã‚µãƒ¼ãƒ“ã‚¹ã®ãƒ¢ãƒ‡ãƒ«åï¼‰";
         return false;
     }
 
@@ -473,12 +473,12 @@ bool AiClient::Ask(const AiSettings& st,
     out_text.clear();
     out_error.clear();
 
-    // OpenAI ŒİŠ· API ‚Í•ÊŒo˜HiBearer ”FØ / chat/completions / ”ñƒXƒgƒŠ[ƒ~ƒ“ƒOj
+    // OpenAI äº’æ› API ã¯åˆ¥çµŒè·¯ï¼ˆBearer èªè¨¼ / chat/completions / éã‚¹ãƒˆãƒªãƒ¼ãƒŸãƒ³ã‚°ï¼‰
     if (st.provider == AiProvider::OpenAiCompat)
         return AskOpenAiCompat(st, prompt, out_text, out_error, on_tick);
 
     if (st.api_key.empty()) {
-        out_error = L"API ƒL[‚ªİ’è‚³‚ê‚Ä‚¢‚Ü‚¹‚ñBuŠî–{İ’èvƒ^ƒu‚Å“ü—Í‚µ‚Ä‚­‚¾‚³‚¢B";
+        out_error = L"API ã‚­ãƒ¼ãŒè¨­å®šã•ã‚Œã¦ã„ã¾ã›ã‚“ã€‚ã€ŒåŸºæœ¬è¨­å®šã€ã‚¿ãƒ–ã§å…¥åŠ›ã—ã¦ãã ã•ã„ã€‚";
         return false;
     }
     std::wstring url = st.endpoint.empty() ? DefaultEndpoint() : st.endpoint;
@@ -487,7 +487,7 @@ bool AiClient::Ask(const AiSettings& st,
     int  port = 0;
     bool secure = true;
     if (!CrackEndpoint(url, host, port, path, secure)) {
-        out_error = L"ƒGƒ“ƒhƒ|ƒCƒ“ƒg‚ÌŒ`®‚ª•s³‚Å‚·: " + url;
+        out_error = L"ã‚¨ãƒ³ãƒ‰ãƒã‚¤ãƒ³ãƒˆã®å½¢å¼ãŒä¸æ­£ã§ã™: " + url;
         return false;
     }
 
@@ -495,7 +495,7 @@ bool AiClient::Ask(const AiSettings& st,
                                        WINHTTP_ACCESS_TYPE_DEFAULT_PROXY,
                                        WINHTTP_NO_PROXY_NAME, WINHTTP_NO_PROXY_BYPASS, 0);
     if (!hSession) {
-        out_error = L"WinHTTP ƒZƒbƒVƒ‡ƒ“‚ğì¬‚Å‚«‚Ü‚¹‚ñ‚Å‚µ‚½B";
+        out_error = L"WinHTTP ã‚»ãƒƒã‚·ãƒ§ãƒ³ã‚’ä½œæˆã§ãã¾ã›ã‚“ã§ã—ãŸã€‚";
         return false;
     }
     int tmo = (st.timeout_sec > 0 ? st.timeout_sec : 600) * 1000;
@@ -504,7 +504,7 @@ bool AiClient::Ask(const AiSettings& st,
     HINTERNET hConnect = ::WinHttpConnect(hSession, host.c_str(), (INTERNET_PORT)port, 0);
     if (!hConnect) {
         ::WinHttpCloseHandle(hSession);
-        out_error = L"Ú‘±æ‚É“’B‚Å‚«‚Ü‚¹‚ñ: " + host;
+        out_error = L"æ¥ç¶šå…ˆã«åˆ°é”ã§ãã¾ã›ã‚“: " + host;
         return false;
     }
 
@@ -515,7 +515,7 @@ bool AiClient::Ask(const AiSettings& st,
     if (!hReq) {
         ::WinHttpCloseHandle(hConnect);
         ::WinHttpCloseHandle(hSession);
-        out_error = L"HTTP ƒŠƒNƒGƒXƒg‚ğì¬‚Å‚«‚Ü‚¹‚ñ‚Å‚µ‚½B";
+        out_error = L"HTTP ãƒªã‚¯ã‚¨ã‚¹ãƒˆã‚’ä½œæˆã§ãã¾ã›ã‚“ã§ã—ãŸã€‚";
         return false;
     }
 
@@ -528,13 +528,13 @@ bool AiClient::Ask(const AiSettings& st,
                                    (DWORD)body.size(), 0);
     if (!ok) {
         DWORD e = ::GetLastError();
-        out_error = L"‘—M‚É¸”s‚µ‚Ü‚µ‚½ (WinHTTP error " + std::to_wstring((int)e) + L")";
+        out_error = L"é€ä¿¡ã«å¤±æ•—ã—ã¾ã—ãŸ (WinHTTP error " + std::to_wstring((int)e) + L")";
         ::WinHttpCloseHandle(hReq); ::WinHttpCloseHandle(hConnect); ::WinHttpCloseHandle(hSession);
         return false;
     }
     if (!::WinHttpReceiveResponse(hReq, nullptr)) {
         DWORD e = ::GetLastError();
-        out_error = L"‰“š‚ğóM‚Å‚«‚Ü‚¹‚ñ‚Å‚µ‚½ (WinHTTP error " + std::to_wstring((int)e) + L")";
+        out_error = L"å¿œç­”ã‚’å—ä¿¡ã§ãã¾ã›ã‚“ã§ã—ãŸ (WinHTTP error " + std::to_wstring((int)e) + L")";
         ::WinHttpCloseHandle(hReq); ::WinHttpCloseHandle(hConnect); ::WinHttpCloseHandle(hSession);
         return false;
     }
@@ -544,7 +544,7 @@ bool AiClient::Ask(const AiSettings& st,
                           WINHTTP_HEADER_NAME_BY_INDEX, &status, &slen, WINHTTP_NO_HEADER_INDEX);
 
     std::string pending;
-    std::string raw_body;      // ƒGƒ‰[‚ÌƒƒbƒZ[ƒW—piæ“ª‚Ì‚İj
+    std::string raw_body;      // ã‚¨ãƒ©ãƒ¼æ™‚ã®ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ç”¨ï¼ˆå…ˆé ­ã®ã¿ï¼‰
     std::wstring final_text;
     bool got_final = false;
     bool got_error = false;
@@ -592,7 +592,7 @@ bool AiClient::Ask(const AiSettings& st,
     ::WinHttpCloseHandle(hSession);
 
     if (status != 0 && status != 200) {
-        std::wstring msg = L"API ‚ª HTTP " + std::to_wstring((int)status) + L" ‚ğ•Ô‚µ‚Ü‚µ‚½B";
+        std::wstring msg = L"API ãŒ HTTP " + std::to_wstring((int)status) + L" ã‚’è¿”ã—ã¾ã—ãŸã€‚";
         if (!raw_body.empty()) msg += L"\n" + Utf8Decode(raw_body);
         out_error = msg;
         return false;
@@ -601,7 +601,7 @@ bool AiClient::Ask(const AiSettings& st,
 
     if (out_text.empty()) {
         if (!out_error.empty()) return false;
-        out_error = L"API ‚©‚ç–{•¶‚ª•Ô‚è‚Ü‚¹‚ñ‚Å‚µ‚½B";
+        out_error = L"API ã‹ã‚‰æœ¬æ–‡ãŒè¿”ã‚Šã¾ã›ã‚“ã§ã—ãŸã€‚";
         return false;
     }
     return true;

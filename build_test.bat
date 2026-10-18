@@ -1,13 +1,13 @@
 @echo off
 rem ===========================================================================
-rem  Migration Switcher - ’P‘ÌƒeƒXƒg‚Ìƒrƒ‹ƒh‚ÆÀs
+rem  Migration Switcher - å˜ä½“ãƒ†ã‚¹ãƒˆã®ãƒ“ãƒ«ãƒ‰ã¨å®Ÿè¡Œ
 rem
-rem    build_test.bat            ƒeƒXƒg‚ğƒrƒ‹ƒh‚µ‚ÄÀs
-rem    build_test.bat live <ƒtƒ@ƒCƒ‹>
-rem                              À API ‘a’ÊƒeƒXƒg‚àÀsiAPI ƒL[‚ğ‘‚¢‚½ƒtƒ@ƒCƒ‹j
-rem    build_test.bat clean      ƒeƒXƒg¶¬•¨‚ğíœ
+rem    build_test.bat            ãƒ†ã‚¹ãƒˆã‚’ãƒ“ãƒ«ãƒ‰ã—ã¦å®Ÿè¡Œ
+rem    build_test.bat live <ãƒ•ã‚¡ã‚¤ãƒ«>
+rem                              å®Ÿ API ç–é€šãƒ†ã‚¹ãƒˆã‚‚å®Ÿè¡Œï¼ˆAPI ã‚­ãƒ¼ã‚’æ›¸ã„ãŸãƒ•ã‚¡ã‚¤ãƒ«ï¼‰
+rem    build_test.bat clean      ãƒ†ã‚¹ãƒˆç”Ÿæˆç‰©ã‚’å‰Šé™¤
 rem
-rem  ƒeƒXƒg‚Í GUI ‚Æ“¯‚¶ƒ\[ƒXimain.cpp ‚ğœ‚­j‚ğƒŠƒ“ƒN‚µ‚½ƒRƒ“ƒ\[ƒ‹”Å‚Å‚·B
+rem  ãƒ†ã‚¹ãƒˆã¯ GUI ã¨åŒã˜ã‚½ãƒ¼ã‚¹ï¼ˆmain.cpp ã‚’é™¤ãï¼‰ã‚’ãƒªãƒ³ã‚¯ã—ãŸã‚³ãƒ³ã‚½ãƒ¼ãƒ«ç‰ˆã§ã™ã€‚
 rem ===========================================================================
 setlocal
 chcp 932 >nul
@@ -17,13 +17,13 @@ set "KEYFILE=%~2"
 set "MODE=%~1"
 
 echo ============================================================
-echo  Migration Switcher - ’P‘ÌƒeƒXƒg
+echo  Migration Switcher - å˜ä½“ãƒ†ã‚¹ãƒˆ
 echo ============================================================
-echo  ƒ‹[ƒg: %ROOT%
+echo  ãƒ«ãƒ¼ãƒˆ: %ROOT%
 
 if /i "%MODE%"=="clean" goto :clean
 
-rem ---- ƒc[ƒ‹ƒ`ƒF[ƒ“‚Ì”»’è --------------------------------------------------
+rem ---- ãƒ„ãƒ¼ãƒ«ãƒã‚§ãƒ¼ãƒ³ã®åˆ¤å®š --------------------------------------------------
 set "HAVE_MSVC=0"
 set "HAVE_MINGW=0"
 set "VSWHERE=%ProgramFiles(x86)%\Microsoft Visual Studio\Installer\vswhere.exe"
@@ -47,8 +47,8 @@ if "%HAVE_MSVC%"=="0" if "%HAVE_MINGW%"=="0" (
 if "%HAVE_MSVC%"=="1" goto :msvc
 if "%HAVE_MINGW%"=="1" goto :mingw
 echo.
-echo [ERROR] ƒrƒ‹ƒh‚Ég‚¦‚é C++ ƒRƒ“ƒpƒCƒ‰‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñ‚Å‚µ‚½B
-echo         build.bat help  ‚ğQÆ‚µ‚Ä‚­‚¾‚³‚¢B
+echo [ERROR] ãƒ“ãƒ«ãƒ‰ã«ä½¿ãˆã‚‹ C++ ã‚³ãƒ³ãƒ‘ã‚¤ãƒ©ãŒè¦‹ã¤ã‹ã‚Šã¾ã›ã‚“ã§ã—ãŸã€‚
+echo         build.bat help  ã‚’å‚ç…§ã—ã¦ãã ã•ã„ã€‚
 exit /b 1
 
 rem ---- Visual Studio 2022 ----------------------------------------------------
@@ -65,18 +65,18 @@ set "TEXE=%TBUILD%\Release\ms_test.exe"
 cmake --version >nul 2>nul
 if errorlevel 1 goto :nocmake
 
-echo  --- ƒeƒXƒg‚ğ\¬‚µ‚Ä‚¢‚Ü‚· (CMake) ---
+echo  --- ãƒ†ã‚¹ãƒˆã‚’æ§‹æˆã—ã¦ã„ã¾ã™ (CMake) ---
 cmake -S "%ROOT%\test" -B "%TBUILD%" -G "Visual Studio 17 2022" -A x64
 if errorlevel 1 goto :fail
-echo  --- ƒeƒXƒg‚ğƒrƒ‹ƒh‚µ‚Ä‚¢‚Ü‚· ---
+echo  --- ãƒ†ã‚¹ãƒˆã‚’ãƒ“ãƒ«ãƒ‰ã—ã¦ã„ã¾ã™ ---
 cmake --build "%TBUILD%" --config Release
 if errorlevel 1 goto :fail
 goto :run
 
 :nocmake
 echo.
-echo [ERROR] ’P‘ÌƒeƒXƒg‚Ìƒrƒ‹ƒh‚É‚Í CMake ‚ª•K—v‚Å‚·B
-echo         CMake ‚ğƒCƒ“ƒXƒg[ƒ‹‚·‚é‚©AMinGW-w64 (build.bat test) ‚ğg—p‚µ‚Ä‚­‚¾‚³‚¢B
+echo [ERROR] å˜ä½“ãƒ†ã‚¹ãƒˆã®ãƒ“ãƒ«ãƒ‰ã«ã¯ CMake ãŒå¿…è¦ã§ã™ã€‚
+echo         CMake ã‚’ã‚¤ãƒ³ã‚¹ãƒˆãƒ¼ãƒ«ã™ã‚‹ã‹ã€MinGW-w64 (build.bat test) ã‚’ä½¿ç”¨ã—ã¦ãã ã•ã„ã€‚
 exit /b 1
 
 rem ---- MinGW-w64 -------------------------------------------------------------
@@ -93,18 +93,18 @@ set "CROSSOPT="
 g++ --version >nul 2>nul
 if not errorlevel 1 set "CROSSOPT=CROSS="
 cd /d "%ROOT%"
-echo  --- ƒeƒXƒg‚ğƒrƒ‹ƒh‚µ‚Ä‚¢‚Ü‚· (%MK%) ---
+echo  --- ãƒ†ã‚¹ãƒˆã‚’ãƒ“ãƒ«ãƒ‰ã—ã¦ã„ã¾ã™ (%MK%) ---
 %MK% %CROSSOPT% build\ms_test.exe
 if errorlevel 1 goto :fail
 set "TEXE=%ROOT%\build\ms_test.exe"
 goto :run
 
-rem ---- Às ------------------------------------------------------------------
+rem ---- å®Ÿè¡Œ ------------------------------------------------------------------
 :run
 if not exist "%TEXE%" goto :noexe
 echo.
-echo  --- ƒeƒXƒg‚ğÀs‚µ‚Ä‚¢‚Ü‚· ---
-echo  Àsƒtƒ@ƒCƒ‹: %TEXE%
+echo  --- ãƒ†ã‚¹ãƒˆã‚’å®Ÿè¡Œã—ã¦ã„ã¾ã™ ---
+echo  å®Ÿè¡Œãƒ•ã‚¡ã‚¤ãƒ«: %TEXE%
 echo.
 if /i "%MODE%"=="live" goto :live
 "%TEXE%"
@@ -122,48 +122,48 @@ goto :result
 echo.
 if "%RC%"=="0" (
   echo ============================================================
-  echo  ƒeƒXƒgŠ®—¹i‚·‚×‚Ä PASSj
+  echo  ãƒ†ã‚¹ãƒˆå®Œäº†ï¼ˆã™ã¹ã¦ PASSï¼‰
   echo ============================================================
 ) else (
   echo ============================================================
-  echo  ƒeƒXƒg¸”siFAIL ‚ª‚ ‚è‚Ü‚·j
+  echo  ãƒ†ã‚¹ãƒˆå¤±æ•—ï¼ˆFAIL ãŒã‚ã‚Šã¾ã™ï¼‰
   echo ============================================================
 )
-echo  I—¹ƒR[ƒh: %RC%
+echo  çµ‚äº†ã‚³ãƒ¼ãƒ‰: %RC%
 exit /b %RC%
 
 :clean
-echo  ƒeƒXƒg¶¬•¨‚ğíœ‚µ‚Ä‚¢‚Ü‚·
+echo  ãƒ†ã‚¹ãƒˆç”Ÿæˆç‰©ã‚’å‰Šé™¤ã—ã¦ã„ã¾ã™
 if exist "%ROOT%\build\msvc_test" rmdir /s /q "%ROOT%\build\msvc_test"
 if exist "%ROOT%\build\console_test.o" del /q "%ROOT%\build\console_test.o" >nul 2>nul
 if exist "%ROOT%\build\ms_test.exe" del /q "%ROOT%\build\ms_test.exe" >nul 2>nul
-echo  Š®—¹‚µ‚Ü‚µ‚½B
+echo  å®Œäº†ã—ã¾ã—ãŸã€‚
 exit /b 0
 
 :novs
 echo.
-echo [ERROR] Visual Studio ‚Ì cl.exe ‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñB
+echo [ERROR] Visual Studio ã® cl.exe ãŒè¦‹ã¤ã‹ã‚Šã¾ã›ã‚“ã€‚
 exit /b 1
 
 :nomake
 echo.
-echo [ERROR] make / mingw32-make ‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñB
+echo [ERROR] make / mingw32-make ãŒè¦‹ã¤ã‹ã‚Šã¾ã›ã‚“ã€‚
 exit /b 1
 
 :nokey
 echo.
-echo [ERROR] --live ‚Éw’è‚·‚é API ƒL[‚Ìƒtƒ@ƒCƒ‹‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñB
-echo         g‚¢•û:  build_test.bat live C:\path\to\key.txt
-echo         iƒtƒ@ƒCƒ‹‚É‚Í API ƒL[‚ğ 1 s‚¾‚¯‘‚¢‚Ä‚­‚¾‚³‚¢j
+echo [ERROR] --live ã«æŒ‡å®šã™ã‚‹ API ã‚­ãƒ¼ã®ãƒ•ã‚¡ã‚¤ãƒ«ãŒè¦‹ã¤ã‹ã‚Šã¾ã›ã‚“ã€‚
+echo         ä½¿ã„æ–¹:  build_test.bat live C:\path\to\key.txt
+echo         ï¼ˆãƒ•ã‚¡ã‚¤ãƒ«ã«ã¯ API ã‚­ãƒ¼ã‚’ 1 è¡Œã ã‘æ›¸ã„ã¦ãã ã•ã„ï¼‰
 exit /b 1
 
 :noexe
 echo.
-echo [ERROR] ƒeƒXƒgÀsƒtƒ@ƒCƒ‹‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñB
-echo         Šú‘Ò‚µ‚½êŠ: %TEXE%
+echo [ERROR] ãƒ†ã‚¹ãƒˆå®Ÿè¡Œãƒ•ã‚¡ã‚¤ãƒ«ãŒè¦‹ã¤ã‹ã‚Šã¾ã›ã‚“ã€‚
+echo         æœŸå¾…ã—ãŸå ´æ‰€: %TEXE%
 exit /b 1
 
 :fail
 echo.
-echo [ERROR] ƒeƒXƒg‚Ìƒrƒ‹ƒh‚É¸”s‚µ‚Ü‚µ‚½B
+echo [ERROR] ãƒ†ã‚¹ãƒˆã®ãƒ“ãƒ«ãƒ‰ã«å¤±æ•—ã—ã¾ã—ãŸã€‚
 exit /b 1

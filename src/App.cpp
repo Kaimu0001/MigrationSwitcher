@@ -1,7 +1,7 @@
-// =============================================================================
+ï»¿// =============================================================================
 // App.cpp
-// İŒv‘ 9Íuˆ—ƒtƒ[v/ 6Íu‹@”\Ú×İŒvv/ 13Íuó‘ÔŠÇ—v
-// Phase 4: 17Í •¡”ƒtƒ@ƒCƒ‹ˆêŠ‡ˆ— ‘Î‰
+// è¨­è¨ˆæ›¸ 9ç« ã€Œå‡¦ç†ãƒ•ãƒ­ãƒ¼ã€/ 6ç« ã€Œæ©Ÿèƒ½è©³ç´°è¨­è¨ˆã€/ 13ç« ã€ŒçŠ¶æ…‹ç®¡ç†ã€
+// Phase 4: 17ç«  è¤‡æ•°ãƒ•ã‚¡ã‚¤ãƒ«ä¸€æ‹¬å‡¦ç† å¯¾å¿œ
 // =============================================================================
 #include "App.h"
 #include "resource.h"
@@ -21,7 +21,7 @@
 #include "CodeScope.h"
 #include "ResultExporter.h"
 
-// •¶š—ñ‚©‚ç®”‚ğæ‚èo‚·i”’lˆÈŠO‚ª¬‚´‚éê‡‚ÍŠù’è’lj
+// æ–‡å­—åˆ—ã‹ã‚‰æ•´æ•°ã‚’å–ã‚Šå‡ºã™ï¼ˆæ•°å€¤ä»¥å¤–ãŒæ··ã–ã‚‹å ´åˆã¯æ—¢å®šå€¤ï¼‰
 static int ParseIntOr(const std::wstring& s, int def)
 {
     if (s.empty()) return def;
@@ -51,7 +51,7 @@ static int ParseIntOr(const std::wstring& s, int def)
 namespace ms {
 
 // -----------------------------------------------------------------------------
-// UI “Ç‚İæ‚è
+// UI èª­ã¿å–ã‚Š
 // -----------------------------------------------------------------------------
 SwitchStyle App::ReadStyleFromUi() const
 {
@@ -149,7 +149,7 @@ void App::ReadInputs(OperationContext& ctx)
 }
 
 // -----------------------------------------------------------------------------
-// 14Í ƒoƒŠƒf[ƒVƒ‡ƒ“
+// 14ç«  ãƒãƒªãƒ‡ãƒ¼ã‚·ãƒ§ãƒ³
 // -----------------------------------------------------------------------------
 bool App::CheckInputs(bool for_execute, std::wstring& out_error,
                       std::vector<std::wstring>& out_warnings)
@@ -161,7 +161,7 @@ bool App::CheckInputs(bool for_execute, std::wstring& out_error,
     std::wstring oc = util::NormalizeNewlines(GetEditText(hOldEdit_));
     std::wstring nc = util::NormalizeNewlines(GetEditText(hNewEdit_));
 
-    // ---- ƒXƒCƒbƒ`’è‹`ƒwƒbƒ_‚ÌŒŸØ ----
+    // ---- ã‚¹ã‚¤ãƒƒãƒå®šç¾©ãƒ˜ãƒƒãƒ€ã®æ¤œè¨¼ ----
     if (IsChecked(hChkManageSwHeader_) || IsChecked(hChkAddInclude_)) {
         std::wstring hn = util::Trim(GetEditText(hEditSwHeaderName_));
         if (hn.empty()) hn = SwitchHeaderManager::DefaultHeaderName();
@@ -174,47 +174,47 @@ bool App::CheckInputs(bool for_execute, std::wstring& out_error,
         if (util::PathExists(hp)) {
             FileInfo hfi = FileManager::Inspect(hp, L"auto");
             if (hfi.is_directory) {
-                out_error = L"ƒXƒCƒbƒ`’è‹`ƒwƒbƒ_‚Ìw’èæ‚ªƒtƒHƒ‹ƒ_‚Å‚·: " + hp;
+                out_error = L"ã‚¹ã‚¤ãƒƒãƒå®šç¾©ãƒ˜ãƒƒãƒ€ã®æŒ‡å®šå…ˆãŒãƒ•ã‚©ãƒ«ãƒ€ã§ã™: " + hp;
                 return false;
             }
             if (!hfi.writable && !hfi.read_only_attribute) {
-                out_error = L"ƒXƒCƒbƒ`’è‹`ƒwƒbƒ_‚É‘‚«‚ß‚Ü‚¹‚ñ: " + hp;
+                out_error = L"ã‚¹ã‚¤ãƒƒãƒå®šç¾©ãƒ˜ãƒƒãƒ€ã«æ›¸ãè¾¼ã‚ã¾ã›ã‚“: " + hp;
                 return false;
             }
         } else {
             std::wstring hdir = util::GetDirectoryOf(hp);
             if (!hdir.empty() && !util::PathExists(hdir))
-                out_warnings.push_back(L"ƒXƒCƒbƒ`’è‹`ƒwƒbƒ_‚Ìo—ÍæƒtƒHƒ‹ƒ_‚ğì¬‚µ‚Ü‚·: " + hdir);
+                out_warnings.push_back(L"ã‚¹ã‚¤ãƒƒãƒå®šç¾©ãƒ˜ãƒƒãƒ€ã®å‡ºåŠ›å…ˆãƒ•ã‚©ãƒ«ãƒ€ã‚’ä½œæˆã—ã¾ã™: " + hdir);
         }
     }
 
-    // ---- ˆêŠ‡ˆ—ƒ‚[ƒhi17Íj----
+    // ---- ä¸€æ‹¬å‡¦ç†ãƒ¢ãƒ¼ãƒ‰ï¼ˆ17ç« ï¼‰----
     if (IsFolderMode()) {
         std::wstring folder = util::Trim(GetEditText(hFolderEdit_));
         if (folder.empty()) {
-            out_error = L"‘ÎÛƒtƒHƒ‹ƒ_‚ğ‘I‘ğ‚µ‚Ä‚­‚¾‚³‚¢B";
+            out_error = L"å¯¾è±¡ãƒ•ã‚©ãƒ«ãƒ€ã‚’é¸æŠã—ã¦ãã ã•ã„ã€‚";
             return false;
         }
         if (!util::PathExists(folder)) {
-            out_error = L"w’è‚³‚ê‚½ƒtƒHƒ‹ƒ_‚ª‘¶İ‚µ‚Ü‚¹‚ñ: " + folder;
+            out_error = L"æŒ‡å®šã•ã‚ŒãŸãƒ•ã‚©ãƒ«ãƒ€ãŒå­˜åœ¨ã—ã¾ã›ã‚“: " + folder;
             return false;
         }
         DWORD attr = ::GetFileAttributesW(folder.c_str());
         if (attr == INVALID_FILE_ATTRIBUTES || (attr & FILE_ATTRIBUTE_DIRECTORY) == 0) {
-            out_error = L"w’è‚³‚ê‚½ƒpƒX‚ÍƒtƒHƒ‹ƒ_‚Å‚Í‚ ‚è‚Ü‚¹‚ñB";
+            out_error = L"æŒ‡å®šã•ã‚ŒãŸãƒ‘ã‚¹ã¯ãƒ•ã‚©ãƒ«ãƒ€ã§ã¯ã‚ã‚Šã¾ã›ã‚“ã€‚";
             return false;
         }
         if (ReadExtensionsFromUi().empty()) {
-            out_error = L"Šg’£qƒtƒBƒ‹ƒ^‚ğ 1 ‚ÂˆÈã‘I‘ğ‚µ‚Ä‚­‚¾‚³‚¢B";
+            out_error = L"æ‹¡å¼µå­ãƒ•ã‚£ãƒ«ã‚¿ã‚’ 1 ã¤ä»¥ä¸Šé¸æŠã—ã¦ãã ã•ã„ã€‚";
             return false;
         }
 
         ValidationResult vs = ValidationManager::ValidateSwitchName(sw);
         for (size_t i = 0; i < vs.warnings.size(); ++i) out_warnings.push_back(vs.warnings[i]);
         if (!vs.ok) {
-            // ŒŸõ‚Ì‚İ‚Ìê‡‚ÍƒXƒCƒbƒ`–¼‚ª–³‚­‚Ä‚àÀs‚Å‚«‚éi’uŠ·‚ÌÀs‚É•K—vj
+            // æ¤œç´¢ã®ã¿ã®å ´åˆã¯ã‚¹ã‚¤ãƒƒãƒåãŒç„¡ãã¦ã‚‚å®Ÿè¡Œã§ãã‚‹ï¼ˆç½®æ›ã®å®Ÿè¡Œæ™‚ã«å¿…è¦ï¼‰
             if (for_execute) { out_error = vs.error; return false; }
-            out_warnings.push_back(vs.error + L"i’uŠ·‚ÌÀs‚É‚Í•K—v‚Å‚·j");
+            out_warnings.push_back(vs.error + L"ï¼ˆç½®æ›ã®å®Ÿè¡Œæ™‚ã«ã¯å¿…è¦ã§ã™ï¼‰");
         }
 
         ValidationResult vo = ValidationManager::ValidateOldCode(oc);
@@ -226,11 +226,11 @@ bool App::CheckInputs(bool for_execute, std::wstring& out_error,
 
         if (for_execute) {
             if (matches_.empty()) {
-                out_error = L"ŒŸõŒ‹‰Ê‚ª‚ ‚è‚Ü‚¹‚ñBæ‚ÉuŒŸõv‚ğÀs‚µ‚Ä‚­‚¾‚³‚¢B";
+                out_error = L"æ¤œç´¢çµæœãŒã‚ã‚Šã¾ã›ã‚“ã€‚å…ˆã«ã€Œæ¤œç´¢ã€ã‚’å®Ÿè¡Œã—ã¦ãã ã•ã„ã€‚";
                 return false;
             }
             if (GetSelectedMatches().empty()) {
-                out_error = L"’uŠ·‘ÎÛ‚ª‘I‘ğ‚³‚ê‚Ä‚¢‚Ü‚¹‚ñBŒŸõŒ‹‰Êƒ^ƒu‚Ü‚½‚ÍˆêŠ‡ˆ—ƒ^ƒu‚Å‘ÎÛ‚ğ‘I‘ğ‚µ‚Ä‚­‚¾‚³‚¢B";
+                out_error = L"ç½®æ›å¯¾è±¡ãŒé¸æŠã•ã‚Œã¦ã„ã¾ã›ã‚“ã€‚æ¤œç´¢çµæœã‚¿ãƒ–ã¾ãŸã¯ä¸€æ‹¬å‡¦ç†ã‚¿ãƒ–ã§å¯¾è±¡ã‚’é¸æŠã—ã¦ãã ã•ã„ã€‚";
                 return false;
             }
             if (IsChecked(hChkBackup_)) {
@@ -245,13 +245,13 @@ bool App::CheckInputs(bool for_execute, std::wstring& out_error,
             }
         }
         if (IsChecked(hChkDryRunOnly_) && for_execute)
-            out_warnings.push_back(L"uƒhƒ‰ƒCƒ‰ƒ“‚Ì‚İv‚ª—LŒø‚Å‚·B–{Às‚Ís‚í‚ê‚Ü‚¹‚ñB");
+            out_warnings.push_back(L"ã€Œãƒ‰ãƒ©ã‚¤ãƒ©ãƒ³ã®ã¿ã€ãŒæœ‰åŠ¹ã§ã™ã€‚æœ¬å®Ÿè¡Œã¯è¡Œã‚ã‚Œã¾ã›ã‚“ã€‚");
         return true;
     }
 
-    // ---- ’Pˆêƒtƒ@ƒCƒ‹ƒ‚[ƒh ----
+    // ---- å˜ä¸€ãƒ•ã‚¡ã‚¤ãƒ«ãƒ¢ãƒ¼ãƒ‰ ----
     std::wstring path = util::Trim(GetEditText(hTargetEdit_));
-    if (path.empty()) { out_error = L"MSG001: ‘ÎÛƒtƒ@ƒCƒ‹‚ğ‘I‘ğ‚µ‚Ä‚­‚¾‚³‚¢B"; return false; }
+    if (path.empty()) { out_error = L"MSG001: å¯¾è±¡ãƒ•ã‚¡ã‚¤ãƒ«ã‚’é¸æŠã—ã¦ãã ã•ã„ã€‚"; return false; }
 
     FileInfo fi = FileManager::Inspect(util::MakeAbsolute(path), cfg_.encoding_mode);
     ValidationResult vr = ValidationManager::ValidateTargetFile(path, fi);
@@ -271,11 +271,11 @@ bool App::CheckInputs(bool for_execute, std::wstring& out_error,
 
     if (for_execute) {
         if (matches_.empty()) {
-            out_error = L"ŒŸõŒ‹‰Ê‚ª‚ ‚è‚Ü‚¹‚ñBæ‚ÉuŒŸõv‚ğÀs‚µ‚Ä‚­‚¾‚³‚¢B";
+            out_error = L"æ¤œç´¢çµæœãŒã‚ã‚Šã¾ã›ã‚“ã€‚å…ˆã«ã€Œæ¤œç´¢ã€ã‚’å®Ÿè¡Œã—ã¦ãã ã•ã„ã€‚";
             return false;
         }
         if (GetSelectedMatches().empty()) {
-            out_error = L"’uŠ·‘ÎÛ‚ª‘I‘ğ‚³‚ê‚Ä‚¢‚Ü‚¹‚ñBŒŸõŒ‹‰Êƒ^ƒu‚Å‘ÎÛ‚ğ‘I‘ğ‚µ‚Ä‚­‚¾‚³‚¢B";
+            out_error = L"ç½®æ›å¯¾è±¡ãŒé¸æŠã•ã‚Œã¦ã„ã¾ã›ã‚“ã€‚æ¤œç´¢çµæœã‚¿ãƒ–ã§å¯¾è±¡ã‚’é¸æŠã—ã¦ãã ã•ã„ã€‚";
             return false;
         }
         if (IsChecked(hChkBackup_)) {
@@ -289,24 +289,24 @@ bool App::CheckInputs(bool for_execute, std::wstring& out_error,
     }
 
     if (IsChecked(hChkDryRunOnly_) && for_execute)
-        out_warnings.push_back(L"uƒhƒ‰ƒCƒ‰ƒ“‚Ì‚İv‚ª—LŒø‚Å‚·B–{Às‚Ís‚í‚ê‚Ü‚¹‚ñB");
+        out_warnings.push_back(L"ã€Œãƒ‰ãƒ©ã‚¤ãƒ©ãƒ³ã®ã¿ã€ãŒæœ‰åŠ¹ã§ã™ã€‚æœ¬å®Ÿè¡Œã¯è¡Œã‚ã‚Œã¾ã›ã‚“ã€‚");
     return true;
 }
 
 // -----------------------------------------------------------------------------
-// 15Í / 16Í Œx‚Ì•t—^i’PˆêEˆêŠ‡‚Å‹¤’Êj
+// 15ç«  / 16ç«  è­¦å‘Šã®ä»˜ä¸ï¼ˆå˜ä¸€ãƒ»ä¸€æ‹¬ã§å…±é€šï¼‰
 // -----------------------------------------------------------------------------
 void App::EvaluateMatchWarnings()
 {
     bool warn_pre = IsChecked(hChkWarnPreproc_);
     bool warn_cmt = IsChecked(hChkWarnComment_);
     if (!warn_pre && !warn_cmt) {
-        log_.Info(L"Œx”»’è: –³ŒøiŠî–{İ’èƒ^ƒu‚ÌuƒRƒƒ“ƒg“à‚Ìˆê’v‚ğŒx‚·‚év"
-                  L"uŠù‘¶ƒRƒ“ƒpƒCƒ‹ƒXƒCƒbƒ`‹ß–T‚ğŒx‚·‚év‚ª–¢ƒ`ƒFƒbƒN‚Å‚·j");
+        log_.Info(L"è­¦å‘Šåˆ¤å®š: ç„¡åŠ¹ï¼ˆåŸºæœ¬è¨­å®šã‚¿ãƒ–ã®ã€Œã‚³ãƒ¡ãƒ³ãƒˆå†…ã®ä¸€è‡´ã‚’è­¦å‘Šã™ã‚‹ã€"
+                  L"ã€Œæ—¢å­˜ã‚³ãƒ³ãƒ‘ã‚¤ãƒ«ã‚¹ã‚¤ãƒƒãƒè¿‘å‚ã‚’è­¦å‘Šã™ã‚‹ã€ãŒæœªãƒã‚§ãƒƒã‚¯ã§ã™ï¼‰");
         return;
     }
 
-    // ƒtƒ@ƒCƒ‹’PˆÊ‚É–{•¶‚ğæ‚èo‚·
+    // ãƒ•ã‚¡ã‚¤ãƒ«å˜ä½ã«æœ¬æ–‡ã‚’å–ã‚Šå‡ºã™
     int count = 0;
     for (size_t i = 0; i < matches_.size(); ++i) {
         MatchResult& m = matches_[i];
@@ -326,7 +326,7 @@ void App::EvaluateMatchWarnings()
             if (SearchEngine::DetectNearbyPreprocessor(*text, m.start_line, m.end_line,
                                                        cfg_.preprocessor_scan_lines, detail)) {
                 m.warning_flags.push_back(
-                    detail + L"“ñd‚ÉƒRƒ“ƒpƒCƒ‹ƒXƒCƒbƒ`‚ÅˆÍ‚í‚ê‚é‰Â”\«‚ª‚ ‚è‚Ü‚·B");
+                    detail + L"äºŒé‡ã«ã‚³ãƒ³ãƒ‘ã‚¤ãƒ«ã‚¹ã‚¤ãƒƒãƒã§å›²ã‚ã‚Œã‚‹å¯èƒ½æ€§ãŒã‚ã‚Šã¾ã™ã€‚");
                 if (m.status == MatchStatus::Target) m.status = MatchStatus::Warning;
                 ++count;
             }
@@ -334,29 +334,29 @@ void App::EvaluateMatchWarnings()
         if (warn_cmt) {
             if (SearchEngine::IsInsideComment(*text, m.start_offset)) {
                 m.warning_flags.push_back(
-                    L"ƒRƒƒ“ƒg“ài// ‚Ü‚½‚Í /* */j‚Åˆê’v‚µ‚Ä‚¢‚Ü‚·B"
-                    L"ˆÓ}‚µ‚½’uŠ·‘ÎÛ‚©Šm”F‚µ‚Ä‚­‚¾‚³‚¢B");
+                    L"ã‚³ãƒ¡ãƒ³ãƒˆå†…ï¼ˆ// ã¾ãŸã¯ /* */ï¼‰ã§ä¸€è‡´ã—ã¦ã„ã¾ã™ã€‚"
+                    L"æ„å›³ã—ãŸç½®æ›å¯¾è±¡ã‹ç¢ºèªã—ã¦ãã ã•ã„ã€‚");
                 if (m.status == MatchStatus::Target) m.status = MatchStatus::Warning;
                 ++count;
             }
         }
     }
     if (count > 0) {
-        log_.Warn(L"Œx•t‚«‚Ìˆê’v‰ÓŠ: " + std::to_wstring(count) + L" Œ");
+        log_.Warn(L"è­¦å‘Šä»˜ãã®ä¸€è‡´ç®‡æ‰€: " + std::to_wstring(count) + L" ä»¶");
         for (size_t i = 0; i < matches_.size(); ++i) {
             const MatchResult& m = matches_[i];
             if (!m.HasWarning()) continue;
             for (size_t k = 0; k < m.warning_flags.size(); ++k)
                 log_.Warn(L"  " + util::GetFileNameOf(m.file_path) + L" " +
-                          std::to_wstring(m.start_line) + L" s–Ú: " + m.warning_flags[k]);
+                          std::to_wstring(m.start_line) + L" è¡Œç›®: " + m.warning_flags[k]);
         }
     } else if (warn_pre || warn_cmt) {
-        log_.Info(L"Œx”»’è: ŠY“–‚È‚µiƒRƒƒ“ƒg“à‚Ìˆê’v / Šù‘¶ƒXƒCƒbƒ`‹ß–T‚È‚µj");
+        log_.Info(L"è­¦å‘Šåˆ¤å®š: è©²å½“ãªã—ï¼ˆã‚³ãƒ¡ãƒ³ãƒˆå†…ã®ä¸€è‡´ / æ—¢å­˜ã‚¹ã‚¤ãƒƒãƒè¿‘å‚ãªã—ï¼‰");
     }
 }
 
 // -----------------------------------------------------------------------------
-// 6.6 •¡”ƒqƒbƒgˆ— / 5.3.1 ƒqƒbƒg‚Ì“®ì
+// 6.6 è¤‡æ•°ãƒ’ãƒƒãƒˆå‡¦ç† / 5.3.1 ãƒ’ãƒƒãƒˆæ™‚ã®å‹•ä½œ
 // -----------------------------------------------------------------------------
 void App::ApplyHitBehavior()
 {
@@ -392,7 +392,7 @@ std::vector<MatchResult> App::GetSelectedMatches() const
     for (size_t i = 0; i < matches_.size(); ++i) {
         if (!matches_[i].selected) continue;
         if (IsFolderMode()) {
-            // ˆêŠ‡ˆ—: ƒtƒ@ƒCƒ‹’PˆÊ‚Ì‘I‘ğ‚à”½‰f‚·‚é
+            // ä¸€æ‹¬å‡¦ç†: ãƒ•ã‚¡ã‚¤ãƒ«å˜ä½ã®é¸æŠã‚‚åæ˜ ã™ã‚‹
             bool file_on = false;
             for (size_t k = 0; k < batch_entries_.size(); ++k) {
                 if (batch_entries_[k].path == matches_[i].file_path) {
@@ -408,7 +408,7 @@ std::vector<MatchResult> App::GetSelectedMatches() const
 }
 
 // -----------------------------------------------------------------------------
-// ˆê——•\¦
+// ä¸€è¦§è¡¨ç¤º
 // -----------------------------------------------------------------------------
 void App::RefreshListView()
 {
@@ -421,14 +421,14 @@ void App::RefreshListView()
     for (size_t i = 0; i < matches_.size(); ++i) {
         const MatchResult& m = matches_[i];
 
-        std::wstring type = L"Š®‘Sˆê’v";
-        if (m.match_type == MatchType::Normalized) type = L"³‹K‰»ˆê’v";
-        else if (m.match_type == MatchType::Similar) type = L"—Ş—ˆê’v";
+        std::wstring type = L"å®Œå…¨ä¸€è‡´";
+        if (m.match_type == MatchType::Normalized) type = L"æ­£è¦åŒ–ä¸€è‡´";
+        else if (m.match_type == MatchType::Similar) type = L"é¡ä¼¼ä¸€è‡´";
 
-        std::wstring st = L"‘ÎÛ";
-        if (m.status == MatchStatus::Excluded) st = L"œŠO";
-        else if (m.status == MatchStatus::Warning) st = L"Œx";
-        else if (m.status == MatchStatus::Error) st = L"ƒGƒ‰[";
+        std::wstring st = L"å¯¾è±¡";
+        if (m.status == MatchStatus::Excluded) st = L"é™¤å¤–";
+        else if (m.status == MatchStatus::Warning) st = L"è­¦å‘Š";
+        else if (m.status == MatchStatus::Error) st = L"ã‚¨ãƒ©ãƒ¼";
 
         std::wstring preview = m.matched_text;
         for (size_t k = 0; k < preview.size(); ++k) {
@@ -456,7 +456,7 @@ void App::RefreshListView()
             ::SendMessageW(hListView_, LVM_SETITEMW, 0, (LPARAM)&si);
         };
 
-        setSub(1, m.selected ? L"›" : L"");
+        setSub(1, m.selected ? L"â—‹" : L"");
         setSub(2, util::GetFileNameOf(m.file_path));
         setSub(3, std::to_wstring(m.start_line));
         setSub(4, std::to_wstring(m.start_column));
@@ -472,7 +472,7 @@ void App::RefreshListView()
     ::InvalidateRect(hListView_, nullptr, TRUE);
 
     wchar_t buf[256];
-    swprintf(buf, 256, L"ƒqƒbƒgŒ”: %d Œ / ‘I‘ğ’†: %d Œ",
+    swprintf(buf, 256, L"ãƒ’ãƒƒãƒˆä»¶æ•°: %d ä»¶ / é¸æŠä¸­: %d ä»¶",
              (int)matches_.size(), (int)GetSelectedMatches().size());
     SetEditText(hLblResultInfo_, buf);
 
@@ -514,8 +514,8 @@ void App::RefreshFileList()
             ::SendMessageW(hListFiles_, LVM_SETITEMW, 0, (LPARAM)&si);
         };
 
-        std::wstring st = e.status.empty() ? std::wstring(L"‘Ò‹@") : e.status;
-        if (!e.error.empty()) st += L"i" + e.error + L"j";
+        std::wstring st = e.status.empty() ? std::wstring(L"å¾…æ©Ÿ") : e.status;
+        if (!e.error.empty()) st += L"ï¼ˆ" + e.error + L"ï¼‰";
 
         setSub(1, util::GetFileNameOf(e.path));
         setSub(2, util::GetDirectoryOf(e.path));
@@ -544,10 +544,10 @@ void App::RefreshScanInfo()
     }
     wchar_t buf[320];
     if (batch_entries_.empty()) {
-        swprintf(buf, 320, L"‘ÎÛ: %d ƒtƒ@ƒCƒ‹i–¢ŒŸõj",
+        swprintf(buf, 320, L"å¯¾è±¡: %d ãƒ•ã‚¡ã‚¤ãƒ«ï¼ˆæœªæ¤œç´¢ï¼‰",
                  (int)batch_files_.size());
     } else {
-        swprintf(buf, 320, L"‘–¸ %d ƒtƒ@ƒCƒ‹ / ƒqƒbƒg %d ƒtƒ@ƒCƒ‹ %d Œ / ‘ÎÛ %d ƒtƒ@ƒCƒ‹",
+        swprintf(buf, 320, L"èµ°æŸ» %d ãƒ•ã‚¡ã‚¤ãƒ« / ãƒ’ãƒƒãƒˆ %d ãƒ•ã‚¡ã‚¤ãƒ« %d ä»¶ / å¯¾è±¡ %d ãƒ•ã‚¡ã‚¤ãƒ«",
                  (int)batch_files_.size(), hit_files, total_hits, sel_files);
     }
     SetEditText(hLblScanInfo_, buf);
@@ -581,7 +581,7 @@ void App::UpdateSelectionColumn()
     suppress_events_ = true;
     int n = ListView_GetItemCount(hListView_);
     for (int i = 0; i < n && i < (int)matches_.size(); ++i) {
-        std::wstring mark = matches_[(size_t)i].selected ? L"›" : L"";
+        std::wstring mark = matches_[(size_t)i].selected ? L"â—‹" : L"";
         LVITEMW si;
         ::ZeroMemory(&si, sizeof(si));
         si.iItem = i;
@@ -591,7 +591,7 @@ void App::UpdateSelectionColumn()
         ::SendMessageW(hListView_, LVM_SETITEMW, 0, (LPARAM)&si);
     }
     wchar_t buf[256];
-    swprintf(buf, 256, L"ƒqƒbƒgŒ”: %d Œ / ‘I‘ğ’†: %d Œ",
+    swprintf(buf, 256, L"ãƒ’ãƒƒãƒˆä»¶æ•°: %d ä»¶ / é¸æŠä¸­: %d ä»¶",
              (int)matches_.size(), (int)GetSelectedMatches().size());
     SetEditText(hLblResultInfo_, buf);
     suppress_events_ = false;
@@ -602,7 +602,7 @@ void App::DoSelectAll()
     for (size_t i = 0; i < matches_.size(); ++i) matches_[i].selected = true;
     RefreshListView();
     RefreshFileList();
-    log_.Info(L"‚·‚×‚Ä‚Ìˆê’v‚ğ’uŠ·‘ÎÛ‚Éİ’è‚µ‚Ü‚µ‚½B");
+    log_.Info(L"ã™ã¹ã¦ã®ä¸€è‡´ã‚’ç½®æ›å¯¾è±¡ã«è¨­å®šã—ã¾ã—ãŸã€‚");
 }
 
 void App::DoClearSelection()
@@ -610,7 +610,7 @@ void App::DoClearSelection()
     for (size_t i = 0; i < matches_.size(); ++i) matches_[i].selected = false;
     RefreshListView();
     RefreshFileList();
-    log_.Info(L"’uŠ·‘ÎÛ‚Ì‘I‘ğ‚ğ‰ğœ‚µ‚Ü‚µ‚½B");
+    log_.Info(L"ç½®æ›å¯¾è±¡ã®é¸æŠã‚’è§£é™¤ã—ã¾ã—ãŸã€‚");
 }
 
 void App::DoFileSelectAll()
@@ -618,7 +618,7 @@ void App::DoFileSelectAll()
     for (size_t i = 0; i < batch_entries_.size(); ++i) batch_entries_[i].selected = true;
     RefreshFileList();
     UpdateSelectionColumn();
-    log_.Info(L"‚·‚×‚Ä‚Ìƒtƒ@ƒCƒ‹‚ğ‘ÎÛ‚Éİ’è‚µ‚Ü‚µ‚½B");
+    log_.Info(L"ã™ã¹ã¦ã®ãƒ•ã‚¡ã‚¤ãƒ«ã‚’å¯¾è±¡ã«è¨­å®šã—ã¾ã—ãŸã€‚");
 }
 
 void App::DoFileSelectNone()
@@ -626,7 +626,7 @@ void App::DoFileSelectNone()
     for (size_t i = 0; i < batch_entries_.size(); ++i) batch_entries_[i].selected = false;
     RefreshFileList();
     UpdateSelectionColumn();
-    log_.Info(L"‚·‚×‚Ä‚Ìƒtƒ@ƒCƒ‹‚ğ‘ÎÛŠO‚É‚µ‚Ü‚µ‚½B");
+    log_.Info(L"ã™ã¹ã¦ã®ãƒ•ã‚¡ã‚¤ãƒ«ã‚’å¯¾è±¡å¤–ã«ã—ã¾ã—ãŸã€‚");
 }
 
 void App::DoClearLog()
@@ -641,19 +641,19 @@ void App::OnTargetKindChanged()
     ::EnableWindow(hBrowseBtn_, !folder);
     ::EnableWindow(hFolderEdit_, folder);
     ::EnableWindow(hFolderBrowseBtn_, folder);
-    // ‘–¸‚ÍV‹ŒƒR[ƒhEƒXƒCƒbƒ`–¼‚ª–¢“ü—Í‚Å‚àÀs‚Å‚«‚éiƒtƒHƒ‹ƒ_‘–¸‚Ì‚İj
+    // èµ°æŸ»ã¯æ–°æ—§ã‚³ãƒ¼ãƒ‰ãƒ»ã‚¹ã‚¤ãƒƒãƒåãŒæœªå…¥åŠ›ã§ã‚‚å®Ÿè¡Œã§ãã‚‹ï¼ˆãƒ•ã‚©ãƒ«ãƒ€èµ°æŸ»ã®ã¿ï¼‰
     ::EnableWindow(hBtnScan_, TRUE);
     ::EnableWindow(hBtnFileSelAll_, folder);
     ::EnableWindow(hBtnFileSelNone_, folder);
     ::EnableWindow(hListFiles_, folder);
     for (int i = 0; i < 6; ++i) ::EnableWindow(hChkExt_[i], folder);
     ::EnableWindow(hChkSubdirs_, folder);
-    SetStatus(folder ? L"ƒtƒHƒ‹ƒ_ƒ‚[ƒh: ‘ÎÛƒtƒHƒ‹ƒ_‚ÆŠg’£qƒtƒBƒ‹ƒ^‚ğw’è‚µ‚Äu‘–¸v¨uŒŸõv"
+    SetStatus(folder ? L"ãƒ•ã‚©ãƒ«ãƒ€ãƒ¢ãƒ¼ãƒ‰: å¯¾è±¡ãƒ•ã‚©ãƒ«ãƒ€ã¨æ‹¡å¼µå­ãƒ•ã‚£ãƒ«ã‚¿ã‚’æŒ‡å®šã—ã¦ã€Œèµ°æŸ»ã€â†’ã€Œæ¤œç´¢ã€"
                      : L"Ready");
 }
 
 // -----------------------------------------------------------------------------
-// ó‘ÔŠÇ—i13Íj
+// çŠ¶æ…‹ç®¡ç†ï¼ˆ13ç« ï¼‰
 // -----------------------------------------------------------------------------
 void App::SetState(AppState s)
 {
@@ -662,15 +662,15 @@ void App::SetState(AppState s)
 
     std::wstring st;
     switch (s) {
-    case AppState::INIT:           st = L"‰Šú‰»’†..."; break;
+    case AppState::INIT:           st = L"åˆæœŸåŒ–ä¸­..."; break;
     case AppState::READY:          st = L"Ready"; break;
-    case AppState::FILE_SELECTED:  st = L"ƒtƒ@ƒCƒ‹‘I‘ğÏ‚İ"; break;
-    case AppState::SEARCHED:       st = L"ŒŸõŠ®—¹i" + std::to_wstring((int)matches_.size()) + L" Œj"; break;
-    case AppState::PREVIEWED:      st = L"ƒvƒŒƒrƒ…[¶¬Ï‚İ"; break;
-    case AppState::EXECUTING:      st = L"Às’†..."; break;
-    case AppState::COMPLETED:      st = L"Š®—¹"; break;
-    case AppState::Error:          st = L"ƒGƒ‰["; break;
-    case AppState::UNDO_AVAILABLE: st = L"Š®—¹iŒ³‚É–ß‚· ‚ª‰Â”\‚Å‚·j"; break;
+    case AppState::FILE_SELECTED:  st = L"ãƒ•ã‚¡ã‚¤ãƒ«é¸æŠæ¸ˆã¿"; break;
+    case AppState::SEARCHED:       st = L"æ¤œç´¢å®Œäº†ï¼ˆ" + std::to_wstring((int)matches_.size()) + L" ä»¶ï¼‰"; break;
+    case AppState::PREVIEWED:      st = L"ãƒ—ãƒ¬ãƒ“ãƒ¥ãƒ¼ç”Ÿæˆæ¸ˆã¿"; break;
+    case AppState::EXECUTING:      st = L"å®Ÿè¡Œä¸­..."; break;
+    case AppState::COMPLETED:      st = L"å®Œäº†"; break;
+    case AppState::Error:          st = L"ã‚¨ãƒ©ãƒ¼"; break;
+    case AppState::UNDO_AVAILABLE: st = L"å®Œäº†ï¼ˆå…ƒã«æˆ»ã™ ãŒå¯èƒ½ã§ã™ï¼‰"; break;
     default:                       st = L"Ready"; break;
     }
     SetStatus(st);
@@ -700,7 +700,7 @@ void App::UpdateButtons()
 }
 
 // -----------------------------------------------------------------------------
-// 6.1 ‘ÎÛƒtƒ@ƒCƒ‹‘I‘ğ
+// 6.1 å¯¾è±¡ãƒ•ã‚¡ã‚¤ãƒ«é¸æŠ
 // -----------------------------------------------------------------------------
 void App::DoBrowse()
 {
@@ -719,12 +719,12 @@ void App::DoBrowse()
     ofn.lStructSize = sizeof(ofn);
     ofn.hwndOwner   = hWnd_;
     ofn.lpstrFilter =
-        L"C/C++ ƒ\[ƒX (*.c;*.cpp;*.h;*.hpp;*.cc;*.cxx)\0*.c;*.cpp;*.h;*.hpp;*.cc;*.cxx\0"
-        L"ƒeƒLƒXƒg ƒtƒ@ƒCƒ‹ (*.txt)\0*.txt\0"
-        L"‚·‚×‚Ä‚Ìƒtƒ@ƒCƒ‹ (*.*)\0*.*\0\0";
+        L"C/C++ ã‚½ãƒ¼ã‚¹ (*.c;*.cpp;*.h;*.hpp;*.cc;*.cxx)\0*.c;*.cpp;*.h;*.hpp;*.cc;*.cxx\0"
+        L"ãƒ†ã‚­ã‚¹ãƒˆ ãƒ•ã‚¡ã‚¤ãƒ« (*.txt)\0*.txt\0"
+        L"ã™ã¹ã¦ã®ãƒ•ã‚¡ã‚¤ãƒ« (*.*)\0*.*\0\0";
     ofn.lpstrFile   = buf;
     ofn.nMaxFile    = MAX_PATH * 4;
-    ofn.lpstrTitle  = L"‘ÎÛƒtƒ@ƒCƒ‹‚ğ‘I‘ğ";
+    ofn.lpstrTitle  = L"å¯¾è±¡ãƒ•ã‚¡ã‚¤ãƒ«ã‚’é¸æŠ";
     ofn.Flags       = OFN_FILEMUSTEXIST | OFN_PATHMUSTEXIST | OFN_EXPLORER;
 
     if (!::GetOpenFileNameW(&ofn)) {
@@ -754,7 +754,7 @@ void App::DoBrowse()
     for (size_t i = 0; i < vr.warnings.size(); ++i) log_.Warn(vr.warnings[i]);
 
     if (!FileManager::ReadText(target_path_, cfg_.encoding_mode, file_text_, file_info_)) {
-        ShowError(L"ƒtƒ@ƒCƒ‹‚ğ“Ç‚İæ‚ê‚Ü‚¹‚ñB");
+        ShowError(L"ãƒ•ã‚¡ã‚¤ãƒ«ã‚’èª­ã¿å–ã‚Œã¾ã›ã‚“ã€‚");
         log_.Error(L"Failed to read file: " + target_path_);
         SetState(AppState::Error);
         return;
@@ -770,7 +770,7 @@ void App::DoBrowse()
 }
 
 // -----------------------------------------------------------------------------
-// 17.2.1 ‘ÎÛƒtƒHƒ‹ƒ_‘I‘ğ
+// 17.2.1 å¯¾è±¡ãƒ•ã‚©ãƒ«ãƒ€é¸æŠ
 // -----------------------------------------------------------------------------
 void App::DoFolderBrowse()
 {
@@ -781,7 +781,7 @@ void App::DoFolderBrowse()
     BROWSEINFOW bi;
     ::ZeroMemory(&bi, sizeof(bi));
     bi.hwndOwner = hWnd_;
-    bi.lpszTitle = L"‘ÎÛƒtƒHƒ‹ƒ_‚ğ‘I‘ğ‚µ‚Ä‚­‚¾‚³‚¢";
+    bi.lpszTitle = L"å¯¾è±¡ãƒ•ã‚©ãƒ«ãƒ€ã‚’é¸æŠã—ã¦ãã ã•ã„";
     bi.ulFlags   = BIF_RETURNONLYFSDIRS | BIF_NEWDIALOGSTYLE | BIF_EDITBOX;
 
     LPITEMIDLIST pidl = ::SHBrowseForFolderW(&bi);
@@ -798,17 +798,17 @@ void App::DoFolderBrowse()
 }
 
 // -----------------------------------------------------------------------------
-// 17.2.2 è‡1-2 ‘–¸
+// 17.2.2 æ‰‹é †1-2 èµ°æŸ»
 // -----------------------------------------------------------------------------
 void App::DoScan()
 {
     std::wstring folder = util::Trim(GetEditText(hFolderEdit_));
-    if (folder.empty()) { ShowError(L"‘ÎÛƒtƒHƒ‹ƒ_‚ğ‘I‘ğ‚µ‚Ä‚­‚¾‚³‚¢B"); return; }
+    if (folder.empty()) { ShowError(L"å¯¾è±¡ãƒ•ã‚©ãƒ«ãƒ€ã‚’é¸æŠã—ã¦ãã ã•ã„ã€‚"); return; }
 
     folder = util::MakeAbsolute(folder);
     std::vector<std::wstring> exts = ReadExtensionsFromUi();
     if (exts.empty()) {
-        ShowError(L"Šg’£qƒtƒBƒ‹ƒ^‚ğ 1 ‚ÂˆÈã‘I‘ğ‚µ‚Ä‚­‚¾‚³‚¢B");
+        ShowError(L"æ‹¡å¼µå­ãƒ•ã‚£ãƒ«ã‚¿ã‚’ 1 ã¤ä»¥ä¸Šé¸æŠã—ã¦ãã ã•ã„ã€‚");
         return;
     }
     bool sub = IsChecked(hChkSubdirs_);
@@ -832,38 +832,38 @@ void App::DoScan()
               L" / Directories: " + std::to_wstring(sr.scanned_directories));
 
     if (sr.files.empty()) {
-        SetStatus(L"‘–¸Š®—¹: ‘ÎÛƒtƒ@ƒCƒ‹‚ª 0 Œ‚Å‚·BƒtƒHƒ‹ƒ_‚ÆŠg’£qƒtƒBƒ‹ƒ^‚ğŠm”F‚µ‚Ä‚­‚¾‚³‚¢B");
-        ShowWarn(L"ğŒ‚Éˆê’v‚·‚éƒtƒ@ƒCƒ‹‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñ‚Å‚µ‚½B\n\n"
-                 L"‘ÎÛƒtƒHƒ‹ƒ_‚ÆŠg’£qƒtƒBƒ‹ƒ^‚ğŠm”F‚µ‚Ä‚­‚¾‚³‚¢B");
+        SetStatus(L"èµ°æŸ»å®Œäº†: å¯¾è±¡ãƒ•ã‚¡ã‚¤ãƒ«ãŒ 0 ä»¶ã§ã™ã€‚ãƒ•ã‚©ãƒ«ãƒ€ã¨æ‹¡å¼µå­ãƒ•ã‚£ãƒ«ã‚¿ã‚’ç¢ºèªã—ã¦ãã ã•ã„ã€‚");
+        ShowWarn(L"æ¡ä»¶ã«ä¸€è‡´ã™ã‚‹ãƒ•ã‚¡ã‚¤ãƒ«ãŒè¦‹ã¤ã‹ã‚Šã¾ã›ã‚“ã§ã—ãŸã€‚\n\n"
+                 L"å¯¾è±¡ãƒ•ã‚©ãƒ«ãƒ€ã¨æ‹¡å¼µå­ãƒ•ã‚£ãƒ«ã‚¿ã‚’ç¢ºèªã—ã¦ãã ã•ã„ã€‚");
     } else {
-        SetStatus(L"‘–¸Š®—¹: " + std::to_wstring((int)sr.files.size()) +
-                  L" ƒtƒ@ƒCƒ‹iV‹ŒƒR[ƒh‚Í–¢“ü—Í‚Å‚à‘–¸‚Å‚«‚Ü‚·jB"
-                  L"Ÿ‚É‹ŒƒR[ƒhEVƒR[ƒh‚ğ“ü—Í‚µ‚ÄuŒŸõv‚ğ‰Ÿ‚µ‚Ä‚­‚¾‚³‚¢B");
+        SetStatus(L"èµ°æŸ»å®Œäº†: " + std::to_wstring((int)sr.files.size()) +
+                  L" ãƒ•ã‚¡ã‚¤ãƒ«ï¼ˆæ–°æ—§ã‚³ãƒ¼ãƒ‰ã¯æœªå…¥åŠ›ã§ã‚‚èµ°æŸ»ã§ãã¾ã™ï¼‰ã€‚"
+                  L"æ¬¡ã«æ—§ã‚³ãƒ¼ãƒ‰ãƒ»æ–°ã‚³ãƒ¼ãƒ‰ã‚’å…¥åŠ›ã—ã¦ã€Œæ¤œç´¢ã€ã‚’æŠ¼ã—ã¦ãã ã•ã„ã€‚");
     }
     for (size_t i = 0; i < sr.errors.size() && i < 20; ++i) log_.Warn(sr.errors[i]);
-    for (size_t i = 0; i < sr.skipped.size() && i < 20; ++i) log_.Warn(L"œŠO: " + sr.skipped[i]);
+    for (size_t i = 0; i < sr.skipped.size() && i < 20; ++i) log_.Warn(L"é™¤å¤–: " + sr.skipped[i]);
 
     if (!sr.errors.empty()) ShowWarn(ValidationManager::BuildWarningSummary(sr.errors));
 
     if (sr.files.empty()) {
-        ShowInfo(L"ğŒ‚Éˆê’v‚·‚éƒtƒ@ƒCƒ‹‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñ‚Å‚µ‚½B\n"
-                 L"‘ÎÛƒtƒHƒ‹ƒ_‚ÆŠg’£qƒtƒBƒ‹ƒ^‚ğŠm”F‚µ‚Ä‚­‚¾‚³‚¢B");
+        ShowInfo(L"æ¡ä»¶ã«ä¸€è‡´ã™ã‚‹ãƒ•ã‚¡ã‚¤ãƒ«ãŒè¦‹ã¤ã‹ã‚Šã¾ã›ã‚“ã§ã—ãŸã€‚\n"
+                 L"å¯¾è±¡ãƒ•ã‚©ãƒ«ãƒ€ã¨æ‹¡å¼µå­ãƒ•ã‚£ãƒ«ã‚¿ã‚’ç¢ºèªã—ã¦ãã ã•ã„ã€‚");
         SetState(AppState::FILE_SELECTED);
         return;
     }
 
     if (sr.truncated) {
-        ShowWarn(L"‘ÎÛƒtƒ@ƒCƒ‹”‚ªãŒÀi" + std::to_wstring(FolderScanner::kMaxFiles) +
-                 L" Œj‚É’B‚µ‚½‚½‚ßAˆÈ~‚Ìƒtƒ@ƒCƒ‹‚Í‘–¸‚µ‚Ä‚¢‚Ü‚¹‚ñB");
+        ShowWarn(L"å¯¾è±¡ãƒ•ã‚¡ã‚¤ãƒ«æ•°ãŒä¸Šé™ï¼ˆ" + std::to_wstring(FolderScanner::kMaxFiles) +
+                 L" ä»¶ï¼‰ã«é”ã—ãŸãŸã‚ã€ä»¥é™ã®ãƒ•ã‚¡ã‚¤ãƒ«ã¯èµ°æŸ»ã—ã¦ã„ã¾ã›ã‚“ã€‚");
     }
     SetProgress(100);
     SetState(AppState::FILE_SELECTED);
-    ShowInfo(L"‘–¸‚ªŠ®—¹‚µ‚Ü‚µ‚½B\n\n‘ÎÛƒtƒ@ƒCƒ‹: " + std::to_wstring((int)sr.files.size()) +
-             L" Œ\n\nuŒŸõv‚ğÀs‚µ‚Ä‚­‚¾‚³‚¢B");
+    ShowInfo(L"èµ°æŸ»ãŒå®Œäº†ã—ã¾ã—ãŸã€‚\n\nå¯¾è±¡ãƒ•ã‚¡ã‚¤ãƒ«: " + std::to_wstring((int)sr.files.size()) +
+             L" ä»¶\n\nã€Œæ¤œç´¢ã€ã‚’å®Ÿè¡Œã—ã¦ãã ã•ã„ã€‚");
 }
 
 // -----------------------------------------------------------------------------
-// 9.2 ŒŸõˆ—ƒtƒ[
+// 9.2 æ¤œç´¢å‡¦ç†ãƒ•ãƒ­ãƒ¼
 // -----------------------------------------------------------------------------
 void App::DoSearch()
 {
@@ -883,7 +883,7 @@ void App::DoSearch()
     log_.Info(L"Search started.");
 
     if (!FileManager::ReadText(target_path_, cfg_.encoding_mode, file_text_, file_info_)) {
-        ShowError(L"ƒtƒ@ƒCƒ‹‚ğ“Ç‚İæ‚ê‚Ü‚¹‚ñB");
+        ShowError(L"ãƒ•ã‚¡ã‚¤ãƒ«ã‚’èª­ã¿å–ã‚Œã¾ã›ã‚“ã€‚");
         log_.Error(L"Failed to read file: " + target_path_);
         SetState(AppState::Error);
         return;
@@ -892,10 +892,10 @@ void App::DoSearch()
     std::wstring pattern = util::NormalizeNewlines(GetEditText(hOldEdit_));
     if (!pattern.empty() && pattern[pattern.size() - 1] == L'\n') {
         pattern.erase(pattern.size() - 1);
-        log_.Info(L"·‚µ‘Ö‚¦‘ÎÛƒR[ƒh––”ö‚Ì‰üs‚ğœ‹‚µ‚ÄŒŸõ‚µ‚Ü‚·B");
+        log_.Info(L"å·®ã—æ›¿ãˆå¯¾è±¡ã‚³ãƒ¼ãƒ‰æœ«å°¾ã®æ”¹è¡Œã‚’é™¤å»ã—ã¦æ¤œç´¢ã—ã¾ã™ã€‚");
     }
     if (util::IsBlank(pattern)) {
-        ShowError(L"MSG003: ·‚µ‘Ö‚¦‘ÎÛƒR[ƒh‚ğ“ü—Í‚µ‚Ä‚­‚¾‚³‚¢B");
+        ShowError(L"MSG003: å·®ã—æ›¿ãˆå¯¾è±¡ã‚³ãƒ¼ãƒ‰ã‚’å…¥åŠ›ã—ã¦ãã ã•ã„ã€‚");
         SetState(AppState::Error);
         return;
     }
@@ -921,8 +921,8 @@ void App::DoSearch()
     if (matches_.empty()) {
         RefreshListView();
         SetState(AppState::SEARCHED);
-        ShowInfo(L"MSG005: ‘ÎÛƒR[ƒh‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñ‚Å‚µ‚½B");
-        log_.Warn(L"‘ÎÛƒR[ƒh‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñ‚Å‚µ‚½B");
+        ShowInfo(L"MSG005: å¯¾è±¡ã‚³ãƒ¼ãƒ‰ãŒè¦‹ã¤ã‹ã‚Šã¾ã›ã‚“ã§ã—ãŸã€‚");
+        log_.Warn(L"å¯¾è±¡ã‚³ãƒ¼ãƒ‰ãŒè¦‹ã¤ã‹ã‚Šã¾ã›ã‚“ã§ã—ãŸã€‚");
         return;
     }
 
@@ -930,23 +930,23 @@ void App::DoSearch()
     RefreshListView();
 
     if (matches_.size() > 1 && ReadHitBehaviorFromUi() == HitBehavior::AutoSelectSingle) {
-        ShowWarn(L"MSG006: “¯ˆêƒR[ƒh‚ª " + std::to_wstring((int)matches_.size()) +
-                 L" ŒŒ©‚Â‚©‚è‚Ü‚µ‚½B\n’uŠ·‘ÎÛ‚ğ‘I‘ğ‚µ‚Ä‚­‚¾‚³‚¢B");
+        ShowWarn(L"MSG006: åŒä¸€ã‚³ãƒ¼ãƒ‰ãŒ " + std::to_wstring((int)matches_.size()) +
+                 L" ä»¶è¦‹ã¤ã‹ã‚Šã¾ã—ãŸã€‚\nç½®æ›å¯¾è±¡ã‚’é¸æŠã—ã¦ãã ã•ã„ã€‚");
     }
 
     int warn_count = 0;
     for (size_t i = 0; i < matches_.size(); ++i)
         if (matches_[i].HasWarning()) ++warn_count;
     if (warn_count > 0)
-        ShowWarn(L"Œx•t‚«‚Ìˆê’v‰ÓŠ‚ª " + std::to_wstring(warn_count) +
-                 L" Œ‚ ‚è‚Ü‚·BŒŸõŒ‹‰Êƒ^ƒu‚Ìuó‘Ôv—ñ‚ğŠm”F‚µ‚Ä‚­‚¾‚³‚¢B");
+        ShowWarn(L"è­¦å‘Šä»˜ãã®ä¸€è‡´ç®‡æ‰€ãŒ " + std::to_wstring(warn_count) +
+                 L" ä»¶ã‚ã‚Šã¾ã™ã€‚æ¤œç´¢çµæœã‚¿ãƒ–ã®ã€ŒçŠ¶æ…‹ã€åˆ—ã‚’ç¢ºèªã—ã¦ãã ã•ã„ã€‚");
 
     SetState(AppState::SEARCHED);
     SetProgress(100);
 }
 
 // -----------------------------------------------------------------------------
-// 17.2.2 è‡3-4 ˆêŠ‡ŒŸõ
+// 17.2.2 æ‰‹é †3-4 ä¸€æ‹¬æ¤œç´¢
 // -----------------------------------------------------------------------------
 void App::DoBatchSearch()
 {
@@ -967,10 +967,10 @@ void App::DoBatchSearch()
     std::wstring pattern = util::NormalizeNewlines(GetEditText(hOldEdit_));
     if (!pattern.empty() && pattern[pattern.size() - 1] == L'\n') {
         pattern.erase(pattern.size() - 1);
-        log_.Info(L"·‚µ‘Ö‚¦‘ÎÛƒR[ƒh––”ö‚Ì‰üs‚ğœ‹‚µ‚ÄŒŸõ‚µ‚Ü‚·B");
+        log_.Info(L"å·®ã—æ›¿ãˆå¯¾è±¡ã‚³ãƒ¼ãƒ‰æœ«å°¾ã®æ”¹è¡Œã‚’é™¤å»ã—ã¦æ¤œç´¢ã—ã¾ã™ã€‚");
     }
     if (util::IsBlank(pattern)) {
-        ShowError(L"MSG003: ·‚µ‘Ö‚¦‘ÎÛƒR[ƒh‚ğ“ü—Í‚µ‚Ä‚­‚¾‚³‚¢B");
+        ShowError(L"MSG003: å·®ã—æ›¿ãˆå¯¾è±¡ã‚³ãƒ¼ãƒ‰ã‚’å…¥åŠ›ã—ã¦ãã ã•ã„ã€‚");
         SetState(AppState::Error);
         return;
     }
@@ -982,7 +982,7 @@ void App::DoBatchSearch()
     BatchProgressFn prog = [this](int done, int total, const std::wstring& cur) {
         if (total > 0) SetProgress((int)((done * 100) / total));
         if (!cur.empty())
-            SetStatus(L"ŒŸõ’† (" + std::to_wstring(done) + L"/" + std::to_wstring(total) +
+            SetStatus(L"æ¤œç´¢ä¸­ (" + std::to_wstring(done) + L"/" + std::to_wstring(total) +
                       L"): " + util::GetFileNameOf(cur));
     };
 
@@ -1013,7 +1013,7 @@ void App::DoBatchSearch()
               L" / Match count: " + std::to_wstring(bs.total_matches));
     for (size_t i = 0; i < bs.entries.size(); ++i)
         log_.Info(L"  " + bs.entries[i].path + L" : " +
-                  std::to_wstring(bs.entries[i].hit_count) + L" Œ");
+                  std::to_wstring(bs.entries[i].hit_count) + L" ä»¶");
 
     EvaluateMatchWarnings();
     ApplyHitBehavior();
@@ -1022,9 +1022,9 @@ void App::DoBatchSearch()
         RefreshListView();
         RefreshFileList();
         SetState(AppState::SEARCHED);
-        ShowInfo(L"MSG005: ‘ÎÛƒR[ƒh‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñ‚Å‚µ‚½B\n\n‘–¸ƒtƒ@ƒCƒ‹: " +
-                 std::to_wstring(bs.scanned_count) + L" Œ");
-        log_.Warn(L"‘ÎÛƒR[ƒh‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñ‚Å‚µ‚½B");
+        ShowInfo(L"MSG005: å¯¾è±¡ã‚³ãƒ¼ãƒ‰ãŒè¦‹ã¤ã‹ã‚Šã¾ã›ã‚“ã§ã—ãŸã€‚\n\nèµ°æŸ»ãƒ•ã‚¡ã‚¤ãƒ«: " +
+                 std::to_wstring(bs.scanned_count) + L" ä»¶");
+        log_.Warn(L"å¯¾è±¡ã‚³ãƒ¼ãƒ‰ãŒè¦‹ã¤ã‹ã‚Šã¾ã›ã‚“ã§ã—ãŸã€‚");
         return;
     }
 
@@ -1032,24 +1032,24 @@ void App::DoBatchSearch()
     RefreshFileList();
 
     if (matches_.size() > 1 && ReadHitBehaviorFromUi() == HitBehavior::AutoSelectSingle) {
-        ShowWarn(L"MSG006: “¯ˆêƒR[ƒh‚ª " + std::to_wstring((int)matches_.size()) +
-                 L" Œi" + std::to_wstring(bs.hit_file_count) +
-                 L" ƒtƒ@ƒCƒ‹jŒ©‚Â‚©‚è‚Ü‚µ‚½B\n’uŠ·‘ÎÛ‚ğ‘I‘ğ‚µ‚Ä‚­‚¾‚³‚¢B");
+        ShowWarn(L"MSG006: åŒä¸€ã‚³ãƒ¼ãƒ‰ãŒ " + std::to_wstring((int)matches_.size()) +
+                 L" ä»¶ï¼ˆ" + std::to_wstring(bs.hit_file_count) +
+                 L" ãƒ•ã‚¡ã‚¤ãƒ«ï¼‰è¦‹ã¤ã‹ã‚Šã¾ã—ãŸã€‚\nç½®æ›å¯¾è±¡ã‚’é¸æŠã—ã¦ãã ã•ã„ã€‚");
     }
 
     int warn_count = 0;
     for (size_t i = 0; i < matches_.size(); ++i)
         if (matches_[i].HasWarning()) ++warn_count;
     if (warn_count > 0)
-        ShowWarn(L"Œx•t‚«‚Ìˆê’v‰ÓŠ‚ª " + std::to_wstring(warn_count) +
-                 L" Œ‚ ‚è‚Ü‚·BŒŸõŒ‹‰Êƒ^ƒu‚Ìuó‘Ôv—ñ‚ğŠm”F‚µ‚Ä‚­‚¾‚³‚¢B");
+        ShowWarn(L"è­¦å‘Šä»˜ãã®ä¸€è‡´ç®‡æ‰€ãŒ " + std::to_wstring(warn_count) +
+                 L" ä»¶ã‚ã‚Šã¾ã™ã€‚æ¤œç´¢çµæœã‚¿ãƒ–ã®ã€ŒçŠ¶æ…‹ã€åˆ—ã‚’ç¢ºèªã—ã¦ãã ã•ã„ã€‚");
 
     SetProgress(100);
     SetState(AppState::SEARCHED);
 }
 
 // -----------------------------------------------------------------------------
-// 6.7 / 6.8 ’uŠ·ƒuƒƒbƒN‚Ì¶¬
+// 6.7 / 6.8 ç½®æ›ãƒ–ãƒ­ãƒƒã‚¯ã®ç”Ÿæˆ
 // -----------------------------------------------------------------------------
 std::wstring App::MakeBlockFor(const MatchResult& m, const OperationContext& ctx,
                                const std::wstring& text) const
@@ -1073,19 +1073,19 @@ std::vector<std::wstring> App::MakeBlocksFor(const std::vector<MatchResult>& ms,
 }
 
 // -----------------------------------------------------------------------------
-// 9.3 ƒvƒŒƒrƒ…[ˆ—ƒtƒ[i’Pˆêƒtƒ@ƒCƒ‹j
+// 9.3 ãƒ—ãƒ¬ãƒ“ãƒ¥ãƒ¼å‡¦ç†ãƒ•ãƒ­ãƒ¼ï¼ˆå˜ä¸€ãƒ•ã‚¡ã‚¤ãƒ«ï¼‰
 // -----------------------------------------------------------------------------
 bool App::BuildPreviewInternal(std::wstring& out_error)
 {
     out_error.clear();
 
     if (matches_.empty()) {
-        out_error = L"ŒŸõŒ‹‰Ê‚ª‚ ‚è‚Ü‚¹‚ñBæ‚ÉuŒŸõv‚ğÀs‚µ‚Ä‚­‚¾‚³‚¢B";
+        out_error = L"æ¤œç´¢çµæœãŒã‚ã‚Šã¾ã›ã‚“ã€‚å…ˆã«ã€Œæ¤œç´¢ã€ã‚’å®Ÿè¡Œã—ã¦ãã ã•ã„ã€‚";
         return false;
     }
     std::vector<MatchResult> sel = GetSelectedMatches();
     if (sel.empty()) {
-        out_error = L"’uŠ·‘ÎÛ‚ª‘I‘ğ‚³‚ê‚Ä‚¢‚Ü‚¹‚ñBŒŸõŒ‹‰Êƒ^ƒu‚Å‘ÎÛ‚ğ‘I‘ğ‚µ‚Ä‚­‚¾‚³‚¢B";
+        out_error = L"ç½®æ›å¯¾è±¡ãŒé¸æŠã•ã‚Œã¦ã„ã¾ã›ã‚“ã€‚æ¤œç´¢çµæœã‚¿ãƒ–ã§å¯¾è±¡ã‚’é¸æŠã—ã¦ãã ã•ã„ã€‚";
         return false;
     }
 
@@ -1100,7 +1100,7 @@ bool App::BuildPreviewInternal(std::wstring& out_error)
 
     std::wstring before_ex, after_ex;
     if (!PreviewGenerator::BuildExcerpts(file_text_, after, sel, 4, before_ex, after_ex)) {
-        out_error = L"ƒvƒŒƒrƒ…[‚Ì¶¬‚É¸”s‚µ‚Ü‚µ‚½B";
+        out_error = L"ãƒ—ãƒ¬ãƒ“ãƒ¥ãƒ¼ã®ç”Ÿæˆã«å¤±æ•—ã—ã¾ã—ãŸã€‚";
         return false;
     }
 
@@ -1111,9 +1111,9 @@ bool App::BuildPreviewInternal(std::wstring& out_error)
     else                                    shown = PreviewGenerator::BuildTopBottom(before_ex, after_ex);
 
     std::wstring head;
-    head += L"===== ¶¬‚³‚ê‚éƒRƒ“ƒpƒCƒ‹ƒXƒCƒbƒ`i•û®: ";
+    head += L"===== ç”Ÿæˆã•ã‚Œã‚‹ã‚³ãƒ³ãƒ‘ã‚¤ãƒ«ã‚¹ã‚¤ãƒƒãƒï¼ˆæ–¹å¼: ";
     head += SwitchGenerator::StyleName(ctx.switch_style);
-    head += L"j=====\r\n\r\n";
+    head += L"ï¼‰=====\r\n\r\n";
     head += util::DenormalizeNewlines(blocks[0], L"\r\n");
     head += L"\r\n\r\n";
 
@@ -1125,26 +1125,26 @@ bool App::BuildPreviewInternal(std::wstring& out_error)
 }
 
 // -----------------------------------------------------------------------------
-// 17.2.2 è‡6 ˆêŠ‡ƒvƒŒƒrƒ…[
+// 17.2.2 æ‰‹é †6 ä¸€æ‹¬ãƒ—ãƒ¬ãƒ“ãƒ¥ãƒ¼
 // -----------------------------------------------------------------------------
 bool App::BuildBatchPreview(std::wstring& out_error)
 {
     out_error.clear();
 
     if (matches_.empty()) {
-        out_error = L"ŒŸõŒ‹‰Ê‚ª‚ ‚è‚Ü‚¹‚ñBæ‚ÉuŒŸõv‚ğÀs‚µ‚Ä‚­‚¾‚³‚¢B";
+        out_error = L"æ¤œç´¢çµæœãŒã‚ã‚Šã¾ã›ã‚“ã€‚å…ˆã«ã€Œæ¤œç´¢ã€ã‚’å®Ÿè¡Œã—ã¦ãã ã•ã„ã€‚";
         return false;
     }
     std::vector<MatchResult> sel = GetSelectedMatches();
     if (sel.empty()) {
-        out_error = L"’uŠ·‘ÎÛ‚ª‘I‘ğ‚³‚ê‚Ä‚¢‚Ü‚¹‚ñBŒŸõŒ‹‰Êƒ^ƒu‚Ü‚½‚ÍˆêŠ‡ˆ—ƒ^ƒu‚Å‘ÎÛ‚ğ‘I‘ğ‚µ‚Ä‚­‚¾‚³‚¢B";
+        out_error = L"ç½®æ›å¯¾è±¡ãŒé¸æŠã•ã‚Œã¦ã„ã¾ã›ã‚“ã€‚æ¤œç´¢çµæœã‚¿ãƒ–ã¾ãŸã¯ä¸€æ‹¬å‡¦ç†ã‚¿ãƒ–ã§å¯¾è±¡ã‚’é¸æŠã—ã¦ãã ã•ã„ã€‚";
         return false;
     }
 
     OperationContext ctx;
     ReadInputs(ctx);
 
-    // ƒtƒ@ƒCƒ‹’PˆÊ‚É‚Ü‚Æ‚ß‚éiˆêŠ‡ˆ—ƒ^ƒu‚Ì•À‚Ñ‡j
+    // ãƒ•ã‚¡ã‚¤ãƒ«å˜ä½ã«ã¾ã¨ã‚ã‚‹ï¼ˆä¸€æ‹¬å‡¦ç†ã‚¿ãƒ–ã®ä¸¦ã³é †ï¼‰
     std::vector<size_t> order;
     for (size_t ei = 0; ei < batch_entries_.size(); ++ei) {
         if (!batch_entries_[ei].selected) continue;
@@ -1155,11 +1155,11 @@ bool App::BuildBatchPreview(std::wstring& out_error)
     std::wstring out;
     wchar_t buf[512];
     swprintf(buf, 512,
-             L"===== ˆêŠ‡ƒvƒŒƒrƒ…[ =====\r\n"
-             L"‘ÎÛƒtƒHƒ‹ƒ_ : %s\r\n"
-             L"ƒXƒCƒbƒ`–¼   : %s\r\n"
-             L"’uŠ·•û®     : %s\r\n"
-             L"‘ÎÛƒtƒ@ƒCƒ‹ : %d Œ / ’uŠ·Œ” : %d Œ\r\n\r\n",
+             L"===== ä¸€æ‹¬ãƒ—ãƒ¬ãƒ“ãƒ¥ãƒ¼ =====\r\n"
+             L"å¯¾è±¡ãƒ•ã‚©ãƒ«ãƒ€ : %s\r\n"
+             L"ã‚¹ã‚¤ãƒƒãƒå   : %s\r\n"
+             L"ç½®æ›æ–¹å¼     : %s\r\n"
+             L"å¯¾è±¡ãƒ•ã‚¡ã‚¤ãƒ« : %d ä»¶ / ç½®æ›ä»¶æ•° : %d ä»¶\r\n\r\n",
              batch_folder_.c_str(), ctx.switch_name.c_str(),
              SwitchGenerator::StyleName(ctx.switch_style),
              (int)order.size(), (int)sel.size());
@@ -1169,8 +1169,8 @@ bool App::BuildBatchPreview(std::wstring& out_error)
     size_t shown = 0;
     for (size_t oi = 0; oi < order.size(); ++oi) {
         if (shown >= kMaxFiles) {
-            out += L"...ic‚è " + std::to_wstring((int)order.size() - (int)shown) +
-                   L" ƒtƒ@ƒCƒ‹‚ÍÈ—ªBÀsŒã‚É“‡ƒŒƒ|[ƒg‚ÅŠm”F‚Å‚«‚Ü‚·j\r\n";
+            out += L"...ï¼ˆæ®‹ã‚Š " + std::to_wstring((int)order.size() - (int)shown) +
+                   L" ãƒ•ã‚¡ã‚¤ãƒ«ã¯çœç•¥ã€‚å®Ÿè¡Œå¾Œã«çµ±åˆãƒ¬ãƒãƒ¼ãƒˆã§ç¢ºèªã§ãã¾ã™ï¼‰\r\n";
             break;
         }
         BatchFileEntry& e = batch_entries_[order[oi]];
@@ -1190,8 +1190,8 @@ bool App::BuildBatchPreview(std::wstring& out_error)
         PreviewGenerator::BuildExcerpts(e.text, after, fm, 3, before_ex, after_ex);
 
         out += L"--------------------------------------------------------------------\r\n";
-        out += L"ƒtƒ@ƒCƒ‹: " + e.path + L"\r\n";
-        swprintf(buf, 512, L"  ƒqƒbƒg %d Œ / ’uŠ· %d Œ / •¶šƒR[ƒh %s / ‰üs %s\r\n",
+        out += L"ãƒ•ã‚¡ã‚¤ãƒ«: " + e.path + L"\r\n";
+        swprintf(buf, 512, L"  ãƒ’ãƒƒãƒˆ %d ä»¶ / ç½®æ› %d ä»¶ / æ–‡å­—ã‚³ãƒ¼ãƒ‰ %s / æ”¹è¡Œ %s\r\n",
                  e.hit_count, (int)fm.size(),
                  EncodingDetector::EncodingName(e.info.encoding),
                  e.info.newline == NewlineKind::CRLF ? L"CRLF" :
@@ -1234,11 +1234,11 @@ void App::DoPreviewModeChanged()
     std::wstring err;
     if (IsFolderMode()) { if (!BuildBatchPreview(err)) return; }
     else                { if (!BuildPreviewInternal(err)) return; }
-    log_.Info(L"ƒvƒŒƒrƒ…[•\¦ƒ‚[ƒh‚ğ•ÏX‚µ‚Ü‚µ‚½B");
+    log_.Info(L"ãƒ—ãƒ¬ãƒ“ãƒ¥ãƒ¼è¡¨ç¤ºãƒ¢ãƒ¼ãƒ‰ã‚’å¤‰æ›´ã—ã¾ã—ãŸã€‚");
 }
 
 // -----------------------------------------------------------------------------
-// 9.5 ƒhƒ‰ƒCƒ‰ƒ“ / 9.4 –{Às
+// 9.5 ãƒ‰ãƒ©ã‚¤ãƒ©ãƒ³ / 9.4 æœ¬å®Ÿè¡Œ
 // -----------------------------------------------------------------------------
 void App::DoDryRun()
 {
@@ -1249,7 +1249,7 @@ void App::DoDryRun()
 void App::DoExecute()
 {
     if (IsChecked(hChkDryRunOnly_)) {
-        ShowInfo(L"uƒhƒ‰ƒCƒ‰ƒ“‚Ì‚İv‚ª—LŒø‚Å‚·Bƒhƒ‰ƒCƒ‰ƒ“‚ğÀs‚µ‚Ü‚·B");
+        ShowInfo(L"ã€Œãƒ‰ãƒ©ã‚¤ãƒ©ãƒ³ã®ã¿ã€ãŒæœ‰åŠ¹ã§ã™ã€‚ãƒ‰ãƒ©ã‚¤ãƒ©ãƒ³ã‚’å®Ÿè¡Œã—ã¾ã™ã€‚");
         if (IsFolderMode()) RunBatchOperation(ExecutionMode::DryRun);
         else                RunOperation(ExecutionMode::DryRun);
         return;
@@ -1259,7 +1259,7 @@ void App::DoExecute()
 }
 
 // -----------------------------------------------------------------------------
-// 9.4 –{Àsˆ—ƒtƒ[i’Pˆêƒtƒ@ƒCƒ‹j
+// 9.4 æœ¬å®Ÿè¡Œå‡¦ç†ãƒ•ãƒ­ãƒ¼ï¼ˆå˜ä¸€ãƒ•ã‚¡ã‚¤ãƒ«ï¼‰
 // -----------------------------------------------------------------------------
 void App::RunOperation(ExecutionMode mode)
 {
@@ -1287,18 +1287,18 @@ void App::RunOperation(ExecutionMode mode)
     std::vector<MatchResult> sel = GetSelectedMatches();
     ctx.selected_matches = sel;
 
-    // è‡4`5: ‘ÎÛƒtƒ@ƒCƒ‹Ä“Ç‚İ‚İ‚ÆŒŸõŒ‹‰Ê‚ÌÄŒŸØ
+    // æ‰‹é †4ï½5: å¯¾è±¡ãƒ•ã‚¡ã‚¤ãƒ«å†èª­ã¿è¾¼ã¿ã¨æ¤œç´¢çµæœã®å†æ¤œè¨¼
     std::wstring current;
     FileInfo cur_info;
     if (!FileManager::ReadText(target_path_, cfg_.encoding_mode, current, cur_info)) {
-        ShowError(L"ƒtƒ@ƒCƒ‹‚ğ“Ç‚İæ‚ê‚Ü‚¹‚ñB");
+        ShowError(L"ãƒ•ã‚¡ã‚¤ãƒ«ã‚’èª­ã¿å–ã‚Œã¾ã›ã‚“ã€‚");
         SetState(AppState::Error);
         return;
     }
     if (current != file_text_) {
-        ShowWarn(L"‘ÎÛƒtƒ@ƒCƒ‹‚ªŒŸõŒã‚É•ÏX‚³‚ê‚Ä‚¢‚Ü‚·B\n"
-                 L"ˆÀ‘S‚Ì‚½‚ßˆ—‚ğ’†’f‚µ‚Ü‚µ‚½BÄŒŸõ‚µ‚Ä‚­‚¾‚³‚¢B");
-        log_.Warn(L"‘ÎÛƒtƒ@ƒCƒ‹‚ªŒŸõŒã‚É•ÏX‚³‚ê‚Ä‚¢‚Ü‚·BÄŒŸõ‚ğ—v‹‚µ‚Ü‚·B");
+        ShowWarn(L"å¯¾è±¡ãƒ•ã‚¡ã‚¤ãƒ«ãŒæ¤œç´¢å¾Œã«å¤‰æ›´ã•ã‚Œã¦ã„ã¾ã™ã€‚\n"
+                 L"å®‰å…¨ã®ãŸã‚å‡¦ç†ã‚’ä¸­æ–­ã—ã¾ã—ãŸã€‚å†æ¤œç´¢ã—ã¦ãã ã•ã„ã€‚");
+        log_.Warn(L"å¯¾è±¡ãƒ•ã‚¡ã‚¤ãƒ«ãŒæ¤œç´¢å¾Œã«å¤‰æ›´ã•ã‚Œã¦ã„ã¾ã™ã€‚å†æ¤œç´¢ã‚’è¦æ±‚ã—ã¾ã™ã€‚");
         file_text_ = current;
         file_info_ = cur_info;
         matches_.clear();
@@ -1310,13 +1310,13 @@ void App::RunOperation(ExecutionMode mode)
     std::vector<std::wstring> blocks = MakeBlocksFor(sel, ctx, file_text_);
     std::wstring after = PreviewGenerator::BuildAfterTextEach(file_text_, sel, blocks);
 
-    // ƒXƒCƒbƒ`’è‹`ƒwƒbƒ_‚Ì #include ‚ğ’Ç‰Á‚·‚é
+    // ã‚¹ã‚¤ãƒƒãƒå®šç¾©ãƒ˜ãƒƒãƒ€ã® #include ã‚’è¿½åŠ ã™ã‚‹
     bool inc_added = false;
     int  inc_line = 0;
     if (ctx.add_switch_header_include && !ctx.switch_header_path.empty()) {
         if (!ApplyIncludeToText(after, target_path_, ctx, inc_added, inc_line)) {
-            ShowError(L"#include ‚Ì’Ç‰Á‚É¸”s‚µ‚Ü‚µ‚½B");
-            log_.Error(L"#include ‚Ì’Ç‰Á‚É¸”s‚µ‚Ü‚µ‚½B");
+            ShowError(L"#include ã®è¿½åŠ ã«å¤±æ•—ã—ã¾ã—ãŸã€‚");
+            log_.Error(L"#include ã®è¿½åŠ ã«å¤±æ•—ã—ã¾ã—ãŸã€‚");
             SetState(AppState::Error);
             SetProgress(0);
             return;
@@ -1327,10 +1327,10 @@ void App::RunOperation(ExecutionMode mode)
     }
 
     if (mode == ExecutionMode::Real) {
-        if (!Confirm(L"‘ÎÛƒtƒ@ƒCƒ‹‚ğ‘‚«Š·‚¦‚Ü‚·B‚æ‚ë‚µ‚¢‚Å‚·‚©H\n\n" +
-                     target_path_ + L"\n’uŠ·Œ”: " +
-                     std::to_wstring((int)sel.size()) + L" Œ")) {
-            log_.Info(L"ƒ†[ƒU[‚ªÀs‚ğƒLƒƒƒ“ƒZƒ‹‚µ‚Ü‚µ‚½B");
+        if (!Confirm(L"å¯¾è±¡ãƒ•ã‚¡ã‚¤ãƒ«ã‚’æ›¸ãæ›ãˆã¾ã™ã€‚ã‚ˆã‚ã—ã„ã§ã™ã‹ï¼Ÿ\n\n" +
+                     target_path_ + L"\nç½®æ›ä»¶æ•°: " +
+                     std::to_wstring((int)sel.size()) + L" ä»¶")) {
+            log_.Info(L"ãƒ¦ãƒ¼ã‚¶ãƒ¼ãŒå®Ÿè¡Œã‚’ã‚­ãƒ£ãƒ³ã‚»ãƒ«ã—ã¾ã—ãŸã€‚");
             SetState(AppState::PREVIEWED);
             SetProgress(0);
             return;
@@ -1359,7 +1359,7 @@ void App::RunOperation(ExecutionMode mode)
     std::wstring header_backup;
     bool header_added = false;
 
-    // ---- ƒXƒCƒbƒ`’è‹`ƒwƒbƒ_‚Ì¶¬^XVi–{Às‚Ì‚İBƒhƒ‰ƒCƒ‰ƒ“‚Å‚Í•ÏX‚µ‚È‚¢j----
+    // ---- ã‚¹ã‚¤ãƒƒãƒå®šç¾©ãƒ˜ãƒƒãƒ€ã®ç”Ÿæˆï¼æ›´æ–°ï¼ˆæœ¬å®Ÿè¡Œã®ã¿ã€‚ãƒ‰ãƒ©ã‚¤ãƒ©ãƒ³ã§ã¯å¤‰æ›´ã—ãªã„ï¼‰----
     if (mode == ExecutionMode::Real && ctx.manage_switch_header) {
         std::vector<std::wstring> srcs;
         srcs.push_back(target_path_);
@@ -1398,16 +1398,16 @@ void App::RunOperation(ExecutionMode mode)
             if (!backup_path.empty() && util::PathExists(backup_path)) {
                 std::wstring rerr;
                 if (FileManager::CopyFileTo(backup_path, target_path_, rerr)) {
-                    log_.Warn(L"‘‚«‚İ¸”s‚Ì‚½‚ßƒoƒbƒNƒAƒbƒv‚©‚ç•œ‹Œ‚µ‚Ü‚µ‚½B");
-                    ShowError(L"MSG009: ƒtƒ@ƒCƒ‹‚ÌXV‚É¸”s‚µ‚Ü‚µ‚½B\n" + err +
-                              L"\n\nƒoƒbƒNƒAƒbƒv‚©‚çŒ³‚Ì“à—e‚Ö•œ‹Œ‚µ‚Ü‚µ‚½B");
+                    log_.Warn(L"æ›¸ãè¾¼ã¿å¤±æ•—ã®ãŸã‚ãƒãƒƒã‚¯ã‚¢ãƒƒãƒ—ã‹ã‚‰å¾©æ—§ã—ã¾ã—ãŸã€‚");
+                    ShowError(L"MSG009: ãƒ•ã‚¡ã‚¤ãƒ«ã®æ›´æ–°ã«å¤±æ•—ã—ã¾ã—ãŸã€‚\n" + err +
+                              L"\n\nãƒãƒƒã‚¯ã‚¢ãƒƒãƒ—ã‹ã‚‰å…ƒã®å†…å®¹ã¸å¾©æ—§ã—ã¾ã—ãŸã€‚");
                 } else {
-                    ShowError(L"MSG009: ƒtƒ@ƒCƒ‹‚ÌXV‚É¸”s‚µ‚Ü‚µ‚½B\n" + err +
-                              L"\n\n©“®•œ‹Œ‚É‚à¸”s‚µ‚Ü‚µ‚½BƒoƒbƒNƒAƒbƒv‚ğè“®‚Å•œŒ³‚µ‚Ä‚­‚¾‚³‚¢:\n" +
+                    ShowError(L"MSG009: ãƒ•ã‚¡ã‚¤ãƒ«ã®æ›´æ–°ã«å¤±æ•—ã—ã¾ã—ãŸã€‚\n" + err +
+                              L"\n\nè‡ªå‹•å¾©æ—§ã«ã‚‚å¤±æ•—ã—ã¾ã—ãŸã€‚ãƒãƒƒã‚¯ã‚¢ãƒƒãƒ—ã‚’æ‰‹å‹•ã§å¾©å…ƒã—ã¦ãã ã•ã„:\n" +
                               backup_path);
                 }
             } else {
-                ShowError(L"MSG009: ƒtƒ@ƒCƒ‹‚ÌXV‚É¸”s‚µ‚Ü‚µ‚½B\n" + err);
+                ShowError(L"MSG009: ãƒ•ã‚¡ã‚¤ãƒ«ã®æ›´æ–°ã«å¤±æ•—ã—ã¾ã—ãŸã€‚\n" + err);
             }
             SetState(AppState::Error);
             SetProgress(0);
@@ -1427,9 +1427,9 @@ void App::RunOperation(ExecutionMode mode)
         std::wstring rerr;
         if (!DiffReportGenerator::Generate(report_path, ctx, sel, file_text_, after,
                                            result, rerr)) {
-            log_.Warn(L"ƒŒƒ|[ƒgo—Í‚É¸”s‚µ‚Ü‚µ‚½: " + rerr);
-            ShowWarn(L"ƒŒƒ|[ƒgo—Í‚É¸”s‚µ‚Ü‚µ‚½B\n" + rerr +
-                     L"\n\nƒtƒ@ƒCƒ‹XV©‘Ì‚Í" + (file_written ? L"¬Œ÷‚µ‚Ä‚¢‚Ü‚·B" : L"s‚í‚ê‚Ä‚¢‚Ü‚¹‚ñB"));
+            log_.Warn(L"ãƒ¬ãƒãƒ¼ãƒˆå‡ºåŠ›ã«å¤±æ•—ã—ã¾ã—ãŸ: " + rerr);
+            ShowWarn(L"ãƒ¬ãƒãƒ¼ãƒˆå‡ºåŠ›ã«å¤±æ•—ã—ã¾ã—ãŸã€‚\n" + rerr +
+                     L"\n\nãƒ•ã‚¡ã‚¤ãƒ«æ›´æ–°è‡ªä½“ã¯" + (file_written ? L"æˆåŠŸã—ã¦ã„ã¾ã™ã€‚" : L"è¡Œã‚ã‚Œã¦ã„ã¾ã›ã‚“ã€‚"));
             report_path.clear();
         } else {
             result.report_file_path = report_path;
@@ -1460,7 +1460,7 @@ void App::RunOperation(ExecutionMode mode)
             hrec.operation_id = ctx.operation_id;
             hrec.target_file_path = ctx.switch_header_path;
             hrec.backup_file_path = header_backup;
-            hrec.remove_on_undo = header_backup.empty();   // V‹Kì¬‚È‚çíœ‚µ‚Ä–ß‚·
+            hrec.remove_on_undo = header_backup.empty();   // æ–°è¦ä½œæˆãªã‚‰å‰Šé™¤ã—ã¦æˆ»ã™
             hrec.switch_name = ctx.switch_name;
             hrec.executed_at = util::NowDateTime();
             hrec.valid = true;
@@ -1482,31 +1482,31 @@ void App::RunOperation(ExecutionMode mode)
 
     if (mode == ExecutionMode::DryRun) {
         log_.Info(L"Dry run completed. File was not modified.");
-        std::wstring msg = L"ƒhƒ‰ƒCƒ‰ƒ“‚ªŠ®—¹‚µ‚Ü‚µ‚½Bƒtƒ@ƒCƒ‹‚Í•ÏX‚³‚ê‚Ä‚¢‚Ü‚¹‚ñB\n\n"
-                           L"’uŠ·‘ÎÛ: " + std::to_wstring((int)sel.size()) + L" Œ\n";
-        if (!report_path.empty()) msg += L"ƒŒƒ|[ƒg: " + report_path;
+        std::wstring msg = L"ãƒ‰ãƒ©ã‚¤ãƒ©ãƒ³ãŒå®Œäº†ã—ã¾ã—ãŸã€‚ãƒ•ã‚¡ã‚¤ãƒ«ã¯å¤‰æ›´ã•ã‚Œã¦ã„ã¾ã›ã‚“ã€‚\n\n"
+                           L"ç½®æ›å¯¾è±¡: " + std::to_wstring((int)sel.size()) + L" ä»¶\n";
+        if (!report_path.empty()) msg += L"ãƒ¬ãƒãƒ¼ãƒˆ: " + report_path;
         ShowInfo(msg);
     } else {
-        log_.Info(L"MSG008: ƒtƒ@ƒCƒ‹‚ÌXV‚É¬Œ÷‚µ‚Ü‚µ‚½B");
-        std::wstring msg = L"MSG008: ƒtƒ@ƒCƒ‹‚ÌXV‚É¬Œ÷‚µ‚Ü‚µ‚½B\n\n"
-                           L"’uŠ·Œ”: " + std::to_wstring((int)sel.size()) + L" Œ\n";
-        if (!backup_path.empty()) msg += L"ƒoƒbƒNƒAƒbƒv: " + backup_path + L"\n";
+        log_.Info(L"MSG008: ãƒ•ã‚¡ã‚¤ãƒ«ã®æ›´æ–°ã«æˆåŠŸã—ã¾ã—ãŸã€‚");
+        std::wstring msg = L"MSG008: ãƒ•ã‚¡ã‚¤ãƒ«ã®æ›´æ–°ã«æˆåŠŸã—ã¾ã—ãŸã€‚\n\n"
+                           L"ç½®æ›ä»¶æ•°: " + std::to_wstring((int)sel.size()) + L" ä»¶\n";
+        if (!backup_path.empty()) msg += L"ãƒãƒƒã‚¯ã‚¢ãƒƒãƒ—: " + backup_path + L"\n";
         if (result.switch_header_updated)
-            msg += L"ƒXƒCƒbƒ`’è‹`ƒwƒbƒ_: " + result.switch_header_path +
-                   (header_added ? L"iƒXƒCƒbƒ`‚ğV‹K“o˜^j" : L"iXVj") + L"\n";
+            msg += L"ã‚¹ã‚¤ãƒƒãƒå®šç¾©ãƒ˜ãƒƒãƒ€: " + result.switch_header_path +
+                   (header_added ? L"ï¼ˆã‚¹ã‚¤ãƒƒãƒã‚’æ–°è¦ç™»éŒ²ï¼‰" : L"ï¼ˆæ›´æ–°ï¼‰") + L"\n";
         if (inc_added)
-            msg += L"#include ‚ğ " + std::to_wstring(inc_line) + L" s–Ú‚É’Ç‰Á‚µ‚Ü‚µ‚½B\n";
-        if (!report_path.empty()) msg += L"ƒŒƒ|[ƒg: " + report_path;
+            msg += L"#include ã‚’ " + std::to_wstring(inc_line) + L" è¡Œç›®ã«è¿½åŠ ã—ã¾ã—ãŸã€‚\n";
+        if (!report_path.empty()) msg += L"ãƒ¬ãƒãƒ¼ãƒˆ: " + report_path;
         ShowInfo(msg);
     }
 
     if (IsChecked(hChkOpenReport_) && !report_path.empty()) OpenPath(report_path);
 
-    // ’uŠ·Œã‚àŒŸõŒ‹‰Ê‚Í•Û‚·‚éiƒvƒŒƒrƒ…[ƒ^ƒu‚Ì WinMerge ”äŠr‚ğ‚»‚Ì‚Ü‚Üg‚¦‚é‚æ‚¤‚ÉjB
-    // ŒŸõŒ‹‰Ê‚ğÁ‚·‚Ì‚ÍÄ‘–¸EÄŒŸõ‚ğÀs‚µ‚½‚Æ‚«‚¾‚¯B
+    // ç½®æ›å¾Œã‚‚æ¤œç´¢çµæœã¯ä¿æŒã™ã‚‹ï¼ˆãƒ—ãƒ¬ãƒ“ãƒ¥ãƒ¼ã‚¿ãƒ–ã® WinMerge æ¯”è¼ƒã‚’ãã®ã¾ã¾ä½¿ãˆã‚‹ã‚ˆã†ã«ï¼‰ã€‚
+    // æ¤œç´¢çµæœã‚’æ¶ˆã™ã®ã¯å†èµ°æŸ»ãƒ»å†æ¤œç´¢ã‚’å®Ÿè¡Œã—ãŸã¨ãã ã‘ã€‚
     if (file_written) {
-        // ©•ª‚Å‘‚«Š·‚¦‚½“à—e‚ğ•Û‚µAŸ‰ñÀs‚É
-        // uŒŸõŒã‚É•ÏX‚³‚ê‚Ä‚¢‚Ü‚·v‚ÆŒë”»’è‚µ‚ÄŒŸõŒ‹‰Ê‚ªÁ‚¦‚é‚Ì‚ğ–h‚®B
+        // è‡ªåˆ†ã§æ›¸ãæ›ãˆãŸå†…å®¹ã‚’ä¿æŒã—ã€æ¬¡å›å®Ÿè¡Œæ™‚ã«
+        // ã€Œæ¤œç´¢å¾Œã«å¤‰æ›´ã•ã‚Œã¦ã„ã¾ã™ã€ã¨èª¤åˆ¤å®šã—ã¦æ¤œç´¢çµæœãŒæ¶ˆãˆã‚‹ã®ã‚’é˜²ãã€‚
         FileInfo fi2;
         std::wstring cur2;
         if (FileManager::ReadText(target_path_, cfg_.encoding_mode, cur2, fi2)) {
@@ -1520,7 +1520,7 @@ void App::RunOperation(ExecutionMode mode)
 }
 
 // -----------------------------------------------------------------------------
-// 17.2.2 è‡7-9 ˆêŠ‡ƒoƒbƒNƒAƒbƒvEˆêŠ‡•ÏŠ·E“‡ƒŒƒ|[ƒg
+// 17.2.2 æ‰‹é †7-9 ä¸€æ‹¬ãƒãƒƒã‚¯ã‚¢ãƒƒãƒ—ãƒ»ä¸€æ‹¬å¤‰æ›ãƒ»çµ±åˆãƒ¬ãƒãƒ¼ãƒˆ
 // -----------------------------------------------------------------------------
 void App::RunBatchOperation(ExecutionMode mode)
 {
@@ -1539,18 +1539,18 @@ void App::RunBatchOperation(ExecutionMode mode)
     ReadInputs(ctx);
     ctx.execution_mode = mode;
     ctx.operation_id = util::NewOperationId();
-    ctx.encoding = TextEncoding::UTF8;     // ˆêŠ‡ˆ—‚Å‚Íƒtƒ@ƒCƒ‹‚²‚Æ‚ÉˆÙ‚È‚é
+    ctx.encoding = TextEncoding::UTF8;     // ä¸€æ‹¬å‡¦ç†ã§ã¯ãƒ•ã‚¡ã‚¤ãƒ«ã”ã¨ã«ç•°ãªã‚‹
     ctx.newline  = NewlineKind::LF;
 
     std::vector<MatchResult> sel = GetSelectedMatches();
     if (sel.empty()) {
-        ShowError(L"’uŠ·‘ÎÛ‚ª‘I‘ğ‚³‚ê‚Ä‚¢‚Ü‚¹‚ñB");
+        ShowError(L"ç½®æ›å¯¾è±¡ãŒé¸æŠã•ã‚Œã¦ã„ã¾ã›ã‚“ã€‚");
         SetState(AppState::SEARCHED);
         return;
     }
     ctx.selected_matches = sel;
 
-    // matches_ ‚Æ“¯‚¶•À‚Ñ‚ÌƒuƒƒbƒN”z—ñ‚ğ—pˆÓ‚·‚éi–¢‘I‘ğ—v‘f‚Í‹ój
+    // matches_ ã¨åŒã˜ä¸¦ã³ã®ãƒ–ãƒ­ãƒƒã‚¯é…åˆ—ã‚’ç”¨æ„ã™ã‚‹ï¼ˆæœªé¸æŠè¦ç´ ã¯ç©ºï¼‰
     std::vector<std::wstring> blocks(matches_.size());
     for (size_t i = 0; i < matches_.size(); ++i) {
         if (!matches_[i].selected) continue;
@@ -1570,24 +1570,24 @@ void App::RunBatchOperation(ExecutionMode mode)
         blocks[i] = MakeBlockFor(matches_[i], ctx, text);
     }
 
-    // ‘ÎÛƒtƒ@ƒCƒ‹”‚ğWŒv
+    // å¯¾è±¡ãƒ•ã‚¡ã‚¤ãƒ«æ•°ã‚’é›†è¨ˆ
     int target_files = 0;
     for (size_t i = 0; i < batch_entries_.size(); ++i)
         if (batch_entries_[i].selected && batch_entries_[i].selected_count > 0) ++target_files;
 
     if (mode == ExecutionMode::Real) {
-        if (!Confirm(L"‘ÎÛƒtƒHƒ‹ƒ_“à‚Ìƒtƒ@ƒCƒ‹‚ğˆêŠ‡‚Å‘‚«Š·‚¦‚Ü‚·B‚æ‚ë‚µ‚¢‚Å‚·‚©H\n\n" +
-                     batch_folder_ + L"\n‘ÎÛƒtƒ@ƒCƒ‹: " + std::to_wstring(target_files) +
-                     L" Œ\n’uŠ·Œ”: " + std::to_wstring((int)sel.size()) + L" Œ\n\n" +
-                     L"ƒoƒbƒNƒAƒbƒv‚ğì¬‚µ‚Ä‚©‚çÀs‚µ‚Ü‚·B")) {
-            log_.Info(L"ƒ†[ƒU[‚ªˆêŠ‡Às‚ğƒLƒƒƒ“ƒZƒ‹‚µ‚Ü‚µ‚½B");
+        if (!Confirm(L"å¯¾è±¡ãƒ•ã‚©ãƒ«ãƒ€å†…ã®ãƒ•ã‚¡ã‚¤ãƒ«ã‚’ä¸€æ‹¬ã§æ›¸ãæ›ãˆã¾ã™ã€‚ã‚ˆã‚ã—ã„ã§ã™ã‹ï¼Ÿ\n\n" +
+                     batch_folder_ + L"\nå¯¾è±¡ãƒ•ã‚¡ã‚¤ãƒ«: " + std::to_wstring(target_files) +
+                     L" ä»¶\nç½®æ›ä»¶æ•°: " + std::to_wstring((int)sel.size()) + L" ä»¶\n\n" +
+                     L"ãƒãƒƒã‚¯ã‚¢ãƒƒãƒ—ã‚’ä½œæˆã—ã¦ã‹ã‚‰å®Ÿè¡Œã—ã¾ã™ã€‚")) {
+            log_.Info(L"ãƒ¦ãƒ¼ã‚¶ãƒ¼ãŒä¸€æ‹¬å®Ÿè¡Œã‚’ã‚­ãƒ£ãƒ³ã‚»ãƒ«ã—ã¾ã—ãŸã€‚");
             SetState(AppState::PREVIEWED);
             SetProgress(0);
             return;
         }
     }
 
-    // ---- ƒXƒCƒbƒ`’è‹`ƒwƒbƒ_‚Ì¶¬^XVi–{Às‚Ì‚İBƒhƒ‰ƒCƒ‰ƒ“‚Å‚Í•ÏX‚µ‚È‚¢j----
+    // ---- ã‚¹ã‚¤ãƒƒãƒå®šç¾©ãƒ˜ãƒƒãƒ€ã®ç”Ÿæˆï¼æ›´æ–°ï¼ˆæœ¬å®Ÿè¡Œã®ã¿ã€‚ãƒ‰ãƒ©ã‚¤ãƒ©ãƒ³ã§ã¯å¤‰æ›´ã—ãªã„ï¼‰----
     std::wstring header_backup;
     bool header_added = false;
     if (mode == ExecutionMode::Real && ctx.manage_switch_header) {
@@ -1604,7 +1604,7 @@ void App::RunBatchOperation(ExecutionMode mode)
             return;
         }
         log_.Info(std::wstring(header_added ? L"Switch registered: " : L"Switch header updated: ") +
-                  ctx.switch_header_path + L"i‘ÎÛ " + std::to_wstring((int)srcs.size()) + L" ƒtƒ@ƒCƒ‹j");
+                  ctx.switch_header_path + L"ï¼ˆå¯¾è±¡ " + std::to_wstring((int)srcs.size()) + L" ãƒ•ã‚¡ã‚¤ãƒ«ï¼‰");
     }
 
     SetState(AppState::EXECUTING);
@@ -1619,7 +1619,7 @@ void App::RunBatchOperation(ExecutionMode mode)
         int pct = (total > 0) ? (int)((done * 85) / total) + 5 : 5;
         SetProgress(pct);
         if (!cur.empty())
-            SetStatus(L"ˆ—’† (" + std::to_wstring(done) + L"/" + std::to_wstring(total) +
+            SetStatus(L"å‡¦ç†ä¸­ (" + std::to_wstring(done) + L"/" + std::to_wstring(total) +
                       L"): " + util::GetFileNameOf(cur));
     };
 
@@ -1639,7 +1639,7 @@ void App::RunBatchOperation(ExecutionMode mode)
     RefreshFileList();
     RefreshListView();
 
-    // ---- è‡9: “‡ƒŒƒ|[ƒgo—Í ----
+    // ---- æ‰‹é †9: çµ±åˆãƒ¬ãƒãƒ¼ãƒˆå‡ºåŠ› ----
     std::vector<ReportFileSection> sections;
     for (size_t ei = 0; ei < batch_entries_.size(); ++ei) {
         BatchFileEntry& e = batch_entries_[ei];
@@ -1676,10 +1676,10 @@ void App::RunBatchOperation(ExecutionMode mode)
             ReportDirectory(), batch_folder_, util::TimestampFileName());
         std::wstring rerr;
         if (!DiffReportGenerator::GenerateIntegrated(report_path, ctx, sections, br, rerr)) {
-            log_.Warn(L"“‡ƒŒƒ|[ƒgo—Í‚É¸”s‚µ‚Ü‚µ‚½: " + rerr);
-            ShowWarn(L"“‡ƒŒƒ|[ƒgo—Í‚É¸”s‚µ‚Ü‚µ‚½B\n" + rerr +
-                     L"\n\nƒtƒ@ƒCƒ‹XV©‘Ì‚Í" +
-                     (mode == ExecutionMode::Real ? L"Š®—¹‚µ‚Ä‚¢‚Ü‚·B" : L"s‚í‚ê‚Ä‚¢‚Ü‚¹‚ñB"));
+            log_.Warn(L"çµ±åˆãƒ¬ãƒãƒ¼ãƒˆå‡ºåŠ›ã«å¤±æ•—ã—ã¾ã—ãŸ: " + rerr);
+            ShowWarn(L"çµ±åˆãƒ¬ãƒãƒ¼ãƒˆå‡ºåŠ›ã«å¤±æ•—ã—ã¾ã—ãŸã€‚\n" + rerr +
+                     L"\n\nãƒ•ã‚¡ã‚¤ãƒ«æ›´æ–°è‡ªä½“ã¯" +
+                     (mode == ExecutionMode::Real ? L"å®Œäº†ã—ã¦ã„ã¾ã™ã€‚" : L"è¡Œã‚ã‚Œã¦ã„ã¾ã›ã‚“ã€‚"));
             report_path.clear();
         } else {
             br.report_file_path = report_path;
@@ -1688,7 +1688,7 @@ void App::RunBatchOperation(ExecutionMode mode)
         }
     }
 
-    // ---- Undo î•ñ•Û‘¶i‘€ì’PˆÊ‚Å‘Sƒtƒ@ƒCƒ‹‚ğ•œŒ³‚Å‚«‚é‚æ‚¤‚É‚·‚éj----
+    // ---- Undo æƒ…å ±ä¿å­˜ï¼ˆæ“ä½œå˜ä½ã§å…¨ãƒ•ã‚¡ã‚¤ãƒ«ã‚’å¾©å…ƒã§ãã‚‹ã‚ˆã†ã«ã™ã‚‹ï¼‰----
     if (mode == ExecutionMode::Real && ctx.manage_switch_header &&
         !ctx.switch_header_path.empty()) {
         UndoRecord hrec;
@@ -1720,23 +1720,23 @@ void App::RunBatchOperation(ExecutionMode mode)
     wchar_t buf[512];
     if (mode == ExecutionMode::DryRun) {
         swprintf(buf, 512,
-                 L"ˆêŠ‡ƒhƒ‰ƒCƒ‰ƒ“‚ªŠ®—¹‚µ‚Ü‚µ‚½Bƒtƒ@ƒCƒ‹‚Í•ÏX‚³‚ê‚Ä‚¢‚Ü‚¹‚ñB\n\n"
-                 L"‘ÎÛƒtƒ@ƒCƒ‹: %d Œ\n’uŠ·Œ”: %d Œ\n",
+                 L"ä¸€æ‹¬ãƒ‰ãƒ©ã‚¤ãƒ©ãƒ³ãŒå®Œäº†ã—ã¾ã—ãŸã€‚ãƒ•ã‚¡ã‚¤ãƒ«ã¯å¤‰æ›´ã•ã‚Œã¦ã„ã¾ã›ã‚“ã€‚\n\n"
+                 L"å¯¾è±¡ãƒ•ã‚¡ã‚¤ãƒ«: %d ä»¶\nç½®æ›ä»¶æ•°: %d ä»¶\n",
                  (int)sections.size(), br.replaced_count);
     } else {
         swprintf(buf, 512,
-                 L"ˆêŠ‡ˆ—‚ªŠ®—¹‚µ‚Ü‚µ‚½B\n\n"
-                 L"¬Œ÷: %d Œ / ¸”s: %d Œ / ƒXƒLƒbƒv: %d Œ\n’uŠ·Œ”: %d Œ\n",
+                 L"ä¸€æ‹¬å‡¦ç†ãŒå®Œäº†ã—ã¾ã—ãŸã€‚\n\n"
+                 L"æˆåŠŸ: %d ä»¶ / å¤±æ•—: %d ä»¶ / ã‚¹ã‚­ãƒƒãƒ—: %d ä»¶\nç½®æ›ä»¶æ•°: %d ä»¶\n",
                  br.replaced_count, br.error_count, br.skipped_count, br.replaced_count);
     }
     std::wstring msg = buf;
     if (br.switch_header_updated)
-        msg += L"\nƒXƒCƒbƒ`’è‹`ƒwƒbƒ_: " + br.switch_header_path +
-               (header_added ? L"iƒXƒCƒbƒ`‚ğV‹K“o˜^j" : L"iXVj");
-    if (!report_path.empty()) msg += L"\n“‡ƒŒƒ|[ƒg: " + report_path;
+        msg += L"\nã‚¹ã‚¤ãƒƒãƒå®šç¾©ãƒ˜ãƒƒãƒ€: " + br.switch_header_path +
+               (header_added ? L"ï¼ˆã‚¹ã‚¤ãƒƒãƒã‚’æ–°è¦ç™»éŒ²ï¼‰" : L"ï¼ˆæ›´æ–°ï¼‰");
+    if (!report_path.empty()) msg += L"\nçµ±åˆãƒ¬ãƒãƒ¼ãƒˆ: " + report_path;
     if (br.error_count > 0) {
-        msg += L"\n\n¸”s‚µ‚½ƒtƒ@ƒCƒ‹‚ª‚ ‚è‚Ü‚·BˆêŠ‡ˆ—ƒ^ƒu‚Ìuó‘Ôv—ñ‚Æ"
-               L"“‡ƒŒƒ|[ƒg‚ğŠm”F‚µ‚Ä‚­‚¾‚³‚¢B";
+        msg += L"\n\nå¤±æ•—ã—ãŸãƒ•ã‚¡ã‚¤ãƒ«ãŒã‚ã‚Šã¾ã™ã€‚ä¸€æ‹¬å‡¦ç†ã‚¿ãƒ–ã®ã€ŒçŠ¶æ…‹ã€åˆ—ã¨"
+               L"çµ±åˆãƒ¬ãƒãƒ¼ãƒˆã‚’ç¢ºèªã—ã¦ãã ã•ã„ã€‚";
         ShowWarn(msg);
     } else {
         ShowInfo(msg);
@@ -1744,8 +1744,8 @@ void App::RunBatchOperation(ExecutionMode mode)
 
     if (IsChecked(hChkOpenReport_) && !report_path.empty()) OpenPath(report_path);
 
-    // ÀsŒã‚àŒŸõŒ‹‰Ê‚Í•Û‚·‚éiƒvƒŒƒrƒ…[ƒ^ƒu‚Ì WinMerge ”äŠr‚ğ‚»‚Ì‚Ü‚Üg‚¦‚é‚æ‚¤‚ÉjB
-    // ŒŸõŒ‹‰Ê‚ğÁ‚·‚Ì‚ÍÄ‘–¸EÄŒŸõ‚ğÀs‚µ‚½‚Æ‚«‚¾‚¯B
+    // å®Ÿè¡Œå¾Œã‚‚æ¤œç´¢çµæœã¯ä¿æŒã™ã‚‹ï¼ˆãƒ—ãƒ¬ãƒ“ãƒ¥ãƒ¼ã‚¿ãƒ–ã® WinMerge æ¯”è¼ƒã‚’ãã®ã¾ã¾ä½¿ãˆã‚‹ã‚ˆã†ã«ï¼‰ã€‚
+    // æ¤œç´¢çµæœã‚’æ¶ˆã™ã®ã¯å†èµ°æŸ»ãƒ»å†æ¤œç´¢ã‚’å®Ÿè¡Œã—ãŸã¨ãã ã‘ã€‚
     if (mode == ExecutionMode::Real) {
         RefreshListView();
     }
@@ -1755,7 +1755,7 @@ void App::RunBatchOperation(ExecutionMode mode)
 
 
 // -----------------------------------------------------------------------------
-// ƒXƒCƒbƒ`’è‹`ƒwƒbƒ_‚ÌˆêŒ³ŠÇ—
+// ã‚¹ã‚¤ãƒƒãƒå®šç¾©ãƒ˜ãƒƒãƒ€ã®ä¸€å…ƒç®¡ç†
 // -----------------------------------------------------------------------------
 std::wstring App::SwitchHeaderBaseDir() const
 {
@@ -1776,7 +1776,7 @@ std::wstring App::CurrentSwitchHeaderPath() const
 {
     std::wstring name = util::Trim(GetEditText(hEditSwHeaderName_));
     if (name.empty()) name = SwitchHeaderManager::DefaultHeaderName();
-    // ƒtƒ‹ƒpƒX‚Å“ü—Í‚³‚ê‚½ê‡‚Í‚»‚Ì‚Ü‚Üg‚¤
+    // ãƒ•ãƒ«ãƒ‘ã‚¹ã§å…¥åŠ›ã•ã‚ŒãŸå ´åˆã¯ãã®ã¾ã¾ä½¿ã†
     if (!util::GetDirectoryOf(name).empty())
         return util::MakeAbsolute(name);
     return SwitchHeaderManager::ResolveHeaderPath(
@@ -1797,7 +1797,7 @@ void App::RefreshSwitchList()
     for (size_t i = 0; i < sw_header_info_.entries.size(); ++i) {
         const SwitchEntry& e = sw_header_info_.entries[i];
 
-        std::wstring state = e.enabled ? L"—LŒøiVƒR[ƒhj" : L"–³Œøi‹ŒƒR[ƒhj";
+        std::wstring state = e.enabled ? L"æœ‰åŠ¹ï¼ˆæ–°ã‚³ãƒ¼ãƒ‰ï¼‰" : L"ç„¡åŠ¹ï¼ˆæ—§ã‚³ãƒ¼ãƒ‰ï¼‰";
         std::wstring files;
         for (size_t k = 0; k < e.files.size(); ++k) {
             if (k) files += L", ";
@@ -1835,14 +1835,14 @@ void App::RefreshSwitchList()
 
     wchar_t buf[512];
     if (!sw_header_info_.exists) {
-        swprintf(buf, 512, L"ƒwƒbƒ_–¢ì¬: %s", sw_header_info_.path.c_str());
+        swprintf(buf, 512, L"ãƒ˜ãƒƒãƒ€æœªä½œæˆ: %s", sw_header_info_.path.c_str());
     } else if (sw_header_info_.entries.empty()) {
-        swprintf(buf, 512, L"%siƒXƒCƒbƒ`–¢“o˜^j", sw_header_info_.path.c_str());
+        swprintf(buf, 512, L"%sï¼ˆã‚¹ã‚¤ãƒƒãƒæœªç™»éŒ²ï¼‰", sw_header_info_.path.c_str());
     } else {
         int on = 0;
         for (size_t i = 0; i < sw_header_info_.entries.size(); ++i)
             if (sw_header_info_.entries[i].enabled) ++on;
-        swprintf(buf, 512, L"%s / ƒXƒCƒbƒ` %d Œi—LŒø %d / –³Œø %dj",
+        swprintf(buf, 512, L"%s / ã‚¹ã‚¤ãƒƒãƒ %d ä»¶ï¼ˆæœ‰åŠ¹ %d / ç„¡åŠ¹ %dï¼‰",
                  sw_header_info_.path.c_str(),
                  (int)sw_header_info_.entries.size(), on,
                  (int)sw_header_info_.entries.size() - on);
@@ -1860,17 +1860,17 @@ void App::DoSwitchHeaderLoad()
         sw_header_info_ = SwitchHeaderInfo();
         sw_header_info_.path = path;
         RefreshSwitchList();
-        log_.Info(L"ƒXƒCƒbƒ`’è‹`ƒwƒbƒ_‚Í–¢ì¬‚Å‚·: " + path);
+        log_.Info(L"ã‚¹ã‚¤ãƒƒãƒå®šç¾©ãƒ˜ãƒƒãƒ€ã¯æœªä½œæˆã§ã™: " + path);
         return;
     }
     if (!SwitchHeaderManager::Load(path, sw_header_info_)) {
-        ShowError(L"ƒXƒCƒbƒ`’è‹`ƒwƒbƒ_‚ğ“Ç‚İ‚ß‚Ü‚¹‚ñ: " + path);
+        ShowError(L"ã‚¹ã‚¤ãƒƒãƒå®šç¾©ãƒ˜ãƒƒãƒ€ã‚’èª­ã¿è¾¼ã‚ã¾ã›ã‚“: " + path);
         log_.Error(L"Failed to load switch header: " + path);
         return;
     }
     RefreshSwitchList();
-    log_.Info(L"ƒXƒCƒbƒ`’è‹`ƒwƒbƒ_‚ğ“Ç‚İ‚İ‚Ü‚µ‚½: " + path +
-              L"i" + std::to_wstring((int)sw_header_info_.entries.size()) + L" Œj");
+    log_.Info(L"ã‚¹ã‚¤ãƒƒãƒå®šç¾©ãƒ˜ãƒƒãƒ€ã‚’èª­ã¿è¾¼ã¿ã¾ã—ãŸ: " + path +
+              L"ï¼ˆ" + std::to_wstring((int)sw_header_info_.entries.size()) + L" ä»¶ï¼‰");
 }
 
 void App::DoSwitchHeaderBrowse()
@@ -1886,10 +1886,10 @@ void App::DoSwitchHeaderBrowse()
     ::ZeroMemory(&ofn, sizeof(ofn));
     ofn.lStructSize = sizeof(ofn);
     ofn.hwndOwner   = hWnd_;
-    ofn.lpstrFilter = L"C/C++ ƒwƒbƒ_ (*.h)\0*.h\0‚·‚×‚Ä‚Ìƒtƒ@ƒCƒ‹ (*.*)\0*.*\0\0";
+    ofn.lpstrFilter = L"C/C++ ãƒ˜ãƒƒãƒ€ (*.h)\0*.h\0ã™ã¹ã¦ã®ãƒ•ã‚¡ã‚¤ãƒ« (*.*)\0*.*\0\0";
     ofn.lpstrFile   = buf;
     ofn.nMaxFile    = MAX_PATH * 4;
-    ofn.lpstrTitle  = L"ƒXƒCƒbƒ`’è‹`ƒwƒbƒ_‚ğ‘I‘ğ";
+    ofn.lpstrTitle  = L"ã‚¹ã‚¤ãƒƒãƒå®šç¾©ãƒ˜ãƒƒãƒ€ã‚’é¸æŠ";
     ofn.Flags       = OFN_PATHMUSTEXIST | OFN_EXPLORER;
 
     if (!::GetOpenFileNameW(&ofn)) return;
@@ -1906,7 +1906,7 @@ void App::DoSwitchHeaderDirBrowse()
     BROWSEINFOW bi;
     ::ZeroMemory(&bi, sizeof(bi));
     bi.hwndOwner = hWnd_;
-    bi.lpszTitle = L"ƒXƒCƒbƒ`’è‹`ƒwƒbƒ_‚Ìo—ÍæƒtƒHƒ‹ƒ_‚ğ‘I‘ğ‚µ‚Ä‚­‚¾‚³‚¢";
+    bi.lpszTitle = L"ã‚¹ã‚¤ãƒƒãƒå®šç¾©ãƒ˜ãƒƒãƒ€ã®å‡ºåŠ›å…ˆãƒ•ã‚©ãƒ«ãƒ€ã‚’é¸æŠã—ã¦ãã ã•ã„";
     bi.ulFlags   = BIF_RETURNONLYFSDIRS | BIF_NEWDIALOGSTYLE | BIF_EDITBOX;
 
     LPITEMIDLIST pidl = ::SHBrowseForFolderW(&bi);
@@ -1935,16 +1935,16 @@ bool App::PrepareSwitchHeader(const OperationContext& ctx,
 
     if (!ctx.manage_switch_header) return true;
     if (ctx.switch_header_path.empty()) {
-        out_error = L"ƒXƒCƒbƒ`’è‹`ƒwƒbƒ_‚ÌƒpƒX‚ªŒˆ’è‚Å‚«‚Ü‚¹‚ñB";
+        out_error = L"ã‚¹ã‚¤ãƒƒãƒå®šç¾©ãƒ˜ãƒƒãƒ€ã®ãƒ‘ã‚¹ãŒæ±ºå®šã§ãã¾ã›ã‚“ã€‚";
         return false;
     }
 
-    // Šù‘¶ƒwƒbƒ_‚ğƒoƒbƒNƒAƒbƒv‚µ‚Ä‚©‚çXV‚·‚éi19.1j
+    // æ—¢å­˜ãƒ˜ãƒƒãƒ€ã‚’ãƒãƒƒã‚¯ã‚¢ãƒƒãƒ—ã—ã¦ã‹ã‚‰æ›´æ–°ã™ã‚‹ï¼ˆ19.1ï¼‰
     if (backup_header && util::PathExists(ctx.switch_header_path)) {
         std::wstring berr;
         if (!BackupManager::CreateBackup(ctx.switch_header_path, BackupDirectory(),
                                          out_backup, berr)) {
-            out_error = L"ƒXƒCƒbƒ`’è‹`ƒwƒbƒ_‚ÌƒoƒbƒNƒAƒbƒv‚É¸”s‚µ‚Ü‚µ‚½: " + berr;
+            out_error = L"ã‚¹ã‚¤ãƒƒãƒå®šç¾©ãƒ˜ãƒƒãƒ€ã®ãƒãƒƒã‚¯ã‚¢ãƒƒãƒ—ã«å¤±æ•—ã—ã¾ã—ãŸ: " + berr;
             return false;
         }
     }
@@ -1997,12 +1997,12 @@ void App::DoSwitchCreateNow()
     std::wstring t = util::Trim(GetEditText(hTargetEdit_));
     if (!t.empty()) srcs.push_back(util::MakeAbsolute(t));
 
-    // Šù‘¶ƒwƒbƒ_‚Í‘Ş”ğ‚µ‚Ä‚©‚çXV‚·‚é
+    // æ—¢å­˜ãƒ˜ãƒƒãƒ€ã¯é€€é¿ã—ã¦ã‹ã‚‰æ›´æ–°ã™ã‚‹
     std::wstring backup;
     if (util::PathExists(path)) {
         std::wstring berr;
         if (!BackupManager::CreateBackup(path, BackupDirectory(), backup, berr)) {
-            ShowError(L"ƒXƒCƒbƒ`’è‹`ƒwƒbƒ_‚ÌƒoƒbƒNƒAƒbƒv‚É¸”s‚µ‚Ü‚µ‚½B\n" + berr);
+            ShowError(L"ã‚¹ã‚¤ãƒƒãƒå®šç¾©ãƒ˜ãƒƒãƒ€ã®ãƒãƒƒã‚¯ã‚¢ãƒƒãƒ—ã«å¤±æ•—ã—ã¾ã—ãŸã€‚\n" + berr);
             return;
         }
     }
@@ -2011,7 +2011,7 @@ void App::DoSwitchCreateNow()
     bool added = false;
     if (!SwitchHeaderManager::RegisterSwitch(path, sw, util::Trim(GetEditText(hEditSwMemo_)),
                                              oc, nc, srcs, info, added, herr)) {
-        ShowError(L"ƒXƒCƒbƒ`’è‹`ƒwƒbƒ_‚ÌXV‚É¸”s‚µ‚Ü‚µ‚½B\n" + herr);
+        ShowError(L"ã‚¹ã‚¤ãƒƒãƒå®šç¾©ãƒ˜ãƒƒãƒ€ã®æ›´æ–°ã«å¤±æ•—ã—ã¾ã—ãŸã€‚\n" + herr);
         log_.Error(herr);
         return;
     }
@@ -2019,10 +2019,10 @@ void App::DoSwitchCreateNow()
     RefreshSwitchList();
     log_.Info(std::wstring(added ? L"Switch registered: " : L"Switch header updated: ") + path);
 
-    std::wstring msg = L"ƒXƒCƒbƒ`’è‹`ƒwƒbƒ_‚ğ" + std::wstring(added ? L"ì¬‚µ‚Ü‚µ‚½B" : L"XV‚µ‚Ü‚µ‚½B") +
-                       L"\n\n" + path + L"\n\nƒXƒCƒbƒ`: " + sw +
-                       (added ? L"iV‹K“o˜^EŠù’è‚Í–³Œøj" : L"iŠù‘¶‚ğXVj");
-    if (!backup.empty()) msg += L"\nƒoƒbƒNƒAƒbƒv: " + backup;
+    std::wstring msg = L"ã‚¹ã‚¤ãƒƒãƒå®šç¾©ãƒ˜ãƒƒãƒ€ã‚’" + std::wstring(added ? L"ä½œæˆã—ã¾ã—ãŸã€‚" : L"æ›´æ–°ã—ã¾ã—ãŸã€‚") +
+                       L"\n\n" + path + L"\n\nã‚¹ã‚¤ãƒƒãƒ: " + sw +
+                       (added ? L"ï¼ˆæ–°è¦ç™»éŒ²ãƒ»æ—¢å®šã¯ç„¡åŠ¹ï¼‰" : L"ï¼ˆæ—¢å­˜ã‚’æ›´æ–°ï¼‰");
+    if (!backup.empty()) msg += L"\nãƒãƒƒã‚¯ã‚¢ãƒƒãƒ—: " + backup;
     ShowInfo(msg);
 }
 
@@ -2030,31 +2030,31 @@ void App::DoSwitchEnable()
 {
     int sel = ListView_GetNextItem(hListSwitches_, -1, LVNI_SELECTED);
     if (sel < 0 || sel >= (int)sw_header_info_.entries.size()) {
-        ShowInfo(L"—LŒø‰»‚·‚éƒXƒCƒbƒ`‚ğˆê——‚©‚ç‘I‘ğ‚µ‚Ä‚­‚¾‚³‚¢B");
+        ShowInfo(L"æœ‰åŠ¹åŒ–ã™ã‚‹ã‚¹ã‚¤ãƒƒãƒã‚’ä¸€è¦§ã‹ã‚‰é¸æŠã—ã¦ãã ã•ã„ã€‚");
         return;
     }
     std::wstring name = sw_header_info_.entries[(size_t)sel].name;
-    if (!Confirm(L"ƒXƒCƒbƒ` '" + name + L"' ‚ğ—LŒø‚É‚µ‚Ü‚·B\n\n"
-                 L"‚±‚ÌƒXƒCƒbƒ`‚ğQÆ‚µ‚Ä‚¢‚éƒ\[ƒX‚Å‚ÍVƒR[ƒh‚ªg‚í‚ê‚é‚æ‚¤‚É‚È‚è‚Ü‚·B\n"
-                 L"‚æ‚ë‚µ‚¢‚Å‚·‚©H")) return;
+    if (!Confirm(L"ã‚¹ã‚¤ãƒƒãƒ '" + name + L"' ã‚’æœ‰åŠ¹ã«ã—ã¾ã™ã€‚\n\n"
+                 L"ã“ã®ã‚¹ã‚¤ãƒƒãƒã‚’å‚ç…§ã—ã¦ã„ã‚‹ã‚½ãƒ¼ã‚¹ã§ã¯æ–°ã‚³ãƒ¼ãƒ‰ãŒä½¿ã‚ã‚Œã‚‹ã‚ˆã†ã«ãªã‚Šã¾ã™ã€‚\n"
+                 L"ã‚ˆã‚ã—ã„ã§ã™ã‹ï¼Ÿ")) return;
 
     SwitchHeaderInfo info;
     std::wstring err;
     if (!SwitchHeaderManager::SetEnabled(CurrentSwitchHeaderPath(), name, true, info, err)) {
-        ShowError(L"—LŒø‰»‚É¸”s‚µ‚Ü‚µ‚½B\n" + err);
+        ShowError(L"æœ‰åŠ¹åŒ–ã«å¤±æ•—ã—ã¾ã—ãŸã€‚\n" + err);
         log_.Error(err);
         return;
     }
     sw_header_info_ = info;
     RefreshSwitchList();
-    log_.Info(L"ƒXƒCƒbƒ`‚ğ—LŒø‰»‚µ‚Ü‚µ‚½: " + name);
+    log_.Info(L"ã‚¹ã‚¤ãƒƒãƒã‚’æœ‰åŠ¹åŒ–ã—ã¾ã—ãŸ: " + name);
 }
 
 void App::DoSwitchDisable()
 {
     int sel = ListView_GetNextItem(hListSwitches_, -1, LVNI_SELECTED);
     if (sel < 0 || sel >= (int)sw_header_info_.entries.size()) {
-        ShowInfo(L"–³Œø‰»‚·‚éƒXƒCƒbƒ`‚ğˆê——‚©‚ç‘I‘ğ‚µ‚Ä‚­‚¾‚³‚¢B");
+        ShowInfo(L"ç„¡åŠ¹åŒ–ã™ã‚‹ã‚¹ã‚¤ãƒƒãƒã‚’ä¸€è¦§ã‹ã‚‰é¸æŠã—ã¦ãã ã•ã„ã€‚");
         return;
     }
     std::wstring name = sw_header_info_.entries[(size_t)sel].name;
@@ -2062,70 +2062,70 @@ void App::DoSwitchDisable()
     SwitchHeaderInfo info;
     std::wstring err;
     if (!SwitchHeaderManager::SetEnabled(CurrentSwitchHeaderPath(), name, false, info, err)) {
-        ShowError(L"–³Œø‰»‚É¸”s‚µ‚Ü‚µ‚½B\n" + err);
+        ShowError(L"ç„¡åŠ¹åŒ–ã«å¤±æ•—ã—ã¾ã—ãŸã€‚\n" + err);
         log_.Error(err);
         return;
     }
     sw_header_info_ = info;
     RefreshSwitchList();
-    log_.Info(L"ƒXƒCƒbƒ`‚ğ–³Œø‰»‚µ‚Ü‚µ‚½: " + name);
+    log_.Info(L"ã‚¹ã‚¤ãƒƒãƒã‚’ç„¡åŠ¹åŒ–ã—ã¾ã—ãŸ: " + name);
 }
 
 void App::DoSwitchRemove()
 {
     int sel = ListView_GetNextItem(hListSwitches_, -1, LVNI_SELECTED);
     if (sel < 0 || sel >= (int)sw_header_info_.entries.size()) {
-        ShowInfo(L"íœ‚·‚éƒXƒCƒbƒ`‚ğˆê——‚©‚ç‘I‘ğ‚µ‚Ä‚­‚¾‚³‚¢B");
+        ShowInfo(L"å‰Šé™¤ã™ã‚‹ã‚¹ã‚¤ãƒƒãƒã‚’ä¸€è¦§ã‹ã‚‰é¸æŠã—ã¦ãã ã•ã„ã€‚");
         return;
     }
     std::wstring name = sw_header_info_.entries[(size_t)sel].name;
-    if (!Confirm(L"ƒXƒCƒbƒ` '" + name + L"' ‚ğƒwƒbƒ_‚ÌŠÇ——Ìˆæ‚©‚çíœ‚µ‚Ü‚·B\n\n"
-                 L"ƒ\[ƒX‘¤‚Ì #ifdef ‚Í•ÏX‚³‚ê‚Ü‚¹‚ñBíœ‚·‚é‚Æ–¢’è‹`‚Ì‚Ü‚Ü‚É‚È‚è‚Ü‚·B\n"
-                 L"‚æ‚ë‚µ‚¢‚Å‚·‚©H")) return;
+    if (!Confirm(L"ã‚¹ã‚¤ãƒƒãƒ '" + name + L"' ã‚’ãƒ˜ãƒƒãƒ€ã®ç®¡ç†é ˜åŸŸã‹ã‚‰å‰Šé™¤ã—ã¾ã™ã€‚\n\n"
+                 L"ã‚½ãƒ¼ã‚¹å´ã® #ifdef ã¯å¤‰æ›´ã•ã‚Œã¾ã›ã‚“ã€‚å‰Šé™¤ã™ã‚‹ã¨æœªå®šç¾©ã®ã¾ã¾ã«ãªã‚Šã¾ã™ã€‚\n"
+                 L"ã‚ˆã‚ã—ã„ã§ã™ã‹ï¼Ÿ")) return;
 
     SwitchHeaderInfo info;
     std::wstring err;
     if (!SwitchHeaderManager::RemoveSwitch(CurrentSwitchHeaderPath(), name, info, err)) {
-        ShowError(L"íœ‚É¸”s‚µ‚Ü‚µ‚½B\n" + err);
+        ShowError(L"å‰Šé™¤ã«å¤±æ•—ã—ã¾ã—ãŸã€‚\n" + err);
         log_.Error(err);
         return;
     }
     sw_header_info_ = info;
     RefreshSwitchList();
-    log_.Info(L"ƒXƒCƒbƒ`‚ğíœ‚µ‚Ü‚µ‚½: " + name);
+    log_.Info(L"ã‚¹ã‚¤ãƒƒãƒã‚’å‰Šé™¤ã—ã¾ã—ãŸ: " + name);
 }
 
 void App::DoSwitchOpen()
 {
     std::wstring path = CurrentSwitchHeaderPath();
     if (!util::PathExists(path)) {
-        ShowInfo(L"ƒXƒCƒbƒ`’è‹`ƒwƒbƒ_‚Í‚Ü‚¾ì¬‚³‚ê‚Ä‚¢‚Ü‚¹‚ñB\n\n" + path);
+        ShowInfo(L"ã‚¹ã‚¤ãƒƒãƒå®šç¾©ãƒ˜ãƒƒãƒ€ã¯ã¾ã ä½œæˆã•ã‚Œã¦ã„ã¾ã›ã‚“ã€‚\n\n" + path);
         return;
     }
     OpenPath(path);
 }
 
 // -----------------------------------------------------------------------------
-// 9.6 Undo ˆ—ƒtƒ[
+// 9.6 Undo å‡¦ç†ãƒ•ãƒ­ãƒ¼
 // -----------------------------------------------------------------------------
 void App::DoUndo()
 {
     std::wstring err;
     if (!undo_.CanUndo()) {
-        ShowInfo(L"Œ³‚É–ß‚¹‚é‘€ì‚ª‚ ‚è‚Ü‚¹‚ñB");
+        ShowInfo(L"å…ƒã«æˆ»ã›ã‚‹æ“ä½œãŒã‚ã‚Šã¾ã›ã‚“ã€‚");
         return;
     }
     int file_count = undo_.FileCount();
 
-    std::wstring msg = L"’¼‘O‚Ì•ÏX‚ğŒ³‚É–ß‚µ‚Ü‚·B‚æ‚ë‚µ‚¢‚Å‚·‚©H\n\n";
-    msg += L"Undo —š—ğ: " + std::to_wstring(undo_.HistorySize()) +
-           L" ¢‘ãi‚±‚Ì‘€ì‚Å 1 ¢‘ã–ß‚è‚Ü‚·j\n";
+    std::wstring msg = L"ç›´å‰ã®å¤‰æ›´ã‚’å…ƒã«æˆ»ã—ã¾ã™ã€‚ã‚ˆã‚ã—ã„ã§ã™ã‹ï¼Ÿ\n\n";
+    msg += L"Undo å±¥æ­´: " + std::to_wstring(undo_.HistorySize()) +
+           L" ä¸–ä»£ï¼ˆã“ã®æ“ä½œã§ 1 ä¸–ä»£æˆ»ã‚Šã¾ã™ï¼‰\n";
     if (file_count > 1) {
-        msg += L"‘ÎÛƒtƒ@ƒCƒ‹: " + std::to_wstring(file_count) + L" ŒiˆêŠ‡ˆ—j\n";
-        msg += L"‘ÎÛƒtƒHƒ‹ƒ_: " + undo_.Record().target_file_path + L" ‚Ù‚©\n";
+        msg += L"å¯¾è±¡ãƒ•ã‚¡ã‚¤ãƒ«: " + std::to_wstring(file_count) + L" ä»¶ï¼ˆä¸€æ‹¬å‡¦ç†ï¼‰\n";
+        msg += L"å¯¾è±¡ãƒ•ã‚©ãƒ«ãƒ€: " + undo_.Record().target_file_path + L" ã»ã‹\n";
     } else {
-        msg += L"‘ÎÛƒtƒ@ƒCƒ‹: " + undo_.Record().target_file_path + L"\n";
-        msg += L"•œŒ³Œ³: " + undo_.Record().backup_file_path;
+        msg += L"å¯¾è±¡ãƒ•ã‚¡ã‚¤ãƒ«: " + undo_.Record().target_file_path + L"\n";
+        msg += L"å¾©å…ƒå…ƒ: " + undo_.Record().backup_file_path;
     }
     if (!Confirm(msg)) return;
 
@@ -2134,7 +2134,7 @@ void App::DoUndo()
 
     std::vector<std::wstring> sidecars;
     if (!undo_.Undo(err, sidecars)) {
-        ShowError(L"Undo‚É¸”s‚µ‚Ü‚µ‚½B\n" + err);
+        ShowError(L"Undoã«å¤±æ•—ã—ã¾ã—ãŸã€‚\n" + err);
         log_.Error(err);
         SetState(AppState::Error);
         return;
@@ -2142,9 +2142,9 @@ void App::DoUndo()
 
     log_.Info(L"Undo completed. Restored files: " + std::to_wstring((int)sidecars.size()));
     for (size_t i = 0; i < sidecars.size(); ++i)
-        log_.Info(L"  Œ»İ‚Ì“à—e‚ğ‘Ş”ğ‚µ‚Ü‚µ‚½: " + sidecars[i]);
+        log_.Info(L"  ç¾åœ¨ã®å†…å®¹ã‚’é€€é¿ã—ã¾ã—ãŸ: " + sidecars[i]);
 
-    // Ä“Ç‚İ‚İ
+    // å†èª­ã¿è¾¼ã¿
     matches_.clear();
     if (IsFolderMode()) {
         batch_entries_.clear();
@@ -2157,21 +2157,21 @@ void App::DoUndo()
     SetState(AppState::FILE_SELECTED);
     {
         int left = undo_.HistorySize();
-        std::wstring m = L"MSG010: Undo‚ªŠ®—¹‚µ‚Ü‚µ‚½B";
+        std::wstring m = L"MSG010: UndoãŒå®Œäº†ã—ã¾ã—ãŸã€‚";
         if (left > 0)
-            m += L"\n‚³‚ç‚ÉŒ³‚É–ß‚¹‚é‘€ì‚ª " + std::to_wstring(left) + L" ¢‘ã‚ ‚è‚Ü‚·B";
+            m += L"\nã•ã‚‰ã«å…ƒã«æˆ»ã›ã‚‹æ“ä½œãŒ " + std::to_wstring(left) + L" ä¸–ä»£ã‚ã‚Šã¾ã™ã€‚";
         ShowInfo(m);
     }
 }
 
 // -----------------------------------------------------------------------------
-// 5.7.2 HTML •\¦
+// 5.7.2 HTML è¡¨ç¤º
 // -----------------------------------------------------------------------------
 void App::DoOpenHtml()
 {
     std::vector<MatchResult> sel = GetSelectedMatches();
     if (matches_.empty() || sel.empty()) {
-        ShowError(L"’uŠ·‘ÎÛ‚ª‘I‘ğ‚³‚ê‚Ä‚¢‚Ü‚¹‚ñBæ‚ÉŒŸõ‚Æ‘ÎÛ‘I‘ğ‚ğs‚Á‚Ä‚­‚¾‚³‚¢B");
+        ShowError(L"ç½®æ›å¯¾è±¡ãŒé¸æŠã•ã‚Œã¦ã„ã¾ã›ã‚“ã€‚å…ˆã«æ¤œç´¢ã¨å¯¾è±¡é¸æŠã‚’è¡Œã£ã¦ãã ã•ã„ã€‚");
         return;
     }
 
@@ -2185,7 +2185,7 @@ void App::DoOpenHtml()
     std::wstring err;
 
     if (IsFolderMode()) {
-        // ˆêŠ‡ˆ—‚Ì“‡ƒŒƒ|[ƒg‚ğƒvƒŒƒrƒ…[—p‚É¶¬‚·‚é
+        // ä¸€æ‹¬å‡¦ç†ã®çµ±åˆãƒ¬ãƒãƒ¼ãƒˆã‚’ãƒ—ãƒ¬ãƒ“ãƒ¥ãƒ¼ç”¨ã«ç”Ÿæˆã™ã‚‹
         std::vector<std::wstring> blocks(matches_.size());
         for (size_t i = 0; i < matches_.size(); ++i) {
             if (!matches_[i].selected) continue;
@@ -2235,7 +2235,7 @@ void App::DoOpenHtml()
         path = DiffReportGenerator::BuildIntegratedReportPath(
             ReportDirectory(), batch_folder_, util::TimestampFileName());
         if (!DiffReportGenerator::GenerateIntegrated(path, ctx, sections, br, err)) {
-            ShowError(L"“‡ƒŒƒ|[ƒg‚Ì¶¬‚É¸”s‚µ‚Ü‚µ‚½B\n" + err);
+            ShowError(L"çµ±åˆãƒ¬ãƒãƒ¼ãƒˆã®ç”Ÿæˆã«å¤±æ•—ã—ã¾ã—ãŸã€‚\n" + err);
             log_.Error(err);
             return;
         }
@@ -2257,7 +2257,7 @@ void App::DoOpenHtml()
         path = DiffReportGenerator::BuildReportPath(
             ReportDirectory(), target_path_, util::TimestampFileName());
         if (!DiffReportGenerator::Generate(path, ctx, sel, file_text_, after, result, err)) {
-            ShowError(L"ƒŒƒ|[ƒg‚Ì¶¬‚É¸”s‚µ‚Ü‚µ‚½B\n" + err);
+            ShowError(L"ãƒ¬ãƒãƒ¼ãƒˆã®ç”Ÿæˆã«å¤±æ•—ã—ã¾ã—ãŸã€‚\n" + err);
             log_.Error(err);
             return;
         }
@@ -2270,7 +2270,7 @@ void App::DoOpenHtml()
 
 
 // -----------------------------------------------------------------------------
-// AI ˜AŒgi•ÏXd—l‘ / ŒŸ¸d—l‘‚Ì¶¬j
+// AI é€£æºï¼ˆå¤‰æ›´ä»•æ§˜æ›¸ / æ¤œæŸ»ä»•æ§˜æ›¸ã®ç”Ÿæˆï¼‰
 // -----------------------------------------------------------------------------
 AiSettings App::ReadAiSettings() const
 {
@@ -2305,20 +2305,20 @@ SpecInput App::BuildSpecInput() const
     in.created_at   = util::NowDateTime();
 
     if (IsFolderMode()) {
-        in.target_summary = L"ƒtƒHƒ‹ƒ_ " + util::Trim(GetEditText(hFolderEdit_)) +
-                            L"i‘–¸ " + std::to_wstring((int)batch_entries_.size()) +
-                            L" ƒtƒ@ƒCƒ‹ / ƒqƒbƒg " + std::to_wstring((int)matches_.size()) + L" Œj";
+        in.target_summary = L"ãƒ•ã‚©ãƒ«ãƒ€ " + util::Trim(GetEditText(hFolderEdit_)) +
+                            L"ï¼ˆèµ°æŸ» " + std::to_wstring((int)batch_entries_.size()) +
+                            L" ãƒ•ã‚¡ã‚¤ãƒ« / ãƒ’ãƒƒãƒˆ " + std::to_wstring((int)matches_.size()) + L" ä»¶ï¼‰";
     } else {
         in.target_summary = util::Trim(GetEditText(hTargetEdit_));
     }
 
-    // ƒXƒCƒbƒ`’è‹`ƒwƒbƒ_‚Ì“à—ei‚ ‚ê‚Î”²ˆ‚µ‚Äƒvƒƒ“ƒvƒg‚ÉŠÜ‚ß‚éj
+    // ã‚¹ã‚¤ãƒƒãƒå®šç¾©ãƒ˜ãƒƒãƒ€ã®å†…å®¹ï¼ˆã‚ã‚Œã°æŠœç²‹ã—ã¦ãƒ—ãƒ­ãƒ³ãƒ—ãƒˆã«å«ã‚ã‚‹ï¼‰
     std::wstring hp = CurrentSwitchHeaderPath();
     if (util::PathExists(hp)) {
         std::wstring htext;
         FileInfo hfi;
         if (FileManager::ReadText(hp, L"auto", htext, hfi)) {
-            if (htext.size() > 4000) htext = htext.substr(0, 4000) + L"\n...(ˆÈ‰ºÈ—ª)";
+            if (htext.size() > 4000) htext = htext.substr(0, 4000) + L"\n...(ä»¥ä¸‹çœç•¥)";
             in.switch_header_text = htext;
         }
     }
@@ -2342,13 +2342,13 @@ void App::DoGenerateSpecBoth()      { GenerateSpecs(true, true); }
 void App::DoOpenSpecReport()
 {
     if (last_spec_report_path_.empty() || !util::PathExists(last_spec_report_path_)) {
-        ShowWarn(L"¶¬Ï‚İ‚Ìd—l‘ƒŒƒ|[ƒg‚ª‚ ‚è‚Ü‚¹‚ñBæ‚Éu•ÏXd—l‘‚ğ¶¬v“™‚ğÀs‚µ‚Ä‚­‚¾‚³‚¢B");
+        ShowWarn(L"ç”Ÿæˆæ¸ˆã¿ã®ä»•æ§˜æ›¸ãƒ¬ãƒãƒ¼ãƒˆãŒã‚ã‚Šã¾ã›ã‚“ã€‚å…ˆã«ã€Œå¤‰æ›´ä»•æ§˜æ›¸ã‚’ç”Ÿæˆã€ç­‰ã‚’å®Ÿè¡Œã—ã¦ãã ã•ã„ã€‚");
         return;
     }
     OpenPath(last_spec_report_path_);
 }
 
-// API í•Ê‚²‚Æ‚Ì“ü—Í—“‚Ì“Ç‚İ‘‚«
+// API ç¨®åˆ¥ã”ã¨ã®å…¥åŠ›æ¬„ã®èª­ã¿æ›¸ã
 void App::LoadAiFieldsFromConfig(int provider)
 {
     if (provider == 1) {
@@ -2382,7 +2382,7 @@ void App::SaveAiFieldsToConfig(int provider)
     }
 }
 
-// API í•Ê‚ÌØ‚è‘Ö‚¦: Œ»İ‚Ì“ü—Í‚ğ•Û‘¶‚µ‚Ä‚©‚çAØ‚è‘Ö‚¦æ‚Ìİ’è‚ğ“Ç‚İ‚Ş
+// API ç¨®åˆ¥ã®åˆ‡ã‚Šæ›¿ãˆ: ç¾åœ¨ã®å…¥åŠ›ã‚’ä¿å­˜ã—ã¦ã‹ã‚‰ã€åˆ‡ã‚Šæ›¿ãˆå…ˆã®è¨­å®šã‚’èª­ã¿è¾¼ã‚€
 void App::DoAiProviderChanged()
 {
     int oldp = cfg_.ai_provider;
@@ -2392,16 +2392,16 @@ void App::DoAiProviderChanged()
     SaveAiFieldsToConfig(oldp);
     cfg_.ai_provider = newp;
     LoadAiFieldsFromConfig(newp);
-    log_.Info(newp == 1 ? L"AI ˜AŒg: OpenAI ŒİŠ· API ‚ÉØ‚è‘Ö‚¦‚Ü‚µ‚½B"
-                        : L"AI ˜AŒg: Genspark API ‚ÉØ‚è‘Ö‚¦‚Ü‚µ‚½B");
+    log_.Info(newp == 1 ? L"AI é€£æº: OpenAI äº’æ› API ã«åˆ‡ã‚Šæ›¿ãˆã¾ã—ãŸã€‚"
+                        : L"AI é€£æº: Genspark API ã«åˆ‡ã‚Šæ›¿ãˆã¾ã—ãŸã€‚");
     SetStatus(newp == 1
-              ? L"AI ˜AŒg: OpenAI ŒİŠ· APIiGPT / Azure OpenAI / Ollama ‚È‚Çj‚ğg—p‚µ‚Ü‚·B"
-              : L"AI ˜AŒg: Genspark API ‚ğg—p‚µ‚Ü‚·B");
+              ? L"AI é€£æº: OpenAI äº’æ› APIï¼ˆGPT / Azure OpenAI / Ollama ãªã©ï¼‰ã‚’ä½¿ç”¨ã—ã¾ã™ã€‚"
+              : L"AI é€£æº: Genspark API ã‚’ä½¿ç”¨ã—ã¾ã™ã€‚");
 }
 
 
 // =============================================================================
-// Œã‘±”Å: ŒŸõğŒ‚ÌŠg’£ / Œ‹‰ÊƒGƒNƒXƒ|[ƒg / WinMerge ˜AŒg / ’Ç‰ÁƒŒƒ|[ƒg
+// å¾Œç¶šç‰ˆ: æ¤œç´¢æ¡ä»¶ã®æ‹¡å¼µ / çµæœã‚¨ã‚¯ã‚¹ãƒãƒ¼ãƒˆ / WinMerge é€£æº / è¿½åŠ ãƒ¬ãƒãƒ¼ãƒˆ
 // =============================================================================
 bool App::SearchOptionsEnabled() const
 {
@@ -2474,8 +2474,8 @@ void App::LoadSearchOptionsFromConfig()
 
     if (hLblSearchInfo_) {
         std::wstring info =
-            L"—Ş—ˆê’v‚Í’uŠ·‘ÎÛ‚Ö©“®‘I‘ğ‚³‚ê‚Ü‚¹‚ñi“à—e‚ğŠm”F‚µ‚Äè“®‚Å‘I‘ğ‚µ‚Ä‚­‚¾‚³‚¢jB"
-            L"w’ès”ÍˆÍEŠÖ”’PˆÊ‚ÍŠ®‘Sˆê’vŒŸõ‚Æ‘g‚İ‡‚í‚¹‚Äg‚¦‚Ü‚·B";
+            L"é¡ä¼¼ä¸€è‡´ã¯ç½®æ›å¯¾è±¡ã¸è‡ªå‹•é¸æŠã•ã‚Œã¾ã›ã‚“ï¼ˆå†…å®¹ã‚’ç¢ºèªã—ã¦æ‰‹å‹•ã§é¸æŠã—ã¦ãã ã•ã„ï¼‰ã€‚"
+            L"æŒ‡å®šè¡Œç¯„å›²ãƒ»é–¢æ•°å˜ä½ã¯å®Œå…¨ä¸€è‡´æ¤œç´¢ã¨çµ„ã¿åˆã‚ã›ã¦ä½¿ãˆã¾ã™ã€‚";
         SetEditText(hLblSearchInfo_, info);
     }
 }
@@ -2513,7 +2513,7 @@ std::vector<MatchResult> App::RunConfiguredSearch(const std::wstring& text,
     if (fnc) {
         std::wstring fname = util::Trim(GetEditText(hEditFuncName_));
         if (fname.empty()) {
-            out_error = L"ŠÖ”–¼‚ğ“ü—Í‚µ‚Ä‚­‚¾‚³‚¢iŠÖ”’PˆÊŒŸõjB";
+            out_error = L"é–¢æ•°åã‚’å…¥åŠ›ã—ã¦ãã ã•ã„ï¼ˆé–¢æ•°å˜ä½æ¤œç´¢ï¼‰ã€‚";
             return std::vector<MatchResult>();
         }
         int s = 0, e = 0;
@@ -2527,7 +2527,7 @@ std::vector<MatchResult> App::RunConfiguredSearch(const std::wstring& text,
         f2 = ReadLineFromFromUi();
         t2 = ReadLineToFromUi();
         if (t2 > 0 && t2 < f2) {
-            out_error = L"w’ès”ÍˆÍ‚ª‹t“]‚µ‚Ä‚¢‚Ü‚·iŠJns > I—¹sjB";
+            out_error = L"æŒ‡å®šè¡Œç¯„å›²ãŒé€†è»¢ã—ã¦ã„ã¾ã™ï¼ˆé–‹å§‹è¡Œ > çµ‚äº†è¡Œï¼‰ã€‚";
             return std::vector<MatchResult>();
         }
     }
@@ -2554,20 +2554,20 @@ void App::ApplySearchOptionsToBatch(const std::wstring& pattern)
 {
     if (!SearchOptionsEnabled()) return;
     if (IsChecked(hChkFuncScope_) && util::Trim(GetEditText(hEditFuncName_)).empty()) {
-        log_.Warn(L"ŠÖ”–¼‚ª–¢“ü—Í‚Ì‚½‚ßAŠÖ”’PˆÊŒŸõ‚ğs‚¢‚Ü‚¹‚ñ‚Å‚µ‚½B");
+        log_.Warn(L"é–¢æ•°åãŒæœªå…¥åŠ›ã®ãŸã‚ã€é–¢æ•°å˜ä½æ¤œç´¢ã‚’è¡Œã„ã¾ã›ã‚“ã§ã—ãŸã€‚");
         return;
     }
     std::vector<MatchResult> out;
     for (size_t i = 0; i < batch_entries_.size(); ++i) {
         BatchFileEntry& e = batch_entries_[i];
-        // ŠÖ”’PˆÊŒŸõ: ‘ÎÛŠÖ”‚ğ‚½‚È‚¢ƒtƒ@ƒCƒ‹‚Íƒqƒbƒg 0 Œ‚Æ‚µ‚Äˆµ‚¤
+        // é–¢æ•°å˜ä½æ¤œç´¢: å¯¾è±¡é–¢æ•°ã‚’æŒãŸãªã„ãƒ•ã‚¡ã‚¤ãƒ«ã¯ãƒ’ãƒƒãƒˆ 0 ä»¶ã¨ã—ã¦æ‰±ã†
         if (IsChecked(hChkFuncScope_)) {
             int s = 0, en = 0;
             std::wstring ferr;
             if (!CodeScope::FindFunctionBody(e.text, util::Trim(GetEditText(hEditFuncName_)),
                                              s, en, ferr)) {
                 e.hit_count = 0;
-                e.status = L"‘ÎÛŠO";
+                e.status = L"å¯¾è±¡å¤–";
                 continue;
             }
         }
@@ -2577,7 +2577,7 @@ void App::ApplySearchOptionsToBatch(const std::wstring& pattern)
             log_.Warn(e.path + L": " + err);
             e.error = err;
             e.hit_count = 0;
-            e.status = L"‘ÎÛŠO";
+            e.status = L"å¯¾è±¡å¤–";
             continue;
         }
         e.hit_count = (int)r.size();
@@ -2589,7 +2589,7 @@ void App::ApplySearchOptionsToBatch(const std::wstring& pattern)
 void App::DoExportResults(int format)
 {
     if (matches_.empty()) {
-        ShowInfo(L"ŒŸõŒ‹‰Ê‚ª‚ ‚è‚Ü‚¹‚ñBæ‚ÉuŒŸõv‚ğÀs‚µ‚Ä‚­‚¾‚³‚¢B");
+        ShowInfo(L"æ¤œç´¢çµæœãŒã‚ã‚Šã¾ã›ã‚“ã€‚å…ˆã«ã€Œæ¤œç´¢ã€ã‚’å®Ÿè¡Œã—ã¦ãã ã•ã„ã€‚");
         return;
     }
     ExportFormat fmt = ExportFormat::Csv;
@@ -2598,7 +2598,7 @@ void App::DoExportResults(int format)
 
     std::wstring dir = ReportDirectory();
     if (!util::EnsureDirectory(dir)) {
-        ShowError(L"o—ÍæƒtƒHƒ‹ƒ_‚ğì¬‚Å‚«‚Ü‚¹‚ñ: " + dir);
+        ShowError(L"å‡ºåŠ›å…ˆãƒ•ã‚©ãƒ«ãƒ€ã‚’ä½œæˆã§ãã¾ã›ã‚“: " + dir);
         return;
     }
     std::wstring base = IsFolderMode()
@@ -2610,15 +2610,15 @@ void App::DoExportResults(int format)
     std::wstring opid = util::NewOperationId();
     std::wstring err;
     if (!ResultExporter::Export(path, matches_, opid, fmt, cfg_.encoding_mode, err)) {
-        ShowError(L"ƒGƒNƒXƒ|[ƒg‚É¸”s‚µ‚Ü‚µ‚½B\n" + err);
+        ShowError(L"ã‚¨ã‚¯ã‚¹ãƒãƒ¼ãƒˆã«å¤±æ•—ã—ã¾ã—ãŸã€‚\n" + err);
         log_.Error(err);
         return;
     }
     cfg_.last_export_path = path;
     log_.Info(L"Exported search result: " + path);
-    ShowInfo(std::wstring(L"ŒŸõŒ‹‰Ê‚ğ ") + ResultExporter::FormatName(fmt) +
-             L" ‚Åo—Í‚µ‚Ü‚µ‚½B\n\n" + path);
-    if (Confirm(L"o—Í‚µ‚½ƒtƒ@ƒCƒ‹‚ğŠJ‚«‚Ü‚·‚©H\n\n" + path)) OpenPath(path);
+    ShowInfo(std::wstring(L"æ¤œç´¢çµæœã‚’ ") + ResultExporter::FormatName(fmt) +
+             L" ã§å‡ºåŠ›ã—ã¾ã—ãŸã€‚\n\n" + path);
+    if (Confirm(L"å‡ºåŠ›ã—ãŸãƒ•ã‚¡ã‚¤ãƒ«ã‚’é–‹ãã¾ã™ã‹ï¼Ÿ\n\n" + path)) OpenPath(path);
 }
 
 std::wstring App::FindWinMergePath() const
@@ -2651,14 +2651,14 @@ bool App::GetCompareItems(std::vector<CompareItem>& out, std::wstring& out_error
     out_error.clear();
     std::vector<MatchResult> sel = GetSelectedMatches();
     if (sel.empty()) {
-        out_error = L"’uŠ·‘ÎÛ‚ª‘I‘ğ‚³‚ê‚Ä‚¢‚Ü‚¹‚ñBŒŸõŒ‹‰Êƒ^ƒu‚Å‘ÎÛ‚ğ‘I‘ğ‚µ‚Ä‚­‚¾‚³‚¢B";
+        out_error = L"ç½®æ›å¯¾è±¡ãŒé¸æŠã•ã‚Œã¦ã„ã¾ã›ã‚“ã€‚æ¤œç´¢çµæœã‚¿ãƒ–ã§å¯¾è±¡ã‚’é¸æŠã—ã¦ãã ã•ã„ã€‚";
         return false;
     }
 
     OperationContext ctx;
     ReadInputs(ctx);
 
-    // ‘I‘ğ‚³‚ê‚½‘ÎÛ‚ğƒtƒ@ƒCƒ‹’PˆÊ‚É‚Ü‚Æ‚ß‚éi‘I‘ğ‡‚ğˆÛj
+    // é¸æŠã•ã‚ŒãŸå¯¾è±¡ã‚’ãƒ•ã‚¡ã‚¤ãƒ«å˜ä½ã«ã¾ã¨ã‚ã‚‹ï¼ˆé¸æŠé †ã‚’ç¶­æŒï¼‰
     std::vector<std::wstring> order;
     for (size_t i = 0; i < sel.size(); ++i) {
         bool found = false;
@@ -2687,7 +2687,7 @@ bool App::GetCompareItems(std::vector<CompareItem>& out, std::wstring& out_error
         if (text.empty()) {
             FileInfo fi;
             if (!FileManager::ReadText(item.path, cfg_.encoding_mode, text, fi)) {
-                out_error = L"”äŠr‘ÎÛ‚Ìƒtƒ@ƒCƒ‹‚ğ“Ç‚İæ‚ê‚Ü‚¹‚ñ: " + item.path;
+                out_error = L"æ¯”è¼ƒå¯¾è±¡ã®ãƒ•ã‚¡ã‚¤ãƒ«ã‚’èª­ã¿å–ã‚Œã¾ã›ã‚“: " + item.path;
                 return false;
             }
         }
@@ -2711,20 +2711,20 @@ void App::DoWinMerge()
     std::vector<CompareItem> items;
     std::wstring err;
     if (!GetCompareItems(items, err)) {
-        ShowError(err.empty() ? std::wstring(L"”äŠr‚·‚é“à—e‚ğì¬‚Å‚«‚Ü‚¹‚ñB") : err);
+        ShowError(err.empty() ? std::wstring(L"æ¯”è¼ƒã™ã‚‹å†…å®¹ã‚’ä½œæˆã§ãã¾ã›ã‚“ã€‚") : err);
         return;
     }
 
     std::wstring exe = FindWinMergePath();
     if (exe.empty()) {
-        ShowError(L"WinMerge ‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñB\n\n"
-                  L"uŒŸõğŒvƒ^ƒu‚ÌuWinMergeU.exe ‚ÌƒpƒXv‚Åw’è‚µ‚Ä‚­‚¾‚³‚¢B\n"
-                  L"Šù’è‚ÌŠm”Fæ: C:\\Program Files\\WinMerge\\WinMergeU.exe");
+        ShowError(L"WinMerge ãŒè¦‹ã¤ã‹ã‚Šã¾ã›ã‚“ã€‚\n\n"
+                  L"ã€Œæ¤œç´¢æ¡ä»¶ã€ã‚¿ãƒ–ã®ã€ŒWinMergeU.exe ã®ãƒ‘ã‚¹ã€ã§æŒ‡å®šã—ã¦ãã ã•ã„ã€‚\n"
+                  L"æ—¢å®šã®ç¢ºèªå…ˆ: C:\\Program Files\\WinMerge\\WinMergeU.exe");
         log_.Warn(L"WinMerge not found.");
         return;
     }
 
-    // ‘I‘ğ‚³‚ê‚½ƒtƒ@ƒCƒ‹‚ª‘½”‚ ‚éê‡‚ÌãŒÀi1 ƒtƒ@ƒCƒ‹‚É‚Â‚« 1 ƒEƒBƒ“ƒhƒEŠJ‚­‚½‚ßj
+    // é¸æŠã•ã‚ŒãŸãƒ•ã‚¡ã‚¤ãƒ«ãŒå¤šæ•°ã‚ã‚‹å ´åˆã®ä¸Šé™ï¼ˆ1 ãƒ•ã‚¡ã‚¤ãƒ«ã«ã¤ã 1 ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦é–‹ããŸã‚ï¼‰
     const size_t kMaxFiles = 10;
     size_t count = items.size();
     if (count > kMaxFiles) count = kMaxFiles;
@@ -2741,34 +2741,34 @@ void App::DoWinMerge()
         std::wstring werr;
         if (!FileManager::WriteTextAtomic(t1, item.before, TextEncoding::UTF8, true, NewlineKind::CRLF, werr) ||
             !FileManager::WriteTextAtomic(t2, item.after,  TextEncoding::UTF8, true, NewlineKind::CRLF, werr)) {
-            ShowError(L"”äŠr—p‚Ìˆêƒtƒ@ƒCƒ‹‚ğì¬‚Å‚«‚Ü‚¹‚ñB\n" + werr);
+            ShowError(L"æ¯”è¼ƒç”¨ã®ä¸€æ™‚ãƒ•ã‚¡ã‚¤ãƒ«ã‚’ä½œæˆã§ãã¾ã›ã‚“ã€‚\n" + werr);
             return;
         }
 
         std::wstring fname = util::GetFileNameOf(item.path);
         std::wstring args = L"\"" + t1 + L"\" \"" + t2 + L"\" /e /u";
-        // •¡”ƒtƒ@ƒCƒ‹‚ğ“¯‚É”äŠr‚·‚é‚Æ‚«‚Í•ÊƒEƒBƒ“ƒhƒE‚ÅŠJ‚­i/s- = ’PˆêƒCƒ“ƒXƒ^ƒ“ƒXİ’è‚ğ–³‹j
+        // è¤‡æ•°ãƒ•ã‚¡ã‚¤ãƒ«ã‚’åŒæ™‚ã«æ¯”è¼ƒã™ã‚‹ã¨ãã¯åˆ¥ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã§é–‹ãï¼ˆ/s- = å˜ä¸€ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹è¨­å®šã‚’ç„¡è¦–ï¼‰
         if (items.size() > 1) args += L" /s-";
-        args += L" /dl \"•ÏŠ·‘O: " + fname + L"\" /dr \"•ÏŠ·Œã: " + fname + L"\"";
+        args += L" /dl \"å¤‰æ›å‰: " + fname + L"\" /dr \"å¤‰æ›å¾Œ: " + fname + L"\"";
 
         HINSTANCE r = ::ShellExecuteW(nullptr, L"open", exe.c_str(), args.c_str(), nullptr, SW_SHOWNORMAL);
         if ((INT_PTR)r <= 32) {
-            ShowError(L"WinMerge ‚ğ‹N“®‚Å‚«‚Ü‚¹‚ñ‚Å‚µ‚½B\n\n" + exe);
+            ShowError(L"WinMerge ã‚’èµ·å‹•ã§ãã¾ã›ã‚“ã§ã—ãŸã€‚\n\n" + exe);
             log_.Error(L"Failed to launch WinMerge: " + exe);
             return;
         }
         ++launched;
         log_.Info(L"WinMerge launched: " + exe);
         log_.Info(L"  " + fname);
-        log_.Info(L"    •ÏŠ·‘O: " + t1);
-        log_.Info(L"    •ÏŠ·Œã: " + t2);
+        log_.Info(L"    å¤‰æ›å‰: " + t1);
+        log_.Info(L"    å¤‰æ›å¾Œ: " + t2);
     }
 
-    std::wstring msg = L"WinMerge ‚Å”äŠr‚µ‚Ä‚¢‚Ü‚·i•ÏŠ·‘O / •ÏŠ·Œãj: "
-                     + std::to_wstring(launched) + L" ƒtƒ@ƒCƒ‹B";
+    std::wstring msg = L"WinMerge ã§æ¯”è¼ƒã—ã¦ã„ã¾ã™ï¼ˆå¤‰æ›å‰ / å¤‰æ›å¾Œï¼‰: "
+                     + std::to_wstring(launched) + L" ãƒ•ã‚¡ã‚¤ãƒ«ã€‚";
     if (items.size() > kMaxFiles)
-        msg += L"i‘I‘ğ‚ª " + std::to_wstring((int)items.size()) + L" Œ‚Ì‚½‚ßæ“ª "
-               + std::to_wstring((int)kMaxFiles) + L" Œ‚Ì‚İ”äŠr‚µ‚Ü‚µ‚½j";
+        msg += L"ï¼ˆé¸æŠãŒ " + std::to_wstring((int)items.size()) + L" ä»¶ã®ãŸã‚å…ˆé ­ "
+               + std::to_wstring((int)kMaxFiles) + L" ä»¶ã®ã¿æ¯”è¼ƒã—ã¾ã—ãŸï¼‰";
     SetStatus(msg);
 }
 
@@ -2783,10 +2783,10 @@ void App::DoWinMergeBrowse()
     ::ZeroMemory(&ofn, sizeof(ofn));
     ofn.lStructSize = sizeof(ofn);
     ofn.hwndOwner = hWnd_;
-    ofn.lpstrFilter = L"WinMerge (WinMergeU.exe)\0WinMergeU.exe\0Àsƒtƒ@ƒCƒ‹ (*.exe)\0*.exe\0‚·‚×‚Ä (*.*)\0*.*\0\0";
+    ofn.lpstrFilter = L"WinMerge (WinMergeU.exe)\0WinMergeU.exe\0å®Ÿè¡Œãƒ•ã‚¡ã‚¤ãƒ« (*.exe)\0*.exe\0ã™ã¹ã¦ (*.*)\0*.*\0\0";
     ofn.lpstrFile = buf;
     ofn.nMaxFile = MAX_PATH * 4;
-    ofn.lpstrTitle = L"WinMergeU.exe ‚ğ‘I‘ğ‚µ‚Ä‚­‚¾‚³‚¢";
+    ofn.lpstrTitle = L"WinMergeU.exe ã‚’é¸æŠã—ã¦ãã ã•ã„";
     ofn.Flags = OFN_FILEMUSTEXIST | OFN_PATHMUSTEXIST | OFN_NOCHANGEDIR;
     if (!::GetOpenFileNameW(&ofn)) return;
 
@@ -2804,7 +2804,7 @@ void App::WriteExtraReportsAfterRun(bool batch_mode)
     std::wstring stamp = util::TimestampFileName();
     std::wstring dir = ReportDirectory();
     if (!util::EnsureDirectory(dir)) {
-        log_.Warn(L"ƒŒƒ|[ƒgo—Íæ‚ğì¬‚Å‚«‚Ü‚¹‚ñ: " + dir);
+        log_.Warn(L"ãƒ¬ãƒãƒ¼ãƒˆå‡ºåŠ›å…ˆã‚’ä½œæˆã§ãã¾ã›ã‚“: " + dir);
         return;
     }
 
@@ -2818,17 +2818,17 @@ void App::WriteExtraReportsAfterRun(bool batch_mode)
             std::wstring p = DiffReportGenerator::BuildReportPathExt(dir, target_path_, stamp, L".md");
             if (DiffReportGenerator::GenerateMarkdown(p, ctx, matches_, last_result_.before_text,
                                                       last_result_.after_text, last_result_, err))
-                log_.Info(L"Markdown ƒŒƒ|[ƒg‚ğo—Í‚µ‚Ü‚µ‚½: " + p);
+                log_.Info(L"Markdown ãƒ¬ãƒãƒ¼ãƒˆã‚’å‡ºåŠ›ã—ã¾ã—ãŸ: " + p);
             else
-                log_.Warn(L"Markdown ƒŒƒ|[ƒg‚Ìo—Í‚É¸”s‚µ‚Ü‚µ‚½: " + err);
+                log_.Warn(L"Markdown ãƒ¬ãƒãƒ¼ãƒˆã®å‡ºåŠ›ã«å¤±æ•—ã—ã¾ã—ãŸ: " + err);
         }
         if (cfg_.report_json) {
             std::wstring p = DiffReportGenerator::BuildReportPathExt(dir, target_path_, stamp, L".json");
             if (DiffReportGenerator::GenerateJson(p, ctx, matches_, last_result_.before_text,
                                                   last_result_.after_text, last_result_, err))
-                log_.Info(L"JSON ƒŒƒ|[ƒg‚ğo—Í‚µ‚Ü‚µ‚½: " + p);
+                log_.Info(L"JSON ãƒ¬ãƒãƒ¼ãƒˆã‚’å‡ºåŠ›ã—ã¾ã—ãŸ: " + p);
             else
-                log_.Warn(L"JSON ƒŒƒ|[ƒg‚Ìo—Í‚É¸”s‚µ‚Ü‚µ‚½: " + err);
+                log_.Warn(L"JSON ãƒ¬ãƒãƒ¼ãƒˆã®å‡ºåŠ›ã«å¤±æ•—ã—ã¾ã—ãŸ: " + err);
         }
         return;
     }
@@ -2864,16 +2864,16 @@ void App::WriteExtraReportsAfterRun(bool batch_mode)
     if (cfg_.report_markdown) {
         std::wstring p = DiffReportGenerator::BuildReportPathExt(dir, batch_folder_, stamp, L".md");
         if (DiffReportGenerator::GenerateIntegratedMarkdown(p, ctx, sections, last_batch_result_, err))
-            log_.Info(L"Markdown “‡ƒŒƒ|[ƒg‚ğo—Í‚µ‚Ü‚µ‚½: " + p);
+            log_.Info(L"Markdown çµ±åˆãƒ¬ãƒãƒ¼ãƒˆã‚’å‡ºåŠ›ã—ã¾ã—ãŸ: " + p);
         else
-            log_.Warn(L"Markdown “‡ƒŒƒ|[ƒg‚Ìo—Í‚É¸”s‚µ‚Ü‚µ‚½: " + err);
+            log_.Warn(L"Markdown çµ±åˆãƒ¬ãƒãƒ¼ãƒˆã®å‡ºåŠ›ã«å¤±æ•—ã—ã¾ã—ãŸ: " + err);
     }
     if (cfg_.report_json) {
         std::wstring p = DiffReportGenerator::BuildReportPathExt(dir, batch_folder_, stamp, L".json");
         if (DiffReportGenerator::GenerateIntegratedJson(p, ctx, sections, last_batch_result_, err))
-            log_.Info(L"JSON “‡ƒŒƒ|[ƒg‚ğo—Í‚µ‚Ü‚µ‚½: " + p);
+            log_.Info(L"JSON çµ±åˆãƒ¬ãƒãƒ¼ãƒˆã‚’å‡ºåŠ›ã—ã¾ã—ãŸ: " + p);
         else
-            log_.Warn(L"JSON “‡ƒŒƒ|[ƒg‚Ìo—Í‚É¸”s‚µ‚Ü‚µ‚½: " + err);
+            log_.Warn(L"JSON çµ±åˆãƒ¬ãƒãƒ¼ãƒˆã®å‡ºåŠ›ã«å¤±æ•—ã—ã¾ã—ãŸ: " + err);
     }
 }
 
@@ -2881,22 +2881,22 @@ void App::DoAiTest()
 {
     AiSettings st = ReadAiSettings();
     if (st.api_key.empty()) {
-        ShowError(L"API ƒL[‚ª–¢İ’è‚Å‚·BuŠî–{İ’èvƒ^ƒu‚ÌuAI ˜AŒgv‚Å“ü—Í‚µ‚Ä‚­‚¾‚³‚¢B");
+        ShowError(L"API ã‚­ãƒ¼ãŒæœªè¨­å®šã§ã™ã€‚ã€ŒåŸºæœ¬è¨­å®šã€ã‚¿ãƒ–ã®ã€ŒAI é€£æºã€ã§å…¥åŠ›ã—ã¦ãã ã•ã„ã€‚");
         return;
     }
-    SetStatus(L"AI ‚ÖÚ‘±ƒeƒXƒg’†...");
+    SetStatus(L"AI ã¸æ¥ç¶šãƒ†ã‚¹ãƒˆä¸­...");
     std::wstring text, err;
-    bool ok = AiClient::Ask(st, L"Ú‘±ƒeƒXƒg‚Å‚·BuOKv‚Æ‚¾‚¯•Ô‚µ‚Ä‚­‚¾‚³‚¢B",
+    bool ok = AiClient::Ask(st, L"æ¥ç¶šãƒ†ã‚¹ãƒˆã§ã™ã€‚ã€ŒOKã€ã¨ã ã‘è¿”ã—ã¦ãã ã•ã„ã€‚",
                             text, err, std::function<void(const std::wstring&)>(),
                             [this]() { PumpMessages(); });
     if (ok) {
-        log_.Info(L"AI Ú‘±ƒeƒXƒg: ¬Œ÷");
-        ShowInfo(L"AI ‚Ö‚ÌÚ‘±‚É¬Œ÷‚µ‚Ü‚µ‚½B\n\n‰“š: " + util::Trim(text));
+        log_.Info(L"AI æ¥ç¶šãƒ†ã‚¹ãƒˆ: æˆåŠŸ");
+        ShowInfo(L"AI ã¸ã®æ¥ç¶šã«æˆåŠŸã—ã¾ã—ãŸã€‚\n\nå¿œç­”: " + util::Trim(text));
     } else {
-        log_.Error(L"AI Ú‘±ƒeƒXƒg: ¸”s - " + err);
-        ShowError(L"AI ‚Ö‚ÌÚ‘±‚É¸”s‚µ‚Ü‚µ‚½B\n\n" + err);
+        log_.Error(L"AI æ¥ç¶šãƒ†ã‚¹ãƒˆ: å¤±æ•— - " + err);
+        ShowError(L"AI ã¸ã®æ¥ç¶šã«å¤±æ•—ã—ã¾ã—ãŸã€‚\n\n" + err);
     }
-    SetStatus(ok ? L"AI Ú‘±ƒeƒXƒg: ¬Œ÷" : L"AI Ú‘±ƒeƒXƒg: ¸”s");
+    SetStatus(ok ? L"AI æ¥ç¶šãƒ†ã‚¹ãƒˆ: æˆåŠŸ" : L"AI æ¥ç¶šãƒ†ã‚¹ãƒˆ: å¤±æ•—");
 }
 
 bool App::GenerateSpecs(bool do_change, bool do_inspect)
@@ -2905,13 +2905,13 @@ bool App::GenerateSpecs(bool do_change, bool do_inspect)
 
     AiSettings st = ReadAiSettings();
     if (st.api_key.empty()) {
-        ShowError(L"API ƒL[‚ª–¢İ’è‚Å‚·BuŠî–{İ’èvƒ^ƒu‚ÌuAI ˜AŒgv‚Å API ƒL[‚ğ“ü—Í‚µ‚Ä‚­‚¾‚³‚¢B");
-        log_.Warn(L"AI ˜AŒg: API ƒL[‚ª–¢İ’è‚Å‚·B");
+        ShowError(L"API ã‚­ãƒ¼ãŒæœªè¨­å®šã§ã™ã€‚ã€ŒåŸºæœ¬è¨­å®šã€ã‚¿ãƒ–ã®ã€ŒAI é€£æºã€ã§ API ã‚­ãƒ¼ã‚’å…¥åŠ›ã—ã¦ãã ã•ã„ã€‚");
+        log_.Warn(L"AI é€£æº: API ã‚­ãƒ¼ãŒæœªè¨­å®šã§ã™ã€‚");
         return false;
     }
     SpecInput in = BuildSpecInput();
     if (in.system_name.empty()) {
-        ShowError(L"uƒVƒXƒeƒ€î•ñvƒ^ƒu‚ÌuƒVƒXƒeƒ€–¼v‚ğ“ü—Í‚µ‚Ä‚­‚¾‚³‚¢B");
+        ShowError(L"ã€Œã‚·ã‚¹ãƒ†ãƒ æƒ…å ±ã€ã‚¿ãƒ–ã®ã€Œã‚·ã‚¹ãƒ†ãƒ åã€ã‚’å…¥åŠ›ã—ã¦ãã ã•ã„ã€‚");
         return false;
     }
 
@@ -2924,7 +2924,7 @@ bool App::GenerateSpecs(bool do_change, bool do_inspect)
     generating_ = true;
     SetState(AppState::EXECUTING);
     SetProgress(10);
-    log_.Info(L"AI ˜AŒg: d—l‘¶¬‚ğŠJn‚µ‚Ü‚µ‚½i" + st.endpoint + L"j");
+    log_.Info(L"AI é€£æº: ä»•æ§˜æ›¸ç”Ÿæˆã‚’é–‹å§‹ã—ã¾ã—ãŸï¼ˆ" + st.endpoint + L"ï¼‰");
 
     std::wstring md_all, err, last_path;
     bool any_ok = false;
@@ -2935,23 +2935,23 @@ bool App::GenerateSpecs(bool do_change, bool do_inspect)
         std::wstring prompt = (kind == SPEC_INSPECTION)
                               ? SpecGenerator::BuildInspectionSpecPrompt(in)
                               : SpecGenerator::BuildChangeSpecPrompt(in);
-        SetStatus(L"AI ‚ª" + label + L"‚ğ¶¬‚µ‚Ä‚¢‚Ü‚·...");
-        log_.Info(L"AI ˜AŒg: " + label + L" ‚ğ—v‹‚µ‚Ü‚µ‚½B");
+        SetStatus(L"AI ãŒ" + label + L"ã‚’ç”Ÿæˆã—ã¦ã„ã¾ã™...");
+        log_.Info(L"AI é€£æº: " + label + L" ã‚’è¦æ±‚ã—ã¾ã—ãŸã€‚");
 
         std::wstring text;
         bool ok = AiClient::Ask(st, prompt, text, err,
                                 [this, label](const std::wstring&) {
-                                    SetStatus(L"AI ‚ª" + label + L"‚ğ¶¬’†...");
+                                    SetStatus(L"AI ãŒ" + label + L"ã‚’ç”Ÿæˆä¸­...");
                                 },
                                 [this]() { PumpMessages(); });
         if (!ok) {
-            log_.Error(L"AI ˜AŒg: " + label + L" ‚Ì¶¬‚É¸”s‚µ‚Ü‚µ‚½: " + err);
-            ShowError(L"AI ˜AŒg‚ÅƒGƒ‰[‚ª”­¶‚µ‚Ü‚µ‚½B\n\n" + err);
+            log_.Error(L"AI é€£æº: " + label + L" ã®ç”Ÿæˆã«å¤±æ•—ã—ã¾ã—ãŸ: " + err);
+            ShowError(L"AI é€£æºã§ã‚¨ãƒ©ãƒ¼ãŒç™ºç”Ÿã—ã¾ã—ãŸã€‚\n\n" + err);
             continue;
         }
         any_ok = true;
-        log_.Info(L"AI ˜AŒg: " + label + L" ‚ğóM‚µ‚Ü‚µ‚½i" +
-                  std::to_wstring((int)text.size()) + L" •¶šjB");
+        log_.Info(L"AI é€£æº: " + label + L" ã‚’å—ä¿¡ã—ã¾ã—ãŸï¼ˆ" +
+                  std::to_wstring((int)text.size()) + L" æ–‡å­—ï¼‰ã€‚");
 
         if (cfg_.create_html_report) {
             std::wstring dir = ReportDirectory();
@@ -2963,9 +2963,9 @@ bool App::GenerateSpecs(bool do_change, bool do_inspect)
             std::wstring werr;
             if (SpecGenerator::WriteReportFile(path, html, werr)) {
                 last_path = path;
-                log_.Info(L"AI ˜AŒg: ƒŒƒ|[ƒg‚ğo—Í‚µ‚Ü‚µ‚½: " + path);
+                log_.Info(L"AI é€£æº: ãƒ¬ãƒãƒ¼ãƒˆã‚’å‡ºåŠ›ã—ã¾ã—ãŸ: " + path);
             } else {
-                log_.Warn(L"AI ˜AŒg: " + werr);
+                log_.Warn(L"AI é€£æº: " + werr);
             }
         }
 
@@ -2977,7 +2977,7 @@ bool App::GenerateSpecs(bool do_change, bool do_inspect)
     if (!last_path.empty()) {
         last_spec_report_path_ = last_path;
         cfg_.last_spec_report_path = last_path;
-        SetEditText(hLblSpecInfo_, L"o—Í: " + last_path);
+        SetEditText(hLblSpecInfo_, L"å‡ºåŠ›: " + last_path);
     }
     SetProgress(100);
     generating_ = false;
@@ -2985,10 +2985,10 @@ bool App::GenerateSpecs(bool do_change, bool do_inspect)
     UpdateButtons();
 
     if (any_ok) {
-        SetStatus(L"d—l‘‚Ì¶¬‚ªŠ®—¹‚µ‚Ü‚µ‚½B");
+        SetStatus(L"ä»•æ§˜æ›¸ã®ç”ŸæˆãŒå®Œäº†ã—ã¾ã—ãŸã€‚");
         if (!last_path.empty() && (IsChecked(hChkAiOpenReport_) || cfg_.ai_open_report))
             OpenPath(last_path);
-        ShowInfo(L"d—l‘‚ğ¶¬‚µ‚Ü‚µ‚½B" +
+        ShowInfo(L"ä»•æ§˜æ›¸ã‚’ç”Ÿæˆã—ã¾ã—ãŸã€‚" +
                  (last_path.empty() ? L"" : L"\n\n" + last_path));
     }
     return any_ok;
@@ -2996,7 +2996,7 @@ bool App::GenerateSpecs(bool do_change, bool do_inspect)
 
 
 // -----------------------------------------------------------------------------
-// AI ‚ğg‚í‚È‚¢‰^—p: ˆË—Š•¶‚ğ txt ‚Åo—Í‚·‚é / “\‚è•t‚¯‚½‰ñ“š‚ğƒŒƒ|[ƒg‰»‚·‚é
+// AI ã‚’ä½¿ã‚ãªã„é‹ç”¨: ä¾é ¼æ–‡ã‚’ txt ã§å‡ºåŠ›ã™ã‚‹ / è²¼ã‚Šä»˜ã‘ãŸå›ç­”ã‚’ãƒ¬ãƒãƒ¼ãƒˆåŒ–ã™ã‚‹
 // -----------------------------------------------------------------------------
 void App::DoExportPrompt(int kind)
 {
@@ -3012,8 +3012,8 @@ bool App::ExportPrompts(bool do_change, bool do_inspect)
 {
     SpecInput in = BuildSpecInput();
     if (in.system_name.empty()) {
-        ShowError(L"uƒVƒXƒeƒ€î•ñvƒ^ƒu‚ÌuƒVƒXƒeƒ€–¼v‚ğ“ü—Í‚µ‚Ä‚­‚¾‚³‚¢B\n"
-                  L"iƒtƒ@ƒCƒ‹–¼‚Ég—p‚µ‚Ü‚·j");
+        ShowError(L"ã€Œã‚·ã‚¹ãƒ†ãƒ æƒ…å ±ã€ã‚¿ãƒ–ã®ã€Œã‚·ã‚¹ãƒ†ãƒ åã€ã‚’å…¥åŠ›ã—ã¦ãã ã•ã„ã€‚\n"
+                  L"ï¼ˆãƒ•ã‚¡ã‚¤ãƒ«åã«ä½¿ç”¨ã—ã¾ã™ï¼‰");
         return false;
     }
 
@@ -3035,25 +3035,25 @@ bool App::ExportPrompts(bool do_change, bool do_inspect)
             dir, SpecGenerator::MakePromptFileName(in.system_name, kind, util::NowDateTime()));
         std::wstring werr;
         if (!SpecGenerator::WriteReportFile(path, txt, werr)) {
-            log_.Warn(L"ƒvƒƒ“ƒvƒgo—Í: " + werr);
+            log_.Warn(L"ãƒ—ãƒ­ãƒ³ãƒ—ãƒˆå‡ºåŠ›: " + werr);
             ShowError(werr);
             continue;
         }
         if (first.empty()) first = path;
         if (!paths.empty()) paths += L"\n";
         paths += path;
-        log_.Info(L"ƒvƒƒ“ƒvƒg‚ğo—Í‚µ‚Ü‚µ‚½: " + path);
+        log_.Info(L"ãƒ—ãƒ­ãƒ³ãƒ—ãƒˆã‚’å‡ºåŠ›ã—ã¾ã—ãŸ: " + path);
     }
     if (first.empty()) return false;
 
-    SetEditText(hLblSpecInfo_, L"ƒvƒƒ“ƒvƒgo—Í: " + first);
-    SetStatus(L"ƒvƒƒ“ƒvƒg txt ‚ğo—Í‚µ‚Ü‚µ‚½BAI ƒ`ƒƒƒbƒg‚Ö“\‚è•t‚¯‚Ä‚­‚¾‚³‚¢B");
-    ShowInfo(L"AI ƒ`ƒƒƒbƒg‚Ö“\‚è•t‚¯‚éˆË—Š•¶‚ğo—Í‚µ‚Ü‚µ‚½B\n\n" + paths +
-             L"\n\nyè‡z\n1. ã‹L txt ‚ğŠJ‚«A“à—e‚ğ‚·‚×‚ÄƒRƒs[\n"
-             L"2. AI ƒ`ƒƒƒbƒgiChatGPT / Claude / Gemini ‚È‚Çj‚Ö“\‚è•t‚¯‚Ä‘—M\n"
-             L"3. •Ô‚Á‚Ä‚«‚½‰ñ“š‚ğƒRƒs[‚µA‚±‚Ìƒ^ƒu‚Ìo—Í—“‚Ö“\‚è•t‚¯‚Ä\n"
-             L"   u‚±‚Ì“à—e‚ğ•ÏXd—l‘‚É‚·‚é / ŒŸ¸d—l‘‚É‚·‚év‚ğ‰Ÿ‚·\n"
-             L"   ¨ HTML ƒŒƒ|[ƒg‚ªì¬‚³‚ê‚Ü‚·");
+    SetEditText(hLblSpecInfo_, L"ãƒ—ãƒ­ãƒ³ãƒ—ãƒˆå‡ºåŠ›: " + first);
+    SetStatus(L"ãƒ—ãƒ­ãƒ³ãƒ—ãƒˆ txt ã‚’å‡ºåŠ›ã—ã¾ã—ãŸã€‚AI ãƒãƒ£ãƒƒãƒˆã¸è²¼ã‚Šä»˜ã‘ã¦ãã ã•ã„ã€‚");
+    ShowInfo(L"AI ãƒãƒ£ãƒƒãƒˆã¸è²¼ã‚Šä»˜ã‘ã‚‹ä¾é ¼æ–‡ã‚’å‡ºåŠ›ã—ã¾ã—ãŸã€‚\n\n" + paths +
+             L"\n\nã€æ‰‹é †ã€‘\n1. ä¸Šè¨˜ txt ã‚’é–‹ãã€å†…å®¹ã‚’ã™ã¹ã¦ã‚³ãƒ”ãƒ¼\n"
+             L"2. AI ãƒãƒ£ãƒƒãƒˆï¼ˆChatGPT / Claude / Gemini ãªã©ï¼‰ã¸è²¼ã‚Šä»˜ã‘ã¦é€ä¿¡\n"
+             L"3. è¿”ã£ã¦ããŸå›ç­”ã‚’ã‚³ãƒ”ãƒ¼ã—ã€ã“ã®ã‚¿ãƒ–ã®å‡ºåŠ›æ¬„ã¸è²¼ã‚Šä»˜ã‘ã¦\n"
+             L"   ã€Œã“ã®å†…å®¹ã‚’å¤‰æ›´ä»•æ§˜æ›¸ã«ã™ã‚‹ / æ¤œæŸ»ä»•æ§˜æ›¸ã«ã™ã‚‹ã€ã‚’æŠ¼ã™\n"
+             L"   â†’ HTML ãƒ¬ãƒãƒ¼ãƒˆãŒä½œæˆã•ã‚Œã¾ã™");
 
     if (IsChecked(hChkAiOpenReport_) || cfg_.ai_open_report) OpenPath(first);
     return true;
@@ -3063,8 +3063,8 @@ void App::DoMakeReportFromText(int kind)
 {
     std::wstring text = GetEditText(hEditSpecOut_);
     if (util::Trim(text).empty()) {
-        ShowError(L"o—Í—“‚ª‹ó‚Å‚·B\n\nAI ƒ`ƒƒƒbƒg‚Ì‰ñ“š‚ğƒRƒs[‚µ‚ÄA‚±‚Ì—“‚É“\‚è•t‚¯‚Ä‚­‚¾‚³‚¢B\n"
-                  L"iuƒvƒƒ“ƒvƒgtxtvƒ{ƒ^ƒ“‚ÅˆË—Š•¶‚ğo—Í‚Å‚«‚Ü‚·j");
+        ShowError(L"å‡ºåŠ›æ¬„ãŒç©ºã§ã™ã€‚\n\nAI ãƒãƒ£ãƒƒãƒˆã®å›ç­”ã‚’ã‚³ãƒ”ãƒ¼ã—ã¦ã€ã“ã®æ¬„ã«è²¼ã‚Šä»˜ã‘ã¦ãã ã•ã„ã€‚\n"
+                  L"ï¼ˆã€Œãƒ—ãƒ­ãƒ³ãƒ—ãƒˆtxtã€ãƒœã‚¿ãƒ³ã§ä¾é ¼æ–‡ã‚’å‡ºåŠ›ã§ãã¾ã™ï¼‰");
         return;
     }
     SpecInput in = BuildSpecInput();
@@ -3073,8 +3073,8 @@ void App::DoMakeReportFromText(int kind)
 
     std::wstring label = SpecGenerator::KindLabel(kind);
     if (!cfg_.create_html_report) {
-        ShowWarn(L"uHTML·•ªƒŒƒ|[ƒg‚ğo—Í‚·‚év‚ª–³Œø‚Å‚·B\n"
-                 L"uŠî–{İ’èvƒ^ƒu‚Å—LŒø‚É‚·‚é‚ÆƒŒƒ|[ƒg‚ğì¬‚Å‚«‚Ü‚·B");
+        ShowWarn(L"ã€ŒHTMLå·®åˆ†ãƒ¬ãƒãƒ¼ãƒˆã‚’å‡ºåŠ›ã™ã‚‹ã€ãŒç„¡åŠ¹ã§ã™ã€‚\n"
+                 L"ã€ŒåŸºæœ¬è¨­å®šã€ã‚¿ãƒ–ã§æœ‰åŠ¹ã«ã™ã‚‹ã¨ãƒ¬ãƒãƒ¼ãƒˆã‚’ä½œæˆã§ãã¾ã™ã€‚");
         return;
     }
 
@@ -3086,16 +3086,16 @@ void App::DoMakeReportFromText(int kind)
         label + L" - " + in.system_name, SpecGenerator::MarkdownToHtml(text), in);
     std::wstring werr;
     if (!SpecGenerator::WriteReportFile(path, html, werr)) {
-        log_.Error(L"“\‚è•t‚¯“à—e‚ÌƒŒƒ|[ƒg‰»‚É¸”s: " + werr);
+        log_.Error(L"è²¼ã‚Šä»˜ã‘å†…å®¹ã®ãƒ¬ãƒãƒ¼ãƒˆåŒ–ã«å¤±æ•—: " + werr);
         ShowError(werr);
         return;
     }
     last_spec_report_path_ = path;
     cfg_.last_spec_report_path = path;
-    SetEditText(hLblSpecInfo_, L"o—Í: " + path);
-    log_.Info(L"“\‚è•t‚¯‚½‰ñ“š‚©‚ç" + label + L"‚ğì¬‚µ‚Ü‚µ‚½: " + path);
-    SetStatus(label + L"‚ğì¬‚µ‚Ü‚µ‚½B");
-    ShowInfo(label + L"‚ğì¬‚µ‚Ü‚µ‚½B\n\n" + path);
+    SetEditText(hLblSpecInfo_, L"å‡ºåŠ›: " + path);
+    log_.Info(L"è²¼ã‚Šä»˜ã‘ãŸå›ç­”ã‹ã‚‰" + label + L"ã‚’ä½œæˆã—ã¾ã—ãŸ: " + path);
+    SetStatus(label + L"ã‚’ä½œæˆã—ã¾ã—ãŸã€‚");
+    ShowInfo(label + L"ã‚’ä½œæˆã—ã¾ã—ãŸã€‚\n\n" + path);
     if (IsChecked(hChkAiOpenReport_) || cfg_.ai_open_report) OpenPath(path);
 }
 

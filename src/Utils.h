@@ -1,6 +1,6 @@
-// =============================================================================
+ï»¿// =============================================================================
 // Utils.h
-// Migration Switcher - ‹¤’Êƒ†[ƒeƒBƒŠƒeƒB
+// Migration Switcher - å…±é€šãƒ¦ãƒ¼ãƒ†ã‚£ãƒªãƒ†ã‚£
 // =============================================================================
 #pragma once
 
@@ -12,13 +12,13 @@
 namespace ms {
 namespace util {
 
-// ---- •¶šƒR[ƒh•ÏŠ· ---------------------------------------------------------
+// ---- æ–‡å­—ã‚³ãƒ¼ãƒ‰å¤‰æ› ---------------------------------------------------------
 std::wstring Utf8ToWide(const std::string& s);
 std::string  WideToUtf8(const std::wstring& s);
 std::wstring MultiByteToWide(const std::string& s, unsigned int code_page);
 std::string  WideToMultiByte(const std::wstring& s, unsigned int code_page);
 
-// ---- “ú -------------------------------------------------------------------
+// ---- æ—¥æ™‚ -------------------------------------------------------------------
 std::wstring NowDateTime();        // yyyy-mm-dd hh:mm:ss
 std::wstring NowDateTimeMillis();  // yyyy-mm-dd hh:mm:ss.mmm
 std::wstring TimestampFileName();  // yyyymmdd_hhmmss
@@ -26,7 +26,7 @@ std::wstring TimestampDate();      // yyyymmdd
 std::wstring FormatDateYMD();      // yyyy-mm-dd
 std::wstring NewOperationId();     // OP_yyyymmdd_hhmmss_xxx
 
-// ---- •¶š—ñ -----------------------------------------------------------------
+// ---- æ–‡å­—åˆ— -----------------------------------------------------------------
 std::wstring Trim(const std::wstring& s);
 std::wstring TrimRight(const std::wstring& s);
 std::wstring TrimLeft(const std::wstring& s);
@@ -39,19 +39,19 @@ int          CountLines(const std::wstring& s);
 std::vector<std::wstring> SplitLines(const std::wstring& s);
 std::wstring JoinLines(const std::vector<std::wstring>& lines, const std::wstring& nl);
 
-// ---- ‰üs -------------------------------------------------------------------
+// ---- æ”¹è¡Œ -------------------------------------------------------------------
 std::wstring NormalizeNewlines(const std::wstring& s);   // CRLF/CR -> LF
 std::wstring NewlineString(NewlineKind kind);
 NewlineKind  DetectNewlineKind(const std::wstring& s);
 std::wstring DenormalizeNewlines(const std::wstring& s, const std::wstring& nl);
 
-// ---- ˆÊ’uŒvZ ---------------------------------------------------------------
+// ---- ä½ç½®è¨ˆç®— ---------------------------------------------------------------
 void OffsetToLineCol(const std::wstring& text, size_t offset, int& line, int& col);
 size_t LineStartOffset(const std::wstring& text, int line);
 int    LeadingIndentWidth(const std::wstring& line, bool* has_tab = nullptr);
 std::wstring LeadingIndentText(const std::wstring& line);
 
-// ---- ƒpƒX -------------------------------------------------------------------
+// ---- ãƒ‘ã‚¹ -------------------------------------------------------------------
 std::wstring GetDirectoryOf(const std::wstring& path);
 std::wstring GetFileNameOf(const std::wstring& path);
 std::wstring GetBaseNameNoExt(const std::wstring& path);

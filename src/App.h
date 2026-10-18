@@ -1,7 +1,7 @@
-// =============================================================================
+ï»¿// =============================================================================
 // App.h
-// Migration Switcher - ƒAƒvƒŠƒP[ƒVƒ‡ƒ“–{‘Ì / UIManageriİŒv‘ 7.2.1j
-// Phase 4: 17Í •¡”ƒtƒ@ƒCƒ‹ˆêŠ‡ˆ— ‘Î‰
+// Migration Switcher - ã‚¢ãƒ—ãƒªã‚±ãƒ¼ã‚·ãƒ§ãƒ³æœ¬ä½“ / UIManagerï¼ˆè¨­è¨ˆæ›¸ 7.2.1ï¼‰
+// Phase 4: 17ç«  è¤‡æ•°ãƒ•ã‚¡ã‚¤ãƒ«ä¸€æ‹¬å‡¦ç† å¯¾å¿œ
 // =============================================================================
 #pragma once
 
@@ -21,18 +21,18 @@
 
 namespace ms {
 
-// ƒ^ƒu‚Ì•À‚ÑiİŒv‘ 5.1 / 17.2.1j
+// ã‚¿ãƒ–ã®ä¸¦ã³ï¼ˆè¨­è¨ˆæ›¸ 5.1 / 17.2.1ï¼‰
 enum PageIndex {
-    PG_BASIC   = 0,   // Šî–{İ’è
-    PG_BATCH   = 1,   // ˆêŠ‡ˆ—iPhase 4j
-    PG_SEARCH  = 2,   // ŒŸõğŒi—Ş—ˆê’v / w’ès”ÍˆÍ / ŠÖ”’PˆÊ / o—ÍŒ`® / WinMergej
-    PG_OLD     = 3,   // ‹ŒƒR[ƒh
-    PG_NEW     = 4,   // VƒR[ƒh
-    PG_RESULT  = 5,   // ŒŸõŒ‹‰Ê
-    PG_PREVIEW = 6,   // ƒvƒŒƒrƒ…[
-    PG_SWITCH  = 7,   // ƒXƒCƒbƒ`ŠÇ—
-    PG_SYSTEM  = 8,   // ƒVƒXƒeƒ€î•ñid—l‘¶¬j
-    PG_LOG     = 9,   // ƒƒO
+    PG_BASIC   = 0,   // åŸºæœ¬è¨­å®š
+    PG_BATCH   = 1,   // ä¸€æ‹¬å‡¦ç†ï¼ˆPhase 4ï¼‰
+    PG_SEARCH  = 2,   // æ¤œç´¢æ¡ä»¶ï¼ˆé¡ä¼¼ä¸€è‡´ / æŒ‡å®šè¡Œç¯„å›² / é–¢æ•°å˜ä½ / å‡ºåŠ›å½¢å¼ / WinMergeï¼‰
+    PG_OLD     = 3,   // æ—§ã‚³ãƒ¼ãƒ‰
+    PG_NEW     = 4,   // æ–°ã‚³ãƒ¼ãƒ‰
+    PG_RESULT  = 5,   // æ¤œç´¢çµæœ
+    PG_PREVIEW = 6,   // ãƒ—ãƒ¬ãƒ“ãƒ¥ãƒ¼
+    PG_SWITCH  = 7,   // ã‚¹ã‚¤ãƒƒãƒç®¡ç†
+    PG_SYSTEM  = 8,   // ã‚·ã‚¹ãƒ†ãƒ æƒ…å ±ï¼ˆä»•æ§˜æ›¸ç”Ÿæˆï¼‰
+    PG_LOG     = 9,   // ãƒ­ã‚°
     PG_COUNT   = 10
 };
 
@@ -46,12 +46,12 @@ public:
 
 private:
     static LRESULT CALLBACK WndProcStatic(HWND, UINT, WPARAM, LPARAM);
-    // ƒ^ƒuƒy[ƒW—pBƒy[ƒWã‚ÌƒRƒ“ƒgƒ[ƒ‹‚Ì WM_COMMAND / WM_NOTIFY ‚ğ
-    // ƒAƒvƒŠ–{‘ÌihWnd_j‚Æ“¯‚¶ƒnƒ“ƒhƒ‰‚Ö“]‘—‚·‚é‚½‚ß‚É•K—vB
+    // ã‚¿ãƒ–ãƒšãƒ¼ã‚¸ç”¨ã€‚ãƒšãƒ¼ã‚¸ä¸Šã®ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ«ã® WM_COMMAND / WM_NOTIFY ã‚’
+    // ã‚¢ãƒ—ãƒªæœ¬ä½“ï¼ˆhWnd_ï¼‰ã¨åŒã˜ãƒãƒ³ãƒ‰ãƒ©ã¸è»¢é€ã™ã‚‹ãŸã‚ã«å¿…è¦ã€‚
     static LRESULT CALLBACK PageWndProcStatic(HWND, UINT, WPARAM, LPARAM);
     LRESULT WndProc(HWND, UINT, WPARAM, LPARAM);
 
-    // ---- \’z ----
+    // ---- æ§‹ç¯‰ ----
     bool RegisterWindowClass();
     bool CreateMainWindow(int nCmdShow);
     void CreateFonts();
@@ -73,7 +73,7 @@ private:
     void LayoutPage(int index, const RECT& rc);
     void UpdateInputInfo();
 
-    // ---- ƒCƒxƒ“ƒg ----
+    // ---- ã‚¤ãƒ™ãƒ³ãƒˆ ----
     void OnCreate();
     void OnSize(int cx, int cy);
     void OnCommand(int id, int code, HWND ctrl);
@@ -82,7 +82,7 @@ private:
     void OnDestroy();
     void OnDropFiles(HDROP hDrop);
 
-    // ---- ‘€ì ----
+    // ---- æ“ä½œ ----
     void DoBrowse();
     void DoFolderBrowse();
     void DoScan();
@@ -100,7 +100,7 @@ private:
     void DoClearLog();
     void DoPreviewModeChanged();
     void OnTargetKindChanged();
-    // ---- ƒXƒCƒbƒ`ŠÇ— ----
+    // ---- ã‚¹ã‚¤ãƒƒãƒç®¡ç† ----
     void DoSwitchHeaderBrowse();
     void DoSwitchHeaderDirBrowse();
     void DoSwitchHeaderLoad();
@@ -125,7 +125,7 @@ private:
                             bool& out_added,
                             int& out_line);
 
-    // ---- AI ˜AŒgi•ÏXd—l‘ / ŒŸ¸d—l‘j----
+    // ---- AI é€£æºï¼ˆå¤‰æ›´ä»•æ§˜æ›¸ / æ¤œæŸ»ä»•æ§˜æ›¸ï¼‰----
     void DoAiTest();
     void DoAiProviderChanged();
     void LoadAiFieldsFromConfig(int provider);
@@ -142,7 +142,7 @@ private:
     SpecInput   BuildSpecInput() const;
     void PumpMessages();
 
-    // ---- Œã‘±”Å: ŒŸõğŒ‚ÌŠg’£ / ƒGƒNƒXƒ|[ƒg / WinMerge ˜AŒg ----
+    // ---- å¾Œç¶šç‰ˆ: æ¤œç´¢æ¡ä»¶ã®æ‹¡å¼µ / ã‚¨ã‚¯ã‚¹ãƒãƒ¼ãƒˆ / WinMerge é€£æº ----
     void DoExportResults(int format);          // 0=CSV / 1=Markdown / 2=JSON
     void DoWinMerge();
     void DoWinMergeBrowse();
@@ -151,13 +151,13 @@ private:
     void SaveSearchOptionsToConfig();
     void WriteExtraReportsAfterRun(bool batch_mode);
     std::wstring FindWinMergePath() const;
-    // ”äŠr—p‚Ì“à—eiƒtƒ@ƒCƒ‹’PˆÊj
+    // æ¯”è¼ƒç”¨ã®å†…å®¹ï¼ˆãƒ•ã‚¡ã‚¤ãƒ«å˜ä½ï¼‰
     struct CompareItem {
         std::wstring path;
         std::wstring before;
         std::wstring after;
     };
-    // ‘I‘ğ‚³‚ê‚½’uŠ·‘ÎÛ‚ğƒtƒ@ƒCƒ‹’PˆÊ‚É‚Ü‚Æ‚ßA”äŠr—p‚Ì“à—e‚ğì‚é
+    // é¸æŠã•ã‚ŒãŸç½®æ›å¯¾è±¡ã‚’ãƒ•ã‚¡ã‚¤ãƒ«å˜ä½ã«ã¾ã¨ã‚ã€æ¯”è¼ƒç”¨ã®å†…å®¹ã‚’ä½œã‚‹
     bool GetCompareItems(std::vector<CompareItem>& out, std::wstring& out_error);
     bool SearchOptionsEnabled() const;
     int  ReadSimilarThresholdFromUi() const;
@@ -171,7 +171,7 @@ private:
                                                  std::wstring& out_error);
     void ApplySearchOptionsToBatch(const std::wstring& pattern);
 
-    // ---- “à•”ˆ— ----
+    // ---- å†…éƒ¨å‡¦ç† ----
     void ReadInputs(OperationContext& ctx);
     bool CheckInputs(bool for_execute, std::wstring& out_error,
                      std::vector<std::wstring>& out_warnings);
@@ -218,7 +218,7 @@ private:
     bool IsFolderMode() const;
     void RefreshScanInfo();
 
-    // ---- ƒƒ“ƒo ----
+    // ---- ãƒ¡ãƒ³ãƒ ----
     HINSTANCE hInst_;
     HWND      hWnd_;
     HWND      hStatus_;
@@ -229,13 +229,13 @@ private:
     HWND hTab_;
     HWND hPage_[PG_COUNT];
 
-    // page PG_BASIC: Šî–{İ’è
+    // page PG_BASIC: åŸºæœ¬è¨­å®š
     HWND hGrpStyle_, hRadStyle_[4], hLblTemplate_, hEditTemplate_;
     HWND hGrpOption_, hChkBackup_, hChkReport_, hChkLog_, hChkOpenReport_;
     HWND hChkDryRunOnly_, hChkAutoIndent_, hChkWarnComment_, hChkWarnPreproc_;
     HWND hGrpHit_, hRadHit_[4];
 
-    // page PG_BATCH: ˆêŠ‡ˆ—iİŒv‘ 17.2.1 ’Ç‰ÁUIj
+    // page PG_BATCH: ä¸€æ‹¬å‡¦ç†ï¼ˆè¨­è¨ˆæ›¸ 17.2.1 è¿½åŠ UIï¼‰
     HWND hGrpTargetKind_, hRadTargetKind_[2];
     HWND hLblFolder_, hFolderEdit_, hFolderBrowseBtn_;
     HWND hGrpExtFilter_, hChkExt_[6], hChkSubdirs_;
@@ -252,7 +252,7 @@ private:
     // page PG_PREVIEW
     HWND hPreviewEdit_, hCmbPreviewMode_, hBtnOpenHtml_;
 
-    // page PG_SWITCH: ƒXƒCƒbƒ`ŠÇ—
+    // page PG_SWITCH: ã‚¹ã‚¤ãƒƒãƒç®¡ç†
     HWND hLblSwHeader_, hSwHeaderEdit_, hBtnSwHeaderBrowse_, hBtnSwHeaderLoad_;
     HWND hGrpSwAuto_, hChkManageSwHeader_, hChkAddInclude_;
     HWND hLblSwHeaderName_, hEditSwHeaderName_;
@@ -262,7 +262,7 @@ private:
     HWND hBtnSwEnable_, hBtnSwDisable_, hBtnSwRemove_, hBtnSwOpen_, hBtnSwCreate_;
     SwitchHeaderInfo sw_header_info_;
 
-    // page PG_SYSTEM: ƒVƒXƒeƒ€î•ñid—l‘¶¬j
+    // page PG_SYSTEM: ã‚·ã‚¹ãƒ†ãƒ æƒ…å ±ï¼ˆä»•æ§˜æ›¸ç”Ÿæˆï¼‰
     HWND hLblSysName_, hEditSysName_;
     HWND hLblSysOverview_, hEditSysOverview_;
     HWND hLblSysPurpose_, hEditSysPurpose_;
@@ -273,7 +273,7 @@ private:
     HWND hBtnPromptChange_, hBtnPromptInspect_, hBtnPromptBoth_;
     HWND hBtnMakeChange_, hBtnMakeInspect_, hLblPasteNote_;
 
-    // page PG_BASIC: AI ˜AŒg
+    // page PG_BASIC: AI é€£æº
     HWND hGrpAi_, hLblAiProvider_, hCmbAiProvider_, hLblAiKey_, hEditAiKey_, hBtnAiTest_;
     HWND hLblAiEndpoint_, hEditAiEndpoint_;
     HWND hLblAiModel_, hEditAiModel_, hLblAiTimeout_, hEditAiTimeout_;
@@ -283,7 +283,7 @@ private:
 
     HWND hBtnSearch_, hBtnPreview_, hBtnDryRun_, hBtnExecute_, hBtnUndo_, hBtnExit_;
 
-    // page PG_SEARCH: ŒŸõğŒiŒã‘±”Åj
+    // page PG_SEARCH: æ¤œç´¢æ¡ä»¶ï¼ˆå¾Œç¶šç‰ˆï¼‰
     HWND hGrpSimilar_, hChkSimilar_, hLblSimThreshold_, hEditSimThreshold_;
     HWND hGrpLineRange_, hChkLineRange_, hLblLineFrom_, hEditLineFrom_;
     HWND hLblLineTo_, hEditLineTo_;
@@ -304,18 +304,18 @@ private:
     AppConfig cfg_;
     AppState  state_;
 
-    // ’Pˆêƒtƒ@ƒCƒ‹ƒ‚[ƒh
-    std::wstring file_text_;       // LF ³‹K‰»Ï‚İ“à•”•\Œ»
+    // å˜ä¸€ãƒ•ã‚¡ã‚¤ãƒ«ãƒ¢ãƒ¼ãƒ‰
+    std::wstring file_text_;       // LF æ­£è¦åŒ–æ¸ˆã¿å†…éƒ¨è¡¨ç¾
     FileInfo     file_info_;
     std::wstring target_path_;
 
-    // ˆêŠ‡ˆ—ƒ‚[ƒhiPhase 4j
+    // ä¸€æ‹¬å‡¦ç†ãƒ¢ãƒ¼ãƒ‰ï¼ˆPhase 4ï¼‰
     std::vector<BatchFileEntry> batch_entries_;
     std::vector<std::wstring>   batch_files_;
     BatchExecuteResult          last_batch_result_;
     std::wstring                batch_folder_;
 
-    // ‹¤’Ê
+    // å…±é€š
     std::vector<MatchResult> matches_;
     ReplaceResult last_result_;
     std::wstring  last_report_path_;

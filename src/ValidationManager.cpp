@@ -1,4 +1,4 @@
-// =============================================================================
+ï»¿// =============================================================================
 // ValidationManager.cpp
 // =============================================================================
 #include "ValidationManager.h"
@@ -55,15 +55,15 @@ ValidationResult ValidationManager::ValidateSwitchName(const std::wstring& name)
     ValidationResult r;
 
     if (name.empty()) {
-        r.AddError(L"ƒRƒ“ƒpƒCƒ‹ƒXƒCƒbƒ`–¼‚ğ“ü—Í‚µ‚Ä‚­‚¾‚³‚¢B");
+        r.AddError(L"ã‚³ãƒ³ãƒ‘ã‚¤ãƒ«ã‚¹ã‚¤ãƒƒãƒåã‚’å…¥åŠ›ã—ã¦ãã ã•ã„ã€‚");
         return r;
     }
     if (util::IsBlank(name)) {
-        r.AddError(L"ƒRƒ“ƒpƒCƒ‹ƒXƒCƒbƒ`–¼‚É‹ó”’‚Ì‚İ‚Íg—p‚Å‚«‚Ü‚¹‚ñB");
+        r.AddError(L"ã‚³ãƒ³ãƒ‘ã‚¤ãƒ«ã‚¹ã‚¤ãƒƒãƒåã«ç©ºç™½ã®ã¿ã¯ä½¿ç”¨ã§ãã¾ã›ã‚“ã€‚");
         return r;
     }
     if (util::Trim(name) != name) {
-        r.AddWarning(L"ƒRƒ“ƒpƒCƒ‹ƒXƒCƒbƒ`–¼‚Ì‘OŒã‚É‹ó”’‚ª‚ ‚è‚Ü‚·B");
+        r.AddWarning(L"ã‚³ãƒ³ãƒ‘ã‚¤ãƒ«ã‚¹ã‚¤ãƒƒãƒåã®å‰å¾Œã«ç©ºç™½ãŒã‚ã‚Šã¾ã™ã€‚");
     }
 
     wchar_t first = name[0];
@@ -71,8 +71,8 @@ ValidationResult ValidationManager::ValidateSwitchName(const std::wstring& name)
                    (first >= L'a' && first <= L'z') ||
                    first == L'_';
     if (!firstOk) {
-        r.AddError(L"ƒRƒ“ƒpƒCƒ‹ƒXƒCƒbƒ`–¼‚Ìæ“ª‚Í‰pš‚Ü‚½‚ÍƒAƒ“ƒ_[ƒXƒRƒA‚Å"
-                   L"n‚ß‚Ä‚­‚¾‚³‚¢Bi—á: MIGRATION_001j");
+        r.AddError(L"ã‚³ãƒ³ãƒ‘ã‚¤ãƒ«ã‚¹ã‚¤ãƒƒãƒåã®å…ˆé ­ã¯è‹±å­—ã¾ãŸã¯ã‚¢ãƒ³ãƒ€ãƒ¼ã‚¹ã‚³ã‚¢ã§"
+                   L"å§‹ã‚ã¦ãã ã•ã„ã€‚ï¼ˆä¾‹: MIGRATION_001ï¼‰");
         return r;
     }
 
@@ -81,16 +81,16 @@ ValidationResult ValidationManager::ValidateSwitchName(const std::wstring& name)
     if (!IsValidSymbolChars(name, bad_index, bad_char)) {
         wchar_t buf[256];
         swprintf(buf, 256,
-                 L"ƒRƒ“ƒpƒCƒ‹ƒXƒCƒbƒ`–¼‚Ég—p‚Å‚«‚È‚¢•¶š‚ªŠÜ‚Ü‚ê‚Ä‚¢‚Ü‚·"
-                 L"i%d •¶š–Ú: '%c'jB‰p”š‚ÆƒAƒ“ƒ_[ƒXƒRƒA‚Ì‚İg—p‚Å‚«‚Ü‚·B",
+                 L"ã‚³ãƒ³ãƒ‘ã‚¤ãƒ«ã‚¹ã‚¤ãƒƒãƒåã«ä½¿ç”¨ã§ããªã„æ–‡å­—ãŒå«ã¾ã‚Œã¦ã„ã¾ã™"
+                 L"ï¼ˆ%d æ–‡å­—ç›®: '%c'ï¼‰ã€‚è‹±æ•°å­—ã¨ã‚¢ãƒ³ãƒ€ãƒ¼ã‚¹ã‚³ã‚¢ã®ã¿ä½¿ç”¨ã§ãã¾ã™ã€‚",
                  bad_index + 1, bad_char);
         r.AddError(buf);
         return r;
     }
 
     if (IsReservedWord(name)) {
-        r.AddWarning(L"'" + name + L"' ‚Í C/C++ ‚Ì—\–ñŒê‚Ü‚½‚Í•W€ƒ}ƒNƒ–¼‚Æ"
-                     L"‹£‡‚·‚é‰Â”\«‚ª‚ ‚è‚Ü‚·B•Ê‚Ì–¼‘O‚ğ„§‚µ‚Ü‚·B");
+        r.AddWarning(L"'" + name + L"' ã¯ C/C++ ã®äºˆç´„èªã¾ãŸã¯æ¨™æº–ãƒã‚¯ãƒ­åã¨"
+                     L"ç«¶åˆã™ã‚‹å¯èƒ½æ€§ãŒã‚ã‚Šã¾ã™ã€‚åˆ¥ã®åå‰ã‚’æ¨å¥¨ã—ã¾ã™ã€‚");
     }
     return r;
 }
@@ -99,16 +99,16 @@ ValidationResult ValidationManager::ValidateOldCode(const std::wstring& old_code
 {
     ValidationResult r;
     if (old_code.empty()) {
-        r.AddError(L"·‚µ‘Ö‚¦‘ÎÛƒR[ƒh‚ğ“ü—Í‚µ‚Ä‚­‚¾‚³‚¢B");
+        r.AddError(L"å·®ã—æ›¿ãˆå¯¾è±¡ã‚³ãƒ¼ãƒ‰ã‚’å…¥åŠ›ã—ã¦ãã ã•ã„ã€‚");
         return r;
     }
     if (util::IsBlank(old_code)) {
-        r.AddError(L"·‚µ‘Ö‚¦‘ÎÛƒR[ƒh‚ª‹ó”’‚Ì‚İ‚Å‚·BƒR[ƒh‚ğ“ü—Í‚µ‚Ä‚­‚¾‚³‚¢B");
+        r.AddError(L"å·®ã—æ›¿ãˆå¯¾è±¡ã‚³ãƒ¼ãƒ‰ãŒç©ºç™½ã®ã¿ã§ã™ã€‚ã‚³ãƒ¼ãƒ‰ã‚’å…¥åŠ›ã—ã¦ãã ã•ã„ã€‚");
         return r;
     }
     if (!old_code.empty() && old_code[old_code.size() - 1] == L'\n') {
-        r.AddWarning(L"·‚µ‘Ö‚¦‘ÎÛƒR[ƒh‚Ì––”ö‚É‰üs‚ªŠÜ‚Ü‚ê‚Ä‚¢‚Ü‚·B"
-                     L"ŒŸõ‚Éˆê’v‚µ‚È‚¢‰Â”\«‚ª‚ ‚è‚Ü‚·B");
+        r.AddWarning(L"å·®ã—æ›¿ãˆå¯¾è±¡ã‚³ãƒ¼ãƒ‰ã®æœ«å°¾ã«æ”¹è¡ŒãŒå«ã¾ã‚Œã¦ã„ã¾ã™ã€‚"
+                     L"æ¤œç´¢æ™‚ã«ä¸€è‡´ã—ãªã„å¯èƒ½æ€§ãŒã‚ã‚Šã¾ã™ã€‚");
     }
     return r;
 }
@@ -118,25 +118,25 @@ ValidationResult ValidationManager::ValidateNewCode(const std::wstring& old_code
 {
     ValidationResult r;
     if (new_code.empty()) {
-        r.AddWarning(L"VƒR[ƒh‚ª–¢“ü—Í‚Å‚·B‘±s‚µ‚Ü‚·‚©H");
+        r.AddWarning(L"æ–°ã‚³ãƒ¼ãƒ‰ãŒæœªå…¥åŠ›ã§ã™ã€‚ç¶šè¡Œã—ã¾ã™ã‹ï¼Ÿ");
         return r;
     }
     if (util::IsBlank(new_code)) {
-        r.AddWarning(L"VƒR[ƒh‚ª‹ó”’‚Ì‚İ‚Å‚·B");
+        r.AddWarning(L"æ–°ã‚³ãƒ¼ãƒ‰ãŒç©ºç™½ã®ã¿ã§ã™ã€‚");
     }
     if (util::NormalizeNewlines(util::TrimRight(old_code)) ==
         util::NormalizeNewlines(util::TrimRight(new_code))) {
-        r.AddWarning(L"VƒR[ƒh‚ª·‚µ‘Ö‚¦‘ÎÛƒR[ƒh‚Æ“¯ˆê‚Å‚·B"
-                     L"Ø‚è‘Ö‚¦‚ÌˆÓ–¡‚ª‚È‚¢‰Â”\«‚ª‚ ‚è‚Ü‚·B");
+        r.AddWarning(L"æ–°ã‚³ãƒ¼ãƒ‰ãŒå·®ã—æ›¿ãˆå¯¾è±¡ã‚³ãƒ¼ãƒ‰ã¨åŒä¸€ã§ã™ã€‚"
+                     L"åˆ‡ã‚Šæ›¿ãˆã®æ„å‘³ãŒãªã„å¯èƒ½æ€§ãŒã‚ã‚Šã¾ã™ã€‚");
     }
     if (new_code.find(L"#ifdef") != std::wstring::npos ||
         new_code.find(L"#ifndef") != std::wstring::npos) {
-        r.AddWarning(L"VƒR[ƒh‚É #ifdef / #ifndef ‚ªŠÜ‚Ü‚ê‚Ä‚¢‚Ü‚·B"
-                     L"ƒRƒ“ƒpƒCƒ‹ƒXƒCƒbƒ`‚ª“ñd‚É‚È‚é‰Â”\«‚ª‚ ‚è‚Ü‚·B");
+        r.AddWarning(L"æ–°ã‚³ãƒ¼ãƒ‰ã« #ifdef / #ifndef ãŒå«ã¾ã‚Œã¦ã„ã¾ã™ã€‚"
+                     L"ã‚³ãƒ³ãƒ‘ã‚¤ãƒ«ã‚¹ã‚¤ãƒƒãƒãŒäºŒé‡ã«ãªã‚‹å¯èƒ½æ€§ãŒã‚ã‚Šã¾ã™ã€‚");
     }
     if (new_code.find(L"#endif") != std::wstring::npos) {
-        r.AddWarning(L"VƒR[ƒh‚É #endif ‚ªŠÜ‚Ü‚ê‚Ä‚¢‚Ü‚·B"
-                     L"ƒRƒ“ƒpƒCƒ‹ƒXƒCƒbƒ`‚ª“ñd‚É‚È‚é‰Â”\«‚ª‚ ‚è‚Ü‚·B");
+        r.AddWarning(L"æ–°ã‚³ãƒ¼ãƒ‰ã« #endif ãŒå«ã¾ã‚Œã¦ã„ã¾ã™ã€‚"
+                     L"ã‚³ãƒ³ãƒ‘ã‚¤ãƒ«ã‚¹ã‚¤ãƒƒãƒãŒäºŒé‡ã«ãªã‚‹å¯èƒ½æ€§ãŒã‚ã‚Šã¾ã™ã€‚");
     }
     return r;
 }
@@ -146,45 +146,45 @@ ValidationResult ValidationManager::ValidateTargetFile(const std::wstring& path,
 {
     ValidationResult r;
     if (path.empty()) {
-        r.AddError(L"‘ÎÛƒtƒ@ƒCƒ‹‚ğ‘I‘ğ‚µ‚Ä‚­‚¾‚³‚¢B");
+        r.AddError(L"å¯¾è±¡ãƒ•ã‚¡ã‚¤ãƒ«ã‚’é¸æŠã—ã¦ãã ã•ã„ã€‚");
         return r;
     }
     if (info.is_directory) {
-        r.AddError(L"ƒfƒBƒŒƒNƒgƒŠ‚ªw’è‚³‚ê‚Ä‚¢‚Ü‚·Bƒtƒ@ƒCƒ‹‚ğw’è‚µ‚Ä‚­‚¾‚³‚¢B");
+        r.AddError(L"ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªãŒæŒ‡å®šã•ã‚Œã¦ã„ã¾ã™ã€‚ãƒ•ã‚¡ã‚¤ãƒ«ã‚’æŒ‡å®šã—ã¦ãã ã•ã„ã€‚");
         return r;
     }
     if (!info.exists) {
-        r.AddError(L"w’è‚³‚ê‚½ƒtƒ@ƒCƒ‹‚ª‘¶İ‚µ‚Ü‚¹‚ñB");
+        r.AddError(L"æŒ‡å®šã•ã‚ŒãŸãƒ•ã‚¡ã‚¤ãƒ«ãŒå­˜åœ¨ã—ã¾ã›ã‚“ã€‚");
         return r;
     }
     if (!info.readable) {
-        r.AddError(L"ƒtƒ@ƒCƒ‹‚ğ“Ç‚İæ‚ê‚Ü‚¹‚ñB");
+        r.AddError(L"ãƒ•ã‚¡ã‚¤ãƒ«ã‚’èª­ã¿å–ã‚Œã¾ã›ã‚“ã€‚");
         return r;
     }
     if (info.locked) {
-        r.AddError(L"ƒtƒ@ƒCƒ‹‚ª‘¼‚ÌƒAƒvƒŠƒP[ƒVƒ‡ƒ“‚Åg—p’†‚Å‚·B"
-                   L"•Â‚¶‚Ä‚©‚çÄÀs‚µ‚Ä‚­‚¾‚³‚¢B");
+        r.AddError(L"ãƒ•ã‚¡ã‚¤ãƒ«ãŒä»–ã®ã‚¢ãƒ—ãƒªã‚±ãƒ¼ã‚·ãƒ§ãƒ³ã§ä½¿ç”¨ä¸­ã§ã™ã€‚"
+                   L"é–‰ã˜ã¦ã‹ã‚‰å†å®Ÿè¡Œã—ã¦ãã ã•ã„ã€‚");
         return r;
     }
     if (!info.writable) {
         if (info.read_only_attribute) {
-            r.AddWarning(L"ƒtƒ@ƒCƒ‹‚É“Ç‚İæ‚èê—p‘®«‚ªİ’è‚³‚ê‚Ä‚¢‚Ü‚·B"
-                         L"Às‚É‘®«‚ğˆê‰ğœ‚µ‚Ä‘‚«‚İ‚Ü‚·B");
+            r.AddWarning(L"ãƒ•ã‚¡ã‚¤ãƒ«ã«èª­ã¿å–ã‚Šå°‚ç”¨å±æ€§ãŒè¨­å®šã•ã‚Œã¦ã„ã¾ã™ã€‚"
+                         L"å®Ÿè¡Œæ™‚ã«å±æ€§ã‚’ä¸€æ™‚è§£é™¤ã—ã¦æ›¸ãè¾¼ã¿ã¾ã™ã€‚");
         } else {
-            r.AddWarning(L"ƒtƒ@ƒCƒ‹‚É‘‚«‚ß‚È‚¢‰Â”\«‚ª‚ ‚è‚Ü‚·B");
+            r.AddWarning(L"ãƒ•ã‚¡ã‚¤ãƒ«ã«æ›¸ãè¾¼ã‚ãªã„å¯èƒ½æ€§ãŒã‚ã‚Šã¾ã™ã€‚");
         }
     }
     if (info.size > 20ull * 1024 * 1024) {
-        r.AddWarning(L"ƒtƒ@ƒCƒ‹ƒTƒCƒY‚ª 20MB ‚ğ’´‚¦‚Ä‚¢‚Ü‚·Bˆ—‚ÉŠÔ‚ª‚©‚©‚é"
-                     L"‰Â”\«‚ª‚ ‚è‚Ü‚·B");
+        r.AddWarning(L"ãƒ•ã‚¡ã‚¤ãƒ«ã‚µã‚¤ã‚ºãŒ 20MB ã‚’è¶…ãˆã¦ã„ã¾ã™ã€‚å‡¦ç†ã«æ™‚é–“ãŒã‹ã‹ã‚‹"
+                     L"å¯èƒ½æ€§ãŒã‚ã‚Šã¾ã™ã€‚");
     }
     if (util::IsSystemDirectoryPath(path)) {
-        r.AddWarning(L"Windows ƒVƒXƒeƒ€ƒfƒBƒŒƒNƒgƒŠ”z‰º‚Ìƒtƒ@ƒCƒ‹‚Å‚·B"
-                     L"•ÏX“à—e‚ğ\•ª‚ÉŠm”F‚µ‚Ä‚­‚¾‚³‚¢B");
+        r.AddWarning(L"Windows ã‚·ã‚¹ãƒ†ãƒ ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªé…ä¸‹ã®ãƒ•ã‚¡ã‚¤ãƒ«ã§ã™ã€‚"
+                     L"å¤‰æ›´å†…å®¹ã‚’ååˆ†ã«ç¢ºèªã—ã¦ãã ã•ã„ã€‚");
     }
     if (info.encoding == TextEncoding::Unknown) {
-        r.AddWarning(L"•¶šƒR[ƒh‚ğ”»’è‚Å‚«‚Ü‚¹‚ñ‚Å‚µ‚½B"
-                     L"UTF-8 ‚Æ‚µ‚Ä“Ç‚İ‚İ‚Ü‚·B");
+        r.AddWarning(L"æ–‡å­—ã‚³ãƒ¼ãƒ‰ã‚’åˆ¤å®šã§ãã¾ã›ã‚“ã§ã—ãŸã€‚"
+                     L"UTF-8 ã¨ã—ã¦èª­ã¿è¾¼ã¿ã¾ã™ã€‚");
     }
     return r;
 }
@@ -194,7 +194,7 @@ std::wstring ValidationManager::BuildWarningSummary(const std::vector<std::wstri
     std::wstring out;
     for (size_t i = 0; i < warnings.size(); ++i) {
         if (i) out += L"\n";
-        out += L"E" + warnings[i];
+        out += L"ãƒ»" + warnings[i];
     }
     return out;
 }

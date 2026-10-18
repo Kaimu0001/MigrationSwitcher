@@ -1,6 +1,6 @@
-// =============================================================================
+ï»¿// =============================================================================
 // UndoManager.cpp
-// •¡”¢‘ã Undo ‘Î‰Bhistory_ ‚Ì––”ö‚ªÅV¢‘ãB
+// è¤‡æ•°ä¸–ä»£ Undo å¯¾å¿œã€‚history_ ã®æœ«å°¾ãŒæœ€æ–°ä¸–ä»£ã€‚
 // =============================================================================
 #include "UndoManager.h"
 #include "FileManager.h"
@@ -99,21 +99,21 @@ bool UndoManager::ValidateForUndo(std::wstring& out_error) const
     out_error.clear();
     const std::vector<UndoRecord>& t = Top();
     if (t.empty()) {
-        out_error = L"Œ³‚É–ß‚¹‚é‘€ì‚ª‚ ‚è‚Ü‚¹‚ñB";
+        out_error = L"å…ƒã«æˆ»ã›ã‚‹æ“ä½œãŒã‚ã‚Šã¾ã›ã‚“ã€‚";
         return false;
     }
     for (size_t i = 0; i < t.size(); ++i) {
         const UndoRecord& r = t[i];
         if (!r.valid) {
-            out_error = L"Œ³‚É–ß‚¹‚È‚¢‹L˜^‚ªŠÜ‚Ü‚ê‚Ä‚¢‚Ü‚·iƒoƒbƒNƒAƒbƒv‚ª–³ŒøjB";
+            out_error = L"å…ƒã«æˆ»ã›ãªã„è¨˜éŒ²ãŒå«ã¾ã‚Œã¦ã„ã¾ã™ï¼ˆãƒãƒƒã‚¯ã‚¢ãƒƒãƒ—ãŒç„¡åŠ¹ï¼‰ã€‚";
             return false;
         }
         if (!r.remove_on_undo && !util::PathExists(r.backup_file_path)) {
-            out_error = L"ƒoƒbƒNƒAƒbƒvƒtƒ@ƒCƒ‹‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñ: " + r.backup_file_path;
+            out_error = L"ãƒãƒƒã‚¯ã‚¢ãƒƒãƒ—ãƒ•ã‚¡ã‚¤ãƒ«ãŒè¦‹ã¤ã‹ã‚Šã¾ã›ã‚“: " + r.backup_file_path;
             return false;
         }
         if (!util::PathExists(r.target_file_path)) {
-            out_error = L"‘ÎÛƒtƒ@ƒCƒ‹‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñ: " + r.target_file_path;
+            out_error = L"å¯¾è±¡ãƒ•ã‚¡ã‚¤ãƒ«ãŒè¦‹ã¤ã‹ã‚Šã¾ã›ã‚“: " + r.target_file_path;
             return false;
         }
     }
@@ -125,7 +125,7 @@ std::wstring UndoManager::GenerationLabel(int index_from_top) const
     if (index_from_top < 0 || index_from_top >= (int)history_.size())
         return std::wstring();
     const std::vector<UndoRecord>& g = history_[history_.size() - 1 - (size_t)index_from_top];
-    if (g.empty()) return L"(‹ó‚Ì¢‘ã)";
+    if (g.empty()) return L"(ç©ºã®ä¸–ä»£)";
 
     std::wstring when = g[0].executed_at;
     std::wstring op = g[0].operation_id;
@@ -134,7 +134,7 @@ std::wstring UndoManager::GenerationLabel(int index_from_top) const
     std::wstring s = L"";
     if (!when.empty())   s += when + L" ";
     if (!op.empty())     s += L"[" + op + L"] ";
-    if (g.size() > 1)    s += std::to_wstring((int)g.size()) + L" ƒtƒ@ƒCƒ‹iˆêŠ‡ˆ—j";
+    if (g.size() > 1)    s += std::to_wstring((int)g.size()) + L" ãƒ•ã‚¡ã‚¤ãƒ«ï¼ˆä¸€æ‹¬å‡¦ç†ï¼‰";
     else                 s += target;
     return s;
 }
@@ -154,9 +154,9 @@ bool UndoManager::Undo(std::wstring& out_error, std::vector<std::wstring>& out_s
 
     if (!ValidateForUndo(out_error)) return false;
 
-    const std::vector<UndoRecord> gen = Top();   // ‘ÎÛ¢‘ã‚ğƒRƒs[
+    const std::vector<UndoRecord> gen = Top();   // å¯¾è±¡ä¸–ä»£ã‚’ã‚³ãƒ”ãƒ¼
 
-    // 6.10 è‡4: Œ»İƒtƒ@ƒCƒ‹‚ğ‘Ş”ği‘Sƒtƒ@ƒCƒ‹•ªj
+    // 6.10 æ‰‹é †4: ç¾åœ¨ãƒ•ã‚¡ã‚¤ãƒ«ã‚’é€€é¿ï¼ˆå…¨ãƒ•ã‚¡ã‚¤ãƒ«åˆ†ï¼‰
     std::vector<std::wstring> sidecars;
     for (size_t i = 0; i < gen.size(); ++i) {
         const UndoRecord& r = gen[i];
@@ -166,21 +166,21 @@ bool UndoManager::Undo(std::wstring& out_error, std::vector<std::wstring>& out_s
                  util::TimestampFileName() + L"_" + std::to_wstring((int)i + 1) + L".undobak");
         std::wstring err;
         if (!FileManager::CopyFileTo(r.target_file_path, sidecar, err)) {
-            out_error = L"Œ»İ‚Ìƒtƒ@ƒCƒ‹‚ğ‘Ş”ğ‚Å‚«‚Ü‚¹‚ñ‚Å‚µ‚½: " +
-                        r.target_file_path + L"i" + err + L"j";
+            out_error = L"ç¾åœ¨ã®ãƒ•ã‚¡ã‚¤ãƒ«ã‚’é€€é¿ã§ãã¾ã›ã‚“ã§ã—ãŸ: " +
+                        r.target_file_path + L"ï¼ˆ" + err + L"ï¼‰";
             return false;
         }
         sidecars.push_back(sidecar);
     }
     out_sidecars = sidecars;
 
-    // 6.10 è‡5: ƒoƒbƒNƒAƒbƒv‚ğ‘ÎÛƒtƒ@ƒCƒ‹‚ÖƒRƒs[i‘Sƒtƒ@ƒCƒ‹•ªj
+    // 6.10 æ‰‹é †5: ãƒãƒƒã‚¯ã‚¢ãƒƒãƒ—ã‚’å¯¾è±¡ãƒ•ã‚¡ã‚¤ãƒ«ã¸ã‚³ãƒ”ãƒ¼ï¼ˆå…¨ãƒ•ã‚¡ã‚¤ãƒ«åˆ†ï¼‰
     for (size_t i = 0; i < gen.size(); ++i) {
         const UndoRecord& r = gen[i];
         if (r.remove_on_undo) {
             if (util::PathExists(r.target_file_path)) {
                 if (!FileManager::RemoveFile(r.target_file_path)) {
-                    out_error = L"V‹Kì¬‚³‚ê‚½ƒtƒ@ƒCƒ‹‚ğíœ‚Å‚«‚Ü‚¹‚ñ‚Å‚µ‚½: " +
+                    out_error = L"æ–°è¦ä½œæˆã•ã‚ŒãŸãƒ•ã‚¡ã‚¤ãƒ«ã‚’å‰Šé™¤ã§ãã¾ã›ã‚“ã§ã—ãŸ: " +
                                 r.target_file_path;
                     return false;
                 }
@@ -189,13 +189,13 @@ bool UndoManager::Undo(std::wstring& out_error, std::vector<std::wstring>& out_s
         }
         std::wstring err;
         if (!FileManager::CopyFileTo(r.backup_file_path, r.target_file_path, err)) {
-            out_error = L"ƒoƒbƒNƒAƒbƒv‚©‚ç‚Ì•œŒ³‚É¸”s‚µ‚Ü‚µ‚½: " +
-                        r.target_file_path + L"i" + err + L"j";
+            out_error = L"ãƒãƒƒã‚¯ã‚¢ãƒƒãƒ—ã‹ã‚‰ã®å¾©å…ƒã«å¤±æ•—ã—ã¾ã—ãŸ: " +
+                        r.target_file_path + L"ï¼ˆ" + err + L"ï¼‰";
             return false;
         }
     }
 
-    // 6.10 è‡6: •œŒ³¬Œ÷Šm”FiƒTƒCƒYˆê’vj
+    // 6.10 æ‰‹é †6: å¾©å…ƒæˆåŠŸç¢ºèªï¼ˆã‚µã‚¤ã‚ºä¸€è‡´ï¼‰
     for (size_t i = 0; i < gen.size(); ++i) {
         const UndoRecord& r = gen[i];
         if (r.remove_on_undo) continue;
@@ -206,14 +206,14 @@ bool UndoManager::Undo(std::wstring& out_error, std::vector<std::wstring>& out_s
             us.LowPart = sa.nFileSizeLow; us.HighPart = sa.nFileSizeHigh;
             ud.LowPart = da.nFileSizeLow; ud.HighPart = da.nFileSizeHigh;
             if (us.QuadPart != ud.QuadPart) {
-                out_error = L"•œŒ³Œã‚ÌƒTƒCƒY‚ªˆê’v‚µ‚Ü‚¹‚ñBè“®‚ÅŠm”F‚µ‚Ä‚­‚¾‚³‚¢: " +
+                out_error = L"å¾©å…ƒå¾Œã®ã‚µã‚¤ã‚ºãŒä¸€è‡´ã—ã¾ã›ã‚“ã€‚æ‰‹å‹•ã§ç¢ºèªã—ã¦ãã ã•ã„: " +
                             r.target_file_path;
                 return false;
             }
         }
     }
 
-    // ’¼‹ß 1 ¢‘ã‚¾‚¯‚ğæ‚èœ‚­iˆÈ‘O‚Ì¢‘ã‚Íˆø‚«‘±‚«Œ³‚É–ß‚¹‚éj
+    // ç›´è¿‘ 1 ä¸–ä»£ã ã‘ã‚’å–ã‚Šé™¤ãï¼ˆä»¥å‰ã®ä¸–ä»£ã¯å¼•ãç¶šãå…ƒã«æˆ»ã›ã‚‹ï¼‰
     history_.pop_back();
     return true;
 }

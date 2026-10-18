@@ -1,10 +1,10 @@
-// =============================================================================
+﻿// =============================================================================
 // EucJpTable.h
-// EUC-JP �ϊ��e�[�u���iOS ��ˑ��j
-// Windows �� kernel32 �ɂ� EUC-JP �̃R�[�h�y�[�W�����݂��Ȃ��B
-// 51932 �� IsValidCodePage �� 0 ��Ԃ��AMultiByteToWideChar ��
-// ERROR_INVALID_PARAMETER (87) �Ŏ��s����i51932 �� MLang ���̃R�[�h�y�[�W�j�B
-// ���̂��� JIS X 0208 / JIS X 0212 �̑Ή��\��������AOS �Ɉˑ���������E�ϊ�����B
+// EUC-JP 変換テーブル（OS 非依存）
+// Windows の kernel32 には EUC-JP のコードページが存在しない。
+// 51932 は IsValidCodePage が 0 を返し、MultiByteToWideChar も
+// ERROR_INVALID_PARAMETER (87) で失敗する（51932 は MLang 側のコードページ）。
+// そのため JIS X 0208 / JIS X 0212 の対応表を内蔵し、OS に依存せず判定・変換する。
 // =============================================================================
 #pragma once
 
@@ -13,19 +13,19 @@
 namespace ms {
 namespace eucjp {
 
-// JIS X 0208 �� 2 �o�C�g�i0xA1A1-0xFEFE�j�� Unicode �ցB0 �͖���`�B
+// JIS X 0208 の 2 バイト（0xA1A1-0xFEFE）を Unicode へ。0 は未定義。
 unsigned short Jis0208ToUnicode(unsigned char b1, unsigned char b2);
-// JIS X 0212 �� 2 �o�C�g�iEUC-JP �ł͐擪�� 0x8F ���t���j�� Unicode �ցB0 �͖���`�B
+// JIS X 0212 の 2 バイト（EUC-JP では先頭に 0x8F が付く）を Unicode へ。0 は未定義。
 unsigned short Jis0212ToUnicode(unsigned char b1, unsigned char b2);
-// Unicode �� EUC-JP �̃o�C�g��i2 �܂��� 3 �o�C�g�j�֒ǉ�����B�ϊ��s�Ȃ� false�B
+// Unicode を EUC-JP のバイト列（2 または 3 バイト）へ追加する。変換不可なら false。
 bool UnicodeToEucJp(unsigned short u, std::string& out);
-// ���p�J�^�J�i�iU+FF61-U+FF9F�j�� EUC-JP �� 2 �o�C�g�i0x8E, 0xA1-0xDF�j�֒ǉ�����B
+// 半角カタカナ（U+FF61-U+FF9F）を EUC-JP の 2 バイト（0x8E, 0xA1-0xDF）へ追加する。
 bool HalfwidthKatakanaToEucJp(unsigned short u, std::string& out);
-// �\���I�ɑÓ��� EUC-JP �o�C�g�񂩁iASCII / ���p�J�^�J�i / JIS X 0208 / JIS X 0212�j
+// 構造的に妥当な EUC-JP バイト列か（ASCII / 半角カタカナ / JIS X 0208 / JIS X 0212）
 bool IsValidBytes(const std::string& bytes);
-// EUC-JP �o�C�g��� UTF-16 �ցB�s���ȃo�C�g�� U+FFFD �ɂ���B
+// EUC-JP バイト列を UTF-16 へ。不正なバイトは U+FFFD にする。
 std::wstring Decode(const std::string& bytes);
-// UTF-16 �� EUC-JP �o�C�g��ցB�ϊ��ł��Ȃ������������ false�iout �͋�ɂȂ�j�B
+// UTF-16 を EUC-JP バイト列へ。変換できない文字があると false（out は空になる）。
 bool Encode(const std::wstring& text, std::string& out);
 
 } // namespace eucjp

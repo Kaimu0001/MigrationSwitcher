@@ -1,8 +1,8 @@
-// =============================================================================
+ï»¿// =============================================================================
 // UndoManager.h
-// İŒv‘ 6.10uUndo‹@”\v/ 8.5 Undo—š—ğ / 7.2.9 UndoManager
-// 1 ‘€ì = 1 ¢‘ã‚Æ‚µ‚Ä—š—ğ‚ÉÏ‚İA•¡”¢‘ã‚³‚©‚Ì‚Ú‚Á‚ÄŒ³‚É–ß‚¹‚éB
-// ’Pˆêƒtƒ@ƒCƒ‹‘€ì‚àˆêŠ‡ˆ—‚à“¯‚¶ˆµ‚¢iˆêŠ‡‚Í 1 ¢‘ã‚É•¡”ƒtƒ@ƒCƒ‹jB
+// è¨­è¨ˆæ›¸ 6.10ã€ŒUndoæ©Ÿèƒ½ã€/ 8.5 Undoå±¥æ­´ / 7.2.9 UndoManager
+// 1 æ“ä½œ = 1 ä¸–ä»£ã¨ã—ã¦å±¥æ­´ã«ç©ã¿ã€è¤‡æ•°ä¸–ä»£ã•ã‹ã®ã¼ã£ã¦å…ƒã«æˆ»ã›ã‚‹ã€‚
+// å˜ä¸€ãƒ•ã‚¡ã‚¤ãƒ«æ“ä½œã‚‚ä¸€æ‹¬å‡¦ç†ã‚‚åŒã˜æ‰±ã„ï¼ˆä¸€æ‹¬ã¯ 1 ä¸–ä»£ã«è¤‡æ•°ãƒ•ã‚¡ã‚¤ãƒ«ï¼‰ã€‚
 // =============================================================================
 #pragma once
 
@@ -17,37 +17,37 @@ class UndoManager {
 public:
     UndoManager();
 
-    // ’Pˆêƒtƒ@ƒCƒ‹‘€ì‚Ì‹L˜^i1 ¢‘ã‚Æ‚µ‚ÄÏ‚Şj
+    // å˜ä¸€ãƒ•ã‚¡ã‚¤ãƒ«æ“ä½œã®è¨˜éŒ²ï¼ˆ1 ä¸–ä»£ã¨ã—ã¦ç©ã‚€ï¼‰
     void SetRecord(const UndoRecord& record);
-    // ˆêŠ‡‘€ì‚Ì‹L˜^i1 ‘€ì = •¡”ƒtƒ@ƒCƒ‹‚ğ 1 ¢‘ã‚Æ‚µ‚ÄÏ‚Şj
+    // ä¸€æ‹¬æ“ä½œã®è¨˜éŒ²ï¼ˆ1 æ“ä½œ = è¤‡æ•°ãƒ•ã‚¡ã‚¤ãƒ«ã‚’ 1 ä¸–ä»£ã¨ã—ã¦ç©ã‚€ï¼‰
     void SetRecords(const std::vector<UndoRecord>& records);
 
     void Clear();
     bool CanUndo() const;
 
-    // ’¼‹ß¢‘ã‚Ì‘ã•\ƒŒƒR[ƒhi‘¶İ‚µ‚È‚¢ê‡‚Í valid == falsej
+    // ç›´è¿‘ä¸–ä»£ã®ä»£è¡¨ãƒ¬ã‚³ãƒ¼ãƒ‰ï¼ˆå­˜åœ¨ã—ãªã„å ´åˆã¯ valid == falseï¼‰
     const UndoRecord& Record() const;
     const std::vector<UndoRecord>& Records() const;
 
     int FileCount() const;
 
-    // ƒoƒbƒNƒAƒbƒv‚©‚ç‘ÎÛƒtƒ@ƒCƒ‹‚Ö•œŒ³‚·‚éi’¼‹ß 1 ¢‘ã‚ğ–ß‚·j
-    // out_sidecars: •œŒ³‘O‚É‘Ş”ğ‚µ‚½Œ»İ“à—e‚ÌƒpƒXˆê——
+    // ãƒãƒƒã‚¯ã‚¢ãƒƒãƒ—ã‹ã‚‰å¯¾è±¡ãƒ•ã‚¡ã‚¤ãƒ«ã¸å¾©å…ƒã™ã‚‹ï¼ˆç›´è¿‘ 1 ä¸–ä»£ã‚’æˆ»ã™ï¼‰
+    // out_sidecars: å¾©å…ƒå‰ã«é€€é¿ã—ãŸç¾åœ¨å†…å®¹ã®ãƒ‘ã‚¹ä¸€è¦§
     bool Undo(std::wstring& out_error, std::vector<std::wstring>& out_sidecars);
 
-    // ‘ÎÛƒtƒ@ƒCƒ‹‚ªŒ»İ‚à‘¶İ‚µA•ÏX‰Â”\‚©‚ğŠm”F‚·‚é
+    // å¯¾è±¡ãƒ•ã‚¡ã‚¤ãƒ«ãŒç¾åœ¨ã‚‚å­˜åœ¨ã—ã€å¤‰æ›´å¯èƒ½ã‹ã‚’ç¢ºèªã™ã‚‹
     bool ValidateForUndo(std::wstring& out_error) const;
 
-    // ---- •¡”¢‘ã Undo ----
+    // ---- è¤‡æ•°ä¸–ä»£ Undo ----
     void SetMaxGenerations(int n);
     int  MaxGenerations() const { return max_generations_; }
     int  HistorySize() const { return (int)history_.size(); }
-    // V‚µ‚¢‡‚É 0 ‚ªÅV¢‘ã
+    // æ–°ã—ã„é †ã« 0 ãŒæœ€æ–°ä¸–ä»£
     std::wstring GenerationLabel(int index_from_top) const;
     std::vector<std::wstring> HistoryLabels() const;
 
 private:
-    std::vector<std::vector<UndoRecord> > history_;   // ––”ö‚ªÅV¢‘ã
+    std::vector<std::vector<UndoRecord> > history_;   // æœ«å°¾ãŒæœ€æ–°ä¸–ä»£
     int max_generations_;
 
     const std::vector<UndoRecord>& Top() const;

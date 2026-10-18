@@ -1,12 +1,12 @@
 @echo off
 rem ===========================================================================
-rem  Migration Switcher - Visual Studio 2022 ƒrƒ‹ƒh
+rem  Migration Switcher - Visual Studio 2022 ãƒ“ãƒ«ãƒ‰
 rem
-rem    build_msvc.bat            ƒrƒ‹ƒhiRelease / x64j
-rem    build_msvc.bat clean      ¶¬•¨‚ðíœ
+rem    build_msvc.bat            ãƒ“ãƒ«ãƒ‰ï¼ˆRelease / x64ï¼‰
+rem    build_msvc.bat clean      ç”Ÿæˆç‰©ã‚’å‰Šé™¤
 rem
-rem  CMake ‚ª‚ ‚ê‚Î CMakeiVisual Studio 17 2022 ƒWƒFƒlƒŒ[ƒ^j‚ÅA
-rem  –³‚¯‚ê‚Î vcvars64 + cl.exe ‚Å’¼Úƒrƒ‹ƒh‚µ‚Ü‚·B
+rem  CMake ãŒã‚ã‚Œã° CMakeï¼ˆVisual Studio 17 2022 ã‚¸ã‚§ãƒãƒ¬ãƒ¼ã‚¿ï¼‰ã§ã€
+rem  ç„¡ã‘ã‚Œã° vcvars64 + cl.exe ã§ç›´æŽ¥ãƒ“ãƒ«ãƒ‰ã—ã¾ã™ã€‚
 rem ===========================================================================
 setlocal enabledelayedexpansion
 chcp 932 >nul
@@ -17,13 +17,13 @@ set "BUILD=%ROOT%\build\msvc"
 set "EXE=%BUILD%\Release\MigrationSwitcher.exe"
 
 echo ============================================================
-echo  Migration Switcher - Visual Studio 2022 ƒrƒ‹ƒh (x64 / Release)
+echo  Migration Switcher - Visual Studio 2022 ãƒ“ãƒ«ãƒ‰ (x64 / Release)
 echo ============================================================
-echo  ƒ‹[ƒg: %ROOT%
+echo  ãƒ«ãƒ¼ãƒˆ: %ROOT%
 
 if /i "%~1"=="clean" goto :clean
 
-rem ---- 1) Visual Studio ‚ÌŒŸo ------------------------------------------------
+rem ---- 1) Visual Studio ã®æ¤œå‡º ------------------------------------------------
 set "VSPATH="
 set "VSWHERE=%ProgramFiles(x86)%\Microsoft Visual Studio\Installer\vswhere.exe"
 if not exist "%VSWHERE%" set "VSWHERE=%ProgramFiles%\Microsoft Visual Studio\Installer\vswhere.exe"
@@ -32,26 +32,26 @@ if not defined VSPATH if defined VCINSTALLDIR set "VSPATH=%VCINSTALLDIR%.."
 if not defined VSPATH goto :novs
 echo  VS: %VSPATH%
 
-rem ---- 2) ƒrƒ‹ƒhŠÂ‹«‚Ì“Ç‚Ýž‚Ý ------------------------------------------------
+rem ---- 2) ãƒ“ãƒ«ãƒ‰ç’°å¢ƒã®èª­ã¿è¾¼ã¿ ------------------------------------------------
 if exist "%VSPATH%\VC\Auxiliary\Build\vcvars64.bat" call "%VSPATH%\VC\Auxiliary\Build\vcvars64.bat" >nul
 if not defined VCToolsInstallDir goto :nocl
 
-rem ---- 3) CMake ‚ª‚ ‚ê‚Î CMake ‚Åƒrƒ‹ƒh --------------------------------------
+rem ---- 3) CMake ãŒã‚ã‚Œã° CMake ã§ãƒ“ãƒ«ãƒ‰ --------------------------------------
 cmake --version >nul 2>nul
 if errorlevel 1 goto :direct
 
-echo  --- CMake ‚Å\¬‚µ‚Ä‚¢‚Ü‚· ---
+echo  --- CMake ã§æ§‹æˆã—ã¦ã„ã¾ã™ ---
 cmake -S "%ROOT%" -B "%BUILD%" -G "Visual Studio 17 2022" -A x64
 if errorlevel 1 goto :cfgfail
 
-echo  --- ƒrƒ‹ƒh‚µ‚Ä‚¢‚Ü‚· ---
+echo  --- ãƒ“ãƒ«ãƒ‰ã—ã¦ã„ã¾ã™ ---
 cmake --build "%BUILD%" --config Release
 if errorlevel 1 goto :buildfail
 goto :done
 
-rem ---- 4) CMake ‚ª–³‚¢ê‡‚Í cl.exe ‚Å’¼Úƒrƒ‹ƒh ------------------------------
+rem ---- 4) CMake ãŒç„¡ã„å ´åˆã¯ cl.exe ã§ç›´æŽ¥ãƒ“ãƒ«ãƒ‰ ------------------------------
 :direct
-echo  --- CMake ‚ªŒ©‚Â‚©‚ç‚È‚¢‚½‚ß cl.exe ‚Å’¼Úƒrƒ‹ƒh‚µ‚Ü‚· ---
+echo  --- CMake ãŒè¦‹ã¤ã‹ã‚‰ãªã„ãŸã‚ cl.exe ã§ç›´æŽ¥ãƒ“ãƒ«ãƒ‰ã—ã¾ã™ ---
 set "OBJ=%BUILD%\obj"
 if not exist "%OBJ%" mkdir "%OBJ%" >nul 2>nul
 pushd "%OBJ%"
@@ -67,54 +67,54 @@ if not exist "%BUILD%\Release" mkdir "%BUILD%\Release" >nul 2>nul
 link /nologo /OUT:"%EXE%" /SUBSYSTEM:WINDOWS /MANIFEST:NO "%OBJ%\*.obj" "%OBJ%\app.res" comctl32.lib comdlg32.lib shlwapi.lib ole32.lib shell32.lib gdi32.lib user32.lib advapi32.lib winhttp.lib
 if errorlevel 1 goto :buildfail
 
-rem ---- 5) Š®—¹ ----------------------------------------------------------------
+rem ---- 5) å®Œäº† ----------------------------------------------------------------
 :done
 if not exist "%EXE%" goto :noexe
 echo.
 echo ============================================================
-echo  ƒrƒ‹ƒh¬Œ÷
+echo  ãƒ“ãƒ«ãƒ‰æˆåŠŸ
 echo ============================================================
-for %%f in ("%EXE%") do echo  o—Í: %%f  (%%~zf ƒoƒCƒg)
+for %%f in ("%EXE%") do echo  å‡ºåŠ›: %%f  (%%~zf ãƒã‚¤ãƒˆ)
 echo.
-echo  ŽÀs‚·‚é‚É‚Í:  run.bat
-echo  ƒeƒXƒg‚·‚é‚É‚Í: build.bat test
+echo  å®Ÿè¡Œã™ã‚‹ã«ã¯:  run.bat
+echo  ãƒ†ã‚¹ãƒˆã™ã‚‹ã«ã¯: build.bat test
 exit /b 0
 
 :clean
-echo  ¶¬•¨‚ðíœ‚µ‚Ä‚¢‚Ü‚·: %BUILD%
+echo  ç”Ÿæˆç‰©ã‚’å‰Šé™¤ã—ã¦ã„ã¾ã™: %BUILD%
 if exist "%BUILD%" rmdir /s /q "%BUILD%"
-echo  Š®—¹‚µ‚Ü‚µ‚½B
+echo  å®Œäº†ã—ã¾ã—ãŸã€‚
 exit /b 0
 
 :novs
 echo.
-echo [ERROR] Visual Studio 2022 ‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñB
-echo         Visual Studio Installer ‚ÅuC++ ‚É‚æ‚éƒfƒXƒNƒgƒbƒvŠJ”­v‚ð
-echo         ƒCƒ“ƒXƒg[ƒ‹‚µ‚Ä‚­‚¾‚³‚¢B
-echo         ‚Ü‚½‚Í MinGW-w64 ‚ðŽg‚¤ê‡‚Í  build.bat mingw  ‚ðŽÀs‚µ‚Ä‚­‚¾‚³‚¢B
+echo [ERROR] Visual Studio 2022 ãŒè¦‹ã¤ã‹ã‚Šã¾ã›ã‚“ã€‚
+echo         Visual Studio Installer ã§ã€ŒC++ ã«ã‚ˆã‚‹ãƒ‡ã‚¹ã‚¯ãƒˆãƒƒãƒ—é–‹ç™ºã€ã‚’
+echo         ã‚¤ãƒ³ã‚¹ãƒˆãƒ¼ãƒ«ã—ã¦ãã ã•ã„ã€‚
+echo         ã¾ãŸã¯ MinGW-w64 ã‚’ä½¿ã†å ´åˆã¯  build.bat mingw  ã‚’å®Ÿè¡Œã—ã¦ãã ã•ã„ã€‚
 exit /b 1
 
 :nocl
 echo.
-echo [ERROR] cl.exe ‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñB
-echo         vcvars64.bat ‚Ì“Ç‚Ýž‚Ý‚ÉŽ¸”s‚µ‚½‰Â”\«‚ª‚ ‚è‚Ü‚·B
+echo [ERROR] cl.exe ãŒè¦‹ã¤ã‹ã‚Šã¾ã›ã‚“ã€‚
+echo         vcvars64.bat ã®èª­ã¿è¾¼ã¿ã«å¤±æ•—ã—ãŸå¯èƒ½æ€§ãŒã‚ã‚Šã¾ã™ã€‚
 echo         VS: %VSPATH%
 exit /b 1
 
 :cfgfail
 echo.
-echo [ERROR] CMake ‚Ì\¬‚ÉŽ¸”s‚µ‚Ü‚µ‚½B
-echo         ƒƒO: %BUILD%\CMakeFiles\CMakeError.log
+echo [ERROR] CMake ã®æ§‹æˆã«å¤±æ•—ã—ã¾ã—ãŸã€‚
+echo         ãƒ­ã‚°: %BUILD%\CMakeFiles\CMakeError.log
 exit /b 1
 
 :buildfail
 echo.
-echo [ERROR] ƒrƒ‹ƒh‚ÉŽ¸”s‚µ‚Ü‚µ‚½B
-echo         ã‚ÌƒRƒ“ƒpƒCƒ‰ ƒGƒ‰[‚ðŠm”F‚µ‚Ä‚­‚¾‚³‚¢B
+echo [ERROR] ãƒ“ãƒ«ãƒ‰ã«å¤±æ•—ã—ã¾ã—ãŸã€‚
+echo         ä¸Šã®ã‚³ãƒ³ãƒ‘ã‚¤ãƒ© ã‚¨ãƒ©ãƒ¼ã‚’ç¢ºèªã—ã¦ãã ã•ã„ã€‚
 exit /b 1
 
 :noexe
 echo.
-echo [ERROR] ƒrƒ‹ƒh‚ÍŠ®—¹‚µ‚Ü‚µ‚½‚ªŽÀsƒtƒ@ƒCƒ‹‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñB
-echo         Šú‘Ò‚µ‚½êŠ: %EXE%
+echo [ERROR] ãƒ“ãƒ«ãƒ‰ã¯å®Œäº†ã—ã¾ã—ãŸãŒå®Ÿè¡Œãƒ•ã‚¡ã‚¤ãƒ«ãŒè¦‹ã¤ã‹ã‚Šã¾ã›ã‚“ã€‚
+echo         æœŸå¾…ã—ãŸå ´æ‰€: %EXE%
 exit /b 1

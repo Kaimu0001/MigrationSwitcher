@@ -1,7 +1,7 @@
-// =============================================================================
+ï»¿// =============================================================================
 // DiffEngine.h
-// İŒv‘ 12Íu·•ª¶¬İŒvv‚Ìs·•ªƒAƒ‹ƒSƒŠƒYƒ€‚Æ•\¦•”•i
-// DiffReportGenerator ‚©‚çØ‚èo‚µA’Pˆê^“‡ƒŒƒ|[ƒg‚Å‹¤—p‚·‚é
+// è¨­è¨ˆæ›¸ 12ç« ã€Œå·®åˆ†ç”Ÿæˆè¨­è¨ˆã€ã®è¡Œå·®åˆ†ã‚¢ãƒ«ã‚´ãƒªã‚ºãƒ ã¨è¡¨ç¤ºéƒ¨å“
+// DiffReportGenerator ã‹ã‚‰åˆ‡ã‚Šå‡ºã—ã€å˜ä¸€ï¼çµ±åˆãƒ¬ãƒãƒ¼ãƒˆã§å…±ç”¨ã™ã‚‹
 // =============================================================================
 #pragma once
 
@@ -10,7 +10,7 @@
 
 namespace ms {
 
-// 12.3 HTML ƒŒƒ|[ƒg CSS •ûj‚É‘Î‰‚·‚ésí•Ê
+// 12.3 HTML ãƒ¬ãƒãƒ¼ãƒˆ CSS æ–¹é‡ã«å¯¾å¿œã™ã‚‹è¡Œç¨®åˆ¥
 enum DiffLineType {
     DIFF_NORMAL = 0,
     DIFF_ADDED,
@@ -26,18 +26,18 @@ struct DiffLine {
 
 class DiffEngine {
 public:
-    // 12.2 s’PˆÊ‚Ì·•ªiLCSjB‹K–Í‚ª‘å‚«‚¢ê‡‚ÍƒuƒƒbƒN·•ª‚ÖƒtƒH[ƒ‹ƒoƒbƒN‚·‚é
+    // 12.2 è¡Œå˜ä½ã®å·®åˆ†ï¼ˆLCSï¼‰ã€‚è¦æ¨¡ãŒå¤§ãã„å ´åˆã¯ãƒ–ãƒ­ãƒƒã‚¯å·®åˆ†ã¸ãƒ•ã‚©ãƒ¼ãƒ«ãƒãƒƒã‚¯ã™ã‚‹
     static void ComputeLineDiff(const std::vector<std::wstring>& before,
                                 const std::vector<std::wstring>& after,
                                 std::vector<DiffLine>& out);
 
-    // 12.3 F•ª‚¯iadded / deleted / changed / normalj
+    // 12.3 è‰²åˆ†ã‘ï¼ˆadded / deleted / changed / normalï¼‰
     static const wchar_t* ClassName(DiffLineType t);
 
-    // ·•ª•\i<table class="diff"> ‚Ì“à•”j‚ğ HTML ’f•Ğ‚Æ‚µ‚Ä¶¬‚·‚é
+    // å·®åˆ†è¡¨ï¼ˆ<table class="diff"> ã®å†…éƒ¨ï¼‰ã‚’ HTML æ–­ç‰‡ã¨ã—ã¦ç”Ÿæˆã™ã‚‹
     static std::wstring RenderRows(const std::vector<DiffLine>& diff);
 
-    // ‘ÎÛ‰ÓŠ‚Ì‘OŒã context s‚ğØ‚èo‚·is”Ô†‚Í 1 ‹N“_‚Å•Ô‚·j
+    // å¯¾è±¡ç®‡æ‰€ã®å‰å¾Œ context è¡Œã‚’åˆ‡ã‚Šå‡ºã™ï¼ˆè¡Œç•ªå·ã¯ 1 èµ·ç‚¹ã§è¿”ã™ï¼‰
     static void MakeExcerpt(const std::vector<std::wstring>& before,
                             const std::vector<std::wstring>& after,
                             int first_line, int last_line, int context,
@@ -45,7 +45,7 @@ public:
                             std::vector<std::wstring>& out_after,
                             int& out_before_from, int& out_after_from);
 
-    // s”Ô†•t‚« <pre> ‚Ì’†g
+    // è¡Œç•ªå·ä»˜ã <pre> ã®ä¸­èº«
     static std::wstring PreWithLineNumbers(const std::vector<std::wstring>& lines,
                                            int first_line);
 };

@@ -1,4 +1,4 @@
-// =============================================================================
+ï»¿// =============================================================================
 // BackupManager.cpp
 // =============================================================================
 #include "BackupManager.h"
@@ -25,7 +25,7 @@ bool BackupManager::CreateBackup(const std::wstring& target_file,
     out_error.clear();
 
     if (target_file.empty() || !util::PathExists(target_file)) {
-        out_error = L"ƒoƒbƒNƒAƒbƒv‘ÎÛ‚Ìƒtƒ@ƒCƒ‹‚ª‘¶İ‚µ‚Ü‚¹‚ñB";
+        out_error = L"ãƒãƒƒã‚¯ã‚¢ãƒƒãƒ—å¯¾è±¡ã®ãƒ•ã‚¡ã‚¤ãƒ«ãŒå­˜åœ¨ã—ã¾ã›ã‚“ã€‚";
         return false;
     }
 
@@ -35,7 +35,7 @@ bool BackupManager::CreateBackup(const std::wstring& target_file,
     if (dir.empty()) dir = util::ModuleDirectory();
 
     if (!util::EnsureDirectory(dir)) {
-        out_error = L"ƒoƒbƒNƒAƒbƒvæƒtƒHƒ‹ƒ_‚ğì¬‚Å‚«‚Ü‚¹‚ñ: " + dir;
+        out_error = L"ãƒãƒƒã‚¯ã‚¢ãƒƒãƒ—å…ˆãƒ•ã‚©ãƒ«ãƒ€ã‚’ä½œæˆã§ãã¾ã›ã‚“: " + dir;
         return false;
     }
 
@@ -50,11 +50,11 @@ bool BackupManager::CreateBackup(const std::wstring& target_file,
 
     std::wstring err;
     if (!FileManager::CopyFileTo(target_file, path, err)) {
-        out_error = L"ƒoƒbƒNƒAƒbƒv‚Ìì¬‚É¸”s‚µ‚Ü‚µ‚½: " + err;
+        out_error = L"ãƒãƒƒã‚¯ã‚¢ãƒƒãƒ—ã®ä½œæˆã«å¤±æ•—ã—ã¾ã—ãŸ: " + err;
         return false;
     }
 
-    // ƒRƒs[Œã‚ÌƒTƒCƒYŒŸØ
+    // ã‚³ãƒ”ãƒ¼å¾Œã®ã‚µã‚¤ã‚ºæ¤œè¨¼
     WIN32_FILE_ATTRIBUTE_DATA sa, da;
     if (::GetFileAttributesExW(target_file.c_str(), GetFileExInfoStandard, &sa) &&
         ::GetFileAttributesExW(path.c_str(), GetFileExInfoStandard, &da)) {
@@ -63,7 +63,7 @@ bool BackupManager::CreateBackup(const std::wstring& target_file,
         ud.LowPart = da.nFileSizeLow;  ud.HighPart = da.nFileSizeHigh;
         if (us.QuadPart != ud.QuadPart) {
             ::DeleteFileW(path.c_str());
-            out_error = L"ƒoƒbƒNƒAƒbƒv‚ÌƒTƒCƒY‚ªˆê’v‚µ‚Ü‚¹‚ñBÀs‚ğ’†’f‚µ‚Ü‚·B";
+            out_error = L"ãƒãƒƒã‚¯ã‚¢ãƒƒãƒ—ã®ã‚µã‚¤ã‚ºãŒä¸€è‡´ã—ã¾ã›ã‚“ã€‚å®Ÿè¡Œã‚’ä¸­æ–­ã—ã¾ã™ã€‚";
             return false;
         }
     }
@@ -81,18 +81,18 @@ bool BackupManager::CanCreateBackup(const std::wstring& target_file,
         ? util::GetDirectoryOf(target_file)
         : util::MakeAbsolute(backup_dir);
     if (dir.empty()) {
-        out_error = L"ƒoƒbƒNƒAƒbƒvæ‚ª“Á’è‚Å‚«‚Ü‚¹‚ñB";
+        out_error = L"ãƒãƒƒã‚¯ã‚¢ãƒƒãƒ—å…ˆãŒç‰¹å®šã§ãã¾ã›ã‚“ã€‚";
         return false;
     }
     if (!util::EnsureDirectory(dir)) {
-        out_error = L"ƒoƒbƒNƒAƒbƒvæƒtƒHƒ‹ƒ_‚ğì¬‚Å‚«‚Ü‚¹‚ñ: " + dir;
+        out_error = L"ãƒãƒƒã‚¯ã‚¢ãƒƒãƒ—å…ˆãƒ•ã‚©ãƒ«ãƒ€ã‚’ä½œæˆã§ãã¾ã›ã‚“: " + dir;
         return false;
     }
     std::wstring probe = util::JoinPath(dir, L"__ms_backup_probe.tmp");
     HANDLE h = ::CreateFileW(probe.c_str(), GENERIC_WRITE, 0, nullptr,
                              CREATE_ALWAYS, FILE_ATTRIBUTE_TEMPORARY, nullptr);
     if (h == INVALID_HANDLE_VALUE) {
-        out_error = L"ƒoƒbƒNƒAƒbƒvæ‚É‘‚«‚ß‚Ü‚¹‚ñ: " + dir;
+        out_error = L"ãƒãƒƒã‚¯ã‚¢ãƒƒãƒ—å…ˆã«æ›¸ãè¾¼ã‚ã¾ã›ã‚“: " + dir;
         return false;
     }
     ::CloseHandle(h);

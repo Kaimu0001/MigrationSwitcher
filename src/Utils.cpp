@@ -1,4 +1,4 @@
-// =============================================================================
+ï»¿// =============================================================================
 // Utils.cpp
 // =============================================================================
 #include "Utils.h"
@@ -14,7 +14,7 @@ namespace ms {
 namespace util {
 
 // -----------------------------------------------------------------------------
-// •¶šƒR[ƒh•ÏŠ·
+// æ–‡å­—ã‚³ãƒ¼ãƒ‰å¤‰æ›
 // -----------------------------------------------------------------------------
 std::wstring MultiByteToWide(const std::string& s, unsigned int code_page)
 {
@@ -42,7 +42,7 @@ std::string WideToUtf8(const std::wstring& s)
 }
 
 // -----------------------------------------------------------------------------
-// “ú
+// æ—¥æ™‚
 // -----------------------------------------------------------------------------
 std::wstring NowDateTimeMillis()
 {
@@ -106,7 +106,7 @@ std::wstring NewOperationId()
 }
 
 // -----------------------------------------------------------------------------
-// •¶š—ñ
+// æ–‡å­—åˆ—
 // -----------------------------------------------------------------------------
 static bool IsSpaceW(wchar_t c)
 {
@@ -188,7 +188,7 @@ int CountLines(const std::wstring& s)
     int n = 1;
     for (size_t i = 0; i < s.size(); ++i)
         if (s[i] == L'\n') ++n;
-    // ––”ö‚ª‰üs‚ÅI‚í‚éê‡‚Íusv‚Æ‚µ‚Ä”‚¦‚È‚¢i•\¦ã‚ÌÅIsj
+    // æœ«å°¾ãŒæ”¹è¡Œã§çµ‚ã‚ã‚‹å ´åˆã¯ã€Œè¡Œã€ã¨ã—ã¦æ•°ãˆãªã„ï¼ˆè¡¨ç¤ºä¸Šã®æœ€çµ‚è¡Œï¼‰
     if (!s.empty() && s[s.size() - 1] == L'\n') --n;
     return n < 0 ? 0 : n;
 }
@@ -202,7 +202,7 @@ std::vector<std::wstring> SplitLines(const std::wstring& s)
         else cur += s[i];
     }
     out.push_back(cur);
-    // ––”ö‰üs‚Å¶‚¶‚½‹ó—v‘f‚Íu‹ósv‚Æ‚µ‚Ä•Û‚·‚éis”Ô†‘Î‰‚ğ•ö‚³‚È‚¢j
+    // æœ«å°¾æ”¹è¡Œã§ç”Ÿã˜ãŸç©ºè¦ç´ ã¯ã€Œç©ºè¡Œã€ã¨ã—ã¦ä¿æŒã™ã‚‹ï¼ˆè¡Œç•ªå·å¯¾å¿œã‚’å´©ã•ãªã„ï¼‰
     return out;
 }
 
@@ -217,7 +217,7 @@ std::wstring JoinLines(const std::vector<std::wstring>& lines, const std::wstrin
 }
 
 // -----------------------------------------------------------------------------
-// ‰üs
+// æ”¹è¡Œ
 // -----------------------------------------------------------------------------
 std::wstring NormalizeNewlines(const std::wstring& s)
 {
@@ -273,7 +273,7 @@ std::wstring DenormalizeNewlines(const std::wstring& s, const std::wstring& nl)
 }
 
 // -----------------------------------------------------------------------------
-// ˆÊ’uŒvZi1 ‹N“_j
+// ä½ç½®è¨ˆç®—ï¼ˆ1 èµ·ç‚¹ï¼‰
 // -----------------------------------------------------------------------------
 void OffsetToLineCol(const std::wstring& text, size_t offset, int& line, int& col)
 {
@@ -320,7 +320,7 @@ std::wstring LeadingIndentText(const std::wstring& line)
 }
 
 // -----------------------------------------------------------------------------
-// ƒpƒX
+// ãƒ‘ã‚¹
 // -----------------------------------------------------------------------------
 std::wstring GetDirectoryOf(const std::wstring& path)
 {
@@ -393,7 +393,7 @@ bool EnsureDirectory(const std::wstring& dir)
 {
     if (dir.empty()) return false;
     if (PathExists(dir)) return true;
-    // e‚©‚ç‡‚Éì¬‚·‚é
+    // è¦ªã‹ã‚‰é †ã«ä½œæˆã™ã‚‹
     std::wstring parent = GetDirectoryOf(dir);
     if (!parent.empty() && !PathExists(parent)) EnsureDirectory(parent);
     return ::CreateDirectoryW(dir.c_str(), nullptr) != 0;

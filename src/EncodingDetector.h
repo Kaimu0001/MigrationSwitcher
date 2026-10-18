@@ -1,7 +1,7 @@
-// =============================================================================
+ï»¿// =============================================================================
 // EncodingDetector.h
-// İŒv‘ 3.4u•¶šƒR[ƒh‘Î‰v/ 7.2.3 EncodingDetector
-// ‘Î‰: UTF-8 / UTF-8 BOM •t‚« / Shift_JIS iUTF-16LE ‚Í BOM •t‚«‚Ì‚İ“Ç‘Î‰j
+// è¨­è¨ˆæ›¸ 3.4ã€Œæ–‡å­—ã‚³ãƒ¼ãƒ‰å¯¾å¿œã€/ 7.2.3 EncodingDetector
+// å¯¾å¿œ: UTF-8 / UTF-8 BOM ä»˜ã / Shift_JIS ï¼ˆUTF-16LE ã¯ BOM ä»˜ãã®ã¿èª­è¾¼å¯¾å¿œï¼‰
 // =============================================================================
 #pragma once
 
@@ -13,18 +13,18 @@ namespace ms {
 
 class EncodingDetector {
 public:
-    // BOM ”»’è + ƒqƒ…[ƒŠƒXƒeƒBƒbƒN”»’è
-    // raw_bytes ‚ğ‰ğÍ‚µ‚Ä encoding ‚ğ•Ô‚·iBOM ’·‚Í bom_length ‚ÉŠi”[j
+    // BOM åˆ¤å®š + ãƒ’ãƒ¥ãƒ¼ãƒªã‚¹ãƒ†ã‚£ãƒƒã‚¯åˆ¤å®š
+    // raw_bytes ã‚’è§£æã—ã¦ encoding ã‚’è¿”ã™ï¼ˆBOM é•·ã¯ bom_length ã«æ ¼ç´ï¼‰
     static TextEncoding Detect(const std::string& raw_bytes, size_t& bom_length);
 
-    // ¶ƒoƒCƒg—ñ‚ğ“à•”•\Œ»iUTF-16 / std::wstringj‚Ö•ÏŠ·‚·‚é
+    // ç”Ÿãƒã‚¤ãƒˆåˆ—ã‚’å†…éƒ¨è¡¨ç¾ï¼ˆUTF-16 / std::wstringï¼‰ã¸å¤‰æ›ã™ã‚‹
     // force_mode: L"auto" / L"utf8" / L"utf8bom" / L"sjis"
     static bool Decode(const std::string& raw_bytes,
                        const std::wstring& force_mode,
                        std::wstring& out_text,
                        TextEncoding& out_encoding);
 
-    // “à•”•\Œ»‚ğŒ³‚Ì•¶šƒR[ƒhEBOM —L–³‚ÖÄ•ÏŠ·‚·‚é
+    // å†…éƒ¨è¡¨ç¾ã‚’å…ƒã®æ–‡å­—ã‚³ãƒ¼ãƒ‰ãƒ»BOM æœ‰ç„¡ã¸å†å¤‰æ›ã™ã‚‹
     static bool Encode(const std::wstring& text,
                        TextEncoding encoding,
                        bool with_bom,
@@ -32,19 +32,19 @@ public:
 
     static const wchar_t* EncodingName(TextEncoding encoding);
 
-    // UTF-8 ‚Æ‚µ‚Ä‘Ã“–‚©iMB_ERR_INVALID_CHARS ‚É‚æ‚éŒµ–§”»’èj
+    // UTF-8 ã¨ã—ã¦å¦¥å½“ã‹ï¼ˆMB_ERR_INVALID_CHARS ã«ã‚ˆã‚‹å³å¯†åˆ¤å®šï¼‰
     static bool IsValidUtf8(const std::string& bytes);
-    // Shift_JIS(CP932) ‚Æ‚µ‚Ä‘Ã“–‚©
+    // Shift_JIS(CP932) ã¨ã—ã¦å¦¥å½“ã‹
     static bool IsValidShiftJis(const std::string& bytes);
-    // EUC-JP ‚Æ‚µ‚Ä‘Ã“–‚©i“à‘ ƒe[ƒuƒ‹‚É‚æ‚é\‘¢”»’èj
+    // EUC-JP ã¨ã—ã¦å¦¥å½“ã‹ï¼ˆå†…è”µãƒ†ãƒ¼ãƒ–ãƒ«ã«ã‚ˆã‚‹æ§‹é€ åˆ¤å®šï¼‰
     static bool IsValidEucJp(const std::string& bytes);
 
-    // EUC-JP ‚ª—˜—p‚Å‚«‚é‚©i“à‘ ƒe[ƒuƒ‹‚Ì‚½‚ßí‚É truej
+    // EUC-JP ãŒåˆ©ç”¨ã§ãã‚‹ã‹ï¼ˆå†…è”µãƒ†ãƒ¼ãƒ–ãƒ«ã®ãŸã‚å¸¸ã« trueï¼‰
     static bool IsEucJpAvailable();
-    // EUC-JP ‚ÌƒR[ƒhƒy[ƒW”Ô†iQl’lBkernel32 ‚É‚Í‘¶İ‚µ‚È‚¢j
+    // EUC-JP ã®ã‚³ãƒ¼ãƒ‰ãƒšãƒ¼ã‚¸ç•ªå·ï¼ˆå‚è€ƒå€¤ã€‚kernel32 ã«ã¯å­˜åœ¨ã—ãªã„ï¼‰
     static unsigned int EucJpCodePage();
 
-    // ”¼ŠpƒJƒ^ƒJƒi‚ÌŒÂ”iCP932 / EUC-JP ‚Ì©“®”»’èƒqƒ…[ƒŠƒXƒeƒBƒbƒN—pj
+    // åŠè§’ã‚«ã‚¿ã‚«ãƒŠã®å€‹æ•°ï¼ˆCP932 / EUC-JP ã®è‡ªå‹•åˆ¤å®šãƒ’ãƒ¥ãƒ¼ãƒªã‚¹ãƒ†ã‚£ãƒƒã‚¯ç”¨ï¼‰
     static int CountHalfwidthKatakana(const std::wstring& s);
 };
 

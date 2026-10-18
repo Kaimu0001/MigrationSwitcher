@@ -7,7 +7,7 @@
 #   Release\ms_test.exe            (all tests)
 #   Release\ms_test.exe --live <file-with-api-key>
 #
-# NOTE: source files are Shift_JIS (CP932) with CRLF line endings.
+# NOTE: source files are UTF-8 with a BOM and CRLF line endings.
 # =============================================================================
 cmake_minimum_required(VERSION 3.15)
 project(MigrationSwitcherTests LANGUAGES CXX)
@@ -28,10 +28,10 @@ target_compile_definitions(ms_test PRIVATE UNICODE _UNICODE MS_BUILD_CONSOLE_TES
 
 if(MSVC)
     target_compile_options(ms_test PRIVATE
-        /source-charset:.932 /execution-charset:.932 /W3 /EHsc /MP)
+        /source-charset:utf-8 /execution-charset:.932 /W3 /EHsc /MP)
 else()
     target_compile_options(ms_test PRIVATE
-        -Wall -Wextra -finput-charset=CP932 -fexec-charset=CP932)
+        -Wall -Wextra -finput-charset=UTF-8 -fexec-charset=CP932)
     target_link_options(ms_test PRIVATE -static -static-libgcc -static-libstdc++)
 endif()
 

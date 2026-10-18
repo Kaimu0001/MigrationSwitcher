@@ -1,6 +1,6 @@
-// =============================================================================
+ï»¿// =============================================================================
 // BackupManager.h
-// İŒv‘ 6.9uƒoƒbƒNƒAƒbƒv‹@”\v/ 7.2.8 BackupManager
+// è¨­è¨ˆæ›¸ 6.9ã€Œãƒãƒƒã‚¯ã‚¢ãƒƒãƒ—æ©Ÿèƒ½ã€/ 7.2.8 BackupManager
 // =============================================================================
 #pragma once
 
@@ -12,14 +12,14 @@ namespace ms {
 
 class BackupManager {
 public:
-    // 6.9.2 ‘ÎÛƒtƒ@ƒCƒ‹–¼.yyyymmdd_hhmmss.bak
-    // 6.9.3 backup_dir ‚ª‹ó‚Ìê‡‚Í‘ÎÛƒtƒ@ƒCƒ‹‚Æ“¯ˆêƒtƒHƒ‹ƒ_
+    // 6.9.2 å¯¾è±¡ãƒ•ã‚¡ã‚¤ãƒ«å.yyyymmdd_hhmmss.bak
+    // 6.9.3 backup_dir ãŒç©ºã®å ´åˆã¯å¯¾è±¡ãƒ•ã‚¡ã‚¤ãƒ«ã¨åŒä¸€ãƒ•ã‚©ãƒ«ãƒ€
     static bool CreateBackup(const std::wstring& target_file,
                              const std::wstring& backup_dir,
                              std::wstring& out_backup_path,
                              std::wstring& out_error);
 
-    // ƒoƒbƒNƒAƒbƒvæ‚ª‘‚«‚İ‰Â”\‚©‚ğ–‘OŠm”F‚·‚éi14.1 No.10j
+    // ãƒãƒƒã‚¯ã‚¢ãƒƒãƒ—å…ˆãŒæ›¸ãè¾¼ã¿å¯èƒ½ã‹ã‚’äº‹å‰ç¢ºèªã™ã‚‹ï¼ˆ14.1 No.10ï¼‰
     static bool CanCreateBackup(const std::wstring& target_file,
                                 const std::wstring& backup_dir,
                                 std::wstring& out_error);

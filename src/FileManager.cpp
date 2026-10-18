@@ -1,4 +1,4 @@
-// =============================================================================
+ï»¿// =============================================================================
 // FileManager.cpp
 // =============================================================================
 #include "FileManager.h"
@@ -26,7 +26,7 @@ std::wstring FileManager::LastErrorMessage(unsigned long err)
     if (buf) ::LocalFree(buf);
     if (msg.empty()) {
         wchar_t tmp[64];
-        swprintf(tmp, 64, L"ƒGƒ‰[ƒR[ƒh 0x%08lX", err);
+        swprintf(tmp, 64, L"ã‚¨ãƒ©ãƒ¼ã‚³ãƒ¼ãƒ‰ 0x%08lX", err);
         msg = tmp;
     }
     return msg;
@@ -52,7 +52,7 @@ FileInfo FileManager::Inspect(const std::wstring& path, const std::wstring& enco
     info.read_only_attribute = (attr & FILE_ATTRIBUTE_READONLY) != 0;
     if (info.is_directory) return info;
 
-    // --- “Ç‚İæ‚è‰Â”Û ---
+    // --- èª­ã¿å–ã‚Šå¯å¦ ---
     HANDLE hr = ::CreateFileW(path.c_str(), GENERIC_READ,
                               FILE_SHARE_READ | FILE_SHARE_WRITE, nullptr,
                               OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, nullptr);
@@ -72,7 +72,7 @@ FileInfo FileManager::Inspect(const std::wstring& path, const std::wstring& enco
         }
         ::CloseHandle(hr);
 
-        // •¶šƒR[ƒh”»’è
+        // æ–‡å­—ã‚³ãƒ¼ãƒ‰åˆ¤å®š
         size_t bom = 0;
         TextEncoding enc = EncodingDetector::Detect(bytes, bom);
         std::wstring mode = util::ToUpper(encoding_mode);
@@ -90,7 +90,7 @@ FileInfo FileManager::Inspect(const std::wstring& path, const std::wstring& enco
         info.newline_string = util::NewlineString(info.newline);
     }
 
-    // --- ‘‚«‚İ‰Â”Û ---
+    // --- æ›¸ãè¾¼ã¿å¯å¦ ---
     HANDLE hw = ::CreateFileW(path.c_str(), GENERIC_WRITE,
                               FILE_SHARE_READ, nullptr,
                               OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, nullptr);
@@ -99,7 +99,7 @@ FileInfo FileManager::Inspect(const std::wstring& path, const std::wstring& enco
         ::CloseHandle(hw);
     } else {
         info.writable = false;
-        // ‘¼ƒvƒƒZƒX‚ª”r‘¼ƒƒbƒN‚µ‚Ä‚¢‚éê‡‚Ì”»’è
+        // ä»–ãƒ—ãƒ­ã‚»ã‚¹ãŒæ’ä»–ãƒ­ãƒƒã‚¯ã—ã¦ã„ã‚‹å ´åˆã®åˆ¤å®š
         HANDLE hx = ::CreateFileW(path.c_str(), GENERIC_READ | GENERIC_WRITE,
                                   0, nullptr, OPEN_EXISTING, 0, nullptr);
         if (hx == INVALID_HANDLE_VALUE) {
@@ -162,16 +162,16 @@ bool FileManager::ReadText(const std::wstring& path,
     out_info.newline = util::DetectNewlineKind(out_text);
     out_info.newline_string = util::NewlineString(out_info.newline);
 
-    // 6.5.3 CRLF / CR ‚ğ LF ‚Ö“à•”³‹K‰»
+    // 6.5.3 CRLF / CR ã‚’ LF ã¸å†…éƒ¨æ­£è¦åŒ–
     out_text = util::NormalizeNewlines(out_text);
     return true;
 }
 
-// 19.1 ˆêƒtƒ@ƒCƒ‹‚ğ‘ÎÛƒtƒ@ƒCƒ‹‚Ö’uŠ·‚·‚éB
-// ˆêƒtƒ@ƒCƒ‹‚Íƒ‚ƒWƒ…[ƒ‹”z‰º‚Ì temp/ ‚Éì¬‚·‚é‚½‚ßA‘ÎÛƒtƒ@ƒCƒ‹‚ª•Êƒhƒ‰ƒCƒu‚É
-// ‚ ‚é‚Æ’Pƒ‚ÈˆÚ“®‚Í ERROR_NOT_SAME_DEVICE ‚Å¸”s‚·‚éB
-// MOVEFILE_COPY_ALLOWED ‚Åƒ{ƒŠƒ…[ƒ€‚ğ‚Ü‚½‚®ˆÚ“®‚ğ‹–‰Â‚µA‚»‚ê‚Å‚à¸”s‚·‚éê‡‚Í
-// ƒRƒs[ + ˆêƒtƒ@ƒCƒ‹íœ‚ÖƒtƒH[ƒ‹ƒoƒbƒN‚·‚éB
+// 19.1 ä¸€æ™‚ãƒ•ã‚¡ã‚¤ãƒ«ã‚’å¯¾è±¡ãƒ•ã‚¡ã‚¤ãƒ«ã¸ç½®æ›ã™ã‚‹ã€‚
+// ä¸€æ™‚ãƒ•ã‚¡ã‚¤ãƒ«ã¯ãƒ¢ã‚¸ãƒ¥ãƒ¼ãƒ«é…ä¸‹ã® temp/ ã«ä½œæˆã™ã‚‹ãŸã‚ã€å¯¾è±¡ãƒ•ã‚¡ã‚¤ãƒ«ãŒåˆ¥ãƒ‰ãƒ©ã‚¤ãƒ–ã«
+// ã‚ã‚‹ã¨å˜ç´”ãªç§»å‹•ã¯ ERROR_NOT_SAME_DEVICE ã§å¤±æ•—ã™ã‚‹ã€‚
+// MOVEFILE_COPY_ALLOWED ã§ãƒœãƒªãƒ¥ãƒ¼ãƒ ã‚’ã¾ãŸãç§»å‹•ã‚’è¨±å¯ã—ã€ãã‚Œã§ã‚‚å¤±æ•—ã™ã‚‹å ´åˆã¯
+// ã‚³ãƒ”ãƒ¼ + ä¸€æ™‚ãƒ•ã‚¡ã‚¤ãƒ«å‰Šé™¤ã¸ãƒ•ã‚©ãƒ¼ãƒ«ãƒãƒƒã‚¯ã™ã‚‹ã€‚
 static bool MoveReplace(const std::wstring& from, const std::wstring& to)
 {
     if (::MoveFileExW(from.c_str(), to.c_str(),
@@ -195,13 +195,13 @@ bool FileManager::WriteTextAtomic(const std::wstring& path,
 {
     out_error.clear();
 
-    // ‰üsƒR[ƒh‚ğŒ³‚ÌŒ`®‚Ö–ß‚·
+    // æ”¹è¡Œã‚³ãƒ¼ãƒ‰ã‚’å…ƒã®å½¢å¼ã¸æˆ»ã™
     std::wstring final_text = util::DenormalizeNewlines(
         text_lf_normalized, util::NewlineString(newline));
 
     std::string bytes;
     if (!EncodingDetector::Encode(final_text, encoding, with_bom, bytes)) {
-        out_error = L"•¶šƒR[ƒh•ÏŠ·‚É¸”s‚µ‚Ü‚µ‚½B";
+        out_error = L"æ–‡å­—ã‚³ãƒ¼ãƒ‰å¤‰æ›ã«å¤±æ•—ã—ã¾ã—ãŸã€‚";
         return false;
     }
 
@@ -209,19 +209,19 @@ bool FileManager::WriteTextAtomic(const std::wstring& path,
     if (dir.empty()) dir = util::ModuleDirectory();
     util::EnsureDirectory(dir);
 
-    // 19.1 ˆêƒtƒ@ƒCƒ‹‚Ö‘‚«o‚µ‚Ä‚©‚ç’uŠ·‚·‚é
+    // 19.1 ä¸€æ™‚ãƒ•ã‚¡ã‚¤ãƒ«ã¸æ›¸ãå‡ºã—ã¦ã‹ã‚‰ç½®æ›ã™ã‚‹
     std::wstring tmp = MakeTempFilePath(util::GetFileNameOf(path), L".tmp");
     HANDLE h = ::CreateFileW(tmp.c_str(), GENERIC_WRITE, 0, nullptr,
                              CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, nullptr);
     if (h == INVALID_HANDLE_VALUE) {
-        out_error = L"ˆêƒtƒ@ƒCƒ‹‚ğì¬‚Å‚«‚Ü‚¹‚ñ: " + LastErrorMessage(::GetLastError());
+        out_error = L"ä¸€æ™‚ãƒ•ã‚¡ã‚¤ãƒ«ã‚’ä½œæˆã§ãã¾ã›ã‚“: " + LastErrorMessage(::GetLastError());
         return false;
     }
     DWORD written = 0;
     if (!bytes.empty()) {
         if (!::WriteFile(h, bytes.data(), (DWORD)bytes.size(), &written, nullptr) ||
             written != (DWORD)bytes.size()) {
-            out_error = L"ˆêƒtƒ@ƒCƒ‹‚Ö‚Ì‘‚«‚İ‚É¸”s‚µ‚Ü‚µ‚½: " + LastErrorMessage(::GetLastError());
+            out_error = L"ä¸€æ™‚ãƒ•ã‚¡ã‚¤ãƒ«ã¸ã®æ›¸ãè¾¼ã¿ã«å¤±æ•—ã—ã¾ã—ãŸ: " + LastErrorMessage(::GetLastError());
             ::CloseHandle(h);
             ::DeleteFileW(tmp.c_str());
             return false;
@@ -230,11 +230,11 @@ bool FileManager::WriteTextAtomic(const std::wstring& path,
     ::FlushFileBuffers(h);
     ::CloseHandle(h);
 
-    // ‘‚«‚İŒãƒTƒCƒYŠm”Fi19.1j
+    // æ›¸ãè¾¼ã¿å¾Œã‚µã‚¤ã‚ºç¢ºèªï¼ˆ19.1ï¼‰
     HANDLE hv = ::CreateFileW(tmp.c_str(), GENERIC_READ, FILE_SHARE_READ, nullptr,
                               OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, nullptr);
     if (hv == INVALID_HANDLE_VALUE) {
-        out_error = L"‘‚«‚İŒã‚ÌŒŸØ‚É¸”s‚µ‚Ü‚µ‚½B";
+        out_error = L"æ›¸ãè¾¼ã¿å¾Œã®æ¤œè¨¼ã«å¤±æ•—ã—ã¾ã—ãŸã€‚";
         ::DeleteFileW(tmp.c_str());
         return false;
     }
@@ -243,12 +243,12 @@ bool FileManager::WriteTextAtomic(const std::wstring& path,
     ::GetFileSizeEx(hv, &sz);
     ::CloseHandle(hv);
     if ((unsigned long long)sz.QuadPart != (unsigned long long)bytes.size()) {
-        out_error = L"‘‚«‚İƒTƒCƒY‚ªˆê’v‚µ‚Ü‚¹‚ñi”j‘¹‚Ì‰Â”\«jB";
+        out_error = L"æ›¸ãè¾¼ã¿ã‚µã‚¤ã‚ºãŒä¸€è‡´ã—ã¾ã›ã‚“ï¼ˆç ´æã®å¯èƒ½æ€§ï¼‰ã€‚";
         ::DeleteFileW(tmp.c_str());
         return false;
     }
 
-    // “Ç‚İæ‚èê—p‘®«‚ğˆê“I‚É‰ğœ
+    // èª­ã¿å–ã‚Šå°‚ç”¨å±æ€§ã‚’ä¸€æ™‚çš„ã«è§£é™¤
     DWORD attr = ::GetFileAttributesW(path.c_str());
     bool was_readonly = (attr != INVALID_FILE_ATTRIBUTES) &&
                         ((attr & FILE_ATTRIBUTE_READONLY) != 0);
@@ -257,7 +257,7 @@ bool FileManager::WriteTextAtomic(const std::wstring& path,
     }
 
     if (!MoveReplace(tmp, path)) {
-        out_error = L"‘ÎÛƒtƒ@ƒCƒ‹‚Ì’uŠ·‚É¸”s‚µ‚Ü‚µ‚½: " + LastErrorMessage(::GetLastError());
+        out_error = L"å¯¾è±¡ãƒ•ã‚¡ã‚¤ãƒ«ã®ç½®æ›ã«å¤±æ•—ã—ã¾ã—ãŸ: " + LastErrorMessage(::GetLastError());
         ::DeleteFileW(tmp.c_str());
         if (was_readonly && attr != INVALID_FILE_ATTRIBUTES)
             ::SetFileAttributesW(path.c_str(), attr);
@@ -289,7 +289,7 @@ std::wstring FileManager::MakeTempFilePath(const std::wstring& base_name,
     if (stem.empty()) stem = L"work";
     std::wstring path = util::JoinPath(
         temp_dir, stem + L"_" + util::TimestampFileName() + ext);
-    // Õ“Ë‰ñ”ğ
+    // è¡çªå›é¿
     int n = 0;
     while (util::PathExists(path)) {
         wchar_t suffix[16];

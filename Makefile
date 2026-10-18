@@ -1,11 +1,12 @@
 # =============================================================================
 # Migration Switcher - Makefile (mingw-w64 / MSYS2 / MinGW)
-# ƒrƒ‹ƒh: make            ¨ build/MigrationSwitcher.exe
+# ãƒ“ãƒ«ãƒ‰: make            â†’ build/MigrationSwitcher.exe
 #         make clean
 # =============================================================================
 
-# ƒNƒƒXƒRƒ“ƒpƒCƒ‰iMSYS2 / MinGW-w64 ƒlƒCƒeƒBƒuŠÂ‹«‚Å‚Í CROSS= ‚ğ‹ó‚É‚µ‚Äã‘‚«j
-# ƒ\[ƒX‚Í Shift_JIS (CP932) / ‰üs CRLF ‚Å•Û‘¶‚³‚ê‚Ä‚¢‚Ü‚·B
+# ã‚¯ãƒ­ã‚¹ã‚³ãƒ³ãƒ‘ã‚¤ãƒ©ï¼ˆMSYS2 / MinGW-w64 ãƒã‚¤ãƒ†ã‚£ãƒ–ç’°å¢ƒã§ã¯ CROSS= ã‚’ç©ºã«ã—ã¦ä¸Šæ›¸ãï¼‰
+# ã‚½ãƒ¼ã‚¹ã¯ UTF-8 (BOM ä»˜ã) / æ”¹è¡Œ CRLF ã§ä¿å­˜ã•ã‚Œã¦ã„ã¾ã™ã€‚
+# å®Ÿè¡Œæ–‡å­—ã‚»ãƒƒãƒˆã¯ CP932 ã®ã¾ã¾ã«ã™ã‚‹ãŸã‚ã€-fexec-charset=CP932 ã‚’ç¶­æŒã—ã¦ã„ã¾ã™ã€‚
 CROSS    ?= x86_64-w64-mingw32-
 CXX      := $(CROSS)g++
 WINDRES  := $(CROSS)windres
@@ -15,7 +16,7 @@ BUILDDIR := build
 
 CXXFLAGS := -std=c++17 -O2 -Wall -Wextra \
             -DUNICODE -D_UNICODE \
-            -finput-charset=CP932 -fexec-charset=CP932 \
+            -finput-charset=UTF-8 -fexec-charset=CP932 \
             -Isrc
 
 LDFLAGS  := -mwindows -static -static-libgcc -static-libstdc++ \
@@ -38,7 +39,7 @@ $(BUILDDIR)/%.o: $(SRCDIR)/%.cpp | $(BUILDDIR)
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
 $(RES): $(SRCDIR)/app.rc $(SRCDIR)/app.manifest $(SRCDIR)/resource.h | $(BUILDDIR)
-	$(WINDRES) -O coff --codepage=932 -I$(SRCDIR) -i $< -o $@
+	$(WINDRES) -O coff --codepage=65001 -I$(SRCDIR) -i $< -o $@
 
 $(BUILDDIR):
 	mkdir -p $(BUILDDIR)
@@ -50,7 +51,7 @@ run: $(TARGET)
 	$(TARGET)
 
 # ---------------------------------------------------------------------------
-# ’P‘ÌƒeƒXƒgiİŒv‘ 20.1j: GUI ‚Æ“¯‚¶ƒIƒuƒWƒFƒNƒg‚ğƒŠƒ“ƒN‚µ‚½ƒRƒ“ƒ\[ƒ‹”Å
+# å˜ä½“ãƒ†ã‚¹ãƒˆï¼ˆè¨­è¨ˆæ›¸ 20.1ï¼‰: GUI ã¨åŒã˜ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’ãƒªãƒ³ã‚¯ã—ãŸã‚³ãƒ³ã‚½ãƒ¼ãƒ«ç‰ˆ
 #   make test
 # ---------------------------------------------------------------------------
 TEST_OBJS   := $(filter-out $(BUILDDIR)/main.o,$(OBJS)) $(BUILDDIR)/console_test.o

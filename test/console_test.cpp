@@ -1,15 +1,15 @@
-// =============================================================================
-// ‚±‚Ìƒtƒ@ƒCƒ‹‚ÍƒRƒ“ƒ\[ƒ‹”ÅƒeƒXƒgƒn[ƒlƒX‚Å‚·iGUI ”Å‚Æ‚Í•Ê‚ÌÀsƒtƒ@ƒCƒ‹jB
-// GUI ƒvƒƒWƒFƒNƒg‚ÖŒë‚Á‚Ä’Ç‰Á‚³‚ê‚Ä‚à main ‚ªd•¡‚µ‚È‚¢‚æ‚¤A
-// MS_BUILD_CONSOLE_TESTS ‚ª’è‹`‚³‚ê‚Ä‚¢‚é‚Æ‚«‚¾‚¯’†g‚ğƒRƒ“ƒpƒCƒ‹‚µ‚Ü‚·B
-//   Makefile : make build/ms_test.exe   (-DMS_BUILD_CONSOLE_TESTS ‚ğ•t—^)
-//   CMake    : test/CMakeLists.txt ‚Ì ms_test ƒ^[ƒQƒbƒg
+ï»¿// =============================================================================
+// ã“ã®ãƒ•ã‚¡ã‚¤ãƒ«ã¯ã‚³ãƒ³ã‚½ãƒ¼ãƒ«ç‰ˆãƒ†ã‚¹ãƒˆãƒãƒ¼ãƒã‚¹ã§ã™ï¼ˆGUI ç‰ˆã¨ã¯åˆ¥ã®å®Ÿè¡Œãƒ•ã‚¡ã‚¤ãƒ«ï¼‰ã€‚
+// GUI ãƒ—ãƒ­ã‚¸ã‚§ã‚¯ãƒˆã¸èª¤ã£ã¦è¿½åŠ ã•ã‚Œã¦ã‚‚ main ãŒé‡è¤‡ã—ãªã„ã‚ˆã†ã€
+// MS_BUILD_CONSOLE_TESTS ãŒå®šç¾©ã•ã‚Œã¦ã„ã‚‹ã¨ãã ã‘ä¸­èº«ã‚’ã‚³ãƒ³ãƒ‘ã‚¤ãƒ«ã—ã¾ã™ã€‚
+//   Makefile : make build/ms_test.exe   (-DMS_BUILD_CONSOLE_TESTS ã‚’ä»˜ä¸)
+//   CMake    : test/CMakeLists.txt ã® ms_test ã‚¿ãƒ¼ã‚²ãƒƒãƒˆ
 // =============================================================================
 #ifdef MS_BUILD_CONSOLE_TESTS
 // =============================================================================
 // console_test.cpp
-// İŒv‘ 20.1u’P‘ÌƒeƒXƒgv‚É‘Î‰‚·‚éƒRƒ“ƒ\[ƒ‹ŒŸØƒn[ƒlƒX
-// GUI ‚Æ“¯‚¶ƒIƒuƒWƒFƒNƒgƒtƒ@ƒCƒ‹imain.cpp ‚ğœ‚­j‚ğƒŠƒ“ƒN‚µ‚ÄÀs‚·‚éB
+// è¨­è¨ˆæ›¸ 20.1ã€Œå˜ä½“ãƒ†ã‚¹ãƒˆã€ã«å¯¾å¿œã™ã‚‹ã‚³ãƒ³ã‚½ãƒ¼ãƒ«æ¤œè¨¼ãƒãƒ¼ãƒã‚¹
+// GUI ã¨åŒã˜ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãƒ•ã‚¡ã‚¤ãƒ«ï¼ˆmain.cpp ã‚’é™¤ãï¼‰ã‚’ãƒªãƒ³ã‚¯ã—ã¦å®Ÿè¡Œã™ã‚‹ã€‚
 //   make test
 // =============================================================================
 #include <windows.h>
@@ -103,43 +103,43 @@ static bool ReadRaw(const std::wstring& path, std::string& out)
 }
 
 // -----------------------------------------------------------------------------
-// 20.1 No.1`2 ƒXƒCƒbƒ`–¼ŒŸØ
+// 20.1 No.1ï½2 ã‚¹ã‚¤ãƒƒãƒåæ¤œè¨¼
 // -----------------------------------------------------------------------------
 static void TestSwitchName()
 {
-    Out(L"\n== ƒXƒCƒbƒ`–¼ŒŸØ (20.1 No.1-2) ==\n");
+    Out(L"\n== ã‚¹ã‚¤ãƒƒãƒåæ¤œè¨¼ (20.1 No.1-2) ==\n");
 
     Check(ValidationManager::ValidateSwitchName(L"MIGRATION_001").ok,
-          L"³í–¼ MIGRATION_001 ‚ğ‹–‰Â‚·‚é");
+          L"æ­£å¸¸å MIGRATION_001 ã‚’è¨±å¯ã™ã‚‹");
     Check(ValidationManager::ValidateSwitchName(L"USE_NEW_LOGIC").ok,
-          L"³í–¼ USE_NEW_LOGIC ‚ğ‹–‰Â‚·‚é");
+          L"æ­£å¸¸å USE_NEW_LOGIC ã‚’è¨±å¯ã™ã‚‹");
     Check(ValidationManager::ValidateSwitchName(L"ENABLE_NEW_API").ok,
-          L"³í–¼ ENABLE_NEW_API ‚ğ‹–‰Â‚·‚é");
+          L"æ­£å¸¸å ENABLE_NEW_API ã‚’è¨±å¯ã™ã‚‹");
     Check(ValidationManager::ValidateSwitchName(L"_PRIVATE").ok,
-          L"æ“ªƒAƒ“ƒ_[ƒXƒRƒA‚ğ‹–‰Â‚·‚é");
+          L"å…ˆé ­ã‚¢ãƒ³ãƒ€ãƒ¼ã‚¹ã‚³ã‚¢ã‚’è¨±å¯ã™ã‚‹");
     Check(!ValidationManager::ValidateSwitchName(L"123_SWITCH").ok,
-          L"”šn‚Ü‚è‚ğ‹‘”Û‚·‚é");
+          L"æ•°å­—å§‹ã¾ã‚Šã‚’æ‹’å¦ã™ã‚‹");
     Check(!ValidationManager::ValidateSwitchName(L"SWITCH-NAME").ok,
-          L"ƒnƒCƒtƒ“‚ğ‹‘”Û‚·‚é");
+          L"ãƒã‚¤ãƒ•ãƒ³ã‚’æ‹’å¦ã™ã‚‹");
     Check(!ValidationManager::ValidateSwitchName(L"SWITCH NAME").ok,
-          L"‹ó”’‚ğ‹‘”Û‚·‚é");
+          L"ç©ºç™½ã‚’æ‹’å¦ã™ã‚‹");
     Check(!ValidationManager::ValidateSwitchName(L"").ok,
-          L"–¢“ü—Í‚ğ‹‘”Û‚·‚é");
+          L"æœªå…¥åŠ›ã‚’æ‹’å¦ã™ã‚‹");
     Check(!ValidationManager::ValidateSwitchName(L"SWITCH.NAME").ok,
-          L"‹L†‚ğ‹‘”Û‚·‚é");
+          L"è¨˜å·ã‚’æ‹’å¦ã™ã‚‹");
     Check(!ValidationManager::ValidateSwitchName(L"MIGRATION_001;").ok,
-          L"––”ö‚ÌƒZƒ~ƒRƒƒ“‚ğ‹‘”Û‚·‚é");
+          L"æœ«å°¾ã®ã‚»ãƒŸã‚³ãƒ­ãƒ³ã‚’æ‹’å¦ã™ã‚‹");
 
     ValidationResult r = ValidationManager::ValidateSwitchName(L"if");
-    Check(r.ok && !r.warnings.empty(), L"—\–ñŒê if ‚ğŒx‚·‚é");
+    Check(r.ok && !r.warnings.empty(), L"äºˆç´„èª if ã‚’è­¦å‘Šã™ã‚‹");
 }
 
 // -----------------------------------------------------------------------------
-// 20.1 No.3`5 ŒŸõ
+// 20.1 No.3ï½5 æ¤œç´¢
 // -----------------------------------------------------------------------------
 static void TestSearch()
 {
-    Out(L"\n== ŒŸõ (20.1 No.3-5) ==\n");
+    Out(L"\n== æ¤œç´¢ (20.1 No.3-5) ==\n");
 
     std::wstring text =
         L"int a;\n"
@@ -152,20 +152,20 @@ static void TestSearch()
     std::wstring pat = L"old_function(name, g_counter);";
 
     std::vector<MatchResult> m = SearchEngine::Search(text, pat, L"sample.c");
-    Check(m.size() == 3, L"3 Œƒqƒbƒg‚·‚éi•¡”Œƒqƒbƒgj");
+    Check(m.size() == 3, L"3 ä»¶ãƒ’ãƒƒãƒˆã™ã‚‹ï¼ˆè¤‡æ•°ä»¶ãƒ’ãƒƒãƒˆï¼‰");
     if (m.size() == 3) {
-        Check(m[0].start_line == 2 && m[0].start_column == 1, L"1 Œ–Ú‚Ìs”Ô†=2, —ñ”Ô†=1");
-        Check(m[1].start_line == 4 && m[1].start_column == 5, L"2 Œ–Ú‚Ìs”Ô†=4, —ñ”Ô†=5");
-        Check(m[2].start_line == 6, L"3 Œ–Ú‚Ìs”Ô†=6iƒRƒƒ“ƒg“àj");
+        Check(m[0].start_line == 2 && m[0].start_column == 1, L"1 ä»¶ç›®ã®è¡Œç•ªå·=2, åˆ—ç•ªå·=1");
+        Check(m[1].start_line == 4 && m[1].start_column == 5, L"2 ä»¶ç›®ã®è¡Œç•ªå·=4, åˆ—ç•ªå·=5");
+        Check(m[2].start_line == 6, L"3 ä»¶ç›®ã®è¡Œç•ªå·=6ï¼ˆã‚³ãƒ¡ãƒ³ãƒˆå†…ï¼‰");
     }
 
     std::vector<MatchResult> none = SearchEngine::Search(text, L"not_exist_symbol", L"sample.c");
-    Check(none.empty(), L"0 Œ‚Ìê‡‚ğ³‚µ‚­ˆ—‚·‚é");
+    Check(none.empty(), L"0 ä»¶ã®å ´åˆã‚’æ­£ã—ãå‡¦ç†ã™ã‚‹");
 
     std::vector<MatchResult> one = SearchEngine::Search(L"only once\n", L"once", L"x.c");
-    Check(one.size() == 1, L"1 Œƒqƒbƒg‚·‚é");
+    Check(one.size() == 1, L"1 ä»¶ãƒ’ãƒƒãƒˆã™ã‚‹");
 
-    // 15Í Šù‘¶ƒRƒ“ƒpƒCƒ‹ƒXƒCƒbƒ`ŒŸo
+    // 15ç«  æ—¢å­˜ã‚³ãƒ³ãƒ‘ã‚¤ãƒ«ã‚¹ã‚¤ãƒƒãƒæ¤œå‡º
     std::wstring sw_text =
         L"#ifdef LEGACY\n"
         L"#endif\n"
@@ -174,28 +174,28 @@ static void TestSearch()
         L"int y;\n";
     std::wstring detail;
     bool nearby = SearchEngine::DetectNearbyPreprocessor(sw_text, 4, 4, 5, detail);
-    Check(nearby, L"Šù‘¶ #ifdef ‚ğ‹ß–TŒŸo‚·‚é");
+    Check(nearby, L"æ—¢å­˜ #ifdef ã‚’è¿‘å‚æ¤œå‡ºã™ã‚‹");
     Check(!SearchEngine::DetectNearbyPreprocessor(L"int a;\nint b;\n", 1, 1, 5, detail),
-          L"ƒvƒŠƒvƒƒZƒbƒT‚ª–³‚¢ê‡‚ÍŒŸo‚µ‚È‚¢");
+          L"ãƒ—ãƒªãƒ—ãƒ­ã‚»ãƒƒã‚µãŒç„¡ã„å ´åˆã¯æ¤œå‡ºã—ãªã„");
 
-    // 16Í ƒRƒƒ“ƒg“àƒqƒbƒg
+    // 16ç«  ã‚³ãƒ¡ãƒ³ãƒˆå†…ãƒ’ãƒƒãƒˆ
     Check(SearchEngine::IsInsideComment(text, m[2].start_offset),
-          L"/* */ “à‚Ìˆê’v‚ğƒRƒƒ“ƒg“à‚Æ”»’è‚·‚é");
+          L"/* */ å†…ã®ä¸€è‡´ã‚’ã‚³ãƒ¡ãƒ³ãƒˆå†…ã¨åˆ¤å®šã™ã‚‹");
     Check(!SearchEngine::IsInsideComment(text, m[0].start_offset),
-          L"’Êís‚Ìˆê’v‚ÍƒRƒƒ“ƒg“à‚Æ”»’è‚µ‚È‚¢");
+          L"é€šå¸¸è¡Œã®ä¸€è‡´ã¯ã‚³ãƒ¡ãƒ³ãƒˆå†…ã¨åˆ¤å®šã—ãªã„");
 
     std::wstring str_text = L"const char* s = \"old_function(name, g_counter);\";\n";
     std::vector<MatchResult> sm = SearchEngine::Search(str_text, pat, L"s.c");
     Check(sm.size() == 1 && !SearchEngine::IsInsideComment(str_text, sm[0].start_offset),
-          L"•¶š—ñƒŠƒeƒ‰ƒ‹“à‚ÍƒRƒƒ“ƒgˆµ‚¢‚µ‚È‚¢");
+          L"æ–‡å­—åˆ—ãƒªãƒ†ãƒ©ãƒ«å†…ã¯ã‚³ãƒ¡ãƒ³ãƒˆæ‰±ã„ã—ãªã„");
 }
 
 // -----------------------------------------------------------------------------
-// 20.1 No.6`7 •ÏŠ·i6.7 •ÏŠ·•û®A`Dj
+// 20.1 No.6ï½7 å¤‰æ›ï¼ˆ6.7 å¤‰æ›æ–¹å¼Aï½Dï¼‰
 // -----------------------------------------------------------------------------
 static void TestGenerate()
 {
-    Out(L"\n== ƒRƒ“ƒpƒCƒ‹ƒXƒCƒbƒ`¶¬ (20.1 No.6-7) ==\n");
+    Out(L"\n== ã‚³ãƒ³ãƒ‘ã‚¤ãƒ«ã‚¹ã‚¤ãƒƒãƒç”Ÿæˆ (20.1 No.6-7) ==\n");
 
     std::wstring sw = L"MIGRATION_001";
     std::wstring oldc = L"old_function(param1, param2);\nreturn result;";
@@ -211,40 +211,40 @@ static void TestGenerate()
         L"old_function(param1, param2);\n"
         L"return result;\n"
         L"#endif";
-    Check(a == expected_a, L"•û®A(#ifdef VƒR[ƒh—Dæ) ‚ªİŒv‘ 6.7.2 ‚Ìo—Í‚Æˆê’v‚·‚é");
+    Check(a == expected_a, L"æ–¹å¼A(#ifdef æ–°ã‚³ãƒ¼ãƒ‰å„ªå…ˆ) ãŒè¨­è¨ˆæ›¸ 6.7.2 ã®å‡ºåŠ›ã¨ä¸€è‡´ã™ã‚‹");
 
     std::wstring b = SwitchGenerator::Generate(SwitchStyle::IfndefOldFirst, sw, oldc, newc, false, L"", w);
     Check(Contains(b, L"#ifndef MIGRATION_001\nold_function(param1, param2);\nreturn result;\n#else\nnew_function(param1, param2);\nreturn new_result;\n#endif"),
-          L"•û®B(#ifndef ‹ŒƒR[ƒh—Dæ) ‚ªİŒv‘ 6.7.3 ‚Ìo—Í‚Æˆê’v‚·‚é");
+          L"æ–¹å¼B(#ifndef æ—§ã‚³ãƒ¼ãƒ‰å„ªå…ˆ) ãŒè¨­è¨ˆæ›¸ 6.7.3 ã®å‡ºåŠ›ã¨ä¸€è‡´ã™ã‚‹");
 
     std::wstring c = SwitchGenerator::Generate(SwitchStyle::IfdefWithComments, sw, oldc, newc, false, L"", w);
     Check(Contains(c, L"#ifdef MIGRATION_001  /* migration start */") &&
           Contains(c, L"#else               /* original */") &&
           Contains(c, L"#endif              /* MIGRATION_001 */"),
-          L"•û®C(ƒRƒƒ“ƒg•t‚«) ‚ªİŒv‘ 6.7.4 ‚Ìo—Í‚Æˆê’v‚·‚é");
+          L"æ–¹å¼C(ã‚³ãƒ¡ãƒ³ãƒˆä»˜ã) ãŒè¨­è¨ˆæ›¸ 6.7.4 ã®å‡ºåŠ›ã¨ä¸€è‡´ã™ã‚‹");
 
     std::wstring d = SwitchGenerator::Generate(SwitchStyle::BlockCommentStyle, sw, oldc, newc, false, L"", w);
     Check(Contains(d, L"/* MIGRATION_001 start */") &&
           Contains(d, L"/* MIGRATION_001 end */") &&
           Contains(d, L"#ifdef MIGRATION_001"),
-          L"•û®D(ŠJnI—¹ƒRƒƒ“ƒg) ‚ªİŒv‘ 6.7.5 ‚Ìo—Í‚Æˆê’v‚·‚é");
+          L"æ–¹å¼D(é–‹å§‹çµ‚äº†ã‚³ãƒ¡ãƒ³ãƒˆ) ãŒè¨­è¨ˆæ›¸ 6.7.5 ã®å‡ºåŠ›ã¨ä¸€è‡´ã™ã‚‹");
 
-    // 18Í ƒeƒ“ƒvƒŒ[ƒg•û®
+    // 18ç«  ãƒ†ãƒ³ãƒ—ãƒ¬ãƒ¼ãƒˆæ–¹å¼
     std::wstring tpl = L"#ifdef ${SWITCH}\n${NEW_CODE}\n#else\n${OLD_CODE}\n#endif";
     std::wstring t = SwitchGenerator::Generate(SwitchStyle::CustomTemplate, sw, oldc, newc, false, tpl, w);
-    Check(t == expected_a, L"ƒeƒ“ƒvƒŒ[ƒg•û®‚ª•û®A‚Æ“¯ˆê‚Ìo—Í‚ğ¶¬‚·‚é");
+    Check(t == expected_a, L"ãƒ†ãƒ³ãƒ—ãƒ¬ãƒ¼ãƒˆæ–¹å¼ãŒæ–¹å¼Aã¨åŒä¸€ã®å‡ºåŠ›ã‚’ç”Ÿæˆã™ã‚‹");
 
     std::wstring bad_err;
     Check(!SwitchGenerator::ValidateTemplate(L"#ifdef X\n#endif", bad_err),
-          L"•s³ƒeƒ“ƒvƒŒ[ƒgi•Ï”‚È‚µj‚ğŒŸo‚·‚é");
+          L"ä¸æ­£ãƒ†ãƒ³ãƒ—ãƒ¬ãƒ¼ãƒˆï¼ˆå¤‰æ•°ãªã—ï¼‰ã‚’æ¤œå‡ºã™ã‚‹");
 }
 
 // -----------------------------------------------------------------------------
-// 6.8 ƒCƒ“ƒfƒ“ƒg©“®’²®
+// 6.8 ã‚¤ãƒ³ãƒ‡ãƒ³ãƒˆè‡ªå‹•èª¿æ•´
 // -----------------------------------------------------------------------------
 static void TestAutoIndent()
 {
-    Out(L"\n== ƒCƒ“ƒfƒ“ƒg©“®’²® (6.8) ==\n");
+    Out(L"\n== ã‚¤ãƒ³ãƒ‡ãƒ³ãƒˆè‡ªå‹•èª¿æ•´ (6.8) ==\n");
 
     std::wstring oldc = L"        old_function();";
     std::wstring newc = L"new_function();";
@@ -258,27 +258,27 @@ static void TestAutoIndent()
         L"#else\n"
         L"        old_function();\n"
         L"#endif";
-    Check(out == expected, L"İŒv‘ 6.8.2 ‚Ìo—Í—á‚Æˆê’v‚·‚é");
+    Check(out == expected, L"è¨­è¨ˆæ›¸ 6.8.2 ã®å‡ºåŠ›ä¾‹ã¨ä¸€è‡´ã™ã‚‹");
 
-    // 6.8.3 VƒR[ƒh‚ÉŠù‚ÉƒCƒ“ƒfƒ“ƒg‚ª‚ ‚éê‡‚Í’²®‚µ‚È‚¢
+    // 6.8.3 æ–°ã‚³ãƒ¼ãƒ‰ã«æ—¢ã«ã‚¤ãƒ³ãƒ‡ãƒ³ãƒˆãŒã‚ã‚‹å ´åˆã¯èª¿æ•´ã—ãªã„
     std::vector<std::wstring> w2;
     std::wstring out2 = SwitchGenerator::Generate(
         SwitchStyle::IfdefNewFirst, L"SW", L"    old();", L"    new();", true, L"", w2);
-    Check(!w2.empty(), L"VƒR[ƒh‚ÉŠù‘¶ƒCƒ“ƒfƒ“ƒg‚ª‚ ‚éê‡‚ÉŒx‚·‚é");
-    Check(Contains(out2, L"    new();"), L"Šù‘¶ƒCƒ“ƒfƒ“ƒg‚ğ“ñd‚É•t—^‚µ‚È‚¢");
+    Check(!w2.empty(), L"æ–°ã‚³ãƒ¼ãƒ‰ã«æ—¢å­˜ã‚¤ãƒ³ãƒ‡ãƒ³ãƒˆãŒã‚ã‚‹å ´åˆã«è­¦å‘Šã™ã‚‹");
+    Check(Contains(out2, L"    new();"), L"æ—¢å­˜ã‚¤ãƒ³ãƒ‡ãƒ³ãƒˆã‚’äºŒé‡ã«ä»˜ä¸ã—ãªã„");
 
-    // 6.8.3 ƒ^ƒu‚ÆƒXƒy[ƒX¬İ
+    // 6.8.3 ã‚¿ãƒ–ã¨ã‚¹ãƒšãƒ¼ã‚¹æ··åœ¨
     std::vector<std::wstring> w3;
     SwitchGenerator::ApplyAutoIndent(L" \told();", L"new();", w3);
-    Check(!w3.empty(), L"ƒ^ƒu‚ÆƒXƒy[ƒX¬İ‚ÉŒx‚·‚é");
+    Check(!w3.empty(), L"ã‚¿ãƒ–ã¨ã‚¹ãƒšãƒ¼ã‚¹æ··åœ¨æ™‚ã«è­¦å‘Šã™ã‚‹");
 }
 
 // -----------------------------------------------------------------------------
-// 9.3 / 12Í ƒvƒŒƒrƒ…[‚Æ’uŠ·
+// 9.3 / 12ç«  ãƒ—ãƒ¬ãƒ“ãƒ¥ãƒ¼ã¨ç½®æ›
 // -----------------------------------------------------------------------------
 static void TestPreviewAndReplace()
 {
-    Out(L"\n== ƒvƒŒƒrƒ…[¶¬‚Æ’uŠ· (9.3 / 12Í) ==\n");
+    Out(L"\n== ãƒ—ãƒ¬ãƒ“ãƒ¥ãƒ¼ç”Ÿæˆã¨ç½®æ› (9.3 / 12ç« ) ==\n");
 
     std::wstring text =
         L"void f1() {\n"
@@ -289,78 +289,78 @@ static void TestPreviewAndReplace()
         L"}\n";
     std::wstring pat = L"old_function(a, b);";
     std::vector<MatchResult> m = SearchEngine::Search(text, pat, L"x.c");
-    Check(m.size() == 2, L"2 Œƒqƒbƒg‚·‚é");
+    Check(m.size() == 2, L"2 ä»¶ãƒ’ãƒƒãƒˆã™ã‚‹");
 
     std::wstring block =
         L"#ifdef MIGRATION_001\nnew_function(a, b);\n#else\nold_function(a, b);\n#endif";
 
-    // 1 Œ–Ú‚Ì‚İ‘I‘ğ
+    // 1 ä»¶ç›®ã®ã¿é¸æŠ
     m[0].selected = true;
     std::wstring after1 = PreviewGenerator::BuildAfterText(text, m, block);
     Check(after1.find(L"#ifdef MIGRATION_001") != std::wstring::npos,
-          L"‘I‘ğ‰ÓŠ‚ÉƒXƒCƒbƒ`‚ª‘}“ü‚³‚ê‚é");
-    // ’uŠ·‚³‚ê‚È‚©‚Á‚½ 2 Œ–Ú‚ªc‚Á‚Ä‚¢‚é‚±‚Æ
+          L"é¸æŠç®‡æ‰€ã«ã‚¹ã‚¤ãƒƒãƒãŒæŒ¿å…¥ã•ã‚Œã‚‹");
+    // ç½®æ›ã•ã‚Œãªã‹ã£ãŸ 2 ä»¶ç›®ãŒæ®‹ã£ã¦ã„ã‚‹ã“ã¨
     size_t first = after1.find(L"old_function(a, b);");
     size_t second = after1.find(L"old_function(a, b);", first + 1);
-    Check(second != std::wstring::npos, L"–¢‘I‘ğ‚Ì 2 Œ–Ú‚Í‚»‚Ì‚Ü‚Üc‚é");
+    Check(second != std::wstring::npos, L"æœªé¸æŠã® 2 ä»¶ç›®ã¯ãã®ã¾ã¾æ®‹ã‚‹");
 
-    // ‘SŒ‘I‘ğ
+    // å…¨ä»¶é¸æŠ
     m[0].selected = true;
     m[1].selected = true;
     std::wstring after2 = PreviewGenerator::BuildAfterText(text, m, block);
     int cnt = 0;
     size_t pos = 0;
     while ((pos = after2.find(L"#ifdef MIGRATION_001", pos)) != std::wstring::npos) { ++cnt; pos += 4; }
-    Check(cnt == 2, L"2 Œ‚·‚×‚Ä‚ÉƒXƒCƒbƒ`‚ª‘}“ü‚³‚ê‚é");
+    Check(cnt == 2, L"2 ä»¶ã™ã¹ã¦ã«ã‚¹ã‚¤ãƒƒãƒãŒæŒ¿å…¥ã•ã‚Œã‚‹");
 
-    // ”²ˆ¶¬
+    // æŠœç²‹ç”Ÿæˆ
     std::wstring bx, ax;
     bool ok = PreviewGenerator::BuildExcerpts(text, after2, m, 2, bx, ax);
-    Check(ok && !bx.empty() && !ax.empty(), L"•ÏX‘OŒã‚Ì”²ˆ‚ğ¶¬‚Å‚«‚é");
+    Check(ok && !bx.empty() && !ax.empty(), L"å¤‰æ›´å‰å¾Œã®æŠœç²‹ã‚’ç”Ÿæˆã§ãã‚‹");
 
-    // •\¦ƒ‚[ƒh
-    Check(Contains(PreviewGenerator::BuildTopBottom(bx, ax), L"===== •ÏX‘O ====="),
-          L"‘OŒã”äŠr•\¦‚Ìƒwƒbƒ_‚ğ¶¬‚·‚é");
-    Check(Contains(PreviewGenerator::BuildSideBySide(bx, ax), L"| ===== •ÏXŒã"),
-          L"¶‰E”äŠr•\¦‚Ìƒwƒbƒ_‚ğ¶¬‚·‚é");
-    Check(Contains(PreviewGenerator::BuildSimple(ax), L"===== •ÏXŒã ====="),
-          L"’Pƒ•\¦‚Ìƒwƒbƒ_‚ğ¶¬‚·‚é");
+    // è¡¨ç¤ºãƒ¢ãƒ¼ãƒ‰
+    Check(Contains(PreviewGenerator::BuildTopBottom(bx, ax), L"===== å¤‰æ›´å‰ ====="),
+          L"å‰å¾Œæ¯”è¼ƒè¡¨ç¤ºã®ãƒ˜ãƒƒãƒ€ã‚’ç”Ÿæˆã™ã‚‹");
+    Check(Contains(PreviewGenerator::BuildSideBySide(bx, ax), L"| ===== å¤‰æ›´å¾Œ"),
+          L"å·¦å³æ¯”è¼ƒè¡¨ç¤ºã®ãƒ˜ãƒƒãƒ€ã‚’ç”Ÿæˆã™ã‚‹");
+    Check(Contains(PreviewGenerator::BuildSimple(ax), L"===== å¤‰æ›´å¾Œ ====="),
+          L"å˜ç´”è¡¨ç¤ºã®ãƒ˜ãƒƒãƒ€ã‚’ç”Ÿæˆã™ã‚‹");
 }
 
 // -----------------------------------------------------------------------------
-// 3.4 / 6.5.3 •¶šƒR[ƒhE‰üsƒR[ƒh
+// 3.4 / 6.5.3 æ–‡å­—ã‚³ãƒ¼ãƒ‰ãƒ»æ”¹è¡Œã‚³ãƒ¼ãƒ‰
 // -----------------------------------------------------------------------------
 static void TestEncodingAndNewline()
 {
-    Out(L"\n== •¶šƒR[ƒh / ‰üsƒR[ƒh (3.4 / 6.5.3) ==\n");
+    Out(L"\n== æ–‡å­—ã‚³ãƒ¼ãƒ‰ / æ”¹è¡Œã‚³ãƒ¼ãƒ‰ (3.4 / 6.5.3) ==\n");
 
     std::wstring dir = TestDir();
 
-    // --- UTF-8 (BOM ‚È‚µ) + CRLF ---
+    // --- UTF-8 (BOM ãªã—) + CRLF ---
     {
         std::wstring path = util::JoinPath(dir, L"utf8_crlf.c");
         std::wstring text = L"int a;\r\nold_function(x);\r\n";
         std::string bytes;
         EncodingDetector::Encode(text, TextEncoding::UTF8, false, bytes);
-        Check(WriteRaw(path, bytes), L"UTF-8/CRLF ‚ÌƒeƒXƒgƒtƒ@ƒCƒ‹‚ğì¬");
+        Check(WriteRaw(path, bytes), L"UTF-8/CRLF ã®ãƒ†ã‚¹ãƒˆãƒ•ã‚¡ã‚¤ãƒ«ã‚’ä½œæˆ");
 
         std::wstring read;
         FileInfo fi;
-        Check(FileManager::ReadText(path, L"auto", read, fi), L"UTF-8/CRLF ‚ğ“Ç‚İ‚ß‚é");
-        Check(fi.encoding == TextEncoding::UTF8, L"UTF-8 ‚Æ”»’è‚·‚é");
-        Check(fi.newline == NewlineKind::CRLF, L"CRLF ‚Æ”»’è‚·‚é");
-        Check(read == L"int a;\nold_function(x);\n", L"“à•”•\Œ»‚Å LF ‚É³‹K‰»‚³‚ê‚é");
+        Check(FileManager::ReadText(path, L"auto", read, fi), L"UTF-8/CRLF ã‚’èª­ã¿è¾¼ã‚ã‚‹");
+        Check(fi.encoding == TextEncoding::UTF8, L"UTF-8 ã¨åˆ¤å®šã™ã‚‹");
+        Check(fi.newline == NewlineKind::CRLF, L"CRLF ã¨åˆ¤å®šã™ã‚‹");
+        Check(read == L"int a;\nold_function(x);\n", L"å†…éƒ¨è¡¨ç¾ã§ LF ã«æ­£è¦åŒ–ã•ã‚Œã‚‹");
 
         std::wstring after = L"int a;\n#ifdef SW\nnew_function(x);\n#else\nold_function(x);\n#endif\n";
         std::wstring err;
         Check(FileManager::WriteTextAtomic(path, after, fi.encoding, fi.has_bom, fi.newline, err),
-              L"CRLF ‚ğˆÛ‚µ‚Ä‘‚«–ß‚¹‚é");
+              L"CRLF ã‚’ç¶­æŒã—ã¦æ›¸ãæˆ»ã›ã‚‹");
         std::string raw2;
         ReadRaw(path, raw2);
-        Check(raw2.find("\r\n") != std::string::npos, L"‘‚«–ß‚µŒã‚à CRLF ‚ªˆÛ‚³‚ê‚é");
+        Check(raw2.find("\r\n") != std::string::npos, L"æ›¸ãæˆ»ã—å¾Œã‚‚ CRLF ãŒç¶­æŒã•ã‚Œã‚‹");
     }
 
-    // --- UTF-8 BOM •t‚« + LF ---
+    // --- UTF-8 BOM ä»˜ã + LF ---
     {
         std::wstring path = util::JoinPath(dir, L"utf8bom_lf.c");
         std::string bytes;
@@ -370,9 +370,9 @@ static void TestEncodingAndNewline()
         std::wstring read;
         FileInfo fi;
         FileManager::ReadText(path, L"auto", read, fi);
-        Check(fi.encoding == TextEncoding::UTF8BOM, L"UTF-8 BOM •t‚«‚Æ”»’è‚·‚é");
-        Check(fi.newline == NewlineKind::LF, L"LF ‚Æ”»’è‚·‚é");
-        Check(read == L"int b;\nold_function(y);\n", L"BOM ‚ğœ‹‚µ‚ÄŒŸõ‘ÎÛ‰»‚·‚é");
+        Check(fi.encoding == TextEncoding::UTF8BOM, L"UTF-8 BOM ä»˜ãã¨åˆ¤å®šã™ã‚‹");
+        Check(fi.newline == NewlineKind::LF, L"LF ã¨åˆ¤å®šã™ã‚‹");
+        Check(read == L"int b;\nold_function(y);\n", L"BOM ã‚’é™¤å»ã—ã¦æ¤œç´¢å¯¾è±¡åŒ–ã™ã‚‹");
 
         std::wstring err;
         FileManager::WriteTextAtomic(path, L"int b;\nold_function(y);\n",
@@ -381,14 +381,14 @@ static void TestEncodingAndNewline()
         ReadRaw(path, raw2);
         Check(raw2.size() >= 3 && (unsigned char)raw2[0] == 0xEF &&
               (unsigned char)raw2[1] == 0xBB && (unsigned char)raw2[2] == 0xBF,
-              L"‘‚«–ß‚µŒã‚à BOM ‚ªˆÛ‚³‚ê‚é");
-        Check(raw2.find("\r\n") == std::string::npos, L"‘‚«–ß‚µŒã‚à LF ‚ªˆÛ‚³‚ê‚é");
+              L"æ›¸ãæˆ»ã—å¾Œã‚‚ BOM ãŒç¶­æŒã•ã‚Œã‚‹");
+        Check(raw2.find("\r\n") == std::string::npos, L"æ›¸ãæˆ»ã—å¾Œã‚‚ LF ãŒç¶­æŒã•ã‚Œã‚‹");
     }
 
     // --- Shift_JIS ---
     {
         std::wstring path = util::JoinPath(dir, L"sjis.c");
-        std::wstring text = L"/* “ú–{ŒêƒRƒƒ“ƒg */\r\nold_function(z);\r\n";
+        std::wstring text = L"/* æ—¥æœ¬èªã‚³ãƒ¡ãƒ³ãƒˆ */\r\nold_function(z);\r\n";
         std::string bytes;
         EncodingDetector::Encode(text, TextEncoding::ShiftJIS, false, bytes);
         WriteRaw(path, bytes);
@@ -396,38 +396,38 @@ static void TestEncodingAndNewline()
         std::wstring read;
         FileInfo fi;
         FileManager::ReadText(path, L"auto", read, fi);
-        Check(fi.encoding == TextEncoding::ShiftJIS, L"Shift_JIS ‚Æ”»’è‚·‚é");
-        Check(read == L"/* “ú–{ŒêƒRƒƒ“ƒg */\nold_function(z);\n",
-              L"Shift_JIS ‚Ì“ú–{Œê‚ª•¶š‰»‚¯‚¹‚¸“Ç‚İ‚ß‚é");
+        Check(fi.encoding == TextEncoding::ShiftJIS, L"Shift_JIS ã¨åˆ¤å®šã™ã‚‹");
+        Check(read == L"/* æ—¥æœ¬èªã‚³ãƒ¡ãƒ³ãƒˆ */\nold_function(z);\n",
+              L"Shift_JIS ã®æ—¥æœ¬èªãŒæ–‡å­—åŒ–ã‘ã›ãšèª­ã¿è¾¼ã‚ã‚‹");
 
         std::wstring err;
         Check(FileManager::WriteTextAtomic(path, read, fi.encoding, fi.has_bom, fi.newline, err),
-              L"Shift_JIS ‚Å‘‚«–ß‚¹‚é");
+              L"Shift_JIS ã§æ›¸ãæˆ»ã›ã‚‹");
         std::string raw2;
         ReadRaw(path, raw2);
-        Check(raw2 == bytes, L"Shift_JIS ‚ÌƒoƒCƒg—ñ‚ªŠ®‘S‚Éˆê’v‚·‚éi‰•œˆê’vj");
+        Check(raw2 == bytes, L"Shift_JIS ã®ãƒã‚¤ãƒˆåˆ—ãŒå®Œå…¨ã«ä¸€è‡´ã™ã‚‹ï¼ˆå¾€å¾©ä¸€è‡´ï¼‰");
     }
 
-    // --- ”»’èŠÖ”’P‘Ì ---
+    // --- åˆ¤å®šé–¢æ•°å˜ä½“ ---
     {
         size_t bom = 0;
-        std::string utf8 = "\xE3\x81\x82";     // "‚ "
-        Check(EncodingDetector::Detect(utf8, bom) == TextEncoding::UTF8, L"UTF-8 ‚ğ”»’è‚·‚é");
-        std::string sjis = "\x82\xA0";         // "‚ " (Shift_JIS)
-        Check(EncodingDetector::Detect(sjis, bom) == TextEncoding::ShiftJIS, L"Shift_JIS ‚ğ”»’è‚·‚é");
+        std::string utf8 = "\xE3\x81\x82";     // "ã‚"
+        Check(EncodingDetector::Detect(utf8, bom) == TextEncoding::UTF8, L"UTF-8 ã‚’åˆ¤å®šã™ã‚‹");
+        std::string sjis = "\x82\xA0";         // "ã‚" (Shift_JIS)
+        Check(EncodingDetector::Detect(sjis, bom) == TextEncoding::ShiftJIS, L"Shift_JIS ã‚’åˆ¤å®šã™ã‚‹");
         std::string bombytes = "\xEF\xBB\xBFx";
         size_t bl = 0;
         Check(EncodingDetector::Detect(bombytes, bl) == TextEncoding::UTF8BOM && bl == 3,
-              L"BOM ‚ğŒŸo‚µ’·‚³ 3 ‚ğ•Ô‚·");
+              L"BOM ã‚’æ¤œå‡ºã—é•·ã• 3 ã‚’è¿”ã™");
     }
 }
 
 // -----------------------------------------------------------------------------
-// 20.1 No.8`9 ƒoƒbƒNƒAƒbƒv / Undo
+// 20.1 No.8ï½9 ãƒãƒƒã‚¯ã‚¢ãƒƒãƒ— / Undo
 // -----------------------------------------------------------------------------
 static void TestBackupUndo()
 {
-    Out(L"\n== ƒoƒbƒNƒAƒbƒv / Undo (20.1 No.8-9) ==\n");
+    Out(L"\n== ãƒãƒƒã‚¯ã‚¢ãƒƒãƒ— / Undo (20.1 No.8-9) ==\n");
 
     std::wstring dir = TestDir();
     std::wstring target = util::JoinPath(dir, L"backup_target.c");
@@ -440,17 +440,17 @@ static void TestBackupUndo()
 
     std::wstring backup;
     Check(BackupManager::CreateBackup(target, L"", backup, err),
-          L"ƒoƒbƒNƒAƒbƒv‚ğì¬‚·‚éi“¯ˆêƒtƒHƒ‹ƒ_j");
-    Check(!backup.empty() && util::PathExists(backup), L"ƒoƒbƒNƒAƒbƒvƒtƒ@ƒCƒ‹‚ªÀİ‚·‚é");
-    Check(backup.find(L".bak") != std::wstring::npos, L"Šg’£q‚ª .bak ‚Å‚ ‚é");
+          L"ãƒãƒƒã‚¯ã‚¢ãƒƒãƒ—ã‚’ä½œæˆã™ã‚‹ï¼ˆåŒä¸€ãƒ•ã‚©ãƒ«ãƒ€ï¼‰");
+    Check(!backup.empty() && util::PathExists(backup), L"ãƒãƒƒã‚¯ã‚¢ãƒƒãƒ—ãƒ•ã‚¡ã‚¤ãƒ«ãŒå®Ÿåœ¨ã™ã‚‹");
+    Check(backup.find(L".bak") != std::wstring::npos, L"æ‹¡å¼µå­ãŒ .bak ã§ã‚ã‚‹");
     Check(util::GetDirectoryOf(backup) == util::GetDirectoryOf(target),
-          L"ƒoƒbƒNƒAƒbƒvæ‚ª‘ÎÛ‚Æ“¯ˆêƒtƒHƒ‹ƒ_‚Å‚ ‚é");
+          L"ãƒãƒƒã‚¯ã‚¢ãƒƒãƒ—å…ˆãŒå¯¾è±¡ã¨åŒä¸€ãƒ•ã‚©ãƒ«ãƒ€ã§ã‚ã‚‹");
 
     std::wstring cberr;
     Check(BackupManager::CanCreateBackup(target, L"", cberr),
-          L"ƒoƒbƒNƒAƒbƒvì¬‰Â”Û‚ğ–‘OŠm”F‚Å‚«‚é");
+          L"ãƒãƒƒã‚¯ã‚¢ãƒƒãƒ—ä½œæˆå¯å¦ã‚’äº‹å‰ç¢ºèªã§ãã‚‹");
 
-    // •ÏX‚ğ‰Á‚¦‚é
+    // å¤‰æ›´ã‚’åŠ ãˆã‚‹
     std::wstring err2;
     FileManager::WriteTextAtomic(target, L"int changed_content;\n",
                                  TextEncoding::UTF8, false, NewlineKind::LF, err2);
@@ -458,7 +458,7 @@ static void TestBackupUndo()
     std::wstring read;
     FileInfo fi;
     FileManager::ReadText(target, L"auto", read, fi);
-    Check(read == L"int changed_content;\n", L"•ÏXŒã‚Ì“à—e‚ª‘‚«‚Ü‚ê‚Ä‚¢‚é");
+    Check(read == L"int changed_content;\n", L"å¤‰æ›´å¾Œã®å†…å®¹ãŒæ›¸ãè¾¼ã¾ã‚Œã¦ã„ã‚‹");
 
     // Undo
     UndoManager um;
@@ -468,22 +468,22 @@ static void TestBackupUndo()
     rec.switch_name = L"MIGRATION_001";
     rec.executed_at = util::NowDateTime();
     um.SetRecord(rec);
-    Check(um.CanUndo(), L"Undo ‰Â”\‚Æ”»’è‚·‚é");
+    Check(um.CanUndo(), L"Undo å¯èƒ½ã¨åˆ¤å®šã™ã‚‹");
 
     std::wstring uerr;
     std::vector<std::wstring> sidecar;
-    Check(um.Undo(uerr, sidecar), L"ƒoƒbƒNƒAƒbƒv‚©‚ç•œŒ³‚Å‚«‚é");
+    Check(um.Undo(uerr, sidecar), L"ãƒãƒƒã‚¯ã‚¢ãƒƒãƒ—ã‹ã‚‰å¾©å…ƒã§ãã‚‹");
     FileManager::ReadText(target, L"auto", read, fi);
-    Check(read == original, L"Œ³ƒtƒ@ƒCƒ‹‚Ì“à—e‚ÖŠ®‘S‚É•œŒ³‚³‚ê‚é");
-    Check(!um.CanUndo(), L"‰Šú”Å‚Å‚Í Undo ‚Í 1 ‰ñ‚Ì‚İi2 ‰ñ–Ú‚Í•s‰Âj");
+    Check(read == original, L"å…ƒãƒ•ã‚¡ã‚¤ãƒ«ã®å†…å®¹ã¸å®Œå…¨ã«å¾©å…ƒã•ã‚Œã‚‹");
+    Check(!um.CanUndo(), L"åˆæœŸç‰ˆã§ã¯ Undo ã¯ 1 å›ã®ã¿ï¼ˆ2 å›ç›®ã¯ä¸å¯ï¼‰");
 }
 
 // -----------------------------------------------------------------------------
-// 20.1 No.10 HTML ƒŒƒ|[ƒg¶¬
+// 20.1 No.10 HTML ãƒ¬ãƒãƒ¼ãƒˆç”Ÿæˆ
 // -----------------------------------------------------------------------------
 static void TestReport()
 {
-    Out(L"\n== HTML ·•ªƒŒƒ|[ƒg (20.1 No.10 / 6.12) ==\n");
+    Out(L"\n== HTML å·®åˆ†ãƒ¬ãƒãƒ¼ãƒˆ (20.1 No.10 / 6.12) ==\n");
 
     std::wstring dir = TestDir();
     std::wstring target = util::JoinPath(dir, L"report_target.c");
@@ -495,7 +495,7 @@ static void TestReport()
         L"}\n";
     std::vector<MatchResult> m = SearchEngine::Search(before, L"old_function(a, b);", target);
     m[0].selected = true;
-    m[0].warning_flags.push_back(L"ƒeƒXƒgŒx");
+    m[0].warning_flags.push_back(L"ãƒ†ã‚¹ãƒˆè­¦å‘Š");
 
     std::wstring block =
         L"#ifdef MIGRATION_001\nnew_function(a, b);\n#else\nold_function(a, b);\n#endif";
@@ -521,39 +521,39 @@ static void TestReport()
 
     std::wstring path = DiffReportGenerator::BuildReportPath(dir, target, util::TimestampFileName());
     Check(path.find(L"_report_target_diff.html") != std::wstring::npos,
-          L"ƒŒƒ|[ƒgƒtƒ@ƒCƒ‹–¼‚ª <stamp>_<basename>_diff.html Œ`®‚Å‚ ‚é");
+          L"ãƒ¬ãƒãƒ¼ãƒˆãƒ•ã‚¡ã‚¤ãƒ«åãŒ <stamp>_<basename>_diff.html å½¢å¼ã§ã‚ã‚‹");
 
     std::wstring err;
     Check(DiffReportGenerator::Generate(path, ctx, m, before, after, res, err),
-          L"HTML ƒŒƒ|[ƒg‚ğ¶¬‚·‚é");
-    Check(util::PathExists(path), L"ƒŒƒ|[ƒgƒtƒ@ƒCƒ‹‚ªÀİ‚·‚é");
+          L"HTML ãƒ¬ãƒãƒ¼ãƒˆã‚’ç”Ÿæˆã™ã‚‹");
+    Check(util::PathExists(path), L"ãƒ¬ãƒãƒ¼ãƒˆãƒ•ã‚¡ã‚¤ãƒ«ãŒå®Ÿåœ¨ã™ã‚‹");
 
     std::string raw;
     ReadRaw(path, raw);
     std::wstring html = util::Utf8ToWide(
-        raw.size() > 3 ? raw.substr(3) : raw);   // BOM ‚ğœ‹
-    Check(Contains(html, L"Migration Switch Report"), L"ƒ^ƒCƒgƒ‹‚ªŠÜ‚Ü‚ê‚é");
-    Check(Contains(html, L"MIGRATION_001"), L"ƒXƒCƒbƒ`–¼‚ªŠÜ‚Ü‚ê‚é");
-    Check(Contains(html, L"ƒhƒ‰ƒCƒ‰ƒ“"), L"Àsƒ‚[ƒhiƒhƒ‰ƒCƒ‰ƒ“j‚ªŠÜ‚Ü‚ê‚é");
+        raw.size() > 3 ? raw.substr(3) : raw);   // BOM ã‚’é™¤å»
+    Check(Contains(html, L"Migration Switch Report"), L"ã‚¿ã‚¤ãƒˆãƒ«ãŒå«ã¾ã‚Œã‚‹");
+    Check(Contains(html, L"MIGRATION_001"), L"ã‚¹ã‚¤ãƒƒãƒåãŒå«ã¾ã‚Œã‚‹");
+    Check(Contains(html, L"ãƒ‰ãƒ©ã‚¤ãƒ©ãƒ³"), L"å®Ÿè¡Œãƒ¢ãƒ¼ãƒ‰ï¼ˆãƒ‰ãƒ©ã‚¤ãƒ©ãƒ³ï¼‰ãŒå«ã¾ã‚Œã‚‹");
     Check(Contains(html, L".added{background-color:#e6ffed;}"),
-          L"CSS •ûj .added = #e6ffed ‚ªŠÜ‚Ü‚ê‚é");
+          L"CSS æ–¹é‡ .added = #e6ffed ãŒå«ã¾ã‚Œã‚‹");
     Check(Contains(html, L".deleted{background-color:#ffeef0;}"),
-          L"CSS •ûj .deleted = #ffeef0 ‚ªŠÜ‚Ü‚ê‚é");
+          L"CSS æ–¹é‡ .deleted = #ffeef0 ãŒå«ã¾ã‚Œã‚‹");
     Check(Contains(html, L".changed{background-color:#fff5b1;}"),
-          L"CSS •ûj .changed = #fff5b1 ‚ªŠÜ‚Ü‚ê‚é");
+          L"CSS æ–¹é‡ .changed = #fff5b1 ãŒå«ã¾ã‚Œã‚‹");
     Check(Contains(html, L".warning{background-color:#ffd580;}"),
-          L"CSS •ûj .warning = #ffd580 ‚ªŠÜ‚Ü‚ê‚é");
+          L"CSS æ–¹é‡ .warning = #ffd580 ãŒå«ã¾ã‚Œã‚‹");
     Check(Contains(html, L"old_function(a, b);") && Contains(html, L"new_function(a, b);"),
-          L"•ÏX‘OŒã‚ÌƒR[ƒh‚ªŠÜ‚Ü‚ê‚é");
-    Check(Contains(html, L"ƒeƒXƒgŒx"), L"Œxˆê——‚ªŠÜ‚Ü‚ê‚é");
+          L"å¤‰æ›´å‰å¾Œã®ã‚³ãƒ¼ãƒ‰ãŒå«ã¾ã‚Œã‚‹");
+    Check(Contains(html, L"ãƒ†ã‚¹ãƒˆè­¦å‘Š"), L"è­¦å‘Šä¸€è¦§ãŒå«ã¾ã‚Œã‚‹");
 }
 
 // -----------------------------------------------------------------------------
-// 19Í ˆÀ‘S«i“Ç‚İæ‚èê—pEŒ´q“I‘‚«‚İj
+// 19ç«  å®‰å…¨æ€§ï¼ˆèª­ã¿å–ã‚Šå°‚ç”¨ãƒ»åŸå­çš„æ›¸ãè¾¼ã¿ï¼‰
 // -----------------------------------------------------------------------------
 static void TestSafety()
 {
-    Out(L"\n== ˆÀ‘S« (19Í) ==\n");
+    Out(L"\n== å®‰å…¨æ€§ (19ç« ) ==\n");
 
     std::wstring dir = TestDir();
     std::wstring ro = util::JoinPath(dir, L"readonly.c");
@@ -563,62 +563,62 @@ static void TestSafety()
     ::SetFileAttributesW(ro.c_str(), FILE_ATTRIBUTE_READONLY);
 
     FileInfo fi = FileManager::Inspect(ro, L"auto");
-    Check(fi.read_only_attribute, L"“Ç‚İæ‚èê—p‘®«‚ğŒŸo‚·‚é");
-    Check(!fi.writable, L"“Ç‚İæ‚èê—pƒtƒ@ƒCƒ‹‚Í‘‚«‚İƒnƒ“ƒhƒ‹‚ğæ“¾‚Å‚«‚È‚¢iWindows ‚Ìd—l‚Ç‚¨‚èj");
+    Check(fi.read_only_attribute, L"èª­ã¿å–ã‚Šå°‚ç”¨å±æ€§ã‚’æ¤œå‡ºã™ã‚‹");
+    Check(!fi.writable, L"èª­ã¿å–ã‚Šå°‚ç”¨ãƒ•ã‚¡ã‚¤ãƒ«ã¯æ›¸ãè¾¼ã¿ãƒãƒ³ãƒ‰ãƒ«ã‚’å–å¾—ã§ããªã„ï¼ˆWindows ã®ä»•æ§˜ã©ãŠã‚Šï¼‰");
     {
         ValidationResult rovr = ValidationManager::ValidateTargetFile(ro, fi);
         Check(rovr.ok && !rovr.warnings.empty(),
-              L"“Ç‚İæ‚èê—p‚Å‚àŒx‚Ì‚İ‚ÅÀs‚ğ’†’f‚µ‚È‚¢i‘®«‚ğˆê‰ğœ‚µ‚Ä‘‚«‚ŞİŒvj");
+              L"èª­ã¿å–ã‚Šå°‚ç”¨ã§ã‚‚è­¦å‘Šã®ã¿ã§å®Ÿè¡Œã‚’ä¸­æ–­ã—ãªã„ï¼ˆå±æ€§ã‚’ä¸€æ™‚è§£é™¤ã—ã¦æ›¸ãè¾¼ã‚€è¨­è¨ˆï¼‰");
     }
 
     std::wstring err;
     bool wrote = FileManager::WriteTextAtomic(ro, L"int changed;\n",
                                               TextEncoding::UTF8, false,
                                               NewlineKind::LF, err);
-    Check(wrote, L"“Ç‚İæ‚èê—pƒtƒ@ƒCƒ‹‚Ö‘‚«‚ß‚éi‘®«‚ğˆê‰ğœj");
+    Check(wrote, L"èª­ã¿å–ã‚Šå°‚ç”¨ãƒ•ã‚¡ã‚¤ãƒ«ã¸æ›¸ãè¾¼ã‚ã‚‹ï¼ˆå±æ€§ã‚’ä¸€æ™‚è§£é™¤ï¼‰");
 
     DWORD attr = ::GetFileAttributesW(ro.c_str());
-    Check((attr & FILE_ATTRIBUTE_READONLY) != 0, L"‘‚«‚İŒã‚É“Ç‚İæ‚èê—p‘®«‚ª•œŒ³‚³‚ê‚é");
+    Check((attr & FILE_ATTRIBUTE_READONLY) != 0, L"æ›¸ãè¾¼ã¿å¾Œã«èª­ã¿å–ã‚Šå°‚ç”¨å±æ€§ãŒå¾©å…ƒã•ã‚Œã‚‹");
     ::SetFileAttributesW(ro.c_str(), FILE_ATTRIBUTE_NORMAL);
 
     std::wstring missing = util::JoinPath(dir, L"no_such_file.c");
     FileInfo mi = FileManager::Inspect(missing, L"auto");
-    Check(!mi.exists, L"‘¶İ‚µ‚È‚¢ƒtƒ@ƒCƒ‹‚ğŒŸo‚·‚é");
+    Check(!mi.exists, L"å­˜åœ¨ã—ãªã„ãƒ•ã‚¡ã‚¤ãƒ«ã‚’æ¤œå‡ºã™ã‚‹");
     ValidationResult vr = ValidationManager::ValidateTargetFile(missing, mi);
-    Check(!vr.ok, L"‘¶İ‚µ‚È‚¢ƒtƒ@ƒCƒ‹‚ğÀs‘Oƒ`ƒFƒbƒN‚Å’†’f‚·‚é");
+    Check(!vr.ok, L"å­˜åœ¨ã—ãªã„ãƒ•ã‚¡ã‚¤ãƒ«ã‚’å®Ÿè¡Œå‰ãƒã‚§ãƒƒã‚¯ã§ä¸­æ–­ã™ã‚‹");
 
-    // ˆêƒtƒ@ƒCƒ‹Œo—R‚Å‚ ‚é‚±‚Æitemp ƒtƒHƒ‹ƒ_‚ªì‚ç‚ê‚éj
+    // ä¸€æ™‚ãƒ•ã‚¡ã‚¤ãƒ«çµŒç”±ã§ã‚ã‚‹ã“ã¨ï¼ˆtemp ãƒ•ã‚©ãƒ«ãƒ€ãŒä½œã‚‰ã‚Œã‚‹ï¼‰
     Check(util::PathExists(util::JoinPath(util::ModuleDirectory(), L"temp")),
-          L"ˆêƒtƒ@ƒCƒ‹—p temp ƒtƒHƒ‹ƒ_‚ªì¬‚³‚ê‚é");
+          L"ä¸€æ™‚ãƒ•ã‚¡ã‚¤ãƒ«ç”¨ temp ãƒ•ã‚©ãƒ«ãƒ€ãŒä½œæˆã•ã‚Œã‚‹");
 }
 
 // -----------------------------------------------------------------------------
-// 6.3 / 6.4 “ü—Íƒ`ƒFƒbƒN
+// 6.3 / 6.4 å…¥åŠ›ãƒã‚§ãƒƒã‚¯
 // -----------------------------------------------------------------------------
 static void TestInputChecks()
 {
-    Out(L"\n== “ü—Íƒ`ƒFƒbƒN (6.3 / 6.4) ==\n");
+    Out(L"\n== å…¥åŠ›ãƒã‚§ãƒƒã‚¯ (6.3 / 6.4) ==\n");
 
-    Check(!ValidationManager::ValidateOldCode(L"").ok, L"‹ŒƒR[ƒh–¢“ü—Í‚ğƒGƒ‰[‚É‚·‚é");
-    Check(!ValidationManager::ValidateOldCode(L"   \n\t ").ok, L"‹ŒƒR[ƒh‹ó”’‚Ì‚İ‚ğƒGƒ‰[‚É‚·‚é");
-    Check(ValidationManager::ValidateOldCode(L"old_function(a);").ok, L"³í‚È‹ŒƒR[ƒh‚ğ‹–‰Â‚·‚é");
+    Check(!ValidationManager::ValidateOldCode(L"").ok, L"æ—§ã‚³ãƒ¼ãƒ‰æœªå…¥åŠ›ã‚’ã‚¨ãƒ©ãƒ¼ã«ã™ã‚‹");
+    Check(!ValidationManager::ValidateOldCode(L"   \n\t ").ok, L"æ—§ã‚³ãƒ¼ãƒ‰ç©ºç™½ã®ã¿ã‚’ã‚¨ãƒ©ãƒ¼ã«ã™ã‚‹");
+    Check(ValidationManager::ValidateOldCode(L"old_function(a);").ok, L"æ­£å¸¸ãªæ—§ã‚³ãƒ¼ãƒ‰ã‚’è¨±å¯ã™ã‚‹");
 
     ValidationResult n1 = ValidationManager::ValidateNewCode(L"old();", L"");
-    Check(n1.ok && !n1.warnings.empty(), L"VƒR[ƒh–¢“ü—Í‚ğŒx‚·‚é");
+    Check(n1.ok && !n1.warnings.empty(), L"æ–°ã‚³ãƒ¼ãƒ‰æœªå…¥åŠ›ã‚’è­¦å‘Šã™ã‚‹");
 
     ValidationResult n2 = ValidationManager::ValidateNewCode(L"old();", L"old();");
-    Check(!n2.warnings.empty(), L"‹ŒƒR[ƒh‚Æ“¯ˆê‚ÌVƒR[ƒh‚ğŒx‚·‚é");
+    Check(!n2.warnings.empty(), L"æ—§ã‚³ãƒ¼ãƒ‰ã¨åŒä¸€ã®æ–°ã‚³ãƒ¼ãƒ‰ã‚’è­¦å‘Šã™ã‚‹");
 
     ValidationResult n3 = ValidationManager::ValidateNewCode(L"old();", L"#ifdef X\nnew();\n#endif");
     bool has_ifdef_warn = false;
     for (size_t i = 0; i < n3.warnings.size(); ++i)
         if (n3.warnings[i].find(L"#ifdef") != std::wstring::npos) has_ifdef_warn = true;
-    Check(has_ifdef_warn, L"VƒR[ƒh‚Ì #ifdef ¬“ü‚ğŒx‚·‚é");
+    Check(has_ifdef_warn, L"æ–°ã‚³ãƒ¼ãƒ‰ã® #ifdef æ··å…¥ã‚’è­¦å‘Šã™ã‚‹");
 }
 
 
 // =============================================================================
-// Phase 4: 17Í •¡”ƒtƒ@ƒCƒ‹ˆêŠ‡ˆ—
+// Phase 4: 17ç«  è¤‡æ•°ãƒ•ã‚¡ã‚¤ãƒ«ä¸€æ‹¬å‡¦ç†
 // =============================================================================
 static bool WriteTextFile(const std::wstring& path, const std::wstring& text)
 {
@@ -665,7 +665,7 @@ static void BuildBlocks(std::vector<BatchFileEntry>& entries,
 
 static void TestFolderScan()
 {
-    Out(L"\n== ƒtƒHƒ‹ƒ_‘–¸ / Šg’£qƒtƒBƒ‹ƒ^ (17.2.2 è‡1-2) ==\n");
+    Out(L"\n== ãƒ•ã‚©ãƒ«ãƒ€èµ°æŸ» / æ‹¡å¼µå­ãƒ•ã‚£ãƒ«ã‚¿ (17.2.2 æ‰‹é †1-2) ==\n");
 
     std::wstring base = MakeBatchTree();
     std::vector<std::wstring> exts;
@@ -674,43 +674,43 @@ static void TestFolderScan()
 
     ScanResult all;
     FolderScanner::Scan(base, exts, true, all);
-    Check(all.files.size() == 3, L"ƒTƒuƒtƒHƒ‹ƒ_‚ğŠÜ‚ß‚Ä 3 ƒtƒ@ƒCƒ‹‚ğ’Šo‚·‚éi.txt ‚ÍœŠOj");
+    Check(all.files.size() == 3, L"ã‚µãƒ–ãƒ•ã‚©ãƒ«ãƒ€ã‚’å«ã‚ã¦ 3 ãƒ•ã‚¡ã‚¤ãƒ«ã‚’æŠ½å‡ºã™ã‚‹ï¼ˆ.txt ã¯é™¤å¤–ï¼‰");
 
     ScanResult flat;
     FolderScanner::Scan(base, exts, false, flat);
-    Check(flat.files.size() == 2, L"ƒTƒuƒtƒHƒ‹ƒ_‚ğŠÜ‚ß‚È‚¢ê‡‚Í 2 ƒtƒ@ƒCƒ‹‚ğ’Šo‚·‚é");
+    Check(flat.files.size() == 2, L"ã‚µãƒ–ãƒ•ã‚©ãƒ«ãƒ€ã‚’å«ã‚ãªã„å ´åˆã¯ 2 ãƒ•ã‚¡ã‚¤ãƒ«ã‚’æŠ½å‡ºã™ã‚‹");
 
     std::vector<std::wstring> cexts;
     cexts.push_back(L".c");
     ScanResult conly;
     FolderScanner::Scan(base, cexts, true, conly);
-    Check(conly.files.size() == 2, L"Šg’£qƒtƒBƒ‹ƒ^ .c ‚Ì‚İ‚Å‚Í 2 ƒtƒ@ƒCƒ‹‚ğ’Šo‚·‚é");
+    Check(conly.files.size() == 2, L"æ‹¡å¼µå­ãƒ•ã‚£ãƒ«ã‚¿ .c ã®ã¿ã§ã¯ 2 ãƒ•ã‚¡ã‚¤ãƒ«ã‚’æŠ½å‡ºã™ã‚‹");
 
     Check(FolderScanner::MatchesExtension(L"C:\\work\\Y.C", exts),
-          L"Šg’£q‚Ì‘å•¶š¬•¶š‚ğ‹æ•Ê‚¹‚¸ˆê’v‚·‚é");
+          L"æ‹¡å¼µå­ã®å¤§æ–‡å­—å°æ–‡å­—ã‚’åŒºåˆ¥ã›ãšä¸€è‡´ã™ã‚‹");
     Check(!FolderScanner::MatchesExtension(L"C:\\work\\y.cpp", exts),
-          L"ƒtƒBƒ‹ƒ^ŠO‚ÌŠg’£q‚Íˆê’v‚µ‚È‚¢");
+          L"ãƒ•ã‚£ãƒ«ã‚¿å¤–ã®æ‹¡å¼µå­ã¯ä¸€è‡´ã—ãªã„");
 
     std::wstring joined = FolderScanner::JoinExtensions(exts);
-    Check(joined == L"c,h", L"Šg’£qƒŠƒXƒg‚ğ config —p‚ÉŒ‹‡‚Å‚«‚é");
+    Check(joined == L"c,h", L"æ‹¡å¼µå­ãƒªã‚¹ãƒˆã‚’ config ç”¨ã«çµåˆã§ãã‚‹");
     std::vector<std::wstring> back = FolderScanner::SplitExtensions(L"c, cpp ,h");
     Check(back.size() == 3 && back[0] == L".c" && back[1] == L".cpp" && back[2] == L".h",
-          L"Šg’£qƒŠƒXƒg‚ğ•œŒ³‚Å‚«‚éi‹ó”’Eƒhƒbƒg—L–³‚ğ‹zûj");
+          L"æ‹¡å¼µå­ãƒªã‚¹ãƒˆã‚’å¾©å…ƒã§ãã‚‹ï¼ˆç©ºç™½ãƒ»ãƒ‰ãƒƒãƒˆæœ‰ç„¡ã‚’å¸åï¼‰");
 
     std::vector<std::wstring> defs = FolderScanner::DefaultExtensions();
-    Check(defs.size() == 3, L"Šù’è‚ÌŠg’£qƒtƒBƒ‹ƒ^‚Í 3 íi17.2.1j");
+    Check(defs.size() == 3, L"æ—¢å®šã®æ‹¡å¼µå­ãƒ•ã‚£ãƒ«ã‚¿ã¯ 3 ç¨®ï¼ˆ17.2.1ï¼‰");
     Check(FolderScanner::CandidateExtensions().size() == 6,
-          L"Šg’£qŒó•â‚Í 6 íi.c .cpp .h .hpp .cs .javaj");
+          L"æ‹¡å¼µå­å€™è£œã¯ 6 ç¨®ï¼ˆ.c .cpp .h .hpp .cs .javaï¼‰");
 
     ScanResult missing;
     FolderScanner::Scan(util::JoinPath(TestDir(), L"no_such_dir"), exts, true, missing);
     Check(missing.files.empty() && !missing.errors.empty(),
-          L"‘¶İ‚µ‚È‚¢ƒtƒHƒ‹ƒ_‚ğŒŸo‚·‚é");
+          L"å­˜åœ¨ã—ãªã„ãƒ•ã‚©ãƒ«ãƒ€ã‚’æ¤œå‡ºã™ã‚‹");
 }
 
 static void TestBatchSearch()
 {
-    Out(L"\n== ˆêŠ‡ŒŸõ‚ÆW–ñ (17.2.2 è‡3-4) ==\n");
+    Out(L"\n== ä¸€æ‹¬æ¤œç´¢ã¨é›†ç´„ (17.2.2 æ‰‹é †3-4) ==\n");
 
     std::wstring base = MakeBatchTree();
     std::vector<std::wstring> exts;
@@ -721,41 +721,41 @@ static void TestBatchSearch()
     std::wstring err;
     bool ok = BatchProcessor::SearchFolder(base, exts, true, L"old_function();",
                                            L"auto", BatchProgressFn(), bs, err);
-    Check(ok, L"ˆêŠ‡ŒŸõ‚ª¬Œ÷‚·‚é");
-    Check(bs.scanned_count == 3, L"‘–¸ƒtƒ@ƒCƒ‹” 3 ‚ğ•ñ‚·‚é");
-    Check(bs.hit_file_count == 3, L"ƒqƒbƒg‚µ‚½ƒtƒ@ƒCƒ‹” 3 ‚ğ•ñ‚·‚é");
-    Check(bs.total_matches == 4, L"ƒqƒbƒgŒ” 4 ‚ğW–ñ‚·‚é");
-    Check(bs.entries.size() == 3, L"ƒqƒbƒg‚µ‚½ƒtƒ@ƒCƒ‹‚Ì‚İ entries ‚É•Û‚·‚é");
-    Check(bs.matches.size() == 4, L"ˆê’v‰ÓŠ‚ğ 1 ‚Â‚Ìˆê——‚ÖW–ñ‚·‚é");
+    Check(ok, L"ä¸€æ‹¬æ¤œç´¢ãŒæˆåŠŸã™ã‚‹");
+    Check(bs.scanned_count == 3, L"èµ°æŸ»ãƒ•ã‚¡ã‚¤ãƒ«æ•° 3 ã‚’å ±å‘Šã™ã‚‹");
+    Check(bs.hit_file_count == 3, L"ãƒ’ãƒƒãƒˆã—ãŸãƒ•ã‚¡ã‚¤ãƒ«æ•° 3 ã‚’å ±å‘Šã™ã‚‹");
+    Check(bs.total_matches == 4, L"ãƒ’ãƒƒãƒˆä»¶æ•° 4 ã‚’é›†ç´„ã™ã‚‹");
+    Check(bs.entries.size() == 3, L"ãƒ’ãƒƒãƒˆã—ãŸãƒ•ã‚¡ã‚¤ãƒ«ã®ã¿ entries ã«ä¿æŒã™ã‚‹");
+    Check(bs.matches.size() == 4, L"ä¸€è‡´ç®‡æ‰€ã‚’ 1 ã¤ã®ä¸€è¦§ã¸é›†ç´„ã™ã‚‹");
 
     bool ids_ok = true;
     for (size_t i = 0; i < bs.matches.size(); ++i)
         if (bs.matches[i].match_id != (int)i + 1) ids_ok = false;
-    Check(ids_ok, L"ˆê’v‰ÓŠ‚É‘S‘Ì’Ê‚µ”Ô†‚ğU‚é");
+    Check(ids_ok, L"ä¸€è‡´ç®‡æ‰€ã«å…¨ä½“é€šã—ç•ªå·ã‚’æŒ¯ã‚‹");
 
     bool files_ok = true;
     for (size_t i = 0; i < bs.matches.size(); ++i)
         if (bs.matches[i].file_path.empty()) files_ok = false;
-    Check(files_ok, L"Šeˆê’v‰ÓŠ‚Éƒtƒ@ƒCƒ‹ƒpƒX‚ªİ’è‚³‚ê‚é");
+    Check(files_ok, L"å„ä¸€è‡´ç®‡æ‰€ã«ãƒ•ã‚¡ã‚¤ãƒ«ãƒ‘ã‚¹ãŒè¨­å®šã•ã‚Œã‚‹");
 
-    // ƒqƒbƒg‚È‚µ
+    // ãƒ’ãƒƒãƒˆãªã—
     BatchSearchResult none;
     BatchProcessor::SearchFolder(base, exts, true, L"no_such_symbol_xyz",
                                  L"auto", BatchProgressFn(), none, err);
-    Check(none.total_matches == 0, L"ƒqƒbƒg‚ª‚È‚¢ê‡‚Í 0 Œ‚ğ•Ô‚·");
+    Check(none.total_matches == 0, L"ãƒ’ãƒƒãƒˆãŒãªã„å ´åˆã¯ 0 ä»¶ã‚’è¿”ã™");
 
-    // ‘ÎÛ‚È‚µ
+    // å¯¾è±¡ãªã—
     std::vector<std::wstring> noext;
     noext.push_back(L".rs");
     BatchSearchResult empty;
     bool ok2 = BatchProcessor::SearchFolder(base, noext, true, L"old_function();",
                                             L"auto", BatchProgressFn(), empty, err);
-    Check(!ok2 && !err.empty(), L"ğŒ‚Éˆê’v‚·‚éƒtƒ@ƒCƒ‹‚ª–³‚¢ê‡‚ÉƒGƒ‰[‚ğ•Ô‚·");
+    Check(!ok2 && !err.empty(), L"æ¡ä»¶ã«ä¸€è‡´ã™ã‚‹ãƒ•ã‚¡ã‚¤ãƒ«ãŒç„¡ã„å ´åˆã«ã‚¨ãƒ©ãƒ¼ã‚’è¿”ã™");
 }
 
 static void TestBatchDryRunAndExecute()
 {
-    Out(L"\n== ˆêŠ‡ƒhƒ‰ƒCƒ‰ƒ“ / ˆêŠ‡•ÏŠ· (17.2.2 è‡6-8) ==\n");
+    Out(L"\n== ä¸€æ‹¬ãƒ‰ãƒ©ã‚¤ãƒ©ãƒ³ / ä¸€æ‹¬å¤‰æ› (17.2.2 æ‰‹é †6-8) ==\n");
 
     std::wstring base = MakeBatchTree();
     std::vector<std::wstring> exts;
@@ -783,7 +783,7 @@ static void TestBatchDryRunAndExecute()
     ctx.target_folder = base;
     ctx.started_at = util::NowDateTime();
 
-    // ---- ƒhƒ‰ƒCƒ‰ƒ“ ----
+    // ---- ãƒ‰ãƒ©ã‚¤ãƒ©ãƒ³ ----
     {
         BatchSearchResult bs;
         std::wstring err;
@@ -798,19 +798,19 @@ static void TestBatchDryRunAndExecute()
         std::vector<UndoRecord> ur;
         bool ok = BatchProcessor::ExecuteBatch(ctx, L"auto", bs.entries, bs.matches,
                                                blocks, L"", BatchProgressFn(), br, ur, err);
-        Check(ok, L"ˆêŠ‡ƒhƒ‰ƒCƒ‰ƒ“‚ª¬Œ÷‚·‚é");
-        Check(br.replaced_count == 4, L"ƒhƒ‰ƒCƒ‰ƒ“‚Å’uŠ·—\’è 4 Œ‚ğ•ñ‚·‚é");
-        Check(ur.empty(), L"ƒhƒ‰ƒCƒ‰ƒ“‚Å‚Í Undo î•ñ‚ğì¬‚µ‚È‚¢");
+        Check(ok, L"ä¸€æ‹¬ãƒ‰ãƒ©ã‚¤ãƒ©ãƒ³ãŒæˆåŠŸã™ã‚‹");
+        Check(br.replaced_count == 4, L"ãƒ‰ãƒ©ã‚¤ãƒ©ãƒ³ã§ç½®æ›äºˆå®š 4 ä»¶ã‚’å ±å‘Šã™ã‚‹");
+        Check(ur.empty(), L"ãƒ‰ãƒ©ã‚¤ãƒ©ãƒ³ã§ã¯ Undo æƒ…å ±ã‚’ä½œæˆã—ãªã„");
 
         std::wstring now_a;
         FileManager::ReadText(a_path, L"auto", now_a, fi);
-        Check(now_a == orig_a, L"ƒhƒ‰ƒCƒ‰ƒ“‚Å‚Íƒtƒ@ƒCƒ‹‚ª•ÏX‚³‚ê‚È‚¢");
+        Check(now_a == orig_a, L"ãƒ‰ãƒ©ã‚¤ãƒ©ãƒ³ã§ã¯ãƒ•ã‚¡ã‚¤ãƒ«ãŒå¤‰æ›´ã•ã‚Œãªã„");
 
         bool no_switch = (now_a.find(L"#ifdef") == std::wstring::npos);
-        Check(no_switch, L"ƒhƒ‰ƒCƒ‰ƒ“Œã‚àƒRƒ“ƒpƒCƒ‹ƒXƒCƒbƒ`‚ª‘}“ü‚³‚ê‚Ä‚¢‚È‚¢");
+        Check(no_switch, L"ãƒ‰ãƒ©ã‚¤ãƒ©ãƒ³å¾Œã‚‚ã‚³ãƒ³ãƒ‘ã‚¤ãƒ«ã‚¹ã‚¤ãƒƒãƒãŒæŒ¿å…¥ã•ã‚Œã¦ã„ãªã„");
     }
 
-    // ---- –{Às ----
+    // ---- æœ¬å®Ÿè¡Œ ----
     BatchExecuteResult real;
     std::vector<UndoRecord> ur2;
     std::wstring backup_dir = util::JoinPath(TestDir(), L"batch_backup");
@@ -829,14 +829,14 @@ static void TestBatchDryRunAndExecute()
         bool ok = BatchProcessor::ExecuteBatch(ctx, L"auto", bs.entries, bs.matches,
                                                blocks, backup_dir, BatchProgressFn(),
                                                real, ur2, err);
-        Check(ok, L"ˆêŠ‡•ÏŠ·‚ª¬Œ÷‚·‚é");
-        Check(real.replaced_count == 4, L"ˆêŠ‡•ÏŠ·‚Å 4 Œ‚ğ’uŠ·‚·‚é");
-        Check(real.error_count == 0, L"¸”sƒtƒ@ƒCƒ‹‚ª 0 Œ‚Å‚ ‚é");
-        Check(ur2.size() == 3, L"¬Œ÷‚µ‚½ 3 ƒtƒ@ƒCƒ‹•ª‚Ì Undo î•ñ‚ğì¬‚·‚é");
-        Check(real.status == L"Success", L"Œ‹‰ÊƒXƒe[ƒ^ƒX‚ª Success ‚Å‚ ‚é");
+        Check(ok, L"ä¸€æ‹¬å¤‰æ›ãŒæˆåŠŸã™ã‚‹");
+        Check(real.replaced_count == 4, L"ä¸€æ‹¬å¤‰æ›ã§ 4 ä»¶ã‚’ç½®æ›ã™ã‚‹");
+        Check(real.error_count == 0, L"å¤±æ•—ãƒ•ã‚¡ã‚¤ãƒ«ãŒ 0 ä»¶ã§ã‚ã‚‹");
+        Check(ur2.size() == 3, L"æˆåŠŸã—ãŸ 3 ãƒ•ã‚¡ã‚¤ãƒ«åˆ†ã® Undo æƒ…å ±ã‚’ä½œæˆã™ã‚‹");
+        Check(real.status == L"Success", L"çµæœã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹ãŒ Success ã§ã‚ã‚‹");
     }
 
-    // ƒtƒ@ƒCƒ‹“à—e‚ÌŒŸØ
+    // ãƒ•ã‚¡ã‚¤ãƒ«å†…å®¹ã®æ¤œè¨¼
     {
         std::wstring now_a, now_b, now_c;
         FileInfo fa, fb, fc;
@@ -845,24 +845,24 @@ static void TestBatchDryRunAndExecute()
         FileManager::ReadText(c_path, L"auto", now_c, fc);
 
         Check(now_a.find(L"#ifdef MIGRATION_001") != std::wstring::npos,
-              L"a.c ‚ÉƒRƒ“ƒpƒCƒ‹ƒXƒCƒbƒ`‚ª‘}“ü‚³‚ê‚é");
+              L"a.c ã«ã‚³ãƒ³ãƒ‘ã‚¤ãƒ«ã‚¹ã‚¤ãƒƒãƒãŒæŒ¿å…¥ã•ã‚Œã‚‹");
         int cnt = 0;
         size_t pos = 0;
         while ((pos = now_a.find(L"#ifdef MIGRATION_001", pos)) != std::wstring::npos) { ++cnt; pos += 4; }
-        Check(cnt == 2, L"a.c ‚Ì 2 ‰ÓŠ‚·‚×‚Ä‚ª’uŠ·‚³‚ê‚é");
+        Check(cnt == 2, L"a.c ã® 2 ç®‡æ‰€ã™ã¹ã¦ãŒç½®æ›ã•ã‚Œã‚‹");
         Check(now_a.find(L"        new_function();") != std::wstring::npos,
-              L"8 ƒXƒy[ƒX‚ÌƒCƒ“ƒfƒ“ƒg‚ª‘ÎÛs‚©‚çˆø‚«Œp‚ª‚ê‚éi6.8j");
+              L"8 ã‚¹ãƒšãƒ¼ã‚¹ã®ã‚¤ãƒ³ãƒ‡ãƒ³ãƒˆãŒå¯¾è±¡è¡Œã‹ã‚‰å¼•ãç¶™ãŒã‚Œã‚‹ï¼ˆ6.8ï¼‰");
         Check(now_a.find(L"    new_function();") != std::wstring::npos,
-              L"4 ƒXƒy[ƒX‚ÌƒCƒ“ƒfƒ“ƒg‚ª‘ÎÛs‚©‚çˆø‚«Œp‚ª‚ê‚éi6.8j");
+              L"4 ã‚¹ãƒšãƒ¼ã‚¹ã®ã‚¤ãƒ³ãƒ‡ãƒ³ãƒˆãŒå¯¾è±¡è¡Œã‹ã‚‰å¼•ãç¶™ãŒã‚Œã‚‹ï¼ˆ6.8ï¼‰");
         Check(now_b.find(L"#ifdef MIGRATION_001") != std::wstring::npos,
-              L"b.c ‚ÉƒRƒ“ƒpƒCƒ‹ƒXƒCƒbƒ`‚ª‘}“ü‚³‚ê‚é");
+              L"b.c ã«ã‚³ãƒ³ãƒ‘ã‚¤ãƒ«ã‚¹ã‚¤ãƒƒãƒãŒæŒ¿å…¥ã•ã‚Œã‚‹");
         Check(now_c.find(L"#ifdef MIGRATION_001") != std::wstring::npos,
-              L"ƒTƒuƒtƒHƒ‹ƒ_‚Ì c.h ‚ÉƒRƒ“ƒpƒCƒ‹ƒXƒCƒbƒ`‚ª‘}“ü‚³‚ê‚é");
+              L"ã‚µãƒ–ãƒ•ã‚©ãƒ«ãƒ€ã® c.h ã«ã‚³ãƒ³ãƒ‘ã‚¤ãƒ«ã‚¹ã‚¤ãƒƒãƒãŒæŒ¿å…¥ã•ã‚Œã‚‹");
         Check(now_b.find(L"old_function();") != std::wstring::npos,
-              L"‹ŒƒR[ƒh‚ª #else ‘¤‚É•Û‚³‚ê‚é");
+              L"æ—§ã‚³ãƒ¼ãƒ‰ãŒ #else å´ã«ä¿æŒã•ã‚Œã‚‹");
     }
 
-    // ƒoƒbƒNƒAƒbƒv‚ÌŒŸØ
+    // ãƒãƒƒã‚¯ã‚¢ãƒƒãƒ—ã®æ¤œè¨¼
     {
         WIN32_FIND_DATAW fd;
         std::wstring pat = util::JoinPath(backup_dir, L"*.bak");
@@ -873,10 +873,10 @@ static void TestBatchDryRunAndExecute()
             while (::FindNextFileW(h, &fd));
             ::FindClose(h);
         }
-        Check(n == 3, L"ˆêŠ‡ƒoƒbƒNƒAƒbƒv‚ª 3 ƒtƒ@ƒCƒ‹•ªì¬‚³‚ê‚é");
+        Check(n == 3, L"ä¸€æ‹¬ãƒãƒƒã‚¯ã‚¢ãƒƒãƒ—ãŒ 3 ãƒ•ã‚¡ã‚¤ãƒ«åˆ†ä½œæˆã•ã‚Œã‚‹");
     }
 
-    // ---- “‡ƒŒƒ|[ƒg ----
+    // ---- çµ±åˆãƒ¬ãƒãƒ¼ãƒˆ ----
     {
         std::vector<ReportFileSection> sections;
         for (size_t i = 0; i < ur2.size(); ++i) {
@@ -895,57 +895,57 @@ static void TestBatchDryRunAndExecute()
         std::wstring path = DiffReportGenerator::BuildIntegratedReportPath(
             TestDir(), base, util::TimestampFileName());
         Check(path.find(L"_batch_diff.html") != std::wstring::npos,
-              L"“‡ƒŒƒ|[ƒg‚Ìƒtƒ@ƒCƒ‹–¼‚ª <stamp>_<folder>_batch_diff.html Œ`®‚Å‚ ‚é");
+              L"çµ±åˆãƒ¬ãƒãƒ¼ãƒˆã®ãƒ•ã‚¡ã‚¤ãƒ«åãŒ <stamp>_<folder>_batch_diff.html å½¢å¼ã§ã‚ã‚‹");
 
         std::wstring err;
         Check(DiffReportGenerator::GenerateIntegrated(path, ctx, sections, real, err),
-              L"“‡ƒŒƒ|[ƒg‚ğ¶¬‚·‚é");
-        Check(util::PathExists(path), L"“‡ƒŒƒ|[ƒgƒtƒ@ƒCƒ‹‚ªÀİ‚·‚é");
+              L"çµ±åˆãƒ¬ãƒãƒ¼ãƒˆã‚’ç”Ÿæˆã™ã‚‹");
+        Check(util::PathExists(path), L"çµ±åˆãƒ¬ãƒãƒ¼ãƒˆãƒ•ã‚¡ã‚¤ãƒ«ãŒå®Ÿåœ¨ã™ã‚‹");
 
         std::string raw;
         ReadRaw(path, raw);
         std::wstring html = util::Utf8ToWide(raw.size() > 3 ? raw.substr(3) : raw);
-        Check(html.find(L"Migration Switch Report (ˆêŠ‡ˆ—)") != std::wstring::npos,
-              L"“‡ƒŒƒ|[ƒg‚Ìƒ^ƒCƒgƒ‹‚ªŠÜ‚Ü‚ê‚é");
-        Check(html.find(L"ƒtƒ@ƒCƒ‹•ÊƒTƒ}ƒŠ") != std::wstring::npos,
-              L"ƒtƒ@ƒCƒ‹•ÊƒTƒ}ƒŠ•\‚ªŠÜ‚Ü‚ê‚é");
+        Check(html.find(L"Migration Switch Report (ä¸€æ‹¬å‡¦ç†)") != std::wstring::npos,
+              L"çµ±åˆãƒ¬ãƒãƒ¼ãƒˆã®ã‚¿ã‚¤ãƒˆãƒ«ãŒå«ã¾ã‚Œã‚‹");
+        Check(html.find(L"ãƒ•ã‚¡ã‚¤ãƒ«åˆ¥ã‚µãƒãƒª") != std::wstring::npos,
+              L"ãƒ•ã‚¡ã‚¤ãƒ«åˆ¥ã‚µãƒãƒªè¡¨ãŒå«ã¾ã‚Œã‚‹");
         Check(html.find(L"a.c") != std::wstring::npos &&
               html.find(L"b.c") != std::wstring::npos &&
               html.find(L"c.h") != std::wstring::npos,
-              L"‘S‘ÎÛƒtƒ@ƒCƒ‹‚ªƒŒƒ|[ƒg‚ÉŠÜ‚Ü‚ê‚é");
+              L"å…¨å¯¾è±¡ãƒ•ã‚¡ã‚¤ãƒ«ãŒãƒ¬ãƒãƒ¼ãƒˆã«å«ã¾ã‚Œã‚‹");
         Check(html.find(L"MIGRATION_001") != std::wstring::npos,
-              L"ƒXƒCƒbƒ`–¼‚ªƒŒƒ|[ƒg‚ÉŠÜ‚Ü‚ê‚é");
-        Check(html.find(L"Šg’£qƒtƒBƒ‹ƒ^") != std::wstring::npos,
-              L"Šg’£qƒtƒBƒ‹ƒ^‚Ìî•ñ‚ªŠÜ‚Ü‚ê‚é");
+              L"ã‚¹ã‚¤ãƒƒãƒåãŒãƒ¬ãƒãƒ¼ãƒˆã«å«ã¾ã‚Œã‚‹");
+        Check(html.find(L"æ‹¡å¼µå­ãƒ•ã‚£ãƒ«ã‚¿") != std::wstring::npos,
+              L"æ‹¡å¼µå­ãƒ•ã‚£ãƒ«ã‚¿ã®æƒ…å ±ãŒå«ã¾ã‚Œã‚‹");
     }
 
-    // ---- ˆêŠ‡ Undo ----
+    // ---- ä¸€æ‹¬ Undo ----
     {
         UndoManager um;
         um.SetRecords(ur2);
-        Check(um.FileCount() == 3, L"ˆêŠ‡ Undo ‚Ì‘ÎÛƒtƒ@ƒCƒ‹” 3 ‚ğ•Û‚·‚é");
-        Check(um.CanUndo(), L"ˆêŠ‡ Undo ‚ª‰Â”\‚Æ”»’è‚·‚é");
+        Check(um.FileCount() == 3, L"ä¸€æ‹¬ Undo ã®å¯¾è±¡ãƒ•ã‚¡ã‚¤ãƒ«æ•° 3 ã‚’ä¿æŒã™ã‚‹");
+        Check(um.CanUndo(), L"ä¸€æ‹¬ Undo ãŒå¯èƒ½ã¨åˆ¤å®šã™ã‚‹");
 
         std::wstring uerr;
         std::vector<std::wstring> sidecars;
-        Check(um.Undo(uerr, sidecars), L"ˆêŠ‡ Undo ‚ª¬Œ÷‚·‚é");
-        Check(sidecars.size() == 3, L"•œŒ³‘O‚É 3 ƒtƒ@ƒCƒ‹‚ğ‘Ş”ğ‚·‚é");
+        Check(um.Undo(uerr, sidecars), L"ä¸€æ‹¬ Undo ãŒæˆåŠŸã™ã‚‹");
+        Check(sidecars.size() == 3, L"å¾©å…ƒå‰ã« 3 ãƒ•ã‚¡ã‚¤ãƒ«ã‚’é€€é¿ã™ã‚‹");
 
         std::wstring now_a, now_b, now_c;
         FileInfo fa, fb, fc;
         FileManager::ReadText(a_path, L"auto", now_a, fa);
         FileManager::ReadText(b_path, L"auto", now_b, fb);
         FileManager::ReadText(c_path, L"auto", now_c, fc);
-        Check(now_a == orig_a, L"a.c ‚ªÀs‘O‚Ì“à—e‚Ö•œŒ³‚³‚ê‚é");
-        Check(now_b == orig_b, L"b.c ‚ªÀs‘O‚Ì“à—e‚Ö•œŒ³‚³‚ê‚é");
-        Check(now_c == orig_c, L"c.h ‚ªÀs‘O‚Ì“à—e‚Ö•œŒ³‚³‚ê‚é");
-        Check(!um.CanUndo(), L"ˆêŠ‡ Undo Œã‚ÍÄÀs‚Å‚«‚È‚¢");
+        Check(now_a == orig_a, L"a.c ãŒå®Ÿè¡Œå‰ã®å†…å®¹ã¸å¾©å…ƒã•ã‚Œã‚‹");
+        Check(now_b == orig_b, L"b.c ãŒå®Ÿè¡Œå‰ã®å†…å®¹ã¸å¾©å…ƒã•ã‚Œã‚‹");
+        Check(now_c == orig_c, L"c.h ãŒå®Ÿè¡Œå‰ã®å†…å®¹ã¸å¾©å…ƒã•ã‚Œã‚‹");
+        Check(!um.CanUndo(), L"ä¸€æ‹¬ Undo å¾Œã¯å†å®Ÿè¡Œã§ããªã„");
     }
 }
 
 static void TestBatchSafety()
 {
-    Out(L"\n== ˆêŠ‡ˆ—‚ÌˆÀ‘S« (17Í / 19Í) ==\n");
+    Out(L"\n== ä¸€æ‹¬å‡¦ç†ã®å®‰å…¨æ€§ (17ç«  / 19ç« ) ==\n");
 
     std::wstring base = MakeBatchTree();
     std::vector<std::wstring> exts;
@@ -960,12 +960,12 @@ static void TestBatchSafety()
     for (size_t z = 0; z < bs.matches.size(); ++z) bs.matches[z].selected = true;
     BuildBlocks(bs.entries, bs.matches, blocks);
 
-    // ŒŸõŒã‚Éƒtƒ@ƒCƒ‹‚ª•ÏX‚³‚ê‚½ê‡
+    // æ¤œç´¢å¾Œã«ãƒ•ã‚¡ã‚¤ãƒ«ãŒå¤‰æ›´ã•ã‚ŒãŸå ´åˆ
     std::wstring a_path = util::JoinPath(base, L"a.c");
     WriteTextFile(a_path, L"int changed_after_search(void)\n{\n    return 0;\n}\n");
 
-    // ƒtƒ@ƒCƒ‹’PˆÊ‚Ì‘I‘ğ‰ğœi1 ƒtƒ@ƒCƒ‹‚ğ‘ÎÛŠO‚É‚·‚éj
-    bs.entries[1].selected = false;   // b.c ‚ğ‘ÎÛŠO‚É‚·‚é
+    // ãƒ•ã‚¡ã‚¤ãƒ«å˜ä½ã®é¸æŠè§£é™¤ï¼ˆ1 ãƒ•ã‚¡ã‚¤ãƒ«ã‚’å¯¾è±¡å¤–ã«ã™ã‚‹ï¼‰
+    bs.entries[1].selected = false;   // b.c ã‚’å¯¾è±¡å¤–ã«ã™ã‚‹
 
     OperationContext ctx;
     ctx.operation_id = L"OP_TEST_SAFETY";
@@ -993,53 +993,53 @@ static void TestBatchSafety()
     bool excluded_detected = false;
     for (size_t i = 0; i < br.files.size(); ++i) {
         if (br.files[i].status == L"Skipped" &&
-            br.files[i].error.find(L"•ÏX") != std::wstring::npos) changed_detected = true;
+            br.files[i].error.find(L"å¤‰æ›´") != std::wstring::npos) changed_detected = true;
         if (br.files[i].status == L"Skipped" &&
-            br.files[i].error.find(L"‘I‘ğ‚³‚ê‚Ä‚¢‚Ü‚¹‚ñ") != std::wstring::npos) excluded_detected = true;
+            br.files[i].error.find(L"é¸æŠã•ã‚Œã¦ã„ã¾ã›ã‚“") != std::wstring::npos) excluded_detected = true;
     }
-    Check(changed_detected, L"ŒŸõŒã‚É•ÏX‚³‚ê‚½ƒtƒ@ƒCƒ‹‚ğŒŸo‚µ‚ÄƒXƒLƒbƒv‚·‚é");
-    Check(excluded_detected, L"‘ÎÛŠO‚É‚µ‚½ƒtƒ@ƒCƒ‹‚ÍƒXƒLƒbƒv‚·‚é");
-    Check(br.skipped_count == 2, L"ƒXƒLƒbƒvŒ” 2 ‚ğ•ñ‚·‚é");
-    Check(br.status != L"Success", L"ƒXƒLƒbƒv‚ª‚ ‚éê‡‚É Success ˆÈŠO‚ÌƒXƒe[ƒ^ƒX‚ğ•Ô‚·");
+    Check(changed_detected, L"æ¤œç´¢å¾Œã«å¤‰æ›´ã•ã‚ŒãŸãƒ•ã‚¡ã‚¤ãƒ«ã‚’æ¤œå‡ºã—ã¦ã‚¹ã‚­ãƒƒãƒ—ã™ã‚‹");
+    Check(excluded_detected, L"å¯¾è±¡å¤–ã«ã—ãŸãƒ•ã‚¡ã‚¤ãƒ«ã¯ã‚¹ã‚­ãƒƒãƒ—ã™ã‚‹");
+    Check(br.skipped_count == 2, L"ã‚¹ã‚­ãƒƒãƒ—ä»¶æ•° 2 ã‚’å ±å‘Šã™ã‚‹");
+    Check(br.status != L"Success", L"ã‚¹ã‚­ãƒƒãƒ—ãŒã‚ã‚‹å ´åˆã« Success ä»¥å¤–ã®ã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹ã‚’è¿”ã™");
 }
 
 
 // =============================================================================
-// ƒXƒCƒbƒ`’è‹`ƒwƒbƒ_‚ÌˆêŒ³ŠÇ—
+// ã‚¹ã‚¤ãƒƒãƒå®šç¾©ãƒ˜ãƒƒãƒ€ã®ä¸€å…ƒç®¡ç†
 // =============================================================================
 static void TestSwitchHeaderManager()
 {
-    Out(L"\n== ƒXƒCƒbƒ`’è‹`ƒwƒbƒ_ŠÇ— ==\n");
+    Out(L"\n== ã‚¹ã‚¤ãƒƒãƒå®šç¾©ãƒ˜ãƒƒãƒ€ç®¡ç† ==\n");
 
-    // ---- –¼‘OEƒpƒX ----
+    // ---- åå‰ãƒ»ãƒ‘ã‚¹ ----
     std::wstring err;
     Check(SwitchHeaderManager::DefaultHeaderName() == L"migration_switch.h",
-          L"Šù’è‚Ìƒwƒbƒ_–¼‚Í migration_switch.h");
+          L"æ—¢å®šã®ãƒ˜ãƒƒãƒ€åã¯ migration_switch.h");
     Check(SwitchHeaderManager::ValidateHeaderName(L"migration_switch.h", err),
-          L"³í‚Èƒwƒbƒ_–¼‚ğ‹–‰Â‚·‚é");
+          L"æ­£å¸¸ãªãƒ˜ãƒƒãƒ€åã‚’è¨±å¯ã™ã‚‹");
     Check(!SwitchHeaderManager::ValidateHeaderName(L"migration_switch", err),
-          L"Šg’£q .h ˆÈŠO‚ğ‹‘”Û‚·‚é");
+          L"æ‹¡å¼µå­ .h ä»¥å¤–ã‚’æ‹’å¦ã™ã‚‹");
     Check(!SwitchHeaderManager::ValidateHeaderName(L"bad<name>.h", err),
-          L"ƒtƒ@ƒCƒ‹–¼‚Ég‚¦‚È‚¢•¶š‚ğ‹‘”Û‚·‚é");
+          L"ãƒ•ã‚¡ã‚¤ãƒ«åã«ä½¿ãˆãªã„æ–‡å­—ã‚’æ‹’å¦ã™ã‚‹");
     Check(SwitchHeaderManager::GuardFromName(L"migration_switch.h") == L"MIGRATION_SWITCH_H",
-          L"ƒCƒ“ƒNƒ‹[ƒhƒK[ƒh–¼‚ğ¶¬‚·‚é");
+          L"ã‚¤ãƒ³ã‚¯ãƒ«ãƒ¼ãƒ‰ã‚¬ãƒ¼ãƒ‰åã‚’ç”Ÿæˆã™ã‚‹");
 
     std::wstring base = util::JoinPath(TestDir(), L"swh");
     util::EnsureDirectory(base);
     std::wstring hp = SwitchHeaderManager::ResolveHeaderPath(base, L"", L"migration_switch.h");
     Check(hp == util::JoinPath(base, L"migration_switch.h"),
-          L"o—Íæ–¢w’è‚È‚ç‘ÎÛ‚Æ“¯ˆêƒtƒHƒ‹ƒ_‚Ö‰ğŒˆ‚·‚é");
+          L"å‡ºåŠ›å…ˆæœªæŒ‡å®šãªã‚‰å¯¾è±¡ã¨åŒä¸€ãƒ•ã‚©ãƒ«ãƒ€ã¸è§£æ±ºã™ã‚‹");
 
     Check(SwitchHeaderManager::MakeIncludePath(util::JoinPath(base, L"a.c"), hp) ==
           L"migration_switch.h",
-          L"“¯ˆêƒtƒHƒ‹ƒ_‚Ìƒ\[ƒX‚É‚Íƒtƒ@ƒCƒ‹–¼‚Ì‚İ‚Ì #include ‚ğ•Ô‚·");
+          L"åŒä¸€ãƒ•ã‚©ãƒ«ãƒ€ã®ã‚½ãƒ¼ã‚¹ã«ã¯ãƒ•ã‚¡ã‚¤ãƒ«åã®ã¿ã® #include ã‚’è¿”ã™");
     std::wstring subdir = util::JoinPath(base, L"sub");
     util::EnsureDirectory(subdir);
     Check(SwitchHeaderManager::MakeIncludePath(util::JoinPath(subdir, L"c.h"), hp) ==
           L"../migration_switch.h",
-          L"ƒTƒuƒtƒHƒ‹ƒ_‚Ìƒ\[ƒX‚É‚Í‘Š‘ÎƒpƒX‚Ì #include ‚ğ•Ô‚·");
+          L"ã‚µãƒ–ãƒ•ã‚©ãƒ«ãƒ€ã®ã‚½ãƒ¼ã‚¹ã«ã¯ç›¸å¯¾ãƒ‘ã‚¹ã® #include ã‚’è¿”ã™");
 
-    // ---- V‹Kì¬ ----
+    // ---- æ–°è¦ä½œæˆ ----
     std::wstring header = util::JoinPath(base, L"migration_switch.h");
     if (util::PathExists(header)) FileManager::RemoveFile(header);
 
@@ -1047,164 +1047,164 @@ static void TestSwitchHeaderManager()
     bool added = false;
     std::vector<std::wstring> srcs;
     srcs.push_back(util::JoinPath(base, L"a.c"));
-    Check(SwitchHeaderManager::RegisterSwitch(header, L"MIGRATION_001", L"API ·‚µ‘Ö‚¦",
+    Check(SwitchHeaderManager::RegisterSwitch(header, L"MIGRATION_001", L"API å·®ã—æ›¿ãˆ",
                                               L"old_function();", L"new_function();",
                                               srcs, info, added, err),
-          L"ƒXƒCƒbƒ`’è‹`ƒwƒbƒ_‚ğV‹Kì¬‚·‚é");
-    Check(added, L"V‹KƒXƒCƒbƒ`‚Æ‚µ‚Ä“o˜^‚³‚ê‚é");
-    Check(util::PathExists(header), L"ƒwƒbƒ_ƒtƒ@ƒCƒ‹‚ªÀİ‚·‚é");
+          L"ã‚¹ã‚¤ãƒƒãƒå®šç¾©ãƒ˜ãƒƒãƒ€ã‚’æ–°è¦ä½œæˆã™ã‚‹");
+    Check(added, L"æ–°è¦ã‚¹ã‚¤ãƒƒãƒã¨ã—ã¦ç™»éŒ²ã•ã‚Œã‚‹");
+    Check(util::PathExists(header), L"ãƒ˜ãƒƒãƒ€ãƒ•ã‚¡ã‚¤ãƒ«ãŒå®Ÿåœ¨ã™ã‚‹");
     Check(info.entries.size() == 1 && info.entries[0].name == L"MIGRATION_001",
-          L"“o˜^‚µ‚½ƒXƒCƒbƒ`‚ª 1 Œ“Ç‚İ‚ß‚é");
-    Check(!info.entries[0].enabled, L"V‹KƒXƒCƒbƒ`‚ÌŠù’è‚Í–³Œøi‹ŒƒR[ƒh‚Ì‚Ü‚Üj");
+          L"ç™»éŒ²ã—ãŸã‚¹ã‚¤ãƒƒãƒãŒ 1 ä»¶èª­ã¿è¾¼ã‚ã‚‹");
+    Check(!info.entries[0].enabled, L"æ–°è¦ã‚¹ã‚¤ãƒƒãƒã®æ—¢å®šã¯ç„¡åŠ¹ï¼ˆæ—§ã‚³ãƒ¼ãƒ‰ã®ã¾ã¾ï¼‰");
 
     std::string raw;
     ReadRaw(header, raw);
     std::wstring text = util::NormalizeNewlines(util::Utf8ToWide(raw));
     Check(text.find(L"#ifndef MIGRATION_SWITCH_H") != std::wstring::npos,
-          L"ƒCƒ“ƒNƒ‹[ƒhƒK[ƒh‚ªo—Í‚³‚ê‚é");
+          L"ã‚¤ãƒ³ã‚¯ãƒ«ãƒ¼ãƒ‰ã‚¬ãƒ¼ãƒ‰ãŒå‡ºåŠ›ã•ã‚Œã‚‹");
     Check(text.find(L"CopyMigration Switcher managed section: BEGIN") != std::wstring::npos &&
           text.find(L"CopyMigration Switcher managed section: END") != std::wstring::npos,
-          L"ŠÇ——Ìˆæ‚Ìƒ}[ƒJ[‚ªo—Í‚³‚ê‚é");
+          L"ç®¡ç†é ˜åŸŸã®ãƒãƒ¼ã‚«ãƒ¼ãŒå‡ºåŠ›ã•ã‚Œã‚‹");
     Check(text.find(L"/* #define MIGRATION_001 */") != std::wstring::npos,
-          L"–³ŒøƒXƒCƒbƒ`‚ÍƒRƒƒ“ƒgƒAƒEƒg‚³‚ê‚½ #define ‚Åo—Í‚³‚ê‚é");
+          L"ç„¡åŠ¹ã‚¹ã‚¤ãƒƒãƒã¯ã‚³ãƒ¡ãƒ³ãƒˆã‚¢ã‚¦ãƒˆã•ã‚ŒãŸ #define ã§å‡ºåŠ›ã•ã‚Œã‚‹");
     Check(text.find(L"old_function(); -> new_function();") != std::wstring::npos,
-          L"‹Œ¨V‚Ì—v–ñ‚ªƒRƒƒ“ƒg‚ÉŠÜ‚Ü‚ê‚é");
-    Check(text.find(L"è“®’è‹`—Ìˆæ") != std::wstring::npos,
-          L"è“®’è‹`—Ìˆæ‚ª—pˆÓ‚³‚ê‚é");
+          L"æ—§â†’æ–°ã®è¦ç´„ãŒã‚³ãƒ¡ãƒ³ãƒˆã«å«ã¾ã‚Œã‚‹");
+    Check(text.find(L"æ‰‹å‹•å®šç¾©é ˜åŸŸ") != std::wstring::npos,
+          L"æ‰‹å‹•å®šç¾©é ˜åŸŸãŒç”¨æ„ã•ã‚Œã‚‹");
 
-    // ---- ™p“™«id•¡‚µ‚È‚¢j----
+    // ---- å†ªç­‰æ€§ï¼ˆé‡è¤‡ã—ãªã„ï¼‰----
     SwitchHeaderInfo info2;
     bool added2 = true;
-    Check(SwitchHeaderManager::RegisterSwitch(header, L"MIGRATION_001", L"API ·‚µ‘Ö‚¦",
+    Check(SwitchHeaderManager::RegisterSwitch(header, L"MIGRATION_001", L"API å·®ã—æ›¿ãˆ",
                                               L"old_function();", L"new_function();",
                                               srcs, info2, added2, err),
-          L"“¯‚¶ƒXƒCƒbƒ`‚ğÄ“o˜^‚Å‚«‚é");
-    Check(!added2, L"Šù‘¶ƒXƒCƒbƒ`‚ÍV‹K’Ç‰Á‚³‚ê‚È‚¢i™p“™j");
-    Check(info2.entries.size() == 1, L"ƒXƒCƒbƒ`‚ªd•¡“o˜^‚³‚ê‚È‚¢");
+          L"åŒã˜ã‚¹ã‚¤ãƒƒãƒã‚’å†ç™»éŒ²ã§ãã‚‹");
+    Check(!added2, L"æ—¢å­˜ã‚¹ã‚¤ãƒƒãƒã¯æ–°è¦è¿½åŠ ã•ã‚Œãªã„ï¼ˆå†ªç­‰ï¼‰");
+    Check(info2.entries.size() == 1, L"ã‚¹ã‚¤ãƒƒãƒãŒé‡è¤‡ç™»éŒ²ã•ã‚Œãªã„");
 
-    // ---- •¡”ƒtƒ@ƒCƒ‹‚ÌW–ñ ----
+    // ---- è¤‡æ•°ãƒ•ã‚¡ã‚¤ãƒ«ã®é›†ç´„ ----
     SwitchHeaderInfo info3;
     bool added3 = false;
     std::vector<std::wstring> srcs2;
     srcs2.push_back(util::JoinPath(base, L"a.c"));
     srcs2.push_back(util::JoinPath(base, L"b.c"));
-    SwitchHeaderManager::RegisterSwitch(header, L"MIGRATION_001", L"API ·‚µ‘Ö‚¦",
+    SwitchHeaderManager::RegisterSwitch(header, L"MIGRATION_001", L"API å·®ã—æ›¿ãˆ",
                                         L"old_function();", L"new_function();",
                                         srcs2, info3, added3, err);
     Check(info3.entries.size() == 1 && info3.entries[0].files.size() == 2,
-          L"•¡”ƒtƒ@ƒCƒ‹‚ğ 1 ƒXƒCƒbƒ`‚ÖW–ñ‚Å‚«‚éid•¡ƒtƒ@ƒCƒ‹‚Í‘‚â‚³‚È‚¢j");
+          L"è¤‡æ•°ãƒ•ã‚¡ã‚¤ãƒ«ã‚’ 1 ã‚¹ã‚¤ãƒƒãƒã¸é›†ç´„ã§ãã‚‹ï¼ˆé‡è¤‡ãƒ•ã‚¡ã‚¤ãƒ«ã¯å¢—ã‚„ã•ãªã„ï¼‰");
 
-    // ---- •¡”ƒXƒCƒbƒ` ----
+    // ---- è¤‡æ•°ã‚¹ã‚¤ãƒƒãƒ ----
     SwitchHeaderInfo info4;
     bool added4 = false;
-    SwitchHeaderManager::RegisterSwitch(header, L"USE_NEW_LOGIC", L"ƒƒWƒbƒNXV",
+    SwitchHeaderManager::RegisterSwitch(header, L"USE_NEW_LOGIC", L"ãƒ­ã‚¸ãƒƒã‚¯æ›´æ–°",
                                         L"calc();", L"calc_v2();", srcs, info4, added4, err);
-    Check(info4.entries.size() == 2, L"•¡”ƒXƒCƒbƒ`‚ğŠÇ—‚Å‚«‚é");
+    Check(info4.entries.size() == 2, L"è¤‡æ•°ã‚¹ã‚¤ãƒƒãƒã‚’ç®¡ç†ã§ãã‚‹");
     Check(info4.entries[0].name == L"MIGRATION_001" &&
           info4.entries[1].name == L"USE_NEW_LOGIC",
-          L"ƒXƒCƒbƒ`‚Í–¼‘O‡‚É®—ñ‚³‚ê‚é");
+          L"ã‚¹ã‚¤ãƒƒãƒã¯åå‰é †ã«æ•´åˆ—ã•ã‚Œã‚‹");
 
-    // ---- —LŒø‰»^–³Œø‰» ----
+    // ---- æœ‰åŠ¹åŒ–ï¼ç„¡åŠ¹åŒ– ----
     SwitchHeaderInfo info5;
     Check(SwitchHeaderManager::SetEnabled(header, L"MIGRATION_001", true, info5, err),
-          L"ƒXƒCƒbƒ`‚ğ—LŒø‰»‚Å‚«‚é");
-    Check(info5.entries[0].enabled, L"—LŒø‰»‚ª”½‰f‚³‚ê‚é");
+          L"ã‚¹ã‚¤ãƒƒãƒã‚’æœ‰åŠ¹åŒ–ã§ãã‚‹");
+    Check(info5.entries[0].enabled, L"æœ‰åŠ¹åŒ–ãŒåæ˜ ã•ã‚Œã‚‹");
     ReadRaw(header, raw);
     text = util::NormalizeNewlines(util::Utf8ToWide(raw));
     Check(text.find(L"\n#define MIGRATION_001\n") != std::wstring::npos,
-          L"—LŒøƒXƒCƒbƒ`‚ÍƒRƒƒ“ƒg‚È‚µ‚Ì #define ‚Åo—Í‚³‚ê‚é");
+          L"æœ‰åŠ¹ã‚¹ã‚¤ãƒƒãƒã¯ã‚³ãƒ¡ãƒ³ãƒˆãªã—ã® #define ã§å‡ºåŠ›ã•ã‚Œã‚‹");
 
     SwitchHeaderInfo info6;
     Check(SwitchHeaderManager::SetEnabled(header, L"MIGRATION_001", false, info6, err),
-          L"ƒXƒCƒbƒ`‚ğ–³Œø‰»‚Å‚«‚é");
-    Check(!info6.entries[0].enabled, L"–³Œø‰»‚ª”½‰f‚³‚ê‚é");
+          L"ã‚¹ã‚¤ãƒƒãƒã‚’ç„¡åŠ¹åŒ–ã§ãã‚‹");
+    Check(!info6.entries[0].enabled, L"ç„¡åŠ¹åŒ–ãŒåæ˜ ã•ã‚Œã‚‹");
 
-    // ---- è“®•ÒW‚Ì•Û ----
+    // ---- æ‰‹å‹•ç·¨é›†ã®ä¿æŒ ----
     {
         ReadRaw(header, raw);
         std::wstring t2 = util::Utf8ToWide(raw);
-        t2 = util::ReplaceAll(t2, L"/* ---- è“®’è‹`—Ìˆæi‚±‚Ì—Ìˆæ‚Íƒc[ƒ‹‚ª‘‚«Š·‚¦‚Ü‚¹‚ñj ---- */",
-                              L"/* ---- è“®’è‹`—Ìˆæi‚±‚Ì—Ìˆæ‚Íƒc[ƒ‹‚ª‘‚«Š·‚¦‚Ü‚¹‚ñj ---- */\n#define MY_MANUAL_SWITCH 1");
+        t2 = util::ReplaceAll(t2, L"/* ---- æ‰‹å‹•å®šç¾©é ˜åŸŸï¼ˆã“ã®é ˜åŸŸã¯ãƒ„ãƒ¼ãƒ«ãŒæ›¸ãæ›ãˆã¾ã›ã‚“ï¼‰ ---- */",
+                              L"/* ---- æ‰‹å‹•å®šç¾©é ˜åŸŸï¼ˆã“ã®é ˜åŸŸã¯ãƒ„ãƒ¼ãƒ«ãŒæ›¸ãæ›ãˆã¾ã›ã‚“ï¼‰ ---- */\n#define MY_MANUAL_SWITCH 1");
         std::string bytes = util::WideToUtf8(t2);
         WriteRaw(header, bytes);
     }
     SwitchHeaderInfo info7;
     bool added7 = false;
-    SwitchHeaderManager::RegisterSwitch(header, L"THIRD_SWITCH", L"3 ‚Â–Ú",
+    SwitchHeaderManager::RegisterSwitch(header, L"THIRD_SWITCH", L"3 ã¤ç›®",
                                         L"a();", L"b();", srcs, info7, added7, err);
     ReadRaw(header, raw);
     text = util::NormalizeNewlines(util::Utf8ToWide(raw));
     Check(text.find(L"#define MY_MANUAL_SWITCH 1") != std::wstring::npos,
-          L"è“®’è‹`—Ìˆæ‚Ì“à—e‚ªXVŒã‚à•Û‚³‚ê‚é");
+          L"æ‰‹å‹•å®šç¾©é ˜åŸŸã®å†…å®¹ãŒæ›´æ–°å¾Œã‚‚ä¿æŒã•ã‚Œã‚‹");
     Check(text.find(L"THIRD_SWITCH") != std::wstring::npos,
-          L"ŠÇ——Ìˆæ‚ÖV‚µ‚¢ƒXƒCƒbƒ`‚ğ’Ç‹L‚Å‚«‚é");
+          L"ç®¡ç†é ˜åŸŸã¸æ–°ã—ã„ã‚¹ã‚¤ãƒƒãƒã‚’è¿½è¨˜ã§ãã‚‹");
 
-    // ---- íœ ----
+    // ---- å‰Šé™¤ ----
     SwitchHeaderInfo info8;
     Check(SwitchHeaderManager::RemoveSwitch(header, L"THIRD_SWITCH", info8, err),
-          L"ƒXƒCƒbƒ`‚ğíœ‚Å‚«‚é");
-    Check(info8.entries.size() == 2, L"íœŒã‚ÍŒ”‚ªŒ¸‚é");
+          L"ã‚¹ã‚¤ãƒƒãƒã‚’å‰Šé™¤ã§ãã‚‹");
+    Check(info8.entries.size() == 2, L"å‰Šé™¤å¾Œã¯ä»¶æ•°ãŒæ¸›ã‚‹");
     SwitchHeaderInfo info9;
     std::wstring e2;
     Check(!SwitchHeaderManager::RemoveSwitch(header, L"NO_SUCH_SWITCH", info9, e2),
-          L"‘¶İ‚µ‚È‚¢ƒXƒCƒbƒ`‚Ìíœ‚ÍƒGƒ‰[‚É‚È‚é");
+          L"å­˜åœ¨ã—ãªã„ã‚¹ã‚¤ãƒƒãƒã®å‰Šé™¤ã¯ã‚¨ãƒ©ãƒ¼ã«ãªã‚‹");
 
-    // ---- #include ‘}“ü ----
+    // ---- #include æŒ¿å…¥ ----
     {
         std::wstring t, e;
         bool a = false; int line = 0;
 
         t = L"#include <stdio.h>\n#include <string.h>\n\nint x;\n";
         Check(SwitchHeaderManager::EnsureInclude(t, L"migration_switch.h", a, line, e),
-              L"#include ‚ğ’Ç‰Á‚Å‚«‚éiŠù‘¶ include ‚ ‚èj");
-        Check(a && line == 3, L"ÅŒã‚Ì #include ‚Ì’¼Œã‚É‘}“ü‚³‚ê‚éi3 s–Új");
+              L"#include ã‚’è¿½åŠ ã§ãã‚‹ï¼ˆæ—¢å­˜ include ã‚ã‚Šï¼‰");
+        Check(a && line == 3, L"æœ€å¾Œã® #include ã®ç›´å¾Œã«æŒ¿å…¥ã•ã‚Œã‚‹ï¼ˆ3 è¡Œç›®ï¼‰");
         Check(t.find(L"#include <string.h>\n#include \"migration_switch.h\"") != std::wstring::npos,
-              L"Šù‘¶ include ‚ÌŒã‚ë‚É³‚µ‚­‘}“ü‚³‚ê‚é");
+              L"æ—¢å­˜ include ã®å¾Œã‚ã«æ­£ã—ãæŒ¿å…¥ã•ã‚Œã‚‹");
 
         t = L"#ifndef SECOND_C\n#define SECOND_C\n\nint y;\n";
         a = false; line = 0;
         SwitchHeaderManager::EnsureInclude(t, L"migration_switch.h", a, line, e);
-        Check(a && line == 3, L"ƒCƒ“ƒNƒ‹[ƒhƒK[ƒh‚Ì’¼Œã‚É‘}“ü‚³‚ê‚é");
+        Check(a && line == 3, L"ã‚¤ãƒ³ã‚¯ãƒ«ãƒ¼ãƒ‰ã‚¬ãƒ¼ãƒ‰ã®ç›´å¾Œã«æŒ¿å…¥ã•ã‚Œã‚‹");
 
-        t = L"/* third.c\n * ƒTƒ“ƒvƒ‹\n */\nint z;\n";
+        t = L"/* third.c\n * ã‚µãƒ³ãƒ—ãƒ«\n */\nint z;\n";
         a = false; line = 0;
         SwitchHeaderManager::EnsureInclude(t, L"migration_switch.h", a, line, e);
-        Check(a && line == 4, L"æ“ª‚ÌƒuƒƒbƒNƒRƒƒ“ƒg‚ÌŒã‚ë‚É‘}“ü‚³‚ê‚é");
+        Check(a && line == 4, L"å…ˆé ­ã®ãƒ–ãƒ­ãƒƒã‚¯ã‚³ãƒ¡ãƒ³ãƒˆã®å¾Œã‚ã«æŒ¿å…¥ã•ã‚Œã‚‹");
 
         t = L"int w;\n";
         a = false; line = 0;
         SwitchHeaderManager::EnsureInclude(t, L"migration_switch.h", a, line, e);
-        Check(a && line == 1, L"include ‚àƒK[ƒh‚à–³‚¢ê‡‚Íæ“ª‚É‘}“ü‚³‚ê‚é");
+        Check(a && line == 1, L"include ã‚‚ã‚¬ãƒ¼ãƒ‰ã‚‚ç„¡ã„å ´åˆã¯å…ˆé ­ã«æŒ¿å…¥ã•ã‚Œã‚‹");
 
         a = false; line = 0;
         SwitchHeaderManager::EnsureInclude(t, L"migration_switch.h", a, line, e);
-        Check(!a, L"Šù‚É #include ‚ª‚ ‚éê‡‚Íd•¡’Ç‰Á‚µ‚È‚¢i™p“™j");
+        Check(!a, L"æ—¢ã« #include ãŒã‚ã‚‹å ´åˆã¯é‡è¤‡è¿½åŠ ã—ãªã„ï¼ˆå†ªç­‰ï¼‰");
         Check(SwitchHeaderManager::HasInclude(t, L"migration_switch.h"),
-              L"HasInclude ‚ª’Ç‰ÁÏ‚İ‚ğŒŸo‚·‚é");
+              L"HasInclude ãŒè¿½åŠ æ¸ˆã¿ã‚’æ¤œå‡ºã™ã‚‹");
         Check(!SwitchHeaderManager::HasInclude(t, L"other.h"),
-              L"HasInclude ‚ª–¢’Ç‰Á‚ğŒŸo‚·‚é");
+              L"HasInclude ãŒæœªè¿½åŠ ã‚’æ¤œå‡ºã™ã‚‹");
 
-        // ‰üsE––”ö‚Ì•Û
+        // æ”¹è¡Œãƒ»æœ«å°¾ã®ä¿æŒ
         std::wstring t2 = L"int v;\n";
         a = false; line = 0;
         SwitchHeaderManager::EnsureInclude(t2, L"migration_switch.h", a, line, e);
         Check(t2.size() > 0 && t2[t2.size() - 1] == L'\n',
-              L"––”ö‚Ì‰üs‚ª•Û‚³‚ê‚é");
+              L"æœ«å°¾ã®æ”¹è¡ŒãŒä¿æŒã•ã‚Œã‚‹");
     }
 
-    // ---- —v–ñ ----
+    // ---- è¦ç´„ ----
     Check(SwitchHeaderManager::MakeSummary(L"old_function();", L"new_function();") ==
           L"old_function(); -> new_function();",
-          L"—v–ñ•¶š—ñ‚ğ¶¬‚·‚é");
-    Check(SwitchHeaderManager::MakeSummary(L"", L"") == L"(‹ŒƒR[ƒh–¢“ü—Í) -> (VƒR[ƒh–¢“ü—Í)",
-          L"–¢“ü—Í‚Ì—v–ñ‚ğ¶¬‚·‚é");
+          L"è¦ç´„æ–‡å­—åˆ—ã‚’ç”Ÿæˆã™ã‚‹");
+    Check(SwitchHeaderManager::MakeSummary(L"", L"") == L"(æ—§ã‚³ãƒ¼ãƒ‰æœªå…¥åŠ›) -> (æ–°ã‚³ãƒ¼ãƒ‰æœªå…¥åŠ›)",
+          L"æœªå…¥åŠ›æ™‚ã®è¦ç´„ã‚’ç”Ÿæˆã™ã‚‹");
 }
 
 // =============================================================================
-// Àƒ\[ƒX‚Ö‚Ì“‡iƒwƒbƒ_¶¬ + #include + ƒXƒCƒbƒ`‘}“üj
+// å®Ÿã‚½ãƒ¼ã‚¹ã¸ã®çµ±åˆï¼ˆãƒ˜ãƒƒãƒ€ç”Ÿæˆ + #include + ã‚¹ã‚¤ãƒƒãƒæŒ¿å…¥ï¼‰
 // =============================================================================
-// ƒeƒXƒg‚Åg‚¤ì‹ÆƒtƒHƒ‹ƒ_B
-//   ŠÂ‹«•Ï” MS_VERIFY_DIR ‚ª‚ ‚ê‚Î‚»‚±‚ğg‚¢A–³‚¯‚ê‚Î %TEMP%\ms_verify ‚ğg‚¤B
+// ãƒ†ã‚¹ãƒˆã§ä½¿ã†ä½œæ¥­ãƒ•ã‚©ãƒ«ãƒ€ã€‚
+//   ç’°å¢ƒå¤‰æ•° MS_VERIFY_DIR ãŒã‚ã‚Œã°ãã“ã‚’ä½¿ã„ã€ç„¡ã‘ã‚Œã° %TEMP%\ms_verify ã‚’ä½¿ã†ã€‚
 static std::wstring VerifyDir()
 {
     wchar_t buf[1024];
@@ -1224,7 +1224,7 @@ static std::wstring VerifyDir()
 
 static void TestSwitchHeaderIntegration()
 {
-    Out(L"\n== Àƒ\[ƒX‚Ö‚Ì“‡iƒwƒbƒ_ + #include + ƒXƒCƒbƒ`j==\n");
+    Out(L"\n== å®Ÿã‚½ãƒ¼ã‚¹ã¸ã®çµ±åˆï¼ˆãƒ˜ãƒƒãƒ€ + #include + ã‚¹ã‚¤ãƒƒãƒï¼‰==\n");
 
     std::wstring dir = VerifyDir();
     std::wstring header = util::JoinPath(dir, L"migration_switch.h");
@@ -1269,7 +1269,7 @@ static void TestSwitchHeaderIntegration()
         L"#endif\n");
     WriteTextFile(f3,
         L"/* third.c\n"
-        L" * ƒ}ƒCƒOƒŒ[ƒVƒ‡ƒ“‘ÎÛ‚ÌƒTƒ“ƒvƒ‹\n"
+        L" * ãƒã‚¤ã‚°ãƒ¬ãƒ¼ã‚·ãƒ§ãƒ³å¯¾è±¡ã®ã‚µãƒ³ãƒ—ãƒ«\n"
         L" */\n"
         L"static int old_function(int x) { return x + 1; }\n"
         L"static int new_function(int x) { return x + 2; }\n"
@@ -1279,15 +1279,15 @@ static void TestSwitchHeaderIntegration()
         L"    return old_function(x);\n"
         L"}\n");
 
-    // ---- ˆêŠ‡ŒŸõ ----
+    // ---- ä¸€æ‹¬æ¤œç´¢ ----
     std::vector<std::wstring> exts;
     exts.push_back(L".c");
     BatchSearchResult bs;
     std::wstring err;
     BatchProcessor::SearchFolder(dir, exts, false, L"old_function(x)", L"auto",
                                  BatchProgressFn(), bs, err);
-    Check(bs.hit_file_count == 3, L"3 ƒtƒ@ƒCƒ‹‚Åƒqƒbƒg‚·‚é");
-    Check(bs.total_matches == 3, L"3 Œƒqƒbƒg‚·‚é");
+    Check(bs.hit_file_count == 3, L"3 ãƒ•ã‚¡ã‚¤ãƒ«ã§ãƒ’ãƒƒãƒˆã™ã‚‹");
+    Check(bs.total_matches == 3, L"3 ä»¶ãƒ’ãƒƒãƒˆã™ã‚‹");
     for (size_t i = 0; i < bs.matches.size(); ++i) bs.matches[i].selected = true;
 
     std::vector<std::wstring> blocks;
@@ -1303,20 +1303,20 @@ static void TestSwitchHeaderIntegration()
             L"old_function(x)", L"new_function(x)", false, L"", hint, w);
     }
 
-    // ---- ƒXƒCƒbƒ`’è‹`ƒwƒbƒ_‚Ì¶¬ ----
+    // ---- ã‚¹ã‚¤ãƒƒãƒå®šç¾©ãƒ˜ãƒƒãƒ€ã®ç”Ÿæˆ ----
     std::vector<std::wstring> srcs;
     srcs.push_back(f1); srcs.push_back(f2); srcs.push_back(f3);
     SwitchHeaderInfo hi;
     bool added = false;
     Check(SwitchHeaderManager::RegisterSwitch(header, L"MIGRATION_001",
-                                              L"old_function ‚ğ new_function ‚Ö·‚µ‘Ö‚¦",
+                                              L"old_function ã‚’ new_function ã¸å·®ã—æ›¿ãˆ",
                                               L"old_function(x)", L"new_function(x)",
                                               srcs, hi, added, err),
-          L"Àƒ\[ƒX‚©‚çƒXƒCƒbƒ`’è‹`ƒwƒbƒ_‚ğ¶¬‚·‚é");
+          L"å®Ÿã‚½ãƒ¼ã‚¹ã‹ã‚‰ã‚¹ã‚¤ãƒƒãƒå®šç¾©ãƒ˜ãƒƒãƒ€ã‚’ç”Ÿæˆã™ã‚‹");
     Check(added && hi.entries.size() == 1 && hi.entries[0].files.size() == 3,
-          L"3 ƒtƒ@ƒCƒ‹‚ªƒXƒCƒbƒ`‚Ö“o˜^‚³‚ê‚é");
+          L"3 ãƒ•ã‚¡ã‚¤ãƒ«ãŒã‚¹ã‚¤ãƒƒãƒã¸ç™»éŒ²ã•ã‚Œã‚‹");
 
-    // ---- ˆêŠ‡•ÏŠ·i#include ’Ç‰Á + ƒXƒCƒbƒ`‘}“üj----
+    // ---- ä¸€æ‹¬å¤‰æ›ï¼ˆ#include è¿½åŠ  + ã‚¹ã‚¤ãƒƒãƒæŒ¿å…¥ï¼‰----
     OperationContext ctx;
     ctx.operation_id = L"OP_SWH";
     ctx.switch_name = L"MIGRATION_001";
@@ -1337,11 +1337,11 @@ static void TestSwitchHeaderIntegration()
     Check(BatchProcessor::ExecuteBatch(ctx, L"auto", bs.entries, bs.matches, blocks,
                                        util::JoinPath(dir, L"backup"), BatchProgressFn(),
                                        br, ur, err),
-          L"ˆêŠ‡•ÏŠ·‚ª¬Œ÷‚·‚é");
-    Check(br.replaced_count == 3, L"3 Œ‚ğ’uŠ·‚·‚é");
-    Check(br.error_count == 0, L"¸”sƒtƒ@ƒCƒ‹‚ª–³‚¢");
+          L"ä¸€æ‹¬å¤‰æ›ãŒæˆåŠŸã™ã‚‹");
+    Check(br.replaced_count == 3, L"3 ä»¶ã‚’ç½®æ›ã™ã‚‹");
+    Check(br.error_count == 0, L"å¤±æ•—ãƒ•ã‚¡ã‚¤ãƒ«ãŒç„¡ã„");
 
-    // ---- ¶¬•¨‚ÌŒŸØ ----
+    // ---- ç”Ÿæˆç‰©ã®æ¤œè¨¼ ----
     std::wstring t1, t2, t3;
     FileInfo fi;
     FileManager::ReadText(f1, L"auto", t1, fi); t1 = util::NormalizeNewlines(t1);
@@ -1349,24 +1349,24 @@ static void TestSwitchHeaderIntegration()
     FileManager::ReadText(f3, L"auto", t3, fi); t3 = util::NormalizeNewlines(t3);
 
     Check(t1.find(L"#include \"migration_switch.h\"") != std::wstring::npos,
-          L"sample.c ‚É #include ‚ª’Ç‰Á‚³‚ê‚é");
+          L"sample.c ã« #include ãŒè¿½åŠ ã•ã‚Œã‚‹");
     Check(t1.find(L"#include <stdlib.h>\n#include \"migration_switch.h\"") != std::wstring::npos,
-          L"sample.c ‚Ì #include ‚ÍŠù‘¶ include ‚Ì’¼Œã‚É‘}“ü‚³‚ê‚é");
+          L"sample.c ã® #include ã¯æ—¢å­˜ include ã®ç›´å¾Œã«æŒ¿å…¥ã•ã‚Œã‚‹");
     Check(t2.find(L"#define SECOND_C\n#include \"migration_switch.h\"") != std::wstring::npos,
-          L"second.c ‚Ì #include ‚ÍƒCƒ“ƒNƒ‹[ƒhƒK[ƒh’¼Œã‚É‘}“ü‚³‚ê‚é");
+          L"second.c ã® #include ã¯ã‚¤ãƒ³ã‚¯ãƒ«ãƒ¼ãƒ‰ã‚¬ãƒ¼ãƒ‰ç›´å¾Œã«æŒ¿å…¥ã•ã‚Œã‚‹");
     Check(t3.find(L" */\n#include \"migration_switch.h\"") != std::wstring::npos,
-          L"third.c ‚Ì #include ‚Íæ“ªƒRƒƒ“ƒg‚ÌŒã‚ë‚É‘}“ü‚³‚ê‚é");
+          L"third.c ã® #include ã¯å…ˆé ­ã‚³ãƒ¡ãƒ³ãƒˆã®å¾Œã‚ã«æŒ¿å…¥ã•ã‚Œã‚‹");
 
-    // s’†ˆê’vi"    return old_function(x);"j‚Ís“ªƒzƒCƒXƒg‚³‚êA
-    // #ifdef/#else/#endif ‚ªs“ª‚É—ˆ‚Ä‘OŒã‚ÌƒR[ƒh‚ªŠe•ªŠò‚Ö•¡»‚³‚ê‚éiC ‚Æ‚µ‚Ä‘Ã“–j
+    // è¡Œä¸­ä¸€è‡´ï¼ˆ"    return old_function(x);"ï¼‰ã¯è¡Œé ­ãƒ›ã‚¤ã‚¹ãƒˆã•ã‚Œã€
+    // #ifdef/#else/#endif ãŒè¡Œé ­ã«æ¥ã¦å‰å¾Œã®ã‚³ãƒ¼ãƒ‰ãŒå„åˆ†å²ã¸è¤‡è£½ã•ã‚Œã‚‹ï¼ˆC ã¨ã—ã¦å¦¥å½“ï¼‰
     Check(t1.find(L"#ifdef MIGRATION_001\n    return new_function(x);\n"
                   L"#else\n    return old_function(x);\n#endif") != std::wstring::npos,
-          L"sample.c ‚ÉƒRƒ“ƒpƒCƒ‹ƒXƒCƒbƒ`ƒuƒƒbƒN‚ªs“ªƒzƒCƒXƒg‚Å‘}“ü‚³‚ê‚é");
+          L"sample.c ã«ã‚³ãƒ³ãƒ‘ã‚¤ãƒ«ã‚¹ã‚¤ãƒƒãƒãƒ–ãƒ­ãƒƒã‚¯ãŒè¡Œé ­ãƒ›ã‚¤ã‚¹ãƒˆã§æŒ¿å…¥ã•ã‚Œã‚‹");
     Check(t1.find(L"    return #ifdef") == std::wstring::npos,
-          L"#ifdef ‚ªs’†‚Éc‚ç‚È‚¢iC ‚Æ‚µ‚Ä•s³‚É‚È‚ç‚È‚¢j");
+          L"#ifdef ãŒè¡Œä¸­ã«æ®‹ã‚‰ãªã„ï¼ˆC ã¨ã—ã¦ä¸æ­£ã«ãªã‚‰ãªã„ï¼‰");
     Check(t2.find(L"#ifdef MIGRATION_001") != std::wstring::npos &&
           t3.find(L"#ifdef MIGRATION_001") != std::wstring::npos,
-          L"second.c / third.c ‚É‚àƒXƒCƒbƒ`‚ª‘}“ü‚³‚ê‚é");
+          L"second.c / third.c ã«ã‚‚ã‚¹ã‚¤ãƒƒãƒãŒæŒ¿å…¥ã•ã‚Œã‚‹");
 
     bool inc_all = true;
     for (size_t i = 0; i < br.files.size(); ++i) {
@@ -1375,23 +1375,23 @@ static void TestSwitchHeaderIntegration()
             if (bs.entries[k].path == br.files[i].file_path) found = bs.entries[k].include_added;
         if (!found) inc_all = false;
     }
-    Check(inc_all, L"‘Sƒtƒ@ƒCƒ‹‚Å #include ’Ç‰Á‚ª‹L˜^‚³‚ê‚é");
+    Check(inc_all, L"å…¨ãƒ•ã‚¡ã‚¤ãƒ«ã§ #include è¿½åŠ ãŒè¨˜éŒ²ã•ã‚Œã‚‹");
 
     std::string hraw;
     ReadRaw(header, hraw);
     std::wstring htext = util::NormalizeNewlines(util::Utf8ToWide(hraw));
     Check(htext.find(L"/* #define MIGRATION_001 */") != std::wstring::npos,
-          L"¶¬‚³‚ê‚½ƒwƒbƒ_‚Å‚ÍƒXƒCƒbƒ`‚ª–³Œøi‹ŒƒR[ƒh‚ªŠù’èj");
+          L"ç”Ÿæˆã•ã‚ŒãŸãƒ˜ãƒƒãƒ€ã§ã¯ã‚¹ã‚¤ãƒƒãƒãŒç„¡åŠ¹ï¼ˆæ—§ã‚³ãƒ¼ãƒ‰ãŒæ—¢å®šï¼‰");
 
-    Out(L"  [INFO] ŒŸØ—pƒtƒ@ƒCƒ‹o—Íæ: " + dir + L"\n");
+    Out(L"  [INFO] æ¤œè¨¼ç”¨ãƒ•ã‚¡ã‚¤ãƒ«å‡ºåŠ›å…ˆ: " + dir + L"\n");
 }
 
 // =============================================================================
-// ƒwƒbƒ_‚ğŠÜ‚Ş UndoiV‹Kì¬‚³‚ê‚½ƒwƒbƒ_‚Ííœ‚µ‚Ä–ß‚·j
+// ãƒ˜ãƒƒãƒ€ã‚’å«ã‚€ Undoï¼ˆæ–°è¦ä½œæˆã•ã‚ŒãŸãƒ˜ãƒƒãƒ€ã¯å‰Šé™¤ã—ã¦æˆ»ã™ï¼‰
 // =============================================================================
 static void TestSwitchHeaderUndo()
 {
-    Out(L"\n== ƒXƒCƒbƒ`’è‹`ƒwƒbƒ_‚Ì Undo ==\n");
+    Out(L"\n== ã‚¹ã‚¤ãƒƒãƒå®šç¾©ãƒ˜ãƒƒãƒ€ã® Undo ==\n");
 
     std::wstring dir = util::JoinPath(VerifyDir(), L"undo_case");
     util::EnsureDirectory(dir);
@@ -1409,26 +1409,26 @@ static void TestSwitchHeaderUndo()
         L"    return old_function(x);\n"
         L"}\n";
     WriteTextFile(f1, original);
-    Check(!util::PathExists(header), L"ŠJn“_‚Åƒwƒbƒ_‚Í‘¶İ‚µ‚È‚¢");
+    Check(!util::PathExists(header), L"é–‹å§‹æ™‚ç‚¹ã§ãƒ˜ãƒƒãƒ€ã¯å­˜åœ¨ã—ãªã„");
 
-    // 1) ƒXƒCƒbƒ`’è‹`ƒwƒbƒ_‚ğV‹Kì¬
+    // 1) ã‚¹ã‚¤ãƒƒãƒå®šç¾©ãƒ˜ãƒƒãƒ€ã‚’æ–°è¦ä½œæˆ
     SwitchHeaderInfo hi;
     bool added = false;
     std::wstring err;
     std::vector<std::wstring> srcs;
     srcs.push_back(f1);
-    Check(SwitchHeaderManager::RegisterSwitch(header, L"MIGRATION_001", L"Undo ŒŸØ",
+    Check(SwitchHeaderManager::RegisterSwitch(header, L"MIGRATION_001", L"Undo æ¤œè¨¼",
                                               L"old_function(x)", L"new_function(x)",
                                               srcs, hi, added, err),
-          L"ƒXƒCƒbƒ`’è‹`ƒwƒbƒ_‚ğV‹Kì¬‚·‚é");
-    Check(added && util::PathExists(header), L"ƒwƒbƒ_‚ªV‹Kì¬‚³‚ê‚é");
+          L"ã‚¹ã‚¤ãƒƒãƒå®šç¾©ãƒ˜ãƒƒãƒ€ã‚’æ–°è¦ä½œæˆã™ã‚‹");
+    Check(added && util::PathExists(header), L"ãƒ˜ãƒƒãƒ€ãŒæ–°è¦ä½œæˆã•ã‚Œã‚‹");
 
     std::wstring bdir = util::JoinPath(dir, L"backup");
     std::wstring bpath;
     Check(BackupManager::CreateBackup(f1, bdir, bpath, err),
-          L"•ÏŠ·‘O‚Ìƒ\[ƒX‚ğƒoƒbƒNƒAƒbƒv‚·‚é");
+          L"å¤‰æ›å‰ã®ã‚½ãƒ¼ã‚¹ã‚’ãƒãƒƒã‚¯ã‚¢ãƒƒãƒ—ã™ã‚‹");
 
-    // 2) ƒ\[ƒX‚ğ•ÏŠ·i#include ’Ç‰Á + ƒXƒCƒbƒ`‘}“üj
+    // 2) ã‚½ãƒ¼ã‚¹ã‚’å¤‰æ›ï¼ˆ#include è¿½åŠ  + ã‚¹ã‚¤ãƒƒãƒæŒ¿å…¥ï¼‰
     MatchResult mm;
     mm.match_id = 1;
     mm.file_path = f1;
@@ -1454,7 +1454,7 @@ static void TestSwitchHeaderUndo()
     bool inc = false;
     int inc_line = 0;
     SwitchHeaderManager::EnsureInclude(text, L"migration_switch.h", inc, inc_line, err);
-    Check(inc, L"#include ‚ª’Ç‰Á‚³‚ê‚é");
+    Check(inc, L"#include ãŒè¿½åŠ ã•ã‚Œã‚‹");
 
     FileInfo fi = FileManager::Inspect(f1, L"auto");
     std::wstring werr;
@@ -1464,13 +1464,13 @@ static void TestSwitchHeaderUndo()
     FileManager::ReadText(f1, L"auto", changed, fi);
     changed = util::NormalizeNewlines(changed);
     Check(changed.find(L"#include \"migration_switch.h\"") != std::wstring::npos,
-          L"•ÏŠ·Œã‚Í #include ‚ª“ü‚Á‚Ä‚¢‚é");
+          L"å¤‰æ›å¾Œã¯ #include ãŒå…¥ã£ã¦ã„ã‚‹");
     Check(changed.find(L"#ifdef MIGRATION_001") != std::wstring::npos,
-          L"•ÏŠ·Œã‚ÍƒXƒCƒbƒ`‚ª“ü‚Á‚Ä‚¢‚é");
+          L"å¤‰æ›å¾Œã¯ã‚¹ã‚¤ãƒƒãƒãŒå…¥ã£ã¦ã„ã‚‹");
     Check(changed.find(L"    return #ifdef") == std::wstring::npos,
-          L"•ÏŠ·Œã‚à #ifdef ‚Ís“ª‚É‚ ‚é");
+          L"å¤‰æ›å¾Œã‚‚ #ifdef ã¯è¡Œé ­ã«ã‚ã‚‹");
 
-    // 3) UndoiV‹Kì¬‚³‚ê‚½ƒwƒbƒ_‚Ííœ‚Å–ß‚·j
+    // 3) Undoï¼ˆæ–°è¦ä½œæˆã•ã‚ŒãŸãƒ˜ãƒƒãƒ€ã¯å‰Šé™¤ã§æˆ»ã™ï¼‰
     UndoRecord frec;
     frec.operation_id = L"OP_UNDO";
     frec.target_file_path = f1;
@@ -1489,58 +1489,58 @@ static void TestSwitchHeaderUndo()
     recs.push_back(frec);
     recs.push_back(hrec);
     um.SetRecords(recs);
-    Check(um.FileCount() == 2, L"Undo ‘ÎÛ‚ª 2 Œiƒ\[ƒX + ƒwƒbƒ_j");
-    Check(um.CanUndo(), L"V‹Kƒwƒbƒ_‚ğŠÜ‚Ş‘€ì‚à Undo ‰Â”\‚Æ”»’è‚·‚é");
+    Check(um.FileCount() == 2, L"Undo å¯¾è±¡ãŒ 2 ä»¶ï¼ˆã‚½ãƒ¼ã‚¹ + ãƒ˜ãƒƒãƒ€ï¼‰");
+    Check(um.CanUndo(), L"æ–°è¦ãƒ˜ãƒƒãƒ€ã‚’å«ã‚€æ“ä½œã‚‚ Undo å¯èƒ½ã¨åˆ¤å®šã™ã‚‹");
 
     std::wstring uerr;
     std::vector<std::wstring> sidecars;
-    Check(um.Undo(uerr, sidecars), L"Undo ‚ª¬Œ÷‚·‚é");
-    Check(sidecars.size() == 2, L"•œŒ³‘O‚É 2 Œ‚ğ‘Ş”ğ‚·‚é");
+    Check(um.Undo(uerr, sidecars), L"Undo ãŒæˆåŠŸã™ã‚‹");
+    Check(sidecars.size() == 2, L"å¾©å…ƒå‰ã« 2 ä»¶ã‚’é€€é¿ã™ã‚‹");
 
     std::wstring now;
     FileManager::ReadText(f1, L"auto", now, fi);
     now = util::NormalizeNewlines(now);
     Check(now == util::NormalizeNewlines(original),
-          L"ƒ\[ƒX‚ªÀs‘O‚Ì“à—e‚ÖŠ®‘S‚É•œŒ³‚³‚ê‚éi#include ‚àæ‚èœ‚©‚ê‚éj");
+          L"ã‚½ãƒ¼ã‚¹ãŒå®Ÿè¡Œå‰ã®å†…å®¹ã¸å®Œå…¨ã«å¾©å…ƒã•ã‚Œã‚‹ï¼ˆ#include ã‚‚å–ã‚Šé™¤ã‹ã‚Œã‚‹ï¼‰");
     Check(!util::PathExists(header),
-          L"V‹Kì¬‚³‚ê‚½ƒXƒCƒbƒ`’è‹`ƒwƒbƒ_‚ªíœ‚³‚ê‚é");
+          L"æ–°è¦ä½œæˆã•ã‚ŒãŸã‚¹ã‚¤ãƒƒãƒå®šç¾©ãƒ˜ãƒƒãƒ€ãŒå‰Šé™¤ã•ã‚Œã‚‹");
 }
 
 
 // =============================================================================
-// AI ˜AŒgid—l‘¶¬j
+// AI é€£æºï¼ˆä»•æ§˜æ›¸ç”Ÿæˆï¼‰
 // =============================================================================
 static void TestAiClientBasics()
 {
-    Out(L"\n== AI ƒNƒ‰ƒCƒAƒ“ƒgiJSON / SSE ‰ğÍj==\n");
+    Out(L"\n== AI ã‚¯ãƒ©ã‚¤ã‚¢ãƒ³ãƒˆï¼ˆJSON / SSE è§£æï¼‰==\n");
 
-    // JSON ƒGƒXƒP[ƒv
+    // JSON ã‚¨ã‚¹ã‚±ãƒ¼ãƒ—
     std::wstring esc = AiClient::JsonEscape(L"a\"b\\c\nd\te");
-    Check(esc == L"a\\\"b\\\\c\\nd\\te", L"JSON •¶š—ñ‚ğƒGƒXƒP[ƒv‚·‚é");
-    std::wstring uni = AiClient::JsonEscape(L"‰üs\x01");
-    Check(uni.find(L"\\u0001") != std::wstring::npos, L"§Œä•¶š‚ğ \\uXXXX ‚Ö•ÏŠ·‚·‚é");
+    Check(esc == L"a\\\"b\\\\c\\nd\\te", L"JSON æ–‡å­—åˆ—ã‚’ã‚¨ã‚¹ã‚±ãƒ¼ãƒ—ã™ã‚‹");
+    std::wstring uni = AiClient::JsonEscape(L"æ”¹è¡Œ\x01");
+    Check(uni.find(L"\\u0001") != std::wstring::npos, L"åˆ¶å¾¡æ–‡å­—ã‚’ \\uXXXX ã¸å¤‰æ›ã™ã‚‹");
 
-    // ƒŠƒNƒGƒXƒg–{•¶
+    // ãƒªã‚¯ã‚¨ã‚¹ãƒˆæœ¬æ–‡
     AiSettings st;
     st.api_key = L"k";
     st.task_type = L"super_agent";
-    std::string body = AiClient::BuildRequestBody(st, L"ƒeƒXƒg\"‰üs\nŠÜ‚İ");
+    std::string body = AiClient::BuildRequestBody(st, L"ãƒ†ã‚¹ãƒˆ\"æ”¹è¡Œ\nå«ã¿");
     std::string bs(body.begin(), body.end());
-    Check(bs.find("\"message\":\"") != std::string::npos, L"ƒŠƒNƒGƒXƒg–{•¶‚É message ‚ğŠÜ‚Ş");
-    Check(bs.find("\\\"") != std::string::npos, L"ˆø—p•„‚ªƒGƒXƒP[ƒv‚³‚ê‚é");
-    Check(bs.find("\\n") != std::string::npos, L"‰üs‚ªƒGƒXƒP[ƒv‚³‚ê‚é");
-    Check(bs.find("\"task_type\":\"super_agent\"") != std::string::npos, L"task_type ‚ğ‘—M‚·‚é");
+    Check(bs.find("\"message\":\"") != std::string::npos, L"ãƒªã‚¯ã‚¨ã‚¹ãƒˆæœ¬æ–‡ã« message ã‚’å«ã‚€");
+    Check(bs.find("\\\"") != std::string::npos, L"å¼•ç”¨ç¬¦ãŒã‚¨ã‚¹ã‚±ãƒ¼ãƒ—ã•ã‚Œã‚‹");
+    Check(bs.find("\\n") != std::string::npos, L"æ”¹è¡ŒãŒã‚¨ã‚¹ã‚±ãƒ¼ãƒ—ã•ã‚Œã‚‹");
+    Check(bs.find("\"task_type\":\"super_agent\"") != std::string::npos, L"task_type ã‚’é€ä¿¡ã™ã‚‹");
     AiSettings st2 = st;
     st2.model = L"m1";
     std::string body2 = AiClient::BuildRequestBody(st2, L"x");
     Check(std::string(body2.begin(), body2.end()).find("\"use_model\":\"m1\"") != std::string::npos,
-          L"ƒ‚ƒfƒ‹w’è‚Í use_model ‚ğ‘—M‚·‚é");
+          L"ãƒ¢ãƒ‡ãƒ«æŒ‡å®šæ™‚ã¯ use_model ã‚’é€ä¿¡ã™ã‚‹");
 
-    // •¶šƒR[ƒh•ÏŠ·i“ú–{Œê‚Ì‰•œj
-    std::wstring jp = L"•ÏXd—l‘ƒeƒXƒg";
-    Check(AiClient::Utf8Decode(AiClient::Utf8Encode(jp)) == jp, L"UTF-8 ‚Ì‰•œ‚Å•¶š‰»‚¯‚µ‚È‚¢");
+    // æ–‡å­—ã‚³ãƒ¼ãƒ‰å¤‰æ›ï¼ˆæ—¥æœ¬èªã®å¾€å¾©ï¼‰
+    std::wstring jp = L"å¤‰æ›´ä»•æ§˜æ›¸ãƒ†ã‚¹ãƒˆ";
+    Check(AiClient::Utf8Decode(AiClient::Utf8Encode(jp)) == jp, L"UTF-8 ã®å¾€å¾©ã§æ–‡å­—åŒ–ã‘ã—ãªã„");
 
-    // SSE ‰ğÍ: delta ‚Ì˜AŒ‹
+    // SSE è§£æ: delta ã®é€£çµ
     std::wstring acc;
     const char* lines[] = {
         "{\"version\":1,\"project_id\":\"p1\"}",
@@ -1556,183 +1556,183 @@ static void TestAiClientBasics()
         if (ev.has_delta) acc += ev.delta;
         if (ev.has_final) { got_final = true; final_text = ev.final_text; }
     }
-    Check(acc == L"•ÏX", L"SSE ‚Ì delta ‚ğ˜AŒ‹‚Å‚«‚é");
-    Check(got_final && final_text == L"•ÏXd—l‘", L"Š®—¹ƒCƒxƒ“ƒg‚©‚ç–{•¶‚ğæ‚èo‚¹‚é");
+    Check(acc == L"å¤‰æ›´", L"SSE ã® delta ã‚’é€£çµã§ãã‚‹");
+    Check(got_final && final_text == L"å¤‰æ›´ä»•æ§˜æ›¸", L"å®Œäº†ã‚¤ãƒ™ãƒ³ãƒˆã‹ã‚‰æœ¬æ–‡ã‚’å–ã‚Šå‡ºã›ã‚‹");
     Check(AiClient::ParseSseLine("data: {\"delta\":\"x\"}").delta == L"x",
-          L"data: ƒvƒŒƒtƒBƒbƒNƒX•t‚«‚Ìs‚à‰ğÍ‚Å‚«‚é");
-    Check(AiClient::ParseSseLine("").has_delta == false, L"‹ós‚Í–³‹‚³‚ê‚é");
-    // ¶‚Ì UTF-8i\u ƒGƒXƒP[ƒv‚³‚ê‚Ä‚¢‚È‚¢“ú–{Œêj‚ğŠÜ‚Ş SSEB
-    // ƒ\[ƒX‚Í CP932 ‚Å•Û‘¶‚³‚ê‚é‚½‚ßAƒoƒCƒg—ñ‚ğ–¾¦‚µ‚ÄŒŸØ‚·‚éB
+          L"data: ãƒ—ãƒ¬ãƒ•ã‚£ãƒƒã‚¯ã‚¹ä»˜ãã®è¡Œã‚‚è§£æã§ãã‚‹");
+    Check(AiClient::ParseSseLine("").has_delta == false, L"ç©ºè¡Œã¯ç„¡è¦–ã•ã‚Œã‚‹");
+    // ç”Ÿã® UTF-8ï¼ˆ\u ã‚¨ã‚¹ã‚±ãƒ¼ãƒ—ã•ã‚Œã¦ã„ãªã„æ—¥æœ¬èªï¼‰ã‚’å«ã‚€ SSEã€‚
+    // ã‚½ãƒ¼ã‚¹ã¯ CP932 ã§ä¿å­˜ã•ã‚Œã‚‹ãŸã‚ã€ãƒã‚¤ãƒˆåˆ—ã‚’æ˜ç¤ºã—ã¦æ¤œè¨¼ã™ã‚‹ã€‚
     std::string raw_utf8 =
-        "{\"version\":1,\"delta\":\"\xe5\xa4\x89\xe6\x9b\xb4\"}";   // •ÏX
+        "{\"version\":1,\"delta\":\"\xe5\xa4\x89\xe6\x9b\xb4\"}";   // å¤‰æ›´
     SseEvent ev_u = AiClient::ParseSseLine(raw_utf8);
     Check(ev_u.has_delta && ev_u.delta == std::wstring(L"\u5909\u66f4"),
-          L"ƒGƒXƒP[ƒv‚³‚ê‚Ä‚¢‚È‚¢ UTF-8 ‚Ì delta ‚à³‚µ‚­‰ğß‚·‚é");
+          L"ã‚¨ã‚¹ã‚±ãƒ¼ãƒ—ã•ã‚Œã¦ã„ãªã„ UTF-8 ã® delta ã‚‚æ­£ã—ãè§£é‡ˆã™ã‚‹");
     std::string raw_final =
         "{\"status\":\"ok\",\"data\":{\"result_content\":{\"last_message\":["
-        "\"\xe5\xa4\x89\xe6\x9b\xb4\xe4\xbb\x95\xe6\xa7\x98\xe6\x9b\xb8\"]}}}";  // •ÏXd—l‘
+        "\"\xe5\xa4\x89\xe6\x9b\xb4\xe4\xbb\x95\xe6\xa7\x98\xe6\x9b\xb8\"]}}}";  // å¤‰æ›´ä»•æ§˜æ›¸
     Check(AiClient::ParseSseLine(raw_final).final_text ==
               std::wstring(L"\u5909\u66f4\u4ed5\u69d8\u66f8"),
-          L"Š®—¹ƒCƒxƒ“ƒg‚Ì–{•¶‚à UTF-8 ‚Æ‚µ‚Ä‰ğß‚·‚é");
+          L"å®Œäº†ã‚¤ãƒ™ãƒ³ãƒˆã®æœ¬æ–‡ã‚‚ UTF-8 ã¨ã—ã¦è§£é‡ˆã™ã‚‹");
     std::string raw_mixed = "{\"delta\":\"a\\u3042b\"}";   // a + \u3042 + b
     std::wstring want;
     want += L'a'; want += (wchar_t)0x3042; want += L'b';
     Check(AiClient::ParseSseLine(raw_mixed).delta == want,
-          L"ASCII ‚Æ \\u ƒGƒXƒP[ƒv‚Ì¬İ‚ğˆ—‚·‚é");
+          L"ASCII ã¨ \\u ã‚¨ã‚¹ã‚±ãƒ¼ãƒ—ã®æ··åœ¨ã‚’å‡¦ç†ã™ã‚‹");
     Check(AiClient::DefaultEndpoint().find(L"/api/tool_cli/agent_ask") != std::wstring::npos,
-          L"Šù’èƒGƒ“ƒhƒ|ƒCƒ“ƒg‚ª Genspark ‚Ì API ‚ğw‚·");
+          L"æ—¢å®šã‚¨ãƒ³ãƒ‰ãƒã‚¤ãƒ³ãƒˆãŒ Genspark ã® API ã‚’æŒ‡ã™");
 }
 
 static void TestSpecGenerator()
 {
-    Out(L"\n== d—l‘¶¬iƒvƒƒ“ƒvƒg / Markdown¨HTMLj==\n");
+    Out(L"\n== ä»•æ§˜æ›¸ç”Ÿæˆï¼ˆãƒ—ãƒ­ãƒ³ãƒ—ãƒˆ / Markdownâ†’HTMLï¼‰==\n");
 
     SpecInput in;
-    in.system_name = L"İŒÉŠÇ—ƒVƒXƒeƒ€";
-    in.overview = L"C/S \¬‚ÌŠîŠ²ƒVƒXƒeƒ€";
-    in.purpose = L"‹Œ API ‚ÌƒTƒ|[ƒgI—¹‘Î‰";
-    in.modification = L"stock_alloc() ‚ğ new_stock_alloc() ‚Ö·‚µ‘Ö‚¦‚é";
+    in.system_name = L"åœ¨åº«ç®¡ç†ã‚·ã‚¹ãƒ†ãƒ ";
+    in.overview = L"C/S æ§‹æˆã®åŸºå¹¹ã‚·ã‚¹ãƒ†ãƒ ";
+    in.purpose = L"æ—§ API ã®ã‚µãƒãƒ¼ãƒˆçµ‚äº†å¯¾å¿œ";
+    in.modification = L"stock_alloc() ã‚’ new_stock_alloc() ã¸å·®ã—æ›¿ãˆã‚‹";
     in.switch_name = L"MIGRATION_001";
     in.old_code = L"stock_alloc(item, qty);";
     in.new_code = L"new_stock_alloc(item, qty, ctx);";
-    in.target_summary = L"sample.ci1 ‰ÓŠj";
+    in.target_summary = L"sample.cï¼ˆ1 ç®‡æ‰€ï¼‰";
     in.created_at = L"2026-10-18 15:30:00";
 
     std::wstring pc = SpecGenerator::BuildChangeSpecPrompt(in);
-    Check(pc.find(L"İŒÉŠÇ—ƒVƒXƒeƒ€") != std::wstring::npos, L"•ÏXd—l‘ƒvƒƒ“ƒvƒg‚ÉƒVƒXƒeƒ€–¼‚ğŠÜ‚Ş");
-    Check(pc.find(L"•ÏXd—l‘") != std::wstring::npos, L"•ÏXd—l‘‚Ìì¬‚ğw¦‚·‚é");
-    Check(pc.find(L"## 5. ƒRƒ“ƒpƒCƒ‹ƒXƒCƒbƒ`d—l") != std::wstring::npos, L"ƒXƒCƒbƒ`d—l‚ÌÍ‚ğw¦‚·‚é");
-    Check(pc.find(L"## 8. ƒ[ƒ‹ƒoƒbƒNè‡") != std::wstring::npos, L"ƒ[ƒ‹ƒoƒbƒNè‡‚ÌÍ‚ğw¦‚·‚é");
-    Check(pc.find(L"stock_alloc(item, qty);") != std::wstring::npos, L"‹ŒƒR[ƒh‚ğƒvƒƒ“ƒvƒg‚Ö–„‚ß‚Ş");
+    Check(pc.find(L"åœ¨åº«ç®¡ç†ã‚·ã‚¹ãƒ†ãƒ ") != std::wstring::npos, L"å¤‰æ›´ä»•æ§˜æ›¸ãƒ—ãƒ­ãƒ³ãƒ—ãƒˆã«ã‚·ã‚¹ãƒ†ãƒ åã‚’å«ã‚€");
+    Check(pc.find(L"å¤‰æ›´ä»•æ§˜æ›¸") != std::wstring::npos, L"å¤‰æ›´ä»•æ§˜æ›¸ã®ä½œæˆã‚’æŒ‡ç¤ºã™ã‚‹");
+    Check(pc.find(L"## 5. ã‚³ãƒ³ãƒ‘ã‚¤ãƒ«ã‚¹ã‚¤ãƒƒãƒä»•æ§˜") != std::wstring::npos, L"ã‚¹ã‚¤ãƒƒãƒä»•æ§˜ã®ç« ã‚’æŒ‡ç¤ºã™ã‚‹");
+    Check(pc.find(L"## 8. ãƒ­ãƒ¼ãƒ«ãƒãƒƒã‚¯æ‰‹é †") != std::wstring::npos, L"ãƒ­ãƒ¼ãƒ«ãƒãƒƒã‚¯æ‰‹é †ã®ç« ã‚’æŒ‡ç¤ºã™ã‚‹");
+    Check(pc.find(L"stock_alloc(item, qty);") != std::wstring::npos, L"æ—§ã‚³ãƒ¼ãƒ‰ã‚’ãƒ—ãƒ­ãƒ³ãƒ—ãƒˆã¸åŸ‹ã‚è¾¼ã‚€");
 
     std::wstring pi = SpecGenerator::BuildInspectionSpecPrompt(in);
-    Check(pi.find(L"ŒŸ¸d—l‘") != std::wstring::npos, L"ŒŸ¸d—l‘‚Ìì¬‚ğw¦‚·‚é");
-    Check(pi.find(L"## 3. ŒŸ¸ŠÏ“_ˆê——") != std::wstring::npos, L"ŒŸ¸ŠÏ“_‚ÌÍ‚ğw¦‚·‚é");
-    Check(pi.find(L"## 6. ƒXƒCƒbƒ`Ø‘Ö‚ÌŠm”F€–Ú") != std::wstring::npos, L"ƒXƒCƒbƒ`Ø‘Ö‚ÌŠm”FÍ‚ğw¦‚·‚é");
+    Check(pi.find(L"æ¤œæŸ»ä»•æ§˜æ›¸") != std::wstring::npos, L"æ¤œæŸ»ä»•æ§˜æ›¸ã®ä½œæˆã‚’æŒ‡ç¤ºã™ã‚‹");
+    Check(pi.find(L"## 3. æ¤œæŸ»è¦³ç‚¹ä¸€è¦§") != std::wstring::npos, L"æ¤œæŸ»è¦³ç‚¹ã®ç« ã‚’æŒ‡ç¤ºã™ã‚‹");
+    Check(pi.find(L"## 6. ã‚¹ã‚¤ãƒƒãƒåˆ‡æ›¿ã®ç¢ºèªé …ç›®") != std::wstring::npos, L"ã‚¹ã‚¤ãƒƒãƒåˆ‡æ›¿ã®ç¢ºèªç« ã‚’æŒ‡ç¤ºã™ã‚‹");
 
-    // ---- API ‚ğg‚í‚È‚¢‰^—p: AI ƒ`ƒƒƒbƒg‚Ö“\‚éˆË—Š•¶ txt ----
+    // ---- API ã‚’ä½¿ã‚ãªã„é‹ç”¨: AI ãƒãƒ£ãƒƒãƒˆã¸è²¼ã‚‹ä¾é ¼æ–‡ txt ----
     std::wstring txt = SpecGenerator::BuildPromptTxt(SPEC_CHANGE, in);
-    Check(txt.find(L"•ÏXd—l‘ ì¬ˆË—Š") != std::wstring::npos,
-          L"ˆË—Š•¶ txt ‚ÉŒ©o‚µ‚ğ•t‚¯‚é");
-    Check(txt.find(L"y‚±‚Ìƒtƒ@ƒCƒ‹‚Ìg‚¢•ûz") != std::wstring::npos,
-          L"ˆË—Š•¶ txt ‚Ég‚¢•û‚ğ‹LÚ‚·‚é");
-    Check(txt.find(L"AI ƒ`ƒƒƒbƒg") != std::wstring::npos,
-          L"AI ƒ`ƒƒƒbƒg‚Ö“\‚é|‚ğ‹LÚ‚·‚é");
-    Check(txt.find(L"İŒÉŠÇ—ƒVƒXƒeƒ€") != std::wstring::npos,
-          L"ˆË—Š•¶ txt ‚ÉƒVƒXƒeƒ€î•ñ‚ğ–„‚ß‚Ş");
-    Check(txt.find(L"## 9. –¢Šm’è–€EŠm”F–€") != std::wstring::npos,
-          L"ˆË—Š•¶ txt ‚ÉÍ—§‚Ä‚Ìw¦‚ğŠÜ‚Ş");
-    Check(txt.find(L"o—Í‚ÌŒµç–€") != std::wstring::npos,
-          L"ˆË—Š•¶ txt ‚Éo—ÍŒ`®‚Ìw¦‚ğŠÜ‚Ş");
-    Check(txt.find(L"‰ñ“š‚ğ“\‚è–ß‚·‚Æ‚«‚Ìƒƒ‚") != std::wstring::npos,
-          L"ˆË—Š•¶ txt ‚É“\‚è–ß‚µ‚Ìƒƒ‚‚ğŠÜ‚Ş");
+    Check(txt.find(L"å¤‰æ›´ä»•æ§˜æ›¸ ä½œæˆä¾é ¼") != std::wstring::npos,
+          L"ä¾é ¼æ–‡ txt ã«è¦‹å‡ºã—ã‚’ä»˜ã‘ã‚‹");
+    Check(txt.find(L"ã€ã“ã®ãƒ•ã‚¡ã‚¤ãƒ«ã®ä½¿ã„æ–¹ã€‘") != std::wstring::npos,
+          L"ä¾é ¼æ–‡ txt ã«ä½¿ã„æ–¹ã‚’è¨˜è¼‰ã™ã‚‹");
+    Check(txt.find(L"AI ãƒãƒ£ãƒƒãƒˆ") != std::wstring::npos,
+          L"AI ãƒãƒ£ãƒƒãƒˆã¸è²¼ã‚‹æ—¨ã‚’è¨˜è¼‰ã™ã‚‹");
+    Check(txt.find(L"åœ¨åº«ç®¡ç†ã‚·ã‚¹ãƒ†ãƒ ") != std::wstring::npos,
+          L"ä¾é ¼æ–‡ txt ã«ã‚·ã‚¹ãƒ†ãƒ æƒ…å ±ã‚’åŸ‹ã‚è¾¼ã‚€");
+    Check(txt.find(L"## 9. æœªç¢ºå®šäº‹é …ãƒ»ç¢ºèªäº‹é …") != std::wstring::npos,
+          L"ä¾é ¼æ–‡ txt ã«ç« ç«‹ã¦ã®æŒ‡ç¤ºã‚’å«ã‚€");
+    Check(txt.find(L"å‡ºåŠ›ã®å³å®ˆäº‹é …") != std::wstring::npos,
+          L"ä¾é ¼æ–‡ txt ã«å‡ºåŠ›å½¢å¼ã®æŒ‡ç¤ºã‚’å«ã‚€");
+    Check(txt.find(L"å›ç­”ã‚’è²¼ã‚Šæˆ»ã™ã¨ãã®ãƒ¡ãƒ¢") != std::wstring::npos,
+          L"ä¾é ¼æ–‡ txt ã«è²¼ã‚Šæˆ»ã—ã®ãƒ¡ãƒ¢ã‚’å«ã‚€");
     Check(txt.find(L"\r\n") != std::wstring::npos &&
           txt.find(L"\n\n") == std::wstring::npos,
-          L"ˆË—Š•¶ txt ‚Ì‰üs‚ğ CRLF ‚É“ˆê‚·‚é");
+          L"ä¾é ¼æ–‡ txt ã®æ”¹è¡Œã‚’ CRLF ã«çµ±ä¸€ã™ã‚‹");
 
     std::wstring txt2 = SpecGenerator::BuildPromptTxt(SPEC_INSPECTION, in);
-    Check(txt2.find(L"ŒŸ¸d—l‘ ì¬ˆË—Š") != std::wstring::npos &&
-          txt2.find(L"## 3. ŒŸ¸ŠÏ“_ˆê——") != std::wstring::npos,
-          L"ŒŸ¸d—l‘‚ÌˆË—Š•¶ txt ‚ğ¶¬‚·‚é");
-    Check(SpecGenerator::MakePromptFileName(L"İŒÉŠÇ—ƒVƒXƒeƒ€", SPEC_CHANGE,
+    Check(txt2.find(L"æ¤œæŸ»ä»•æ§˜æ›¸ ä½œæˆä¾é ¼") != std::wstring::npos &&
+          txt2.find(L"## 3. æ¤œæŸ»è¦³ç‚¹ä¸€è¦§") != std::wstring::npos,
+          L"æ¤œæŸ»ä»•æ§˜æ›¸ã®ä¾é ¼æ–‡ txt ã‚’ç”Ÿæˆã™ã‚‹");
+    Check(SpecGenerator::MakePromptFileName(L"åœ¨åº«ç®¡ç†ã‚·ã‚¹ãƒ†ãƒ ", SPEC_CHANGE,
                                              L"2026-10-18 15:40:00") ==
-          L"İŒÉŠÇ—ƒVƒXƒeƒ€_changespec_prompt_20261018154000.txt",
-          L"ˆË—Š•¶ txt ‚Ìƒtƒ@ƒCƒ‹–¼‚ğ‘g‚İ—§‚Ä‚é");
+          L"åœ¨åº«ç®¡ç†ã‚·ã‚¹ãƒ†ãƒ _changespec_prompt_20261018154000.txt",
+          L"ä¾é ¼æ–‡ txt ã®ãƒ•ã‚¡ã‚¤ãƒ«åã‚’çµ„ã¿ç«‹ã¦ã‚‹");
 
-    // “\‚è•t‚¯‚½‰ñ“š ¨ ƒŒƒ|[ƒg‰»iAPI ‚ğg‚í‚È‚¢Œo˜Hj
+    // è²¼ã‚Šä»˜ã‘ãŸå›ç­” â†’ ãƒ¬ãƒãƒ¼ãƒˆåŒ–ï¼ˆAPI ã‚’ä½¿ã‚ãªã„çµŒè·¯ï¼‰
     std::wstring dir2 = util::JoinPath(VerifyDir(), L"spec_paste");
     util::EnsureDirectory(dir2);
     std::wstring pasted =
-        L"## 1. ŒŸ¸–Ú“I\nİŒÉˆø“–‚Ì·‚µ‘Ö‚¦‚ª³‚µ‚­“®ì‚·‚é‚±‚Æ‚ğŠm”F‚·‚éB\n\n"
-        L"| No | è‡ | Šú‘ÒŒ‹‰Ê |\n"
+        L"## 1. æ¤œæŸ»ç›®çš„\nåœ¨åº«å¼•å½“ã®å·®ã—æ›¿ãˆãŒæ­£ã—ãå‹•ä½œã™ã‚‹ã“ã¨ã‚’ç¢ºèªã™ã‚‹ã€‚\n\n"
+        L"| No | æ‰‹é † | æœŸå¾…çµæœ |\n"
         L"|----|------|----------|\n"
-        L"| 1 | ƒXƒCƒbƒ` OFF ‚ÅÀs | ‹ŒƒR[ƒh‚ª“®ì‚·‚é |\n"
-        L"| 2 | ƒXƒCƒbƒ` ON ‚ÅÀs | VƒR[ƒh‚ª“®ì‚·‚é |\n";
+        L"| 1 | ã‚¹ã‚¤ãƒƒãƒ OFF ã§å®Ÿè¡Œ | æ—§ã‚³ãƒ¼ãƒ‰ãŒå‹•ä½œã™ã‚‹ |\n"
+        L"| 2 | ã‚¹ã‚¤ãƒƒãƒ ON ã§å®Ÿè¡Œ | æ–°ã‚³ãƒ¼ãƒ‰ãŒå‹•ä½œã™ã‚‹ |\n";
 
-    // 1) ˆË—Š•¶ txt ‚ğƒtƒ@ƒCƒ‹‚Öo—ÍiExportPrompts ‚Æ“¯‚¶Œo˜Hj
+    // 1) ä¾é ¼æ–‡ txt ã‚’ãƒ•ã‚¡ã‚¤ãƒ«ã¸å‡ºåŠ›ï¼ˆExportPrompts ã¨åŒã˜çµŒè·¯ï¼‰
     std::wstring tpath = util::JoinPath(dir2, SpecGenerator::MakePromptFileName(
         in.system_name, SPEC_CHANGE, L"2026-10-18 15:40:00"));
     std::wstring werr2;
     Check(SpecGenerator::WriteReportFile(tpath, SpecGenerator::BuildPromptTxt(SPEC_CHANGE, in), werr2),
-          L"ˆË—Š•¶ txt ‚ğƒtƒ@ƒCƒ‹‚Ö‘‚«o‚¹‚é");
+          L"ä¾é ¼æ–‡ txt ã‚’ãƒ•ã‚¡ã‚¤ãƒ«ã¸æ›¸ãå‡ºã›ã‚‹");
     std::string traw;
     ReadRaw(tpath, traw);
     Check(traw.size() > 3 && (unsigned char)traw[0] == 0xEF,
-          L"ˆË—Š•¶ txt ‚Í UTF-8 BOM •t‚«‚Åo—Í‚³‚ê‚é");
+          L"ä¾é ¼æ–‡ txt ã¯ UTF-8 BOM ä»˜ãã§å‡ºåŠ›ã•ã‚Œã‚‹");
     std::wstring tback = util::Utf8ToWide(traw);
-    Check(tback.find(L"•ÏXd—l‘ ì¬ˆË—Š") != std::wstring::npos &&
-          tback.find(L"İŒÉŠÇ—ƒVƒXƒeƒ€") != std::wstring::npos,
-          L"o—Í‚µ‚½ˆË—Š•¶ txt ‚ÉˆË—Š“à—e‚ÆƒVƒXƒeƒ€î•ñ‚ªŠÜ‚Ü‚ê‚é");
+    Check(tback.find(L"å¤‰æ›´ä»•æ§˜æ›¸ ä½œæˆä¾é ¼") != std::wstring::npos &&
+          tback.find(L"åœ¨åº«ç®¡ç†ã‚·ã‚¹ãƒ†ãƒ ") != std::wstring::npos,
+          L"å‡ºåŠ›ã—ãŸä¾é ¼æ–‡ txt ã«ä¾é ¼å†…å®¹ã¨ã‚·ã‚¹ãƒ†ãƒ æƒ…å ±ãŒå«ã¾ã‚Œã‚‹");
     Check(tback.find(L"\r\n") != std::wstring::npos,
-          L"o—Í‚µ‚½ˆË—Š•¶ txt ‚Ì‰üs‚ª CRLF ‚Å‚ ‚é");
+          L"å‡ºåŠ›ã—ãŸä¾é ¼æ–‡ txt ã®æ”¹è¡ŒãŒ CRLF ã§ã‚ã‚‹");
 
-    // 2) “\‚è•t‚¯‚½‰ñ“š‚ğƒŒƒ|[ƒg‰»
+    // 2) è²¼ã‚Šä»˜ã‘ãŸå›ç­”ã‚’ãƒ¬ãƒãƒ¼ãƒˆåŒ–
     std::wstring rpath = util::JoinPath(dir2,
         SpecGenerator::MakeReportFileName(in.system_name, SPEC_INSPECTION, L"2026-10-18 15:41:00"));
     std::wstring rhtml = SpecGenerator::WrapReportHtml(
-        L"ŒŸ¸d—l‘ - " + in.system_name, SpecGenerator::MarkdownToHtml(pasted), in);
+        L"æ¤œæŸ»ä»•æ§˜æ›¸ - " + in.system_name, SpecGenerator::MarkdownToHtml(pasted), in);
     Check(SpecGenerator::WriteReportFile(rpath, rhtml, werr2),
-          L"“\‚è•t‚¯‚½‰ñ“š‚ğ HTML ƒŒƒ|[ƒg‚Ö‘‚«o‚¹‚é");
-    Check(util::PathExists(rpath), L"“\‚è•t‚¯—R—ˆ‚ÌƒŒƒ|[ƒg‚ª‘¶İ‚·‚é");
+          L"è²¼ã‚Šä»˜ã‘ãŸå›ç­”ã‚’ HTML ãƒ¬ãƒãƒ¼ãƒˆã¸æ›¸ãå‡ºã›ã‚‹");
+    Check(util::PathExists(rpath), L"è²¼ã‚Šä»˜ã‘ç”±æ¥ã®ãƒ¬ãƒãƒ¼ãƒˆãŒå­˜åœ¨ã™ã‚‹");
     std::string rraw;
     ReadRaw(rpath, rraw);
     std::wstring rback = util::Utf8ToWide(rraw);
     Check(rback.find(L"<table>") != std::wstring::npos &&
-          rback.find(L"ƒXƒCƒbƒ` OFF ‚ÅÀs") != std::wstring::npos,
-          L"“\‚è•t‚¯‚½ Markdown ‚Ì•\‚ªƒŒƒ|[ƒg‚Ö”½‰f‚³‚ê‚é");
+          rback.find(L"ã‚¹ã‚¤ãƒƒãƒ OFF ã§å®Ÿè¡Œ") != std::wstring::npos,
+          L"è²¼ã‚Šä»˜ã‘ãŸ Markdown ã®è¡¨ãŒãƒ¬ãƒãƒ¼ãƒˆã¸åæ˜ ã•ã‚Œã‚‹");
 
-    // Markdown ¨ HTML
+    // Markdown â†’ HTML
     std::wstring md =
-        L"## 1. •ÏXŠT—v\n"
-        L"İŒÉˆø“–‚Ì**ŒÄ‚Ño‚µ**‚ğ·‚µ‘Ö‚¦‚éB\n\n"
-        L"- €–Ú1\n"
-        L"- €–Ú2\n\n"
-        L"| ID | ŠÏ“_ | Šú‘ÒŒ‹‰Ê |\n"
+        L"## 1. å¤‰æ›´æ¦‚è¦\n"
+        L"åœ¨åº«å¼•å½“ã®**å‘¼ã³å‡ºã—**ã‚’å·®ã—æ›¿ãˆã‚‹ã€‚\n\n"
+        L"- é …ç›®1\n"
+        L"- é …ç›®2\n\n"
+        L"| ID | è¦³ç‚¹ | æœŸå¾…çµæœ |\n"
         L"|----|------|----------|\n"
-        L"| T1 | ˆø“– | ¬Œ÷ |\n"
-        L"| T2 | İŒÉ•s‘« | ƒGƒ‰[ |\n\n"
+        L"| T1 | å¼•å½“ | æˆåŠŸ |\n"
+        L"| T2 | åœ¨åº«ä¸è¶³ | ã‚¨ãƒ©ãƒ¼ |\n\n"
         L"```\nold_call();\n```\n";
     std::wstring html = SpecGenerator::MarkdownToHtml(md);
-    Check(html.find(L"<h2>1. •ÏXŠT—v</h2>") != std::wstring::npos, L"Œ©o‚µ‚ğ h2 ‚Ö•ÏŠ·‚·‚é");
-    Check(html.find(L"<strong>ŒÄ‚Ño‚µ</strong>") != std::wstring::npos, L"‹­’²‚ğ strong ‚Ö•ÏŠ·‚·‚é");
-    Check(html.find(L"<li>€–Ú1</li>") != std::wstring::npos, L"‰Óğ‘‚«‚ğ ul/li ‚Ö•ÏŠ·‚·‚é");
+    Check(html.find(L"<h2>1. å¤‰æ›´æ¦‚è¦</h2>") != std::wstring::npos, L"è¦‹å‡ºã—ã‚’ h2 ã¸å¤‰æ›ã™ã‚‹");
+    Check(html.find(L"<strong>å‘¼ã³å‡ºã—</strong>") != std::wstring::npos, L"å¼·èª¿ã‚’ strong ã¸å¤‰æ›ã™ã‚‹");
+    Check(html.find(L"<li>é …ç›®1</li>") != std::wstring::npos, L"ç®‡æ¡æ›¸ãã‚’ ul/li ã¸å¤‰æ›ã™ã‚‹");
     Check(html.find(L"<table>") != std::wstring::npos &&
-          html.find(L"<th>ŠÏ“_</th>") != std::wstring::npos &&
-          html.find(L"<td>İŒÉ•s‘«</td>") != std::wstring::npos, L"•\‚ğ table ‚Ö•ÏŠ·‚·‚é");
-    Check(html.find(L"<pre><code>old_call();") != std::wstring::npos, L"ƒR[ƒhƒuƒƒbƒN‚ğ pre/code ‚Ö•ÏŠ·‚·‚é");
+          html.find(L"<th>è¦³ç‚¹</th>") != std::wstring::npos &&
+          html.find(L"<td>åœ¨åº«ä¸è¶³</td>") != std::wstring::npos, L"è¡¨ã‚’ table ã¸å¤‰æ›ã™ã‚‹");
+    Check(html.find(L"<pre><code>old_call();") != std::wstring::npos, L"ã‚³ãƒ¼ãƒ‰ãƒ–ãƒ­ãƒƒã‚¯ã‚’ pre/code ã¸å¤‰æ›ã™ã‚‹");
     Check(SpecGenerator::MarkdownToHtml(L"<script>alert(1)</script>").find(L"&lt;script&gt;") != std::wstring::npos,
-          L"HTML ‚ğƒGƒXƒP[ƒv‚·‚é");
+          L"HTML ã‚’ã‚¨ã‚¹ã‚±ãƒ¼ãƒ—ã™ã‚‹");
 
-    // ƒtƒ@ƒCƒ‹–¼ / ƒŒƒ|[ƒg‘‚«o‚µ
-    Check(SpecGenerator::SanitizeFileName(L"İŒÉ ŠÇ—:ƒVƒXƒeƒ€/v1") == L"İŒÉ_ŠÇ—ƒVƒXƒeƒ€v1",
-          L"ƒtƒ@ƒCƒ‹–¼‚Ég‚¦‚È‚¢•¶š‚ğœ‹‚·‚é");
-    Check(SpecGenerator::MakeReportFileName(L"İŒÉŠÇ—ƒVƒXƒeƒ€", SPEC_INSPECTION,
+    // ãƒ•ã‚¡ã‚¤ãƒ«å / ãƒ¬ãƒãƒ¼ãƒˆæ›¸ãå‡ºã—
+    Check(SpecGenerator::SanitizeFileName(L"åœ¨åº« ç®¡ç†:ã‚·ã‚¹ãƒ†ãƒ /v1") == L"åœ¨åº«_ç®¡ç†ã‚·ã‚¹ãƒ†ãƒ v1",
+          L"ãƒ•ã‚¡ã‚¤ãƒ«åã«ä½¿ãˆãªã„æ–‡å­—ã‚’é™¤å»ã™ã‚‹");
+    Check(SpecGenerator::MakeReportFileName(L"åœ¨åº«ç®¡ç†ã‚·ã‚¹ãƒ†ãƒ ", SPEC_INSPECTION,
                                              L"2026-10-18 15:30:00") ==
-          L"İŒÉŠÇ—ƒVƒXƒeƒ€_inspectspec_20261018153000.html",
-          L"ƒŒƒ|[ƒg–¼‚ğ‘g‚İ—§‚Ä‚é");
-    Check(SpecGenerator::KindLabel(SPEC_CHANGE) == L"•ÏXd—l‘" &&
-          SpecGenerator::KindLabel(SPEC_INSPECTION) == L"ŒŸ¸d—l‘", L"d—l‘‚Ì–¼Ì‚ğ•Ô‚·");
+          L"åœ¨åº«ç®¡ç†ã‚·ã‚¹ãƒ†ãƒ _inspectspec_20261018153000.html",
+          L"ãƒ¬ãƒãƒ¼ãƒˆåã‚’çµ„ã¿ç«‹ã¦ã‚‹");
+    Check(SpecGenerator::KindLabel(SPEC_CHANGE) == L"å¤‰æ›´ä»•æ§˜æ›¸" &&
+          SpecGenerator::KindLabel(SPEC_INSPECTION) == L"æ¤œæŸ»ä»•æ§˜æ›¸", L"ä»•æ§˜æ›¸ã®åç§°ã‚’è¿”ã™");
 
     std::wstring dir = util::JoinPath(VerifyDir(), L"spec_case");
     util::EnsureDirectory(dir);
     std::wstring path = util::JoinPath(dir, L"unit_report.html");
-    std::wstring content = SpecGenerator::WrapReportHtml(L"•ÏXd—l‘ - İŒÉŠÇ—ƒVƒXƒeƒ€", html, in);
+    std::wstring content = SpecGenerator::WrapReportHtml(L"å¤‰æ›´ä»•æ§˜æ›¸ - åœ¨åº«ç®¡ç†ã‚·ã‚¹ãƒ†ãƒ ", html, in);
     std::wstring werr;
-    Check(SpecGenerator::WriteReportFile(path, content, werr), L"HTML ƒŒƒ|[ƒg‚ğ‘‚«o‚¹‚é");
-    Check(util::PathExists(path), L"ƒŒƒ|[ƒgƒtƒ@ƒCƒ‹‚ª‘¶İ‚·‚é");
+    Check(SpecGenerator::WriteReportFile(path, content, werr), L"HTML ãƒ¬ãƒãƒ¼ãƒˆã‚’æ›¸ãå‡ºã›ã‚‹");
+    Check(util::PathExists(path), L"ãƒ¬ãƒãƒ¼ãƒˆãƒ•ã‚¡ã‚¤ãƒ«ãŒå­˜åœ¨ã™ã‚‹");
     std::string raw;
     ReadRaw(path, raw);
-    Check(raw.size() > 3 && (unsigned char)raw[0] == 0xEF, L"ƒŒƒ|[ƒg‚Í UTF-8 BOM •t‚«‚Åo—Í‚³‚ê‚é");
+    Check(raw.size() > 3 && (unsigned char)raw[0] == 0xEF, L"ãƒ¬ãƒãƒ¼ãƒˆã¯ UTF-8 BOM ä»˜ãã§å‡ºåŠ›ã•ã‚Œã‚‹");
     std::wstring back = util::Utf8ToWide(raw);
-    Check(back.find(L"<meta charset=\"utf-8\">") != std::wstring::npos, L"ƒŒƒ|[ƒg‚É charset ‚ğ–„‚ß‚Ş");
-    Check(back.find(L"İŒÉŠÇ—ƒVƒXƒeƒ€") != std::wstring::npos, L"ƒŒƒ|[ƒg‚ÉƒVƒXƒeƒ€–¼‚ğŠÜ‚Ş");
-    Check(back.find(L"MIGRATION_001") != std::wstring::npos, L"ƒŒƒ|[ƒg‚ÉƒXƒCƒbƒ`–¼‚ğŠÜ‚Ş");
-    Check(back.find(L"AI ‚ª¶¬‚µ‚½‘ˆÄ") != std::wstring::npos, L"AI ¶¬‚Å‚ ‚é|‚Ì’‹L‚ğŠÜ‚Ş");
+    Check(back.find(L"<meta charset=\"utf-8\">") != std::wstring::npos, L"ãƒ¬ãƒãƒ¼ãƒˆã« charset ã‚’åŸ‹ã‚è¾¼ã‚€");
+    Check(back.find(L"åœ¨åº«ç®¡ç†ã‚·ã‚¹ãƒ†ãƒ ") != std::wstring::npos, L"ãƒ¬ãƒãƒ¼ãƒˆã«ã‚·ã‚¹ãƒ†ãƒ åã‚’å«ã‚€");
+    Check(back.find(L"MIGRATION_001") != std::wstring::npos, L"ãƒ¬ãƒãƒ¼ãƒˆã«ã‚¹ã‚¤ãƒƒãƒåã‚’å«ã‚€");
+    Check(back.find(L"AI ãŒç”Ÿæˆã—ãŸè‰æ¡ˆ") != std::wstring::npos, L"AI ç”Ÿæˆã§ã‚ã‚‹æ—¨ã®æ³¨è¨˜ã‚’å«ã‚€");
 }
 
 static void TestAiConfigRoundtrip()
 {
-    Out(L"\n== AI ˜AŒg / ƒVƒXƒeƒ€î•ñ‚Ìİ’è•Û‘¶ ==\n");
+    Out(L"\n== AI é€£æº / ã‚·ã‚¹ãƒ†ãƒ æƒ…å ±ã®è¨­å®šä¿å­˜ ==\n");
 
     std::wstring dir = util::JoinPath(VerifyDir(), L"ai_cfg");
     util::EnsureDirectory(dir);
@@ -1748,93 +1748,93 @@ static void TestAiConfigRoundtrip()
     c.ai_task_type = L"super_agent";
     c.ai_timeout_sec = 480;
     c.ai_open_report = false;
-    c.sys_name = L"İŒÉŠÇ—ƒVƒXƒeƒ€";
-    c.sys_overview = L"ŠT—vƒeƒLƒXƒg";
-    c.sys_purpose = L"–Ú“IƒeƒLƒXƒg";
-    c.sys_modification = L"C³‰ÓŠƒeƒLƒXƒg";
-    c.sys_extra = L"’Ç‰Áw¦ƒeƒLƒXƒg";
+    c.sys_name = L"åœ¨åº«ç®¡ç†ã‚·ã‚¹ãƒ†ãƒ ";
+    c.sys_overview = L"æ¦‚è¦ãƒ†ã‚­ã‚¹ãƒˆ";
+    c.sys_purpose = L"ç›®çš„ãƒ†ã‚­ã‚¹ãƒˆ";
+    c.sys_modification = L"ä¿®æ­£ç®‡æ‰€ãƒ†ã‚­ã‚¹ãƒˆ";
+    c.sys_extra = L"è¿½åŠ æŒ‡ç¤ºãƒ†ã‚­ã‚¹ãƒˆ";
     c.last_spec_report_path = L"reports\\x.html";
     cm.Save(c);
 
     AppConfig d;
     cm.Load(d);
-    Check(d.ai_api_key == L"gsk-dummy-key", L"API ƒL[‚ğ•Û‘¶/•œŒ³‚Å‚«‚é");
-    Check(d.ai_endpoint.find(L"genspark.ai") != std::wstring::npos, L"ƒGƒ“ƒhƒ|ƒCƒ“ƒg‚ğ•Û‘¶/•œŒ³‚Å‚«‚é");
-    Check(d.ai_model == L"model-x", L"ƒ‚ƒfƒ‹‚ğ•Û‘¶/•œŒ³‚Å‚«‚é");
-    Check(d.ai_timeout_sec == 480, L"ƒ^ƒCƒ€ƒAƒEƒg‚ğ•Û‘¶/•œŒ³‚Å‚«‚é");
-    Check(d.ai_open_report == false, L"ƒŒƒ|[ƒg©“®ƒI[ƒvƒ“İ’è‚ğ•Û‘¶/•œŒ³‚Å‚«‚é");
-    Check(d.sys_name == L"İŒÉŠÇ—ƒVƒXƒeƒ€", L"ƒVƒXƒeƒ€–¼‚ğ•Û‘¶/•œŒ³‚Å‚«‚é");
-    Check(d.sys_overview == L"ŠT—vƒeƒLƒXƒg", L"ƒVƒXƒeƒ€ŠT—v‚ğ•Û‘¶/•œŒ³‚Å‚«‚é");
-    Check(d.sys_purpose == L"–Ú“IƒeƒLƒXƒg", L"–Ú“I‚ğ•Û‘¶/•œŒ³‚Å‚«‚é");
-    Check(d.sys_modification == L"C³‰ÓŠƒeƒLƒXƒg", L"C³‰ÓŠŠT—v‚ğ•Û‘¶/•œŒ³‚Å‚«‚é");
-    Check(d.sys_extra == L"’Ç‰Áw¦ƒeƒLƒXƒg", L"’Ç‰Áw¦‚ğ•Û‘¶/•œŒ³‚Å‚«‚é");
+    Check(d.ai_api_key == L"gsk-dummy-key", L"API ã‚­ãƒ¼ã‚’ä¿å­˜/å¾©å…ƒã§ãã‚‹");
+    Check(d.ai_endpoint.find(L"genspark.ai") != std::wstring::npos, L"ã‚¨ãƒ³ãƒ‰ãƒã‚¤ãƒ³ãƒˆã‚’ä¿å­˜/å¾©å…ƒã§ãã‚‹");
+    Check(d.ai_model == L"model-x", L"ãƒ¢ãƒ‡ãƒ«ã‚’ä¿å­˜/å¾©å…ƒã§ãã‚‹");
+    Check(d.ai_timeout_sec == 480, L"ã‚¿ã‚¤ãƒ ã‚¢ã‚¦ãƒˆã‚’ä¿å­˜/å¾©å…ƒã§ãã‚‹");
+    Check(d.ai_open_report == false, L"ãƒ¬ãƒãƒ¼ãƒˆè‡ªå‹•ã‚ªãƒ¼ãƒ—ãƒ³è¨­å®šã‚’ä¿å­˜/å¾©å…ƒã§ãã‚‹");
+    Check(d.sys_name == L"åœ¨åº«ç®¡ç†ã‚·ã‚¹ãƒ†ãƒ ", L"ã‚·ã‚¹ãƒ†ãƒ åã‚’ä¿å­˜/å¾©å…ƒã§ãã‚‹");
+    Check(d.sys_overview == L"æ¦‚è¦ãƒ†ã‚­ã‚¹ãƒˆ", L"ã‚·ã‚¹ãƒ†ãƒ æ¦‚è¦ã‚’ä¿å­˜/å¾©å…ƒã§ãã‚‹");
+    Check(d.sys_purpose == L"ç›®çš„ãƒ†ã‚­ã‚¹ãƒˆ", L"ç›®çš„ã‚’ä¿å­˜/å¾©å…ƒã§ãã‚‹");
+    Check(d.sys_modification == L"ä¿®æ­£ç®‡æ‰€ãƒ†ã‚­ã‚¹ãƒˆ", L"ä¿®æ­£ç®‡æ‰€æ¦‚è¦ã‚’ä¿å­˜/å¾©å…ƒã§ãã‚‹");
+    Check(d.sys_extra == L"è¿½åŠ æŒ‡ç¤ºãƒ†ã‚­ã‚¹ãƒˆ", L"è¿½åŠ æŒ‡ç¤ºã‚’ä¿å­˜/å¾©å…ƒã§ãã‚‹");
 }
 
 static void TestAiOpenAiCompat()
 {
-    Out(L"\n== OpenAI ŒİŠ· API ‘Î‰ ==\n");
+    Out(L"\n== OpenAI äº’æ› API å¯¾å¿œ ==\n");
 
-    // URL ‚Ì‘g‚İ—§‚Ä
+    // URL ã®çµ„ã¿ç«‹ã¦
     Check(AiClient::DefaultOpenAiEndpoint().find(L"/chat/completions") != std::wstring::npos,
-          L"Šù’è‚Ì OpenAI ŒİŠ·ƒGƒ“ƒhƒ|ƒCƒ“ƒg‚ğ•Ô‚·");
+          L"æ—¢å®šã® OpenAI äº’æ›ã‚¨ãƒ³ãƒ‰ãƒã‚¤ãƒ³ãƒˆã‚’è¿”ã™");
     Check(AiClient::ResolveOpenAiUrl(L"https://api.openai.com/v1") ==
           L"https://api.openai.com/v1/chat/completions",
-          L"ƒx[ƒX URL ‚É /chat/completions ‚ğ•â‚¤");
+          L"ãƒ™ãƒ¼ã‚¹ URL ã« /chat/completions ã‚’è£œã†");
     Check(AiClient::ResolveOpenAiUrl(L"https://api.openai.com/v1/") ==
           L"https://api.openai.com/v1/chat/completions",
-          L"––”öƒXƒ‰ƒbƒVƒ…‚ª‚ ‚Á‚Ä‚à³‚µ‚­•â‚¤");
+          L"æœ«å°¾ã‚¹ãƒ©ãƒƒã‚·ãƒ¥ãŒã‚ã£ã¦ã‚‚æ­£ã—ãè£œã†");
     Check(AiClient::ResolveOpenAiUrl(L"https://x.example/v1/chat/completions") ==
           L"https://x.example/v1/chat/completions",
-          L"Š®‘S‚È URL ‚Í‚»‚Ì‚Ü‚Üg‚¤");
+          L"å®Œå…¨ãª URL ã¯ãã®ã¾ã¾ä½¿ã†");
     Check(AiClient::ResolveOpenAiUrl(L"https://r.openai.azure.com/openai/deployments/d/chat/completions?api-version=2024-06-01")
               .find(L"api-version") != std::wstring::npos,
-          L"Azure Œ`®iapi-version •t‚«j‚ğ‚»‚Ì‚Ü‚Üg‚¤");
+          L"Azure å½¢å¼ï¼ˆapi-version ä»˜ãï¼‰ã‚’ãã®ã¾ã¾ä½¿ã†");
     Check(AiClient::ResolveOpenAiUrl(L"") == AiClient::DefaultOpenAiEndpoint(),
-          L"–¢“ü—Í‚È‚çŠù’è‚ÖƒtƒH[ƒ‹ƒoƒbƒN‚·‚é");
+          L"æœªå…¥åŠ›ãªã‚‰æ—¢å®šã¸ãƒ•ã‚©ãƒ¼ãƒ«ãƒãƒƒã‚¯ã™ã‚‹");
 
-    // ƒŠƒNƒGƒXƒg–{•¶
+    // ãƒªã‚¯ã‚¨ã‚¹ãƒˆæœ¬æ–‡
     AiSettings st;
     st.provider = AiProvider::OpenAiCompat;
     st.model = L"gpt-4o-mini";
-    std::string body = AiClient::BuildOpenAiRequestBody(st, L"ƒeƒXƒg\"‚Æ‰üs\n‚ğŠÜ‚Ş");
+    std::string body = AiClient::BuildOpenAiRequestBody(st, L"ãƒ†ã‚¹ãƒˆ\"ã¨æ”¹è¡Œ\nã‚’å«ã‚€");
     std::string b(body.begin(), body.end());
     Check(b.find("\"model\":\"gpt-4o-mini\"") != std::string::npos,
-          L"ƒŠƒNƒGƒXƒg–{•¶‚Éƒ‚ƒfƒ‹–¼‚ğŠÜ‚Ş");
+          L"ãƒªã‚¯ã‚¨ã‚¹ãƒˆæœ¬æ–‡ã«ãƒ¢ãƒ‡ãƒ«åã‚’å«ã‚€");
     Check(b.find("\"role\":\"user\"") != std::string::npos &&
           b.find("\"messages\":[") != std::string::npos,
-          L"messages / role ‚ğ‘g‚İ—§‚Ä‚é");
+          L"messages / role ã‚’çµ„ã¿ç«‹ã¦ã‚‹");
     Check(b.find("\"stream\":false") != std::string::npos,
-          L"”ñƒXƒgƒŠ[ƒ~ƒ“ƒO‚ğw’è‚·‚é");
+          L"éã‚¹ãƒˆãƒªãƒ¼ãƒŸãƒ³ã‚°ã‚’æŒ‡å®šã™ã‚‹");
     Check(b.find("\\\"") != std::string::npos && b.find("\\n") != std::string::npos,
-          L"ˆø—p•„‚Æ‰üs‚ğƒGƒXƒP[ƒv‚·‚é");
+          L"å¼•ç”¨ç¬¦ã¨æ”¹è¡Œã‚’ã‚¨ã‚¹ã‚±ãƒ¼ãƒ—ã™ã‚‹");
 
-    // ‰“š‚Ì‰ğÍi\u ƒGƒXƒP[ƒvŒ`®j
+    // å¿œç­”ã®è§£æï¼ˆ\u ã‚¨ã‚¹ã‚±ãƒ¼ãƒ—å½¢å¼ï¼‰
     std::string ok1 = "{\"choices\":[{\"message\":{\"role\":\"assistant\",\"content\":\"\\u5909\\u66f4\\u4ed5\\u69d8\\u66f8\"}}]}";
     std::wstring t1, e1;
     Check(AiClient::ParseOpenAiResponse(ok1, t1, e1) && t1 == std::wstring(L"\u5909\u66f4\u4ed5\u69d8\u66f8"),
-          L"choices[0].message.content ‚ğæ‚èo‚¹‚é");
-    // ‰“š‚Ì‰ğÍi¶‚Ì UTF-8Aƒ\[ƒX‚Í CP932 ‚È‚Ì‚ÅƒoƒCƒg—ñ‚Åw’èj
+          L"choices[0].message.content ã‚’å–ã‚Šå‡ºã›ã‚‹");
+    // å¿œç­”ã®è§£æï¼ˆç”Ÿã® UTF-8ã€ã‚½ãƒ¼ã‚¹ã¯ CP932 ãªã®ã§ãƒã‚¤ãƒˆåˆ—ã§æŒ‡å®šï¼‰
     std::string ok2 = "{\"choices\":[{\"message\":{\"content\":\"\xe5\xa4\x89\xe6\x9b\xb4\"}}]}";
     std::wstring t2, e2;
     Check(AiClient::ParseOpenAiResponse(ok2, t2, e2) && t2 == std::wstring(L"\u5909\u66f4"),
-          L"ƒGƒXƒP[ƒv‚³‚ê‚Ä‚¢‚È‚¢ UTF-8 ‚Ì–{•¶‚à‰ğß‚·‚é");
-    // ‹Œ completions Œ`®
+          L"ã‚¨ã‚¹ã‚±ãƒ¼ãƒ—ã•ã‚Œã¦ã„ãªã„ UTF-8 ã®æœ¬æ–‡ã‚‚è§£é‡ˆã™ã‚‹");
+    // æ—§ completions å½¢å¼
     std::string ok3 = "{\"choices\":[{\"text\":\"hello\"}]}";
     std::wstring t3, e3;
     Check(AiClient::ParseOpenAiResponse(ok3, t3, e3) && t3 == L"hello",
-          L"choices[0].text Œ`®‚É‚à‘Î‰‚·‚é");
-    // ƒGƒ‰[‰“š
+          L"choices[0].text å½¢å¼ã«ã‚‚å¯¾å¿œã™ã‚‹");
+    // ã‚¨ãƒ©ãƒ¼å¿œç­”
     std::string ng = "{\"error\":{\"message\":\"Incorrect API key provided\",\"type\":\"invalid_request_error\"}}";
     std::wstring t4, e4;
     Check(!AiClient::ParseOpenAiResponse(ng, t4, e4) &&
           e4.find(L"Incorrect API key") != std::wstring::npos,
-          L"ƒGƒ‰[‰“š‚©‚çƒƒbƒZ[ƒW‚ğæ‚èo‚·");
-    // ‹ó‰“š
+          L"ã‚¨ãƒ©ãƒ¼å¿œç­”ã‹ã‚‰ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã‚’å–ã‚Šå‡ºã™");
+    // ç©ºå¿œç­”
     std::wstring t5, e5;
     Check(!AiClient::ParseOpenAiResponse("", t5, e5) && !e5.empty(),
-          L"‹ó‚Ì‰“š‚ğƒGƒ‰[‚Æ‚µ‚Äˆµ‚¤");
+          L"ç©ºã®å¿œç­”ã‚’ã‚¨ãƒ©ãƒ¼ã¨ã—ã¦æ‰±ã†");
 
-    // İ’è‚Ì•Û‘¶/•œŒ³
+    // è¨­å®šã®ä¿å­˜/å¾©å…ƒ
     std::wstring dir = util::JoinPath(VerifyDir(), L"ai_openai_cfg");
     util::EnsureDirectory(dir);
     std::wstring ini = util::JoinPath(dir, L"config.ini");
@@ -1850,16 +1850,16 @@ static void TestAiOpenAiCompat()
     cm.Save(c);
     AppConfig d;
     cm.Load(d);
-    Check(d.ai_provider == 1, L"API í•Ê‚ğ•Û‘¶/•œŒ³‚Å‚«‚é");
-    Check(d.ai_openai_key == L"sk-test-key", L"OpenAI ŒİŠ·‚Ì API ƒL[‚ğ•Û‘¶/•œŒ³‚Å‚«‚é");
-    Check(d.ai_openai_endpoint == L"https://api.openai.com/v1", L"OpenAI ŒİŠ·‚ÌƒGƒ“ƒhƒ|ƒCƒ“ƒg‚ğ•Û‘¶/•œŒ³‚Å‚«‚é");
-    Check(d.ai_openai_model == L"gpt-4o-mini", L"OpenAI ŒİŠ·‚Ìƒ‚ƒfƒ‹‚ğ•Û‘¶/•œŒ³‚Å‚«‚é");
-    Check(d.ai_api_key == L"gsk-keep", L"Genspark ‘¤‚Ìİ’è‚ªÁ‚¦‚È‚¢");
+    Check(d.ai_provider == 1, L"API ç¨®åˆ¥ã‚’ä¿å­˜/å¾©å…ƒã§ãã‚‹");
+    Check(d.ai_openai_key == L"sk-test-key", L"OpenAI äº’æ›ã® API ã‚­ãƒ¼ã‚’ä¿å­˜/å¾©å…ƒã§ãã‚‹");
+    Check(d.ai_openai_endpoint == L"https://api.openai.com/v1", L"OpenAI äº’æ›ã®ã‚¨ãƒ³ãƒ‰ãƒã‚¤ãƒ³ãƒˆã‚’ä¿å­˜/å¾©å…ƒã§ãã‚‹");
+    Check(d.ai_openai_model == L"gpt-4o-mini", L"OpenAI äº’æ›ã®ãƒ¢ãƒ‡ãƒ«ã‚’ä¿å­˜/å¾©å…ƒã§ãã‚‹");
+    Check(d.ai_api_key == L"gsk-keep", L"Genspark å´ã®è¨­å®šãŒæ¶ˆãˆãªã„");
 }
 
 static void TestCodeScope()
 {
-    Out(L"\n== ŠÖ”’PˆÊŒŸõiCodeScopej ==\n");
+    Out(L"\n== é–¢æ•°å˜ä½æ¤œç´¢ï¼ˆCodeScopeï¼‰ ==\n");
     std::wstring src =
         L"int other(void) { return 0; }\n"
         L"\n"
@@ -1877,29 +1877,29 @@ static void TestCodeScope()
 
     int s = 0, e = 0;
     std::wstring err;
-    Check(CodeScope::FindFunctionBody(src, L"stock_use", s, e, err), L"ŠÖ”–{‘Ì‚ğŒŸo‚Å‚«‚é");
-    Check(s == 4 && e == 8, L"ŠÖ”–{‘Ì‚Ìs”ÍˆÍ‚ª³‚µ‚¢i4`8 sj");
-    Check(!CodeScope::FindFunctionBody(src, L"no_such_fn", s, e, err), L"‘¶İ‚µ‚È‚¢ŠÖ”‚Í¸”s‚·‚é");
-    Check(!err.empty(), L"¸”s‚É——R‚ğ•Ô‚·");
+    Check(CodeScope::FindFunctionBody(src, L"stock_use", s, e, err), L"é–¢æ•°æœ¬ä½“ã‚’æ¤œå‡ºã§ãã‚‹");
+    Check(s == 4 && e == 8, L"é–¢æ•°æœ¬ä½“ã®è¡Œç¯„å›²ãŒæ­£ã—ã„ï¼ˆ4ï½8 è¡Œï¼‰");
+    Check(!CodeScope::FindFunctionBody(src, L"no_such_fn", s, e, err), L"å­˜åœ¨ã—ãªã„é–¢æ•°ã¯å¤±æ•—ã™ã‚‹");
+    Check(!err.empty(), L"å¤±æ•—æ™‚ã«ç†ç”±ã‚’è¿”ã™");
     Check(!CodeScope::FindFunctionBody(src, L"stock", s, e, err),
-          L"¯•Êq‚Ìˆê•”istockj‚É‚ÍŒëˆê’v‚µ‚È‚¢");
+          L"è­˜åˆ¥å­ã®ä¸€éƒ¨ï¼ˆstockï¼‰ã«ã¯èª¤ä¸€è‡´ã—ãªã„");
 
     std::vector<MatchResult> r =
         SearchEngine::SearchInFunction(src, L"stock_alloc", L"t.c", L"stock_use", err);
-    Check(r.size() == 2, L"ŠÖ”“à‚Ìˆê’v‚¾‚¯‚ğ 2 Œ•Ô‚·");
+    Check(r.size() == 2, L"é–¢æ•°å†…ã®ä¸€è‡´ã ã‘ã‚’ 2 ä»¶è¿”ã™");
     for (size_t i = 0; i < r.size(); ++i)
-        Check(r[i].start_line >= 4 && r[i].start_line <= 8, L"ŠÖ”ŠO‚Ìˆê’v‚ğŠÜ‚Ü‚È‚¢");
+        Check(r[i].start_line >= 4 && r[i].start_line <= 8, L"é–¢æ•°å¤–ã®ä¸€è‡´ã‚’å«ã¾ãªã„");
 }
 
 static void TestSearchOptions()
 {
-    Out(L"\n== —Ş—ˆê’v / w’ès”ÍˆÍŒŸõ ==\n");
+    Out(L"\n== é¡ä¼¼ä¸€è‡´ / æŒ‡å®šè¡Œç¯„å›²æ¤œç´¢ ==\n");
     Check(SearchEngine::NormalizeForSimilar(L"  int  rc = f( a , b );  ") == L"int rc = f( a , b );",
-          L"˜A‘±‚·‚é‹ó”’‚ğ 1 ‚Â‚Éô‚Ş");
-    Check(SearchEngine::SimilarityPercent(L"abcde", L"abcde") == 100, L"“¯ˆê•¶š—ñ‚Ì—Ş—“x‚Í 100%");
+          L"é€£ç¶šã™ã‚‹ç©ºç™½ã‚’ 1 ã¤ã«ç•³ã‚€");
+    Check(SearchEngine::SimilarityPercent(L"abcde", L"abcde") == 100, L"åŒä¸€æ–‡å­—åˆ—ã®é¡ä¼¼åº¦ã¯ 100%");
     Check(SearchEngine::SimilarityPercent(L"abcde", L"abcde") >
           SearchEngine::SimilarityPercent(L"abcde", L"xyzwv"),
-          L"—‚Ä‚¢‚é•¶š—ñ‚Ì•û‚ª—Ş—“x‚ª‚‚¢");
+          L"ä¼¼ã¦ã„ã‚‹æ–‡å­—åˆ—ã®æ–¹ãŒé¡ä¼¼åº¦ãŒé«˜ã„");
 
     std::wstring text =
         L"int a(void)\n"
@@ -1911,81 +1911,81 @@ static void TestSearchOptions()
 
     std::vector<MatchResult> sim =
         SearchEngine::SearchSimilar(text, L"stock_alloc(item, qty)", L"t.c", 70);
-    Check(sim.size() == 1, L"‹ó”’‚¾‚¯‚ªˆÙ‚È‚és‚ğ 1 Œ‚¾‚¯ŒŸo‚·‚éiŠ®‘Sˆê’vs‚ÍœŠOj");
+    Check(sim.size() == 1, L"ç©ºç™½ã ã‘ãŒç•°ãªã‚‹è¡Œã‚’ 1 ä»¶ã ã‘æ¤œå‡ºã™ã‚‹ï¼ˆå®Œå…¨ä¸€è‡´è¡Œã¯é™¤å¤–ï¼‰");
     if (!sim.empty()) {
-        Check(sim[0].match_type == MatchType::Similar, L"ˆê’ví•Ê‚ª—Ş—ˆê’v‚É‚È‚é");
-        Check(sim[0].match_rate >= 70, L"ˆê’v—¦‚ª‚µ‚«‚¢’lˆÈã‚É‚È‚é");
-        Check(sim[0].start_line == 4, L"—Ş—ˆê’v‚Ìs”Ô†‚ª³‚µ‚¢");
+        Check(sim[0].match_type == MatchType::Similar, L"ä¸€è‡´ç¨®åˆ¥ãŒé¡ä¼¼ä¸€è‡´ã«ãªã‚‹");
+        Check(sim[0].match_rate >= 70, L"ä¸€è‡´ç‡ãŒã—ãã„å€¤ä»¥ä¸Šã«ãªã‚‹");
+        Check(sim[0].start_line == 4, L"é¡ä¼¼ä¸€è‡´ã®è¡Œç•ªå·ãŒæ­£ã—ã„");
         Check(sim[0].matched_text.find(L"stock_alloc") != std::wstring::npos,
-              L"ˆê’v•¶š—ñ‚ğŒ³‚Ì•\‹L‚Å•Ô‚·");
-        Check(sim[0].status == MatchStatus::Warning, L"—Ş—ˆê’v‚ÍŒxó‘Ô‚É‚È‚é");
+              L"ä¸€è‡´æ–‡å­—åˆ—ã‚’å…ƒã®è¡¨è¨˜ã§è¿”ã™");
+        Check(sim[0].status == MatchStatus::Warning, L"é¡ä¼¼ä¸€è‡´ã¯è­¦å‘ŠçŠ¶æ…‹ã«ãªã‚‹");
     }
     Check(SearchEngine::SearchSimilar(text, L"stock_alloc(item, qty)", L"t.c", 10).size() >=
-          sim.size(), L"‚µ‚«‚¢’l‚ğ‰º‚°‚é‚ÆŒŸoŒ”‚ÍŒ¸‚ç‚È‚¢");
+          sim.size(), L"ã—ãã„å€¤ã‚’ä¸‹ã’ã‚‹ã¨æ¤œå‡ºä»¶æ•°ã¯æ¸›ã‚‰ãªã„");
 
     std::vector<MatchResult> rng =
         SearchEngine::SearchInRange(text, L"stock_alloc", L"t.c", 1, 3);
-    Check(rng.size() == 1, L"w’ès”ÍˆÍi1`3 sj‚Å 1 Œ‚¾‚¯ŒŸo‚·‚é");
-    if (!rng.empty()) Check(rng[0].start_line == 3, L"”ÍˆÍ“à‚Ìs‚¾‚¯‚ğ•Ô‚·");
+    Check(rng.size() == 1, L"æŒ‡å®šè¡Œç¯„å›²ï¼ˆ1ï½3 è¡Œï¼‰ã§ 1 ä»¶ã ã‘æ¤œå‡ºã™ã‚‹");
+    if (!rng.empty()) Check(rng[0].start_line == 3, L"ç¯„å›²å†…ã®è¡Œã ã‘ã‚’è¿”ã™");
     Check(SearchEngine::SearchInRange(text, L"stock_alloc", L"t.c", 4, 0).size() == 1,
-          L"I—¹s 0 ‚ÍÅIs‚Ü‚Å‚ğˆÓ–¡‚·‚é");
+          L"çµ‚äº†è¡Œ 0 ã¯æœ€çµ‚è¡Œã¾ã§ã‚’æ„å‘³ã™ã‚‹");
     Check(SearchEngine::SearchInRange(text, L"stock_alloc", L"t.c", 10, 20).empty(),
-          L"”ÍˆÍŠO‚É‚Íˆê’v‚µ‚È‚¢");
+          L"ç¯„å›²å¤–ã«ã¯ä¸€è‡´ã—ãªã„");
 }
 
 static void TestEucJp()
 {
-    Out(L"\n== EUC-JP ‘Î‰ ==\n");
-    // ƒR[ƒhƒy[ƒW 51932 ‚Í kernel32 ‚É‘¶İ‚µ‚È‚¢‚½‚ßA“à‘ ƒe[ƒuƒ‹‚Å”»’èE•ÏŠ·‚·‚éB
-    Check(EncodingDetector::IsEucJpAvailable(), L"EUC-JP ‚Í“à‘ ƒe[ƒuƒ‹‚Åí‚É—˜—p‰Â”\");
+    Out(L"\n== EUC-JP å¯¾å¿œ ==\n");
+    // ã‚³ãƒ¼ãƒ‰ãƒšãƒ¼ã‚¸ 51932 ã¯ kernel32 ã«å­˜åœ¨ã—ãªã„ãŸã‚ã€å†…è”µãƒ†ãƒ¼ãƒ–ãƒ«ã§åˆ¤å®šãƒ»å¤‰æ›ã™ã‚‹ã€‚
+    Check(EncodingDetector::IsEucJpAvailable(), L"EUC-JP ã¯å†…è”µãƒ†ãƒ¼ãƒ–ãƒ«ã§å¸¸ã«åˆ©ç”¨å¯èƒ½");
 
     const unsigned char bytes[] = { 0xA4,0xA2, 0xA4,0xA4, 0xA4,0xA6, 0xA4,0xA8, 0xA4,0xAA };
     std::string euc((const char*)bytes, sizeof(bytes));
     const std::wstring expect = L"\u3042\u3044\u3046\u3048\u304A";
 
-    Check(EncodingDetector::IsValidEucJp(euc), L"EUC-JP ‚Ì‚Ğ‚ç‚ª‚È‚ğ‘Ã“–‚Æ”»’è‚·‚é");
+    Check(EncodingDetector::IsValidEucJp(euc), L"EUC-JP ã®ã²ã‚‰ãŒãªã‚’å¦¥å½“ã¨åˆ¤å®šã™ã‚‹");
     size_t bom = 0;
     Check(EncodingDetector::Detect(euc, bom) == TextEncoding::EucJp,
-          L"CP932 ‚Å‚Í”¼ŠpƒJƒ^ƒJƒi‚É‚È‚éƒoƒCƒg—ñ‚ğ EUC-JP ‚Æ©“®”»’è‚·‚é");
+          L"CP932 ã§ã¯åŠè§’ã‚«ã‚¿ã‚«ãƒŠã«ãªã‚‹ãƒã‚¤ãƒˆåˆ—ã‚’ EUC-JP ã¨è‡ªå‹•åˆ¤å®šã™ã‚‹");
 
     std::wstring t; TextEncoding enc;
     Check(EncodingDetector::Decode(euc, L"auto", t, enc) && t == expect,
-          L"EUC-JP ‚ğ©“®”»’è‚µ‚Ä“Ç‚İ‚ß‚é");
+          L"EUC-JP ã‚’è‡ªå‹•åˆ¤å®šã—ã¦èª­ã¿è¾¼ã‚ã‚‹");
     std::wstring t2; TextEncoding enc2;
     Check(EncodingDetector::Decode(euc, L"eucjp", t2, enc2) && enc2 == TextEncoding::EucJp && t2 == expect,
-          L"‹­§ƒ‚[ƒh eucjp ‚Å“Ç‚İ‚ß‚é");
+          L"å¼·åˆ¶ãƒ¢ãƒ¼ãƒ‰ eucjp ã§èª­ã¿è¾¼ã‚ã‚‹");
     std::string back;
     Check(EncodingDetector::Encode(expect, TextEncoding::EucJp, false, back) && back == euc,
-          L"EUC-JP ‚ÖÄƒGƒ“ƒR[ƒh‚·‚é‚ÆŒ³‚ÌƒoƒCƒg—ñ‚É–ß‚é");
+          L"EUC-JP ã¸å†ã‚¨ãƒ³ã‚³ãƒ¼ãƒ‰ã™ã‚‹ã¨å…ƒã®ãƒã‚¤ãƒˆåˆ—ã«æˆ»ã‚‹");
     Check(std::wstring(EncodingDetector::EncodingName(TextEncoding::EucJp)) == L"EUC-JP",
-          L"•¶šƒR[ƒh–¼‚ğ•Ô‚·");
+          L"æ–‡å­—ã‚³ãƒ¼ãƒ‰åã‚’è¿”ã™");
 
-    // ‰ñ‹A: verify_kit/euc_sample.c 11 s–Ú‘Š“–iCP932 ‚Å‚Í•s³AEUC-JP ‚Å‚Í“ú–{ŒêƒRƒƒ“ƒgj
+    // å›å¸°: verify_kit/euc_sample.c 11 è¡Œç›®ç›¸å½“ï¼ˆCP932 ã§ã¯ä¸æ­£ã€EUC-JP ã§ã¯æ—¥æœ¬èªã‚³ãƒ¡ãƒ³ãƒˆï¼‰
     const unsigned char line[] = { 0xB5,0xEC, 0x20, 0x41,0x50,0x49, 0x20,
                                    0xA4,0xF2, 0xB8,0xC6, 0xA4,0xD3, 0xBD,0xD0, 0xA4,0xB9 };
     std::string eucLine((const char*)line, sizeof(line));
-    Check(!EncodingDetector::IsValidShiftJis(eucLine), L"EUC-JP ‚Ì“ú–{ŒêƒRƒƒ“ƒg‚Í CP932 ‚Æ‚µ‚Ä‚Í•s³");
-    Check(EncodingDetector::IsValidEucJp(eucLine), L"EUC-JP ‚Æ‚µ‚Ä‚Í‘Ã“–");
+    Check(!EncodingDetector::IsValidShiftJis(eucLine), L"EUC-JP ã®æ—¥æœ¬èªã‚³ãƒ¡ãƒ³ãƒˆã¯ CP932 ã¨ã—ã¦ã¯ä¸æ­£");
+    Check(EncodingDetector::IsValidEucJp(eucLine), L"EUC-JP ã¨ã—ã¦ã¯å¦¥å½“");
     Check(EncodingDetector::Detect(eucLine, bom) == TextEncoding::EucJp,
-          L"CP932 ‚Æ‚µ‚Ä•s³‚È EUC-JP s‚ğ EUC-JP ‚Æ”»’è‚·‚éi•¶š‰»‚¯‚Ì‰ñ‹Aj");
+          L"CP932 ã¨ã—ã¦ä¸æ­£ãª EUC-JP è¡Œã‚’ EUC-JP ã¨åˆ¤å®šã™ã‚‹ï¼ˆæ–‡å­—åŒ–ã‘ã®å›å¸°ï¼‰");
     std::wstring lt; TextEncoding lenc;
     Check(EncodingDetector::Decode(eucLine, L"auto", lt, lenc) && lt == L"\u65E7\u0020\u0041\u0050\u0049\u0020\u3092\u547C\u3073\u51FA\u3059",
-          L"EUC-JP ‚Ì“ú–{ŒêƒRƒƒ“ƒg‚ª•¶š‰»‚¯‚¹‚¸‚É“Ç‚ß‚é");
+          L"EUC-JP ã®æ—¥æœ¬èªã‚³ãƒ¡ãƒ³ãƒˆãŒæ–‡å­—åŒ–ã‘ã›ãšã«èª­ã‚ã‚‹");
 
-    // ”¼ŠpƒJƒ^ƒJƒii0x8E ƒŠ[ƒhj
+    // åŠè§’ã‚«ã‚¿ã‚«ãƒŠï¼ˆ0x8E ãƒªãƒ¼ãƒ‰ï¼‰
     const unsigned char hk[] = { 0x8E,0xB1, 0x8E,0xB2, 0x8E,0xB3 };
     std::string hks((const char*)hk, sizeof(hk));
     std::wstring ht; TextEncoding henc;
     Check(EncodingDetector::IsValidEucJp(hks) &&
           EncodingDetector::Decode(hks, L"eucjp", ht, henc) && ht == L"\uFF71\uFF72\uFF73",
-          L"”¼ŠpƒJƒ^ƒJƒii0x8E ƒŠ[ƒhj‚ğ‹­§ƒ‚[ƒh eucjp ‚Å“Ç‚İ‚ß‚é");
+          L"åŠè§’ã‚«ã‚¿ã‚«ãƒŠï¼ˆ0x8E ãƒªãƒ¼ãƒ‰ï¼‰ã‚’å¼·åˆ¶ãƒ¢ãƒ¼ãƒ‰ eucjp ã§èª­ã¿è¾¼ã‚ã‚‹");
 
-    // JIS X 0212i0x8F ƒŠ[ƒhj
+    // JIS X 0212ï¼ˆ0x8F ãƒªãƒ¼ãƒ‰ï¼‰
     const unsigned char j212[] = { 0x8F, 0xB0, 0xA1 };
     std::string s212((const char*)j212, sizeof(j212));
     std::wstring t212; TextEncoding e212;
     Check(EncodingDetector::Decode(s212, L"eucjp", t212, e212) && t212 == L"\u4E02",
-          L"JIS X 0212i0x8F ƒŠ[ƒhj‚ğ“Ç‚İ‚ß‚é");
+          L"JIS X 0212ï¼ˆ0x8F ãƒªãƒ¼ãƒ‰ï¼‰ã‚’èª­ã¿è¾¼ã‚ã‚‹");
 
     std::wstring dir = util::JoinPath(VerifyDir(), L"eucjp");
     util::EnsureDirectory(dir);
@@ -1993,18 +1993,18 @@ static void TestEucJp()
     std::wstring werr;
     Check(FileManager::WriteTextAtomic(fp, expect, TextEncoding::EucJp, false,
                                        NewlineKind::CRLF, werr),
-          L"EUC-JP ‚Åƒtƒ@ƒCƒ‹‚Ö‘‚«o‚¹‚é");
+          L"EUC-JP ã§ãƒ•ã‚¡ã‚¤ãƒ«ã¸æ›¸ãå‡ºã›ã‚‹");
     std::wstring rt; FileInfo fi;
     Check(FileManager::ReadText(fp, L"auto", rt, fi) && fi.encoding == TextEncoding::EucJp && rt == expect,
-          L"‘‚«o‚µ‚½ EUC-JP ƒtƒ@ƒCƒ‹‚ğ©“®”»’è‚Å“Ç‚İ–ß‚¹‚é");
+          L"æ›¸ãå‡ºã—ãŸ EUC-JP ãƒ•ã‚¡ã‚¤ãƒ«ã‚’è‡ªå‹•åˆ¤å®šã§èª­ã¿æˆ»ã›ã‚‹");
     std::wstring rt2; FileInfo fi2;
     Check(FileManager::ReadText(fp, L"eucjp", rt2, fi2) && rt2 == expect,
-          L"‹­§ƒ‚[ƒh eucjp ‚Åƒtƒ@ƒCƒ‹‚ğ“Ç‚İ–ß‚¹‚é");
+          L"å¼·åˆ¶ãƒ¢ãƒ¼ãƒ‰ eucjp ã§ãƒ•ã‚¡ã‚¤ãƒ«ã‚’èª­ã¿æˆ»ã›ã‚‹");
 }
 
 static void TestMultiGenerationUndo()
 {
-    Out(L"\n== •¡”¢‘ã Undo ==\n");
+    Out(L"\n== è¤‡æ•°ä¸–ä»£ Undo ==\n");
     std::wstring dir = util::JoinPath(VerifyDir(), L"undo_gen");
     util::EnsureDirectory(dir);
     std::wstring target = util::JoinPath(dir, L"gen.txt");
@@ -2031,24 +2031,24 @@ static void TestMultiGenerationUndo()
     r2.executed_at = L"2026-01-01 00:01:00";
     u.SetRecord(r2);
 
-    Check(u.HistorySize() == 2, L"2 ¢‘ã‚ğ•Û‚·‚é");
-    Check(u.FileCount() == 1, L"ÅV¢‘ã‚Ìƒtƒ@ƒCƒ‹”‚Í 1");
-    Check(u.GenerationLabel(0).find(L"OP_2") != std::wstring::npos, L"ÅV¢‘ã‚Ìƒ‰ƒxƒ‹‚ğ•Ô‚·");
+    Check(u.HistorySize() == 2, L"2 ä¸–ä»£ã‚’ä¿æŒã™ã‚‹");
+    Check(u.FileCount() == 1, L"æœ€æ–°ä¸–ä»£ã®ãƒ•ã‚¡ã‚¤ãƒ«æ•°ã¯ 1");
+    Check(u.GenerationLabel(0).find(L"OP_2") != std::wstring::npos, L"æœ€æ–°ä¸–ä»£ã®ãƒ©ãƒ™ãƒ«ã‚’è¿”ã™");
 
     std::vector<std::wstring> sc;
     std::wstring err;
-    Check(u.Undo(err, sc), L"1 ‰ñ–Ú‚Ì Undo ‚ª¬Œ÷‚·‚é");
+    Check(u.Undo(err, sc), L"1 å›ç›®ã® Undo ãŒæˆåŠŸã™ã‚‹");
     std::wstring a; FileInfo afi;
     FileManager::ReadText(target, L"auto", a, afi);
-    Check(util::Trim(a) == L"v2", L"1 ‰ñ–Ú‚Ì Undo ‚Å 1 ¢‘ã‘Oiv2j‚Ö–ß‚é");
-    Check(u.HistorySize() == 1 && u.CanUndo(), L"1 ¢‘ãc‚é‚Ì‚Å‘±‚¯‚Ä Undo ‚Å‚«‚é");
+    Check(util::Trim(a) == L"v2", L"1 å›ç›®ã® Undo ã§ 1 ä¸–ä»£å‰ï¼ˆv2ï¼‰ã¸æˆ»ã‚‹");
+    Check(u.HistorySize() == 1 && u.CanUndo(), L"1 ä¸–ä»£æ®‹ã‚‹ã®ã§ç¶šã‘ã¦ Undo ã§ãã‚‹");
 
-    Check(u.Undo(err, sc), L"2 ‰ñ–Ú‚Ì Undo ‚ª¬Œ÷‚·‚é");
+    Check(u.Undo(err, sc), L"2 å›ç›®ã® Undo ãŒæˆåŠŸã™ã‚‹");
     std::wstring b; FileInfo bfi;
     FileManager::ReadText(target, L"auto", b, bfi);
-    Check(util::Trim(b) == L"v1", L"2 ‰ñ–Ú‚Ì Undo ‚Å‚³‚ç‚É‘Oiv1j‚Ö–ß‚é");
-    Check(u.HistorySize() == 0 && !u.CanUndo(), L"—š—ğ‚ğg‚¢Ø‚é‚Æ Undo ‚Å‚«‚È‚¢");
-    Check(!u.Undo(err, sc) && !err.empty(), L"—š—ğ‚ª–³‚¢‚Æ‚«‚Í——R‚ğ•Ô‚µ‚Ä¸”s‚·‚é");
+    Check(util::Trim(b) == L"v1", L"2 å›ç›®ã® Undo ã§ã•ã‚‰ã«å‰ï¼ˆv1ï¼‰ã¸æˆ»ã‚‹");
+    Check(u.HistorySize() == 0 && !u.CanUndo(), L"å±¥æ­´ã‚’ä½¿ã„åˆ‡ã‚‹ã¨ Undo ã§ããªã„");
+    Check(!u.Undo(err, sc) && !err.empty(), L"å±¥æ­´ãŒç„¡ã„ã¨ãã¯ç†ç”±ã‚’è¿”ã—ã¦å¤±æ•—ã™ã‚‹");
 
     u.SetMaxGenerations(2);
     for (int i = 0; i < 3; ++i) {
@@ -2057,13 +2057,13 @@ static void TestMultiGenerationUndo()
         r.backup_file_path = bak1;
         u.SetRecord(r);
     }
-    Check(u.HistorySize() == 2, L"ãŒÀ‚ğ’´‚¦‚½ŒÃ‚¢¢‘ã‚Í”jŠü‚³‚ê‚é");
-    Check(u.MaxGenerations() == 2, L"•Û¢‘ã”‚ğæ“¾‚Å‚«‚é");
+    Check(u.HistorySize() == 2, L"ä¸Šé™ã‚’è¶…ãˆãŸå¤ã„ä¸–ä»£ã¯ç ´æ£„ã•ã‚Œã‚‹");
+    Check(u.MaxGenerations() == 2, L"ä¿æŒä¸–ä»£æ•°ã‚’å–å¾—ã§ãã‚‹");
 }
 
 static void TestReportFormats()
 {
-    Out(L"\n== Markdown / JSON ƒŒƒ|[ƒg ==\n");
+    Out(L"\n== Markdown / JSON ãƒ¬ãƒãƒ¼ãƒˆ ==\n");
     OperationContext ctx;
     ctx.operation_id = L"OP_TEST_0001";
     ctx.target_file_path = L"C:\\work\\sample.c";
@@ -2078,7 +2078,7 @@ static void TestReportFormats()
     std::wstring before = L"int a;\n    stock_alloc(item, qty);\n";
     std::wstring after  = L"int a;\n#ifdef MIGRATION_001\n    new_stock_alloc(item, qty, 0);\n#else\n    stock_alloc(item, qty);\n#endif\n";
     std::vector<MatchResult> ms = SearchEngine::Search(before, ctx.old_code, ctx.target_file_path);
-    Check(ms.size() == 1, L"ƒŒƒ|[ƒg—p‚Ìˆê’v‚ğ 1 Œ—pˆÓ‚Å‚«‚é");
+    Check(ms.size() == 1, L"ãƒ¬ãƒãƒ¼ãƒˆç”¨ã®ä¸€è‡´ã‚’ 1 ä»¶ç”¨æ„ã§ãã‚‹");
 
     ReplaceResult res;
     res.operation_id = ctx.operation_id;
@@ -2089,22 +2089,22 @@ static void TestReportFormats()
     res.switch_header_updated = true;
 
     std::wstring md = DiffReportGenerator::BuildMarkdown(ctx, ms, before, after, res);
-    Check(md.find(L"# •ÏX·•ªƒŒƒ|[ƒg") == 0, L"Markdown ‚ÍŒ©o‚µ‚©‚çn‚Ü‚é");
-    Check(md.find(L"MIGRATION_001") != std::wstring::npos, L"Markdown ‚ÉƒXƒCƒbƒ`–¼‚ğo—Í‚·‚é");
-    Check(md.find(L"| No |") != std::wstring::npos, L"Markdown ‚Éˆê’v‰ÓŠ‚Ì•\‚ğo—Í‚·‚é");
-    Check(md.find(L"## •ÏŠ·‘O") != std::wstring::npos &&
-          md.find(L"## •ÏŠ·Œã") != std::wstring::npos, L"Markdown ‚É•ÏŠ·‘OŒã‚ğo—Í‚·‚é");
+    Check(md.find(L"# å¤‰æ›´å·®åˆ†ãƒ¬ãƒãƒ¼ãƒˆ") == 0, L"Markdown ã¯è¦‹å‡ºã—ã‹ã‚‰å§‹ã¾ã‚‹");
+    Check(md.find(L"MIGRATION_001") != std::wstring::npos, L"Markdown ã«ã‚¹ã‚¤ãƒƒãƒåã‚’å‡ºåŠ›ã™ã‚‹");
+    Check(md.find(L"| No |") != std::wstring::npos, L"Markdown ã«ä¸€è‡´ç®‡æ‰€ã®è¡¨ã‚’å‡ºåŠ›ã™ã‚‹");
+    Check(md.find(L"## å¤‰æ›å‰") != std::wstring::npos &&
+          md.find(L"## å¤‰æ›å¾Œ") != std::wstring::npos, L"Markdown ã«å¤‰æ›å‰å¾Œã‚’å‡ºåŠ›ã™ã‚‹");
 
     std::wstring js = DiffReportGenerator::BuildJson(ctx, ms, before, after, res);
     Check(js.find(L"\"operation_id\": \"OP_TEST_0001\"") != std::wstring::npos,
-          L"JSON ‚É operation_id ‚ğo—Í‚·‚é");
-    Check(js.find(L"\"matches\"") != std::wstring::npos, L"JSON ‚É matches ”z—ñ‚ğo—Í‚·‚é");
+          L"JSON ã« operation_id ã‚’å‡ºåŠ›ã™ã‚‹");
+    Check(js.find(L"\"matches\"") != std::wstring::npos, L"JSON ã« matches é…åˆ—ã‚’å‡ºåŠ›ã™ã‚‹");
     Check(js.find(L"\"switch_header_updated\": true") != std::wstring::npos,
-          L"JSON ‚É^‹U’l‚ğo—Í‚·‚é");
-    Check(js.find(L"\\n") != std::wstring::npos, L"JSON ‚Ì‰üs‚ğƒGƒXƒP[ƒv‚·‚é");
+          L"JSON ã«çœŸå½å€¤ã‚’å‡ºåŠ›ã™ã‚‹");
+    Check(js.find(L"\\n") != std::wstring::npos, L"JSON ã®æ”¹è¡Œã‚’ã‚¨ã‚¹ã‚±ãƒ¼ãƒ—ã™ã‚‹");
 
     Check(DiffReportGenerator::JsonEscape(L"a\"b\\c\nd\te") == L"a\\\"b\\\\c\\nd\\te",
-          L"JSON •¶š—ñ‚ğƒGƒXƒP[ƒv‚·‚é");
+          L"JSON æ–‡å­—åˆ—ã‚’ã‚¨ã‚¹ã‚±ãƒ¼ãƒ—ã™ã‚‹");
 
     std::wstring dir = util::JoinPath(VerifyDir(), L"report_fmt");
     util::EnsureDirectory(dir);
@@ -2112,53 +2112,53 @@ static void TestReportFormats()
     std::wstring jsp = util::JoinPath(dir, L"test_diff.json");
     std::wstring err;
     Check(DiffReportGenerator::GenerateMarkdown(mdp, ctx, ms, before, after, res, err),
-          L"Markdown ƒŒƒ|[ƒg‚ğo—Í‚Å‚«‚é");
+          L"Markdown ãƒ¬ãƒãƒ¼ãƒˆã‚’å‡ºåŠ›ã§ãã‚‹");
     Check(DiffReportGenerator::GenerateJson(jsp, ctx, ms, before, after, res, err),
-          L"JSON ƒŒƒ|[ƒg‚ğo—Í‚Å‚«‚é");
-    Check(util::PathExists(mdp) && util::PathExists(jsp), L"ƒŒƒ|[ƒgƒtƒ@ƒCƒ‹‚ªì¬‚³‚ê‚é");
+          L"JSON ãƒ¬ãƒãƒ¼ãƒˆã‚’å‡ºåŠ›ã§ãã‚‹");
+    Check(util::PathExists(mdp) && util::PathExists(jsp), L"ãƒ¬ãƒãƒ¼ãƒˆãƒ•ã‚¡ã‚¤ãƒ«ãŒä½œæˆã•ã‚Œã‚‹");
 
     std::wstring mt; FileInfo mfi;
-    Check(FileManager::ReadText(mdp, L"auto", mt, mfi) && mt.find(L"# •ÏX·•ªƒŒƒ|[ƒg") == 0,
-          L"Markdown ƒŒƒ|[ƒg‚ğ“Ç‚İ–ß‚¹‚é");
-    Check(mfi.encoding == TextEncoding::UTF8BOM, L"Markdown ‚Í UTF-8 (BOM) ‚Åo—Í‚·‚é");
+    Check(FileManager::ReadText(mdp, L"auto", mt, mfi) && mt.find(L"# å¤‰æ›´å·®åˆ†ãƒ¬ãƒãƒ¼ãƒˆ") == 0,
+          L"Markdown ãƒ¬ãƒãƒ¼ãƒˆã‚’èª­ã¿æˆ»ã›ã‚‹");
+    Check(mfi.encoding == TextEncoding::UTF8BOM, L"Markdown ã¯ UTF-8 (BOM) ã§å‡ºåŠ›ã™ã‚‹");
     std::wstring jt; FileInfo jfi;
     Check(FileManager::ReadText(jsp, L"auto", jt, jfi) && jt.find(L"\"matches\"") != std::wstring::npos,
-          L"JSON ƒŒƒ|[ƒg‚ğ“Ç‚İ–ß‚¹‚é");
-    Check(jfi.encoding == TextEncoding::UTF8, L"JSON ‚Í BOM ‚È‚µ UTF-8 ‚Åo—Í‚·‚é");
+          L"JSON ãƒ¬ãƒãƒ¼ãƒˆã‚’èª­ã¿æˆ»ã›ã‚‹");
+    Check(jfi.encoding == TextEncoding::UTF8, L"JSON ã¯ BOM ãªã— UTF-8 ã§å‡ºåŠ›ã™ã‚‹");
 
     Check(DiffReportGenerator::BuildReportPathExt(L"reports", L"C:\\work\\sample.c",
                                                   L"20260101_000000", L".md")
               .find(L"20260101_000000_sample_diff.md") != std::wstring::npos,
-          L"Markdown ƒŒƒ|[ƒg‚Ìƒtƒ@ƒCƒ‹–¼‚ğ‘g‚İ—§‚Ä‚é");
+          L"Markdown ãƒ¬ãƒãƒ¼ãƒˆã®ãƒ•ã‚¡ã‚¤ãƒ«åã‚’çµ„ã¿ç«‹ã¦ã‚‹");
 }
 
 static void TestResultExporter()
 {
-    Out(L"\n== ŒŸõŒ‹‰ÊƒGƒNƒXƒ|[ƒgiCSV / Markdown / JSONj ==\n");
-    Check(ResultExporter::CsvEscape(L"abc") == L"abc", L"CSV: ’Êí‚Ì•¶š—ñ‚Í‚»‚Ì‚Ü‚Ü");
-    Check(ResultExporter::CsvEscape(L"a,b") == L"\"a,b\"", L"CSV: ƒJƒ“ƒ}‚ğˆø—p•„‚ÅˆÍ‚Ş");
-    Check(ResultExporter::CsvEscape(L"a\"b") == L"\"a\"\"b\"", L"CSV: ˆø—p•„‚ğ“ñd‰»‚·‚é");
-    Check(ResultExporter::CsvEscape(L"a\nb") == L"\"a\nb\"", L"CSV: ‰üs‚ğˆø—p•„‚ÅˆÍ‚Ş");
+    Out(L"\n== æ¤œç´¢çµæœã‚¨ã‚¯ã‚¹ãƒãƒ¼ãƒˆï¼ˆCSV / Markdown / JSONï¼‰ ==\n");
+    Check(ResultExporter::CsvEscape(L"abc") == L"abc", L"CSV: é€šå¸¸ã®æ–‡å­—åˆ—ã¯ãã®ã¾ã¾");
+    Check(ResultExporter::CsvEscape(L"a,b") == L"\"a,b\"", L"CSV: ã‚«ãƒ³ãƒã‚’å¼•ç”¨ç¬¦ã§å›²ã‚€");
+    Check(ResultExporter::CsvEscape(L"a\"b") == L"\"a\"\"b\"", L"CSV: å¼•ç”¨ç¬¦ã‚’äºŒé‡åŒ–ã™ã‚‹");
+    Check(ResultExporter::CsvEscape(L"a\nb") == L"\"a\nb\"", L"CSV: æ”¹è¡Œã‚’å¼•ç”¨ç¬¦ã§å›²ã‚€");
 
     std::vector<MatchResult> ms = SearchEngine::Search(
         L"int a;\n    stock_alloc(item, qty);\n    stock_alloc(item, qty);\n",
         L"stock_alloc(item, qty)", L"C:\\work\\sample.c");
-    Check(ms.size() == 2, L"ƒGƒNƒXƒ|[ƒg—p‚Ìˆê’v‚ğ 2 Œ—pˆÓ‚Å‚«‚é");
+    Check(ms.size() == 2, L"ã‚¨ã‚¯ã‚¹ãƒãƒ¼ãƒˆç”¨ã®ä¸€è‡´ã‚’ 2 ä»¶ç”¨æ„ã§ãã‚‹");
     ms[0].selected = true;
 
     std::wstring csv = ResultExporter::BuildCsv(ms, L"OP_TEST_0001");
-    Check(csv.find(L"ƒtƒ@ƒCƒ‹–¼") != std::wstring::npos, L"CSV ‚Éƒwƒbƒ_s‚ğo—Í‚·‚é");
-    Check(csv.find(L"sample.c") != std::wstring::npos, L"CSV ‚Éƒtƒ@ƒCƒ‹–¼‚ğo—Í‚·‚é");
-    Check(util::SplitLines(csv).size() == ms.size() + 1, L"CSV ‚Ìs”‚ªƒwƒbƒ_ + Œ”‚É‚È‚é");
+    Check(csv.find(L"ãƒ•ã‚¡ã‚¤ãƒ«å") != std::wstring::npos, L"CSV ã«ãƒ˜ãƒƒãƒ€è¡Œã‚’å‡ºåŠ›ã™ã‚‹");
+    Check(csv.find(L"sample.c") != std::wstring::npos, L"CSV ã«ãƒ•ã‚¡ã‚¤ãƒ«åã‚’å‡ºåŠ›ã™ã‚‹");
+    Check(util::SplitLines(csv).size() == ms.size() + 1, L"CSV ã®è¡Œæ•°ãŒãƒ˜ãƒƒãƒ€ + ä»¶æ•°ã«ãªã‚‹");
 
     std::wstring md = ResultExporter::BuildMarkdown(ms, L"OP_TEST_0001");
-    Check(md.find(L"OP_TEST_0001") != std::wstring::npos, L"Markdown ‚É‘€ì ID ‚ğo—Í‚·‚é");
-    Check(md.find(L"|---:") != std::wstring::npos, L"Markdown ‚É•\‚Ì‹æØ‚è‚ğo—Í‚·‚é");
+    Check(md.find(L"OP_TEST_0001") != std::wstring::npos, L"Markdown ã«æ“ä½œ ID ã‚’å‡ºåŠ›ã™ã‚‹");
+    Check(md.find(L"|---:") != std::wstring::npos, L"Markdown ã«è¡¨ã®åŒºåˆ‡ã‚Šã‚’å‡ºåŠ›ã™ã‚‹");
 
     std::wstring js = ResultExporter::BuildJson(ms, L"OP_TEST_0001");
-    Check(js.find(L"\"total\": 2") != std::wstring::npos, L"JSON ‚ÉŒ”‚ğo—Í‚·‚é");
+    Check(js.find(L"\"total\": 2") != std::wstring::npos, L"JSON ã«ä»¶æ•°ã‚’å‡ºåŠ›ã™ã‚‹");
     Check(js.find(L"\"report_type\": \"search_result\"") != std::wstring::npos,
-          L"JSON ‚ÉƒŒƒ|[ƒgí•Ê‚ğo—Í‚·‚é");
+          L"JSON ã«ãƒ¬ãƒãƒ¼ãƒˆç¨®åˆ¥ã‚’å‡ºåŠ›ã™ã‚‹");
 
     std::wstring dir = util::JoinPath(VerifyDir(), L"export");
     util::EnsureDirectory(dir);
@@ -2167,31 +2167,31 @@ static void TestResultExporter()
     std::wstring p2 = util::JoinPath(dir, L"result.md");
     std::wstring p3 = util::JoinPath(dir, L"result.json");
     Check(ResultExporter::Export(p1, ms, L"OP_TEST_0001", ExportFormat::Csv, L"utf8bom", err),
-          L"CSV ‚ğo—Í‚Å‚«‚é");
+          L"CSV ã‚’å‡ºåŠ›ã§ãã‚‹");
     Check(ResultExporter::Export(p2, ms, L"OP_TEST_0001", ExportFormat::Markdown, L"utf8bom", err),
-          L"Markdown ‚ğo—Í‚Å‚«‚é");
+          L"Markdown ã‚’å‡ºåŠ›ã§ãã‚‹");
     Check(ResultExporter::Export(p3, ms, L"OP_TEST_0001", ExportFormat::Json, L"utf8bom", err),
-          L"JSON ‚ğo—Í‚Å‚«‚é");
+          L"JSON ã‚’å‡ºåŠ›ã§ãã‚‹");
     Check(util::PathExists(p1) && util::PathExists(p2) && util::PathExists(p3),
-          L"3 Œ`®‚Ìƒtƒ@ƒCƒ‹‚ªì¬‚³‚ê‚é");
+          L"3 å½¢å¼ã®ãƒ•ã‚¡ã‚¤ãƒ«ãŒä½œæˆã•ã‚Œã‚‹");
 
     std::wstring rt; FileInfo fi;
-    Check(FileManager::ReadText(p1, L"auto", rt, fi) && rt.find(L"ƒtƒ@ƒCƒ‹–¼") != std::wstring::npos,
-          L"CSV ‚ğ“Ç‚İ–ß‚¹‚é");
-    Check(fi.encoding == TextEncoding::UTF8BOM, L"CSV ‚Í UTF-8 (BOM) ‚Åo—Í‚·‚éiExcel Œü‚¯j");
+    Check(FileManager::ReadText(p1, L"auto", rt, fi) && rt.find(L"ãƒ•ã‚¡ã‚¤ãƒ«å") != std::wstring::npos,
+          L"CSV ã‚’èª­ã¿æˆ»ã›ã‚‹");
+    Check(fi.encoding == TextEncoding::UTF8BOM, L"CSV ã¯ UTF-8 (BOM) ã§å‡ºåŠ›ã™ã‚‹ï¼ˆExcel å‘ã‘ï¼‰");
     std::wstring jt; FileInfo jfi;
     Check(FileManager::ReadText(p3, L"auto", jt, jfi) && jfi.encoding == TextEncoding::UTF8,
-          L"JSON ‚Í BOM ‚È‚µ UTF-8 ‚Åo—Í‚·‚é");
+          L"JSON ã¯ BOM ãªã— UTF-8 ã§å‡ºåŠ›ã™ã‚‹");
 
     std::wstring ep = ResultExporter::BuildExportPath(L"reports", L"20260101_000000",
                                                       ExportFormat::Csv, L"sample");
     Check(ep.find(L"20260101_000000_sample_result.csv") != std::wstring::npos,
-          L"ƒGƒNƒXƒ|[ƒgƒtƒ@ƒCƒ‹–¼‚ğ‘g‚İ—§‚Ä‚é");
+          L"ã‚¨ã‚¯ã‚¹ãƒãƒ¼ãƒˆãƒ•ã‚¡ã‚¤ãƒ«åã‚’çµ„ã¿ç«‹ã¦ã‚‹");
 }
 
 static void TestConfigRoundtripExt()
 {
-    Out(L"\n== İ’è‚Ì‰•œiŒŸõğŒ / ƒŒƒ|[ƒgŒ`® / Undo ¢‘ã / EUC-JPj ==\n");
+    Out(L"\n== è¨­å®šã®å¾€å¾©ï¼ˆæ¤œç´¢æ¡ä»¶ / ãƒ¬ãƒãƒ¼ãƒˆå½¢å¼ / Undo ä¸–ä»£ / EUC-JPï¼‰ ==\n");
     std::wstring dir = util::JoinPath(VerifyDir(), L"cfg_ext");
     util::EnsureDirectory(dir);
     std::wstring ini = util::JoinPath(dir, L"config.ini");
@@ -2215,14 +2215,14 @@ static void TestConfigRoundtripExt()
 
     AppConfig d;
     cm.Load(d);
-    Check(d.search_similar && d.search_similar_threshold == 85, L"—Ş—ˆê’vŒŸõ‚Ìİ’è‚ğ•Û‘¶/•œŒ³‚Å‚«‚é");
+    Check(d.search_similar && d.search_similar_threshold == 85, L"é¡ä¼¼ä¸€è‡´æ¤œç´¢ã®è¨­å®šã‚’ä¿å­˜/å¾©å…ƒã§ãã‚‹");
     Check(d.search_line_range && d.search_line_from == 10 && d.search_line_to == 200,
-          L"w’ès”ÍˆÍ‚Ìİ’è‚ğ•Û‘¶/•œŒ³‚Å‚«‚é");
+          L"æŒ‡å®šè¡Œç¯„å›²ã®è¨­å®šã‚’ä¿å­˜/å¾©å…ƒã§ãã‚‹");
     Check(d.search_function && d.search_function_name == L"stock_use",
-          L"ŠÖ”’PˆÊŒŸõ‚Ìİ’è‚ğ•Û‘¶/•œŒ³‚Å‚«‚é");
-    Check(d.report_markdown && d.report_json, L"ƒŒƒ|[ƒgŒ`®‚Ìİ’è‚ğ•Û‘¶/•œŒ³‚Å‚«‚é");
-    Check(d.undo_max_generations == 25, L"Undo ¢‘ã”‚Ìİ’è‚ğ•Û‘¶/•œŒ³‚Å‚«‚é");
-    Check(d.encoding_mode == L"eucjp", L"EUC-JP ‚Ì•¶šƒR[ƒhİ’è‚ğ•Û‘¶/•œŒ³‚Å‚«‚é");
+          L"é–¢æ•°å˜ä½æ¤œç´¢ã®è¨­å®šã‚’ä¿å­˜/å¾©å…ƒã§ãã‚‹");
+    Check(d.report_markdown && d.report_json, L"ãƒ¬ãƒãƒ¼ãƒˆå½¢å¼ã®è¨­å®šã‚’ä¿å­˜/å¾©å…ƒã§ãã‚‹");
+    Check(d.undo_max_generations == 25, L"Undo ä¸–ä»£æ•°ã®è¨­å®šã‚’ä¿å­˜/å¾©å…ƒã§ãã‚‹");
+    Check(d.encoding_mode == L"eucjp", L"EUC-JP ã®æ–‡å­—ã‚³ãƒ¼ãƒ‰è¨­å®šã‚’ä¿å­˜/å¾©å…ƒã§ãã‚‹");
 
     std::wstring ini2 = util::JoinPath(dir, L"config2.ini");
     FileManager::RemoveFile(ini2);
@@ -2230,17 +2230,17 @@ static void TestConfigRoundtripExt()
     cm2.SetPath(ini2);
     AppConfig e;
     cm2.Load(e);
-    Check(e.search_similar_threshold == 70, L"—Ş—ˆê’v‚ÌŠù’è‚µ‚«‚¢’l‚Í 70%");
-    Check(e.undo_max_generations == 10, L"Undo ‚ÌŠù’è¢‘ã”‚Í 10");
-    Check(e.search_line_from == 1 && e.search_line_to == 0, L"w’ès”ÍˆÍ‚ÌŠù’è’l‚ª³‚µ‚¢");
+    Check(e.search_similar_threshold == 70, L"é¡ä¼¼ä¸€è‡´ã®æ—¢å®šã—ãã„å€¤ã¯ 70%");
+    Check(e.undo_max_generations == 10, L"Undo ã®æ—¢å®šä¸–ä»£æ•°ã¯ 10");
+    Check(e.search_line_from == 1 && e.search_line_to == 0, L"æŒ‡å®šè¡Œç¯„å›²ã®æ—¢å®šå€¤ãŒæ­£ã—ã„");
 }
 
 static void TestWarningDetection()
 {
-    Out(L"\n== Šù‘¶ƒXƒCƒbƒ`Œx / include guard ‚ÌœŠO ==\n");
+    Out(L"\n== æ—¢å­˜ã‚¹ã‚¤ãƒƒãƒè­¦å‘Š / include guard ã®é™¤å¤– ==\n");
     std::wstring detail;
 
-    // include guard ‚¾‚¯‚Ìƒtƒ@ƒCƒ‹
+    // include guard ã ã‘ã®ãƒ•ã‚¡ã‚¤ãƒ«
     std::wstring guarded =
         L"#ifndef SAMPLE_C\n"
         L"#define SAMPLE_C\n"
@@ -2257,12 +2257,12 @@ static void TestWarningDetection()
         L"\n"
         L"#endif /* SAMPLE_C */\n";
     Check(!SearchEngine::DetectNearbyPreprocessor(guarded, 5, 5, 5, detail),
-          L"include guard ‚Ì #ifndef ‹ß–T‚Å‚ÍŒx‚µ‚È‚¢");
+          L"include guard ã® #ifndef è¿‘å‚ã§ã¯è­¦å‘Šã—ãªã„");
     Check(!SearchEngine::DetectNearbyPreprocessor(guarded, 12, 12, 5, detail),
-          L"include guard ‚Ì #endif ‹ß–T‚Å‚ÍŒx‚µ‚È‚¢iŒëŒŸo‚ÌC³j");
-    Check(detail.empty(), L"Œx‚µ‚È‚¢‚Æ‚«‚Í——R‚ğc‚³‚È‚¢");
+          L"include guard ã® #endif è¿‘å‚ã§ã¯è­¦å‘Šã—ãªã„ï¼ˆèª¤æ¤œå‡ºã®ä¿®æ­£ï¼‰");
+    Check(detail.empty(), L"è­¦å‘Šã—ãªã„ã¨ãã¯ç†ç”±ã‚’æ®‹ã•ãªã„");
 
-    // include guard + “à•”‚ÉˆÚsƒXƒCƒbƒ`‚ª‚ ‚éƒtƒ@ƒCƒ‹
+    // include guard + å†…éƒ¨ã«ç§»è¡Œã‚¹ã‚¤ãƒƒãƒãŒã‚ã‚‹ãƒ•ã‚¡ã‚¤ãƒ«
     std::wstring inside =
         L"#ifndef SAMPLE_C\n"
         L"#define SAMPLE_C\n"
@@ -2279,26 +2279,26 @@ static void TestWarningDetection()
         L"\n"
         L"#endif /* SAMPLE_C */\n";
     Check(SearchEngine::DetectNearbyPreprocessor(inside, 7, 7, 5, detail),
-          L"Šù‘¶ƒXƒCƒbƒ`‚Ì“à‘¤‚Å‚ÍŒx‚·‚é");
-    Check(detail.find(L"“à‘¤") != std::wstring::npos, L"“à‘¤‚Å‚ ‚é‚±‚Æ‚ğ——R‚ÉŠÜ‚ß‚é");
-    Check(detail.find(L"LEGACY_MODE") != std::wstring::npos, L"ŒŸo‚µ‚½ƒXƒCƒbƒ`–¼‚ğŠÜ‚ß‚é");
-    Check(detail.find(L"6 s–Ú") != std::wstring::npos, L"ŒŸo‚µ‚½w—ß‚Ìs”Ô†‚ğŠÜ‚ß‚é");
+          L"æ—¢å­˜ã‚¹ã‚¤ãƒƒãƒã®å†…å´ã§ã¯è­¦å‘Šã™ã‚‹");
+    Check(detail.find(L"å†…å´") != std::wstring::npos, L"å†…å´ã§ã‚ã‚‹ã“ã¨ã‚’ç†ç”±ã«å«ã‚ã‚‹");
+    Check(detail.find(L"LEGACY_MODE") != std::wstring::npos, L"æ¤œå‡ºã—ãŸã‚¹ã‚¤ãƒƒãƒåã‚’å«ã‚ã‚‹");
+    Check(detail.find(L"6 è¡Œç›®") != std::wstring::npos, L"æ¤œå‡ºã—ãŸæŒ‡ä»¤ã®è¡Œç•ªå·ã‚’å«ã‚ã‚‹");
 
     Check(SearchEngine::DetectNearbyPreprocessor(inside, 11, 11, 5, detail),
-          L"ƒuƒƒbƒN‚ÌŠO‚Å‚à‹ß–T‚ÉğŒw—ß‚ª‚ ‚ê‚ÎŒx‚·‚é");
-    Check(detail.find(L"‹ß–T") != std::wstring::npos, L"‹ß–T‚Å‚ ‚é‚±‚Æ‚ğ——R‚ÉŠÜ‚ß‚é");
+          L"ãƒ–ãƒ­ãƒƒã‚¯ã®å¤–ã§ã‚‚è¿‘å‚ã«æ¡ä»¶æŒ‡ä»¤ãŒã‚ã‚Œã°è­¦å‘Šã™ã‚‹");
+    Check(detail.find(L"è¿‘å‚") != std::wstring::npos, L"è¿‘å‚ã§ã‚ã‚‹ã“ã¨ã‚’ç†ç”±ã«å«ã‚ã‚‹");
 
-    // ğŒw—ß‚ª‚Ü‚Á‚½‚­–³‚¢ƒtƒ@ƒCƒ‹
+    // æ¡ä»¶æŒ‡ä»¤ãŒã¾ã£ãŸãç„¡ã„ãƒ•ã‚¡ã‚¤ãƒ«
     Check(!SearchEngine::DetectNearbyPreprocessor(L"int a;\nint b;\nint c;\n", 2, 2, 5, detail),
-          L"ğŒw—ß‚ª–³‚¯‚ê‚ÎŒx‚µ‚È‚¢");
+          L"æ¡ä»¶æŒ‡ä»¤ãŒç„¡ã‘ã‚Œã°è­¦å‘Šã—ãªã„");
 
-    // ‘–¸s”‚ğ 0 ‚É‚·‚é‚Æ‹ß–T‚ÍŒŸo‚µ‚È‚¢i“à‘¤‚Ì‚İj
+    // èµ°æŸ»è¡Œæ•°ã‚’ 0 ã«ã™ã‚‹ã¨è¿‘å‚ã¯æ¤œå‡ºã—ãªã„ï¼ˆå†…å´ã®ã¿ï¼‰
     Check(!SearchEngine::DetectNearbyPreprocessor(inside, 11, 11, 0, detail),
-          L"‘–¸s” 0 ‚Å‚Í‹ß–T‚ğŒŸo‚µ‚È‚¢");
+          L"èµ°æŸ»è¡Œæ•° 0 ã§ã¯è¿‘å‚ã‚’æ¤œå‡ºã—ãªã„");
     Check(SearchEngine::DetectNearbyPreprocessor(inside, 7, 7, 0, detail),
-          L"‘–¸s” 0 ‚Å‚à“à‘¤‚ÍŒŸo‚·‚é");
+          L"èµ°æŸ»è¡Œæ•° 0 ã§ã‚‚å†…å´ã¯æ¤œå‡ºã™ã‚‹");
 
-    // #if !defined(NAME) Œ`®‚Ì include guard
+    // #if !defined(NAME) å½¢å¼ã® include guard
     std::wstring guarded2 =
         L"#if !defined(SAMPLE2_C)\n"
         L"#define SAMPLE2_C\n"
@@ -2310,9 +2310,9 @@ static void TestWarningDetection()
         L"\n"
         L"#endif\n";
     Check(!SearchEngine::DetectNearbyPreprocessor(guarded2, 5, 5, 5, detail),
-          L"#if !defined() Œ`®‚Ì include guard ‚àœŠO‚·‚é");
+          L"#if !defined() å½¢å¼ã® include guard ã‚‚é™¤å¤–ã™ã‚‹");
 
-    // include guard ‚ÌŠO‘¤‚É‚ ‚é–{•¨‚ÌƒXƒCƒbƒ`‚ÍŒŸo‚·‚é
+    // include guard ã®å¤–å´ã«ã‚ã‚‹æœ¬ç‰©ã®ã‚¹ã‚¤ãƒƒãƒã¯æ¤œå‡ºã™ã‚‹
     std::wstring guarded3 =
         L"#ifndef SAMPLE3_C\n"
         L"#define SAMPLE3_C\n"
@@ -2323,28 +2323,28 @@ static void TestWarningDetection()
         L"\n"
         L"#endif /* SAMPLE3_C */\n";
     Check(SearchEngine::DetectNearbyPreprocessor(guarded3, 5, 5, 5, detail),
-          L"include guard ‚Æ•¹‘¶‚·‚é–{•¨‚ÌƒXƒCƒbƒ`‚ÍŒŸo‚·‚é");
-    Check(detail.find(L"REAL_SWITCH") != std::wstring::npos, L"–{•¨‚ÌƒXƒCƒbƒ`–¼‚ğŠÜ‚ß‚é");
+          L"include guard ã¨ä½µå­˜ã™ã‚‹æœ¬ç‰©ã®ã‚¹ã‚¤ãƒƒãƒã¯æ¤œå‡ºã™ã‚‹");
+    Check(detail.find(L"REAL_SWITCH") != std::wstring::npos, L"æœ¬ç‰©ã®ã‚¹ã‚¤ãƒƒãƒåã‚’å«ã‚ã‚‹");
 }
 
 static void TestAiLive(const std::wstring& keyfile)
 {
-    Out(L"\n== AI ˜AŒgiGenspark API À‘a’Êj==\n");
-    if (keyfile.empty()) { Out(L"  [SKIP] ƒL[ƒtƒ@ƒCƒ‹‚ªw’è‚³‚ê‚Ä‚¢‚Ü‚¹‚ñ\n"); return; }
+    Out(L"\n== AI é€£æºï¼ˆGenspark API å®Ÿç–é€šï¼‰==\n");
+    if (keyfile.empty()) { Out(L"  [SKIP] ã‚­ãƒ¼ãƒ•ã‚¡ã‚¤ãƒ«ãŒæŒ‡å®šã•ã‚Œã¦ã„ã¾ã›ã‚“\n"); return; }
     std::string raw;
     ReadRaw(keyfile, raw);
     std::wstring key = util::Trim(util::Utf8ToWide(raw));
-    if (key.empty()) { Out(L"  [SKIP] ƒL[‚ª‹ó‚Å‚·\n"); return; }
+    if (key.empty()) { Out(L"  [SKIP] ã‚­ãƒ¼ãŒç©ºã§ã™\n"); return; }
 
     SpecInput in;
-    in.system_name = L"İŒÉŠÇ—ƒVƒXƒeƒ€iŒŸØ—pj";
-    in.overview = L"C/S \¬‚ÌŠîŠ²ƒVƒXƒeƒ€BİŒÉˆø“–ˆ—‚ğ‹Œ API ‚©‚çV API ‚ÖˆÚs‚·‚éB";
-    in.purpose = L"‹Œ API ‚ÌƒTƒ|[ƒgI—¹‚É”º‚¢V API ‚Ö·‚µ‘Ö‚¦‚éB";
-    in.modification = L"stock_alloc() ‚ÌŒÄ‚Ño‚µ‚ğ new_stock_alloc() ‚É·‚µ‘Ö‚¦‚éB";
+    in.system_name = L"åœ¨åº«ç®¡ç†ã‚·ã‚¹ãƒ†ãƒ ï¼ˆæ¤œè¨¼ç”¨ï¼‰";
+    in.overview = L"C/S æ§‹æˆã®åŸºå¹¹ã‚·ã‚¹ãƒ†ãƒ ã€‚åœ¨åº«å¼•å½“å‡¦ç†ã‚’æ—§ API ã‹ã‚‰æ–° API ã¸ç§»è¡Œã™ã‚‹ã€‚";
+    in.purpose = L"æ—§ API ã®ã‚µãƒãƒ¼ãƒˆçµ‚äº†ã«ä¼´ã„æ–° API ã¸å·®ã—æ›¿ãˆã‚‹ã€‚";
+    in.modification = L"stock_alloc() ã®å‘¼ã³å‡ºã—ã‚’ new_stock_alloc() ã«å·®ã—æ›¿ãˆã‚‹ã€‚";
     in.switch_name = L"MIGRATION_001";
     in.old_code = L"stock_alloc(item, qty);";
     in.new_code = L"new_stock_alloc(item, qty, ctx);";
-    in.target_summary = L"sample.ci1 ƒtƒ@ƒCƒ‹ / 1 ‰ÓŠj";
+    in.target_summary = L"sample.cï¼ˆ1 ãƒ•ã‚¡ã‚¤ãƒ« / 1 ç®‡æ‰€ï¼‰";
     in.created_at = util::NowDateTime();
 
     AiSettings st;
@@ -2356,31 +2356,31 @@ static void TestAiLive(const std::wstring& keyfile)
     std::wstring prompt = SpecGenerator::BuildChangeSpecPrompt(in);
     std::wstring text, err;
     bool ok = AiClient::Ask(st, prompt, text, err);
-    Check(ok, L"Genspark API ‚ÖÚ‘±‚µ‰“š‚ğæ“¾‚·‚é");
+    Check(ok, L"Genspark API ã¸æ¥ç¶šã—å¿œç­”ã‚’å–å¾—ã™ã‚‹");
     if (!ok) { Out(L"  error: " + err + L"\n"); return; }
 
     Out(L"  response: " + std::to_wstring((int)text.size()) + L" chars\n");
-    Check(text.size() > 200, L"•ÏXd—l‘‚Æ‚µ‚Ä\•ª‚È•ª—Ê‚Ì‰“š‚ª•Ô‚é");
-    Check(text.find(L"#") != std::wstring::npos, L"‰“š‚ª Markdown ‚ÌŒ©o‚µ‚ğŠÜ‚Ş");
+    Check(text.size() > 200, L"å¤‰æ›´ä»•æ§˜æ›¸ã¨ã—ã¦ååˆ†ãªåˆ†é‡ã®å¿œç­”ãŒè¿”ã‚‹");
+    Check(text.find(L"#") != std::wstring::npos, L"å¿œç­”ãŒ Markdown ã®è¦‹å‡ºã—ã‚’å«ã‚€");
 
     std::wstring html = SpecGenerator::WrapReportHtml(
-        L"•ÏXd—l‘ - İŒÉŠÇ—ƒVƒXƒeƒ€iŒŸØ—pj", SpecGenerator::MarkdownToHtml(text), in);
+        L"å¤‰æ›´ä»•æ§˜æ›¸ - åœ¨åº«ç®¡ç†ã‚·ã‚¹ãƒ†ãƒ ï¼ˆæ¤œè¨¼ç”¨ï¼‰", SpecGenerator::MarkdownToHtml(text), in);
     std::wstring path = util::JoinPath(VerifyDir(), L"live_changespec.html");
     std::wstring werr;
-    Check(SpecGenerator::WriteReportFile(path, html, werr), L"À‰“š‚ğ HTML ƒŒƒ|[ƒg‚Ö‘‚«o‚¹‚é");
+    Check(SpecGenerator::WriteReportFile(path, html, werr), L"å®Ÿå¿œç­”ã‚’ HTML ãƒ¬ãƒãƒ¼ãƒˆã¸æ›¸ãå‡ºã›ã‚‹");
     Out(L"  report: " + path + L" (" + std::to_wstring((int)html.size()) + L" bytes)\n");
 
     std::wstring prompt2 = SpecGenerator::BuildInspectionSpecPrompt(in);
     std::wstring text2, err2;
     bool ok2 = AiClient::Ask(st, prompt2, text2, err2);
-    Check(ok2, L"ŒŸ¸d—l‘‚à Genspark API ‚©‚çæ“¾‚Å‚«‚é");
+    Check(ok2, L"æ¤œæŸ»ä»•æ§˜æ›¸ã‚‚ Genspark API ã‹ã‚‰å–å¾—ã§ãã‚‹");
     if (ok2) {
         std::wstring html2 = SpecGenerator::WrapReportHtml(
-            L"ŒŸ¸d—l‘ - İŒÉŠÇ—ƒVƒXƒeƒ€iŒŸØ—pj",
+            L"æ¤œæŸ»ä»•æ§˜æ›¸ - åœ¨åº«ç®¡ç†ã‚·ã‚¹ãƒ†ãƒ ï¼ˆæ¤œè¨¼ç”¨ï¼‰",
             SpecGenerator::MarkdownToHtml(text2), in);
         std::wstring path2 = util::JoinPath(VerifyDir(), L"live_inspectspec.html");
         Check(SpecGenerator::WriteReportFile(path2, html2, werr),
-              L"ŒŸ¸d—l‘‚ğ HTML ƒŒƒ|[ƒg‚Ö‘‚«o‚¹‚é");
+              L"æ¤œæŸ»ä»•æ§˜æ›¸ã‚’ HTML ãƒ¬ãƒãƒ¼ãƒˆã¸æ›¸ãå‡ºã›ã‚‹");
         Out(L"  report2: " + path2 + L"\n");
     } else {
         Out(L"  error2: " + err2 + L"\n");
@@ -2396,7 +2396,7 @@ int main(int argc, char** argv)
     std::wstring keyfile = a2;
     ::SetConsoleOutputCP(CP_UTF8);
     Out(L"=====================================================\n");
-    Out(L" CopyMigration Switcher - ’P‘ÌƒeƒXƒgiİŒv‘ 20.1j\n");
+    Out(L" CopyMigration Switcher - å˜ä½“ãƒ†ã‚¹ãƒˆï¼ˆè¨­è¨ˆæ›¸ 20.1ï¼‰\n");
     Out(L"=====================================================\n");
 
     TestSwitchName();
@@ -2410,7 +2410,7 @@ int main(int argc, char** argv)
     TestSafety();
     TestInputChecks();
 
-    // Phase 4: 17Í •¡”ƒtƒ@ƒCƒ‹ˆêŠ‡ˆ—
+    // Phase 4: 17ç«  è¤‡æ•°ãƒ•ã‚¡ã‚¤ãƒ«ä¸€æ‹¬å‡¦ç†
     TestFolderScan();
     TestBatchSearch();
     TestBatchDryRunAndExecute();
@@ -2434,12 +2434,12 @@ int main(int argc, char** argv)
 
     Out(L"\n=====================================================\n");
     wchar_t buf[128];
-    swprintf(buf, 128, L" Œ‹‰Ê: PASS %d / FAIL %d\n", g_pass, g_fail);
+    swprintf(buf, 128, L" çµæœ: PASS %d / FAIL %d\n", g_pass, g_fail);
     Out(buf);
     Out(L"=====================================================\n");
     return g_fail == 0 ? 0 : 1;
 }
 #else
-#pragma message("console_test.cpp: MS_BUILD_CONSOLE_TESTS ‚ª–¢’è‹`‚Ì‚½‚ßA"
-                "‚±‚Ì–|–ó’PˆÊ‚Í‹ó‚É‚È‚è‚Ü‚· (GUI ƒvƒƒWƒFƒNƒg‚Ö’Ç‰Á‚µ‚Ä‚àˆÀ‘S‚Å‚·)")
+#pragma message("console_test.cpp: MS_BUILD_CONSOLE_TESTS ãŒæœªå®šç¾©ã®ãŸã‚ã€"
+                "ã“ã®ç¿»è¨³å˜ä½ã¯ç©ºã«ãªã‚Šã¾ã™ (GUI ãƒ—ãƒ­ã‚¸ã‚§ã‚¯ãƒˆã¸è¿½åŠ ã—ã¦ã‚‚å®‰å…¨ã§ã™)")
 #endif

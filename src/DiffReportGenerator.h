@@ -1,7 +1,7 @@
-// =============================================================================
+ï»¿// =============================================================================
 // DiffReportGenerator.h
-// İŒv‘ 6.12u·•ªƒŒƒ|[ƒgo—Í‹@”\v/ 12Íu·•ª¶¬İŒvv
-// ’Pˆêƒtƒ@ƒCƒ‹”Å‚ÆA17Í ˆêŠ‡ˆ——p‚Ì“‡ƒŒƒ|[ƒg”Å‚ğ’ñ‹Ÿ‚·‚é
+// è¨­è¨ˆæ›¸ 6.12ã€Œå·®åˆ†ãƒ¬ãƒãƒ¼ãƒˆå‡ºåŠ›æ©Ÿèƒ½ã€/ 12ç« ã€Œå·®åˆ†ç”Ÿæˆè¨­è¨ˆã€
+// å˜ä¸€ãƒ•ã‚¡ã‚¤ãƒ«ç‰ˆã¨ã€17ç«  ä¸€æ‹¬å‡¦ç†ç”¨ã®çµ±åˆãƒ¬ãƒãƒ¼ãƒˆç‰ˆã‚’æä¾›ã™ã‚‹
 // =============================================================================
 #pragma once
 
@@ -12,13 +12,13 @@
 
 namespace ms {
 
-// “‡ƒŒƒ|[ƒg‚Ì 1 ƒtƒ@ƒCƒ‹•ªƒZƒNƒVƒ‡ƒ“
+// çµ±åˆãƒ¬ãƒãƒ¼ãƒˆã® 1 ãƒ•ã‚¡ã‚¤ãƒ«åˆ†ã‚»ã‚¯ã‚·ãƒ§ãƒ³
 struct ReportFileSection {
     std::wstring file_path;
     std::vector<MatchResult> matches;
     std::wstring before_text;
     std::wstring after_text;
-    FileReplaceResult result;      // ÀsŒ‹‰Êi–¢Às‚Í status ‚ª‹ój
+    FileReplaceResult result;      // å®Ÿè¡Œçµæœï¼ˆæœªå®Ÿè¡Œæ™‚ã¯ status ãŒç©ºï¼‰
     std::wstring encoding_name;
     std::wstring newline_name;
     bool         include_added = false;
@@ -27,7 +27,7 @@ struct ReportFileSection {
 
 class DiffReportGenerator {
 public:
-    // 6.12 ’Pˆêƒtƒ@ƒCƒ‹”Å
+    // 6.12 å˜ä¸€ãƒ•ã‚¡ã‚¤ãƒ«ç‰ˆ
     static bool Generate(const std::wstring& report_path,
                          const OperationContext& ctx,
                          const std::vector<MatchResult>& matches,
@@ -36,7 +36,7 @@ public:
                          const ReplaceResult& result,
                          std::wstring& out_error);
 
-    // 17.2.2 è‡9 “‡ƒŒƒ|[ƒgi‘Sƒtƒ@ƒCƒ‹‚ğ 1 ‚Â‚Ì HTML ‚É‚Ü‚Æ‚ß‚éj
+    // 17.2.2 æ‰‹é †9 çµ±åˆãƒ¬ãƒãƒ¼ãƒˆï¼ˆå…¨ãƒ•ã‚¡ã‚¤ãƒ«ã‚’ 1 ã¤ã® HTML ã«ã¾ã¨ã‚ã‚‹ï¼‰
     static bool GenerateIntegrated(const std::wstring& report_path,
                                    const OperationContext& ctx,
                                    const std::vector<ReportFileSection>& sections,
@@ -58,7 +58,7 @@ public:
                                   const std::wstring& after_text,
                                   const ReplaceResult& result);
 
-    // ---- Œã‘±”Å: Markdown / JSON ƒŒƒ|[ƒg ----
+    // ---- å¾Œç¶šç‰ˆ: Markdown / JSON ãƒ¬ãƒãƒ¼ãƒˆ ----
     static std::wstring JsonEscape(const std::wstring& s);
     static std::wstring MarkdownCell(const std::wstring& s);
     static std::wstring StyleName(SwitchStyle st);

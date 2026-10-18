@@ -1,8 +1,8 @@
-// =============================================================================
+ï»¿// =============================================================================
 // AiClient.h
-// Genspark APIitool_cli / agent_askj‚ğ WinHTTP ‚ÅŒÄ‚Ño‚·ƒNƒ‰ƒCƒAƒ“ƒg
-//   - SSEiServer-Sent Eventsj‚Ì delta ‚ğ’€Ÿ˜AŒ‹‚·‚é
-//   - JSON ‚Ì¶¬E‰ğÍ‚ÍŠO•”ƒ‰ƒCƒuƒ‰ƒŠ‚ÉˆË‘¶‚µ‚È‚¢Å¬À‘•
+// Genspark APIï¼ˆtool_cli / agent_askï¼‰ã‚’ WinHTTP ã§å‘¼ã³å‡ºã™ã‚¯ãƒ©ã‚¤ã‚¢ãƒ³ãƒˆ
+//   - SSEï¼ˆServer-Sent Eventsï¼‰ã® delta ã‚’é€æ¬¡é€£çµã™ã‚‹
+//   - JSON ã®ç”Ÿæˆãƒ»è§£æã¯å¤–éƒ¨ãƒ©ã‚¤ãƒ–ãƒ©ãƒªã«ä¾å­˜ã—ãªã„æœ€å°å®Ÿè£…
 // =============================================================================
 #pragma once
 
@@ -11,18 +11,18 @@
 
 namespace ms {
 
-// Ú‘±æ‚Ì API í•Ê
+// æ¥ç¶šå…ˆã® API ç¨®åˆ¥
 enum class AiProvider {
-    Genspark = 0,     // Genspark APIi/api/tool_cli/agent_askASSEj
-    OpenAiCompat = 1  // OpenAI ŒİŠ· APIi/chat/completionsABearer ”FØj
+    Genspark = 0,     // Genspark APIï¼ˆ/api/tool_cli/agent_askã€SSEï¼‰
+    OpenAiCompat = 1  // OpenAI äº’æ› APIï¼ˆ/chat/completionsã€Bearer èªè¨¼ï¼‰
 };
 
 struct AiSettings {
     AiProvider   provider = AiProvider::Genspark;
     std::wstring api_key;
-    std::wstring endpoint;      // Šù’è: https://www.genspark.ai/api/tool_cli/agent_ask
-    std::wstring model;         // ‹ó = ƒT[ƒoŠù’è
-    std::wstring task_type;     // Šù’è: super_agent
+    std::wstring endpoint;      // æ—¢å®š: https://www.genspark.ai/api/tool_cli/agent_ask
+    std::wstring model;         // ç©º = ã‚µãƒ¼ãƒæ—¢å®š
+    std::wstring task_type;     // æ—¢å®š: super_agent
     int          timeout_sec = 600;
 };
 
@@ -42,15 +42,15 @@ public:
     static std::wstring DefaultOpenAiEndpoint();
     static std::wstring DefaultTaskType();
 
-    // ---- OpenAI ŒİŠ· APIiGPT / Azure OpenAI / Ollama / Ğ“àƒvƒƒLƒV“™j----
+    // ---- OpenAI äº’æ› APIï¼ˆGPT / Azure OpenAI / Ollama / ç¤¾å†…ãƒ—ãƒ­ã‚­ã‚·ç­‰ï¼‰----
     static std::wstring ResolveOpenAiUrl(const std::wstring& endpoint);
     static std::string  BuildOpenAiRequestBody(const AiSettings& st, const std::wstring& prompt);
     static bool         ParseOpenAiResponse(const std::string& json,
                                             std::wstring& out_text,
                                             std::wstring& out_error);
 
-    // ƒvƒƒ“ƒvƒg‚ğ‘—M‚µ‚Ä‰“š–{•¶‚ğæ“¾‚·‚éB
-    // on_delta: óM‚µ‚½’f•Ğ‚²‚Æ / on_tick: ‘Ò‹@’†iUI ‚ÌƒƒbƒZ[ƒWƒ|ƒ“ƒv—pj
+    // ãƒ—ãƒ­ãƒ³ãƒ—ãƒˆã‚’é€ä¿¡ã—ã¦å¿œç­”æœ¬æ–‡ã‚’å–å¾—ã™ã‚‹ã€‚
+    // on_delta: å—ä¿¡ã—ãŸæ–­ç‰‡ã”ã¨ / on_tick: å¾…æ©Ÿä¸­ï¼ˆUI ã®ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒãƒ³ãƒ—ç”¨ï¼‰
     static bool Ask(const AiSettings& st,
                     const std::wstring& prompt,
                     std::wstring& out_text,
@@ -60,7 +60,7 @@ public:
                     const std::function<void()>& on_tick =
                         std::function<void()>());
 
-    // OpenAI ŒİŠ· API ”Åi”ñƒXƒgƒŠ[ƒ~ƒ“ƒOj
+    // OpenAI äº’æ› API ç‰ˆï¼ˆéã‚¹ãƒˆãƒªãƒ¼ãƒŸãƒ³ã‚°ï¼‰
     static bool AskOpenAiCompat(const AiSettings& st,
                                 const std::wstring& prompt,
                                 std::wstring& out_text,
@@ -68,7 +68,7 @@ public:
                                 const std::function<void()>& on_tick =
                                     std::function<void()>());
 
-    // ---- ƒ†[ƒeƒBƒŠƒeƒBiƒeƒXƒg‘ÎÛj----
+    // ---- ãƒ¦ãƒ¼ãƒ†ã‚£ãƒªãƒ†ã‚£ï¼ˆãƒ†ã‚¹ãƒˆå¯¾è±¡ï¼‰----
     static std::string  Utf8Encode(const std::wstring& s);
     static std::wstring Utf8Decode(const std::string& s);
     static std::wstring JsonEscape(const std::wstring& s);

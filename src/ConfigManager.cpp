@@ -1,4 +1,4 @@
-// =============================================================================
+ï»¿// =============================================================================
 // ConfigManager.cpp
 // =============================================================================
 #include "ConfigManager.h"
@@ -81,7 +81,7 @@ void ConfigManager::Load(AppConfig& c)
     c.default_backup_directory = GetStr(ini_path_, L"Backup", L"DefaultBackupDirectory", L"backups");
     c.winmerge_path = GetStr(ini_path_, L"ExternalTools", L"WinMergePath", L"");
 
-    // ---- ŒŸõğŒ‚ÌŠg’£i—Ş—ˆê’v / w’ès”ÍˆÍ / ŠÖ”’PˆÊ / o—ÍŒ`® / Undo ¢‘ãj----
+    // ---- æ¤œç´¢æ¡ä»¶ã®æ‹¡å¼µï¼ˆé¡ä¼¼ä¸€è‡´ / æŒ‡å®šè¡Œç¯„å›² / é–¢æ•°å˜ä½ / å‡ºåŠ›å½¢å¼ / Undo ä¸–ä»£ï¼‰----
     c.search_similar = GetInt(ini_path_, L"Search", L"SimilarEnabled", 0) != 0;
     c.search_similar_threshold = GetInt(ini_path_, L"Search", L"SimilarThreshold", 70);
     if (c.search_similar_threshold < 1)   c.search_similar_threshold = 1;
@@ -100,7 +100,7 @@ void ConfigManager::Load(AppConfig& c)
     if (c.undo_max_generations > 100) c.undo_max_generations = 100;
     c.last_export_path = GetStr(ini_path_, L"Search", L"LastExportPath", L"");
 
-    // ---- 17Í •¡”ƒtƒ@ƒCƒ‹ˆêŠ‡ˆ—iPhase 4j----
+    // ---- 17ç«  è¤‡æ•°ãƒ•ã‚¡ã‚¤ãƒ«ä¸€æ‹¬å‡¦ç†ï¼ˆPhase 4ï¼‰----
     std::wstring tk = GetStr(ini_path_, L"Batch", L"TargetKind", L"SINGLE_FILE");
     c.target_kind = (util::ToUpper(tk) == L"FOLDER") ? TargetKind::Folder : TargetKind::SingleFile;
     c.last_target_folder = GetStr(ini_path_, L"Batch", L"LastTargetFolder", L"");
@@ -108,7 +108,7 @@ void ConfigManager::Load(AppConfig& c)
     c.extension_filter = FolderScanner::SplitExtensions(exts);
     c.include_subdirs = GetInt(ini_path_, L"Batch", L"IncludeSubdirs", 1) != 0;
 
-    // ---- ƒXƒCƒbƒ`’è‹`ƒwƒbƒ_‚ÌˆêŒ³ŠÇ— ----
+    // ---- ã‚¹ã‚¤ãƒƒãƒå®šç¾©ãƒ˜ãƒƒãƒ€ã®ä¸€å…ƒç®¡ç† ----
     c.manage_switch_header = GetInt(ini_path_, L"SwitchHeader", L"ManageSwitchHeader", 1) != 0;
     c.add_switch_header_include = GetInt(ini_path_, L"SwitchHeader", L"AddInclude", 1) != 0;
     c.switch_header_name = GetStr(ini_path_, L"SwitchHeader", L"HeaderName", L"migration_switch.h");
@@ -116,7 +116,7 @@ void ConfigManager::Load(AppConfig& c)
     c.switch_memo = GetStr(ini_path_, L"SwitchHeader", L"SwitchMemo", L"");
     c.last_switch_header_path = GetStr(ini_path_, L"SwitchHeader", L"LastHeaderPath", L"");
 
-    // ---- AI ˜AŒgid—l‘¶¬j----
+    // ---- AI é€£æºï¼ˆä»•æ§˜æ›¸ç”Ÿæˆï¼‰----
     c.ai_provider  = GetInt(ini_path_, L"Ai", L"Provider", 0);
     if (c.ai_provider != 1) c.ai_provider = 0;
     c.ai_openai_key      = GetStr(ini_path_, L"Ai", L"OpenAiApiKey", L"");
@@ -131,7 +131,7 @@ void ConfigManager::Load(AppConfig& c)
     if (c.ai_timeout_sec > 3600) c.ai_timeout_sec = 3600;
     c.ai_open_report = GetInt(ini_path_, L"Ai", L"OpenReportAfterGenerate", 1) != 0;
 
-    // ---- ƒVƒXƒeƒ€î•ñ ----
+    // ---- ã‚·ã‚¹ãƒ†ãƒ æƒ…å ± ----
     c.sys_name         = GetStr(ini_path_, L"SystemInfo", L"SystemName", L"");
     c.sys_overview     = GetStr(ini_path_, L"SystemInfo", L"SystemOverview", L"");
     c.sys_purpose      = GetStr(ini_path_, L"SystemInfo", L"Purpose", L"");
@@ -144,8 +144,8 @@ void ConfigManager::Save(const AppConfig& c)
 {
     if (ini_path_.empty()) ini_path_ = DefaultIniPath();
 
-    // “ú–{Œê‚È‚Ç‚Ì”ñ ANSI •¶š‚ğ•Û‚·‚é‚½‚ßAV‹Kì¬‚Í UTF-16LE BOM ‚ğ•t‚¯‚éB
-    // iWindows ‚Ìƒvƒƒtƒ@ƒCƒ‹ API ‚Í BOM ‚Ì—L–³‚Å‘‚«‚İƒGƒ“ƒR[ƒfƒBƒ“ƒO‚ğŒˆ‚ß‚éj
+    // æ—¥æœ¬èªãªã©ã®é ANSI æ–‡å­—ã‚’ä¿æŒã™ã‚‹ãŸã‚ã€æ–°è¦ä½œæˆæ™‚ã¯ UTF-16LE BOM ã‚’ä»˜ã‘ã‚‹ã€‚
+    // ï¼ˆWindows ã®ãƒ—ãƒ­ãƒ•ã‚¡ã‚¤ãƒ« API ã¯ BOM ã®æœ‰ç„¡ã§æ›¸ãè¾¼ã¿ã‚¨ãƒ³ã‚³ãƒ¼ãƒ‡ã‚£ãƒ³ã‚°ã‚’æ±ºã‚ã‚‹ï¼‰
     {
         bool need_bom = true;
         HANDLE hr = ::CreateFileW(ini_path_.c_str(), GENERIC_READ,
@@ -156,7 +156,7 @@ void ConfigManager::Save(const AppConfig& c)
             DWORD rd = 0;
             ::ReadFile(hr, b, 2, &rd, nullptr);
             ::CloseHandle(hr);
-            // Šù‘¶ƒtƒ@ƒCƒ‹‚ª ANSIiBOM ‚È‚µj‚Ìê‡‚Í‚»‚Ì‚Ü‚ÜˆÛ‚·‚é
+            // æ—¢å­˜ãƒ•ã‚¡ã‚¤ãƒ«ãŒ ANSIï¼ˆBOM ãªã—ï¼‰ã®å ´åˆã¯ãã®ã¾ã¾ç¶­æŒã™ã‚‹
             need_bom = (rd < 2);
         }
         if (need_bom) {
@@ -223,7 +223,7 @@ void ConfigManager::Save(const AppConfig& c)
     put(L"Backup", L"DefaultBackupDirectory", c.default_backup_directory);
     put(L"ExternalTools", L"WinMergePath", c.winmerge_path);
 
-    // ---- ŒŸõğŒ‚ÌŠg’£ ----
+    // ---- æ¤œç´¢æ¡ä»¶ã®æ‹¡å¼µ ----
     puti(L"Search", L"SimilarEnabled", c.search_similar ? 1 : 0);
     puti(L"Search", L"SimilarThreshold", c.search_similar_threshold);
     puti(L"Search", L"LineRangeEnabled", c.search_line_range ? 1 : 0);
@@ -236,14 +236,14 @@ void ConfigManager::Save(const AppConfig& c)
     puti(L"Search", L"UndoMaxGenerations", c.undo_max_generations);
     put(L"Search", L"LastExportPath", c.last_export_path);
 
-    // ---- 17Í •¡”ƒtƒ@ƒCƒ‹ˆêŠ‡ˆ—iPhase 4j----
+    // ---- 17ç«  è¤‡æ•°ãƒ•ã‚¡ã‚¤ãƒ«ä¸€æ‹¬å‡¦ç†ï¼ˆPhase 4ï¼‰----
     put(L"Batch", L"TargetKind",
         c.target_kind == TargetKind::Folder ? L"FOLDER" : L"SINGLE_FILE");
     put(L"Batch", L"LastTargetFolder", c.last_target_folder);
     put(L"Batch", L"Extensions", FolderScanner::JoinExtensions(c.extension_filter));
     puti(L"Batch", L"IncludeSubdirs", c.include_subdirs ? 1 : 0);
 
-    // ---- ƒXƒCƒbƒ`’è‹`ƒwƒbƒ_‚ÌˆêŒ³ŠÇ— ----
+    // ---- ã‚¹ã‚¤ãƒƒãƒå®šç¾©ãƒ˜ãƒƒãƒ€ã®ä¸€å…ƒç®¡ç† ----
     puti(L"SwitchHeader", L"ManageSwitchHeader", c.manage_switch_header ? 1 : 0);
     puti(L"SwitchHeader", L"AddInclude", c.add_switch_header_include ? 1 : 0);
     put(L"SwitchHeader", L"HeaderName", c.switch_header_name);
@@ -251,7 +251,7 @@ void ConfigManager::Save(const AppConfig& c)
     put(L"SwitchHeader", L"SwitchMemo", c.switch_memo);
     put(L"SwitchHeader", L"LastHeaderPath", c.last_switch_header_path);
 
-    // ---- AI ˜AŒgid—l‘¶¬j----
+    // ---- AI é€£æºï¼ˆä»•æ§˜æ›¸ç”Ÿæˆï¼‰----
     puti(L"Ai", L"Provider", c.ai_provider);
     put(L"Ai", L"OpenAiApiKey", c.ai_openai_key);
     put(L"Ai", L"OpenAiEndpoint", c.ai_openai_endpoint);
@@ -263,7 +263,7 @@ void ConfigManager::Save(const AppConfig& c)
     puti(L"Ai", L"TimeoutSec", c.ai_timeout_sec);
     puti(L"Ai", L"OpenReportAfterGenerate", c.ai_open_report ? 1 : 0);
 
-    // ---- ƒVƒXƒeƒ€î•ñ ----
+    // ---- ã‚·ã‚¹ãƒ†ãƒ æƒ…å ± ----
     put(L"SystemInfo", L"SystemName", c.sys_name);
     put(L"SystemInfo", L"SystemOverview", c.sys_overview);
     put(L"SystemInfo", L"Purpose", c.sys_purpose);

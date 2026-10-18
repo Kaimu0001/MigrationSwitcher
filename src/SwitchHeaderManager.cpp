@@ -1,4 +1,4 @@
-// =============================================================================
+ï»¿// =============================================================================
 // SwitchHeaderManager.cpp
 // =============================================================================
 #include "SwitchHeaderManager.h"
@@ -17,7 +17,7 @@ static const wchar_t* kBeginMarker = L"/* ==== CopyMigration Switcher managed se
 static const wchar_t* kEndMarker   = L"/* ==== CopyMigration Switcher managed section: END ==== */";
 
 // -----------------------------------------------------------------------------
-// ƒpƒXE–¼‘O
+// ãƒ‘ã‚¹ãƒ»åå‰
 // -----------------------------------------------------------------------------
 std::wstring SwitchHeaderManager::DefaultHeaderName()
 {
@@ -42,23 +42,23 @@ bool SwitchHeaderManager::ValidateHeaderName(const std::wstring& header_name, st
 {
     out_error.clear();
     if (util::Trim(header_name).empty()) {
-        out_error = L"ƒXƒCƒbƒ`’è‹`ƒwƒbƒ_‚Ìƒtƒ@ƒCƒ‹–¼‚ğ“ü—Í‚µ‚Ä‚­‚¾‚³‚¢B";
+        out_error = L"ã‚¹ã‚¤ãƒƒãƒå®šç¾©ãƒ˜ãƒƒãƒ€ã®ãƒ•ã‚¡ã‚¤ãƒ«åã‚’å…¥åŠ›ã—ã¦ãã ã•ã„ã€‚";
         return false;
     }
     std::wstring name = util::GetFileNameOf(util::Trim(header_name));
     if (name.empty()) {
-        out_error = L"ƒXƒCƒbƒ`’è‹`ƒwƒbƒ_‚Ìƒtƒ@ƒCƒ‹–¼‚ª•s³‚Å‚·B";
+        out_error = L"ã‚¹ã‚¤ãƒƒãƒå®šç¾©ãƒ˜ãƒƒãƒ€ã®ãƒ•ã‚¡ã‚¤ãƒ«åãŒä¸æ­£ã§ã™ã€‚";
         return false;
     }
     static const wchar_t* bad = L"\\/:*?\"<>|";
     for (size_t i = 0; i < name.size(); ++i) {
         if (wcschr(bad, name[i])) {
-            out_error = L"ƒtƒ@ƒCƒ‹–¼‚Ég—p‚Å‚«‚È‚¢•¶š‚ªŠÜ‚Ü‚ê‚Ä‚¢‚Ü‚·: " + name;
+            out_error = L"ãƒ•ã‚¡ã‚¤ãƒ«åã«ä½¿ç”¨ã§ããªã„æ–‡å­—ãŒå«ã¾ã‚Œã¦ã„ã¾ã™: " + name;
             return false;
         }
     }
     if (util::ToUpper(util::GetExtensionOf(name)) != L".H") {
-        out_error = L"ƒXƒCƒbƒ`’è‹`ƒwƒbƒ_‚ÌŠg’£q‚Í .h ‚É‚µ‚Ä‚­‚¾‚³‚¢: " + name;
+        out_error = L"ã‚¹ã‚¤ãƒƒãƒå®šç¾©ãƒ˜ãƒƒãƒ€ã®æ‹¡å¼µå­ã¯ .h ã«ã—ã¦ãã ã•ã„: " + name;
         return false;
     }
     return true;
@@ -86,10 +86,10 @@ std::wstring SwitchHeaderManager::MakeIncludePath(const std::wstring& source_pat
 
     if (sdir == hdir) return name;
 
-    // ‘Š‘ÎƒpƒX‚ğ‘g‚İ—§‚Ä‚éi“¯ˆêƒhƒ‰ƒCƒu‚Ìê‡‚Ì‚İj
+    // ç›¸å¯¾ãƒ‘ã‚¹ã‚’çµ„ã¿ç«‹ã¦ã‚‹ï¼ˆåŒä¸€ãƒ‰ãƒ©ã‚¤ãƒ–ã®å ´åˆã®ã¿ï¼‰
     if (sdir.size() >= 2 && hdir.size() >= 2 && sdir[1] == L':' && hdir[1] == L':') {
         if (sdir[0] != hdir[0]) {
-            // ƒhƒ‰ƒCƒu‚ªˆÙ‚È‚éê‡‚Íâ‘ÎƒpƒX‚ğg‚¤i/ ‹æØ‚è‚Ö•ÏŠ·j
+            // ãƒ‰ãƒ©ã‚¤ãƒ–ãŒç•°ãªã‚‹å ´åˆã¯çµ¶å¯¾ãƒ‘ã‚¹ã‚’ä½¿ã†ï¼ˆ/ åŒºåˆ‡ã‚Šã¸å¤‰æ›ï¼‰
             std::wstring abs = util::MakeAbsolute(header_path);
             for (size_t i = 0; i < abs.size(); ++i) if (abs[i] == L'\\') abs[i] = L'/';
             return abs;
@@ -117,7 +117,7 @@ std::wstring SwitchHeaderManager::MakeIncludePath(const std::wstring& source_pat
 }
 
 // -----------------------------------------------------------------------------
-// —v–ñE®Œ`ƒwƒ‹ƒp
+// è¦ç´„ãƒ»æ•´å½¢ãƒ˜ãƒ«ãƒ‘
 // -----------------------------------------------------------------------------
 std::wstring SwitchHeaderManager::FirstMeaningfulLine(const std::wstring& code, size_t max_len)
 {
@@ -136,22 +136,22 @@ std::wstring SwitchHeaderManager::MakeSummary(const std::wstring& old_code,
 {
     std::wstring o = FirstMeaningfulLine(old_code, 48);
     std::wstring n = FirstMeaningfulLine(new_code, 48);
-    if (n.empty()) n = L"(VƒR[ƒh–¢“ü—Í)";
-    if (o.empty()) o = L"(‹ŒƒR[ƒh–¢“ü—Í)";
+    if (n.empty()) n = L"(æ–°ã‚³ãƒ¼ãƒ‰æœªå…¥åŠ›)";
+    if (o.empty()) o = L"(æ—§ã‚³ãƒ¼ãƒ‰æœªå…¥åŠ›)";
     return o + L" -> " + n;
 }
 
 // -----------------------------------------------------------------------------
-// ŠÇ——Ìˆæ‚Ì¶¬E‰ğÍ
+// ç®¡ç†é ˜åŸŸã®ç”Ÿæˆãƒ»è§£æ
 // -----------------------------------------------------------------------------
 std::wstring SwitchHeaderManager::BuildManagedSection(const std::vector<SwitchEntry>& entries)
 {
     std::wstring s;
     s += kBeginMarker;
     s += L"\n";
-    s += L"/* ‚±‚Ì—Ìˆæ‚Í CopyMigration Switcher ‚ª©“®¶¬EŠÇ—‚µ‚Ü‚·B */\n";
-    s += L"/* ƒXƒCƒbƒ`‚ğ—LŒø‚É‚·‚é‚É‚Í #define ‚Ìs‚ÌƒRƒƒ“ƒgi/ * * /j‚ğŠO‚µ‚Ä‚­‚¾‚³‚¢B */\n";
-    s += L"/* ’è‹`‚ğ—LŒø‚É‚·‚é‚ÆA‘ÎÛƒ\[ƒX‚Ì #ifdef ‘¤iVƒR[ƒhj‚ª—LŒø‚É‚È‚è‚Ü‚·B */\n";
+    s += L"/* ã“ã®é ˜åŸŸã¯ CopyMigration Switcher ãŒè‡ªå‹•ç”Ÿæˆãƒ»ç®¡ç†ã—ã¾ã™ã€‚ */\n";
+    s += L"/* ã‚¹ã‚¤ãƒƒãƒã‚’æœ‰åŠ¹ã«ã™ã‚‹ã«ã¯ #define ã®è¡Œã®ã‚³ãƒ¡ãƒ³ãƒˆï¼ˆ/ * * /ï¼‰ã‚’å¤–ã—ã¦ãã ã•ã„ã€‚ */\n";
+    s += L"/* å®šç¾©ã‚’æœ‰åŠ¹ã«ã™ã‚‹ã¨ã€å¯¾è±¡ã‚½ãƒ¼ã‚¹ã® #ifdef å´ï¼ˆæ–°ã‚³ãƒ¼ãƒ‰ï¼‰ãŒæœ‰åŠ¹ã«ãªã‚Šã¾ã™ã€‚ */\n";
     s += L"\n";
 
     for (size_t i = 0; i < entries.size(); ++i) {
@@ -198,11 +198,11 @@ void SwitchHeaderManager::ParseManagedSection(const std::wstring& section,
         if (t.empty()) continue;
         if (t == kBeginMarker || t == kEndMarker) continue;
         if (t.compare(0, 2, L"/*") != 0 && t.compare(0, 1, L"#") != 0) continue;
-        if (t.find(L"‚±‚Ì—Ìˆæ‚Í") != std::wstring::npos) continue;
-        if (t.find(L"ƒXƒCƒbƒ`‚ğ—LŒø‚É") != std::wstring::npos) continue;
-        if (t.find(L"’è‹`‚ğ—LŒø‚É") != std::wstring::npos) continue;
+        if (t.find(L"ã“ã®é ˜åŸŸã¯") != std::wstring::npos) continue;
+        if (t.find(L"ã‚¹ã‚¤ãƒƒãƒã‚’æœ‰åŠ¹ã«") != std::wstring::npos) continue;
+        if (t.find(L"å®šç¾©ã‚’æœ‰åŠ¹ã«") != std::wstring::npos) continue;
 
-        // ƒRƒƒ“ƒgsi"/* NAME : comment */"j
+        // ã‚³ãƒ¡ãƒ³ãƒˆè¡Œï¼ˆ"/* NAME : comment */"ï¼‰
         if (t.compare(0, 2, L"/*") == 0 && t.find(L"#define") == std::wstring::npos) {
             if (t.size() > 4) {
                 std::wstring body = t.substr(2);
@@ -215,7 +215,7 @@ void SwitchHeaderManager::ParseManagedSection(const std::wstring& section,
                     cur = SwitchEntry();
                     cur.name = util::Trim(body.substr(0, sep));
                     cur.comment = util::Trim(body.substr(sep + 3));
-                    // ƒtƒ@ƒCƒ‹ˆê——‚ğæ‚èo‚·i––”ö‚Ì [a, b] ‚ğ‰ğÍj
+                    // ãƒ•ã‚¡ã‚¤ãƒ«ä¸€è¦§ã‚’å–ã‚Šå‡ºã™ï¼ˆæœ«å°¾ã® [a, b] ã‚’è§£æï¼‰
                     size_t lb = cur.comment.rfind(L'[');
                     size_t rb = cur.comment.rfind(L']');
                     if (lb != std::wstring::npos && rb != std::wstring::npos && rb > lb) {
@@ -239,7 +239,7 @@ void SwitchHeaderManager::ParseManagedSection(const std::wstring& section,
             continue;
         }
 
-        // ’è‹`si"#define NAME" ‚Ü‚½‚Í "/* #define NAME */"j
+        // å®šç¾©è¡Œï¼ˆ"#define NAME" ã¾ãŸã¯ "/* #define NAME */"ï¼‰
         size_t dp = t.find(L"#define");
         if (dp != std::wstring::npos) {
             std::wstring rest = util::Trim(t.substr(dp + 7));
@@ -259,7 +259,7 @@ void SwitchHeaderManager::ParseManagedSection(const std::wstring& section,
                 has_cur = false;
                 cur = SwitchEntry();
             } else {
-                // ƒRƒƒ“ƒgs‚ª–³‚¢’è‹`‚àE‚¤
+                // ã‚³ãƒ¡ãƒ³ãƒˆè¡ŒãŒç„¡ã„å®šç¾©ã‚‚æ‹¾ã†
                 if (has_cur) { out.push_back(cur); has_cur = false; }
                 SwitchEntry e;
                 e.name = name;
@@ -273,7 +273,7 @@ void SwitchHeaderManager::ParseManagedSection(const std::wstring& section,
 }
 
 // -----------------------------------------------------------------------------
-// “Ç‚İ‚İE‘‚«‚İ
+// èª­ã¿è¾¼ã¿ãƒ»æ›¸ãè¾¼ã¿
 // -----------------------------------------------------------------------------
 bool SwitchHeaderManager::Load(const std::wstring& header_path, SwitchHeaderInfo& out)
 {
@@ -281,7 +281,7 @@ bool SwitchHeaderManager::Load(const std::wstring& header_path, SwitchHeaderInfo
     out.path = header_path;
     out.guard = GuardFromName(header_path);
 
-    if (!util::PathExists(header_path)) return true;   // –¢ì¬‚Í³íiexists=falsej
+    if (!util::PathExists(header_path)) return true;   // æœªä½œæˆã¯æ­£å¸¸ï¼ˆexists=falseï¼‰
 
     std::wstring text;
     FileInfo info;
@@ -322,7 +322,7 @@ std::wstring SwitchHeaderManager::BuildFullContent(const SwitchHeaderInfo& info)
     }
 
     if (info.exists && !info.before_section.empty()) {
-        // Šù‘¶ƒtƒ@ƒCƒ‹‚ÉŠÇ——Ìˆæ‚ª–³‚¢ê‡‚ÍAæ“ª‚ÌƒCƒ“ƒNƒ‹[ƒhƒK[ƒh’¼Œã‚É‘}“ü‚·‚é
+        // æ—¢å­˜ãƒ•ã‚¡ã‚¤ãƒ«ã«ç®¡ç†é ˜åŸŸãŒç„¡ã„å ´åˆã¯ã€å…ˆé ­ã®ã‚¤ãƒ³ã‚¯ãƒ«ãƒ¼ãƒ‰ã‚¬ãƒ¼ãƒ‰ç›´å¾Œã«æŒ¿å…¥ã™ã‚‹
         std::vector<std::wstring> lines = util::SplitLines(info.before_section);
         int insert_at = -1;
         for (size_t i = 0; i < lines.size(); ++i) {
@@ -333,14 +333,14 @@ std::wstring SwitchHeaderManager::BuildFullContent(const SwitchHeaderInfo& info)
             }
         }
         if (insert_at < 0) {
-            // æ“ª‚ÌƒRƒƒ“ƒgƒuƒƒbƒN‚ÌŒã‚ë
+            // å…ˆé ­ã®ã‚³ãƒ¡ãƒ³ãƒˆãƒ–ãƒ­ãƒƒã‚¯ã®å¾Œã‚
             insert_at = 0;
             for (size_t i = 0; i < lines.size(); ++i) {
                 std::wstring t = util::Trim(lines[i]);
                 if (t.empty() || t.compare(0, 2, L"/*") == 0 || t.compare(0, 2, L"//") == 0) {
                     insert_at = (int)i + 1;
                     if (t.compare(0, 2, L"/*") == 0 && t.find(L"*/") == std::wstring::npos) {
-                        // ƒuƒƒbƒNƒRƒƒ“ƒg‚ÌI’[‚Ü‚Åi‚ß‚é
+                        // ãƒ–ãƒ­ãƒƒã‚¯ã‚³ãƒ¡ãƒ³ãƒˆã®çµ‚ç«¯ã¾ã§é€²ã‚ã‚‹
                         for (size_t k = i + 1; k < lines.size(); ++k) {
                             insert_at = (int)k + 1;
                             if (lines[k].find(L"*/") != std::wstring::npos) { i = k; break; }
@@ -359,22 +359,22 @@ std::wstring SwitchHeaderManager::BuildFullContent(const SwitchHeaderInfo& info)
         return s;
     }
 
-    // V‹Kì¬
+    // æ–°è¦ä½œæˆ
     std::wstring s;
     s += L"/* ============================================================================\n";
     s += L" * " + util::GetFileNameOf(info.path) + L"\n";
-    s += L" * ƒ}ƒCƒOƒŒ[ƒVƒ‡ƒ“—pƒRƒ“ƒpƒCƒ‹ƒXƒCƒbƒ`’è‹`\n";
+    s += L" * ãƒã‚¤ã‚°ãƒ¬ãƒ¼ã‚·ãƒ§ãƒ³ç”¨ã‚³ãƒ³ãƒ‘ã‚¤ãƒ«ã‚¹ã‚¤ãƒƒãƒå®šç¾©\n";
     s += L" *\n";
-    s += L" * ‚±‚Ìƒtƒ@ƒCƒ‹‚Í CopyMigration Switcher ‚ªŠÇ—‚µ‚Ü‚·B\n";
-    s += L" * ‘ÎÛƒ\[ƒX‚Í–{ƒtƒ@ƒCƒ‹‚ğ #include ‚µA#ifdef <ƒXƒCƒbƒ`–¼> ‚ÅV‹Œ‚ğØ‚è‘Ö‚¦‚Ü‚·B\n";
-    s += L" * Šù’è‚Í‚·‚×‚Ä–³ŒøiƒRƒƒ“ƒgƒAƒEƒgj‚Å‚·B•K—v‚ÈƒXƒCƒbƒ`‚¾‚¯—LŒø‰»‚µ‚Ä‚­‚¾‚³‚¢B\n";
+    s += L" * ã“ã®ãƒ•ã‚¡ã‚¤ãƒ«ã¯ CopyMigration Switcher ãŒç®¡ç†ã—ã¾ã™ã€‚\n";
+    s += L" * å¯¾è±¡ã‚½ãƒ¼ã‚¹ã¯æœ¬ãƒ•ã‚¡ã‚¤ãƒ«ã‚’ #include ã—ã€#ifdef <ã‚¹ã‚¤ãƒƒãƒå> ã§æ–°æ—§ã‚’åˆ‡ã‚Šæ›¿ãˆã¾ã™ã€‚\n";
+    s += L" * æ—¢å®šã¯ã™ã¹ã¦ç„¡åŠ¹ï¼ˆã‚³ãƒ¡ãƒ³ãƒˆã‚¢ã‚¦ãƒˆï¼‰ã§ã™ã€‚å¿…è¦ãªã‚¹ã‚¤ãƒƒãƒã ã‘æœ‰åŠ¹åŒ–ã—ã¦ãã ã•ã„ã€‚\n";
     s += L" * ==========================================================================*/\n";
     s += L"#ifndef " + guard + L"\n";
     s += L"#define " + guard + L"\n";
     s += L"\n";
     s += managed;
     s += L"\n";
-    s += L"/* ---- è“®’è‹`—Ìˆæi‚±‚Ì—Ìˆæ‚Íƒc[ƒ‹‚ª‘‚«Š·‚¦‚Ü‚¹‚ñj ---- */\n";
+    s += L"/* ---- æ‰‹å‹•å®šç¾©é ˜åŸŸï¼ˆã“ã®é ˜åŸŸã¯ãƒ„ãƒ¼ãƒ«ãŒæ›¸ãæ›ãˆã¾ã›ã‚“ï¼‰ ---- */\n";
     s += L"\n";
     s += L"#endif /* " + guard + L" */\n";
     return s;
@@ -390,11 +390,11 @@ bool SwitchHeaderManager::Write(const std::wstring& header_path,
 
     std::wstring dir = util::GetDirectoryOf(header_path);
     if (!dir.empty() && !util::EnsureDirectory(dir)) {
-        out_error = L"ƒXƒCƒbƒ`’è‹`ƒwƒbƒ_‚Ìo—ÍæƒtƒHƒ‹ƒ_‚ğì¬‚Å‚«‚Ü‚¹‚ñ: " + dir;
+        out_error = L"ã‚¹ã‚¤ãƒƒãƒå®šç¾©ãƒ˜ãƒƒãƒ€ã®å‡ºåŠ›å…ˆãƒ•ã‚©ãƒ«ãƒ€ã‚’ä½œæˆã§ãã¾ã›ã‚“: " + dir;
         return false;
     }
 
-    // V‹K‚Í UTF-8AŠù‘¶‚ÍŒ³‚Ì•¶šƒR[ƒhE‰üsƒR[ƒh‚ğˆÛ‚·‚é
+    // æ–°è¦ã¯ UTF-8ã€æ—¢å­˜ã¯å…ƒã®æ–‡å­—ã‚³ãƒ¼ãƒ‰ãƒ»æ”¹è¡Œã‚³ãƒ¼ãƒ‰ã‚’ç¶­æŒã™ã‚‹
     TextEncoding enc = TextEncoding::UTF8;
     bool with_bom = false;
     NewlineKind nl = NewlineKind::CRLF;
@@ -411,7 +411,7 @@ bool SwitchHeaderManager::Write(const std::wstring& header_path,
 }
 
 // -----------------------------------------------------------------------------
-// ƒXƒCƒbƒ`‚Ì“o˜^EØ‘ÖEíœ
+// ã‚¹ã‚¤ãƒƒãƒã®ç™»éŒ²ãƒ»åˆ‡æ›¿ãƒ»å‰Šé™¤
 // -----------------------------------------------------------------------------
 bool SwitchHeaderManager::RegisterSwitch(const std::wstring& header_path,
                                          const std::wstring& switch_name,
@@ -427,7 +427,7 @@ bool SwitchHeaderManager::RegisterSwitch(const std::wstring& header_path,
     out_error.clear();
 
     if (!Load(header_path, out_info)) {
-        out_error = L"Šù‘¶‚ÌƒXƒCƒbƒ`’è‹`ƒwƒbƒ_‚ğ“Ç‚İ‚ß‚Ü‚¹‚ñ: " + header_path;
+        out_error = L"æ—¢å­˜ã®ã‚¹ã‚¤ãƒƒãƒå®šç¾©ãƒ˜ãƒƒãƒ€ã‚’èª­ã¿è¾¼ã‚ã¾ã›ã‚“: " + header_path;
         return false;
     }
 
@@ -464,12 +464,12 @@ bool SwitchHeaderManager::RegisterSwitch(const std::wstring& header_path,
             std::wstring fname = util::GetFileNameOf(source_files[f]);
             if (!fname.empty()) e.files.push_back(fname);
         }
-        e.enabled = false;                 // Šù’è‚Í–³Œøi‹ŒƒR[ƒh‚Ì‚Ü‚ÜBˆÀ‘S‘¤j
+        e.enabled = false;                 // æ—¢å®šã¯ç„¡åŠ¹ï¼ˆï¼æ—§ã‚³ãƒ¼ãƒ‰ã®ã¾ã¾ã€‚å®‰å…¨å´ï¼‰
         out_info.entries.push_back(e);
         out_added = true;
     }
 
-    // –¼‘O‡‚É®—ñ‚µ‚ÄŒ©’Ê‚µ‚ğ—Ç‚­‚·‚é
+    // åå‰é †ã«æ•´åˆ—ã—ã¦è¦‹é€šã—ã‚’è‰¯ãã™ã‚‹
     std::sort(out_info.entries.begin(), out_info.entries.end(),
               [](const SwitchEntry& a, const SwitchEntry& b) { return a.name < b.name; });
 
@@ -486,7 +486,7 @@ bool SwitchHeaderManager::SetEnabled(const std::wstring& header_path,
     out_error.clear();
 
     if (!Load(header_path, out_info)) {
-        out_error = L"ƒXƒCƒbƒ`’è‹`ƒwƒbƒ_‚ğ“Ç‚İ‚ß‚Ü‚¹‚ñ: " + header_path;
+        out_error = L"ã‚¹ã‚¤ãƒƒãƒå®šç¾©ãƒ˜ãƒƒãƒ€ã‚’èª­ã¿è¾¼ã‚ã¾ã›ã‚“: " + header_path;
         return false;
     }
     bool found = false;
@@ -498,7 +498,7 @@ bool SwitchHeaderManager::SetEnabled(const std::wstring& header_path,
         break;
     }
     if (!found) {
-        out_error = L"ƒXƒCƒbƒ`‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñ: " + switch_name;
+        out_error = L"ã‚¹ã‚¤ãƒƒãƒãŒè¦‹ã¤ã‹ã‚Šã¾ã›ã‚“: " + switch_name;
         return false;
     }
     return Write(header_path, out_info, out_error);
@@ -512,7 +512,7 @@ bool SwitchHeaderManager::RemoveSwitch(const std::wstring& header_path,
     out_error.clear();
 
     if (!Load(header_path, out_info)) {
-        out_error = L"ƒXƒCƒbƒ`’è‹`ƒwƒbƒ_‚ğ“Ç‚İ‚ß‚Ü‚¹‚ñ: " + header_path;
+        out_error = L"ã‚¹ã‚¤ãƒƒãƒå®šç¾©ãƒ˜ãƒƒãƒ€ã‚’èª­ã¿è¾¼ã‚ã¾ã›ã‚“: " + header_path;
         return false;
     }
     std::vector<SwitchEntry> keep;
@@ -525,7 +525,7 @@ bool SwitchHeaderManager::RemoveSwitch(const std::wstring& header_path,
         keep.push_back(out_info.entries[i]);
     }
     if (!found) {
-        out_error = L"ƒXƒCƒbƒ`‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñ: " + switch_name;
+        out_error = L"ã‚¹ã‚¤ãƒƒãƒãŒè¦‹ã¤ã‹ã‚Šã¾ã›ã‚“: " + switch_name;
         return false;
     }
     out_info.entries = keep;
@@ -533,7 +533,7 @@ bool SwitchHeaderManager::RemoveSwitch(const std::wstring& header_path,
 }
 
 // -----------------------------------------------------------------------------
-// ƒ\[ƒX‚Ö‚Ì #include ’Ç‰Á
+// ã‚½ãƒ¼ã‚¹ã¸ã® #include è¿½åŠ 
 // -----------------------------------------------------------------------------
 bool SwitchHeaderManager::HasInclude(const std::wstring& text, const std::wstring& include_path)
 {
@@ -559,7 +559,7 @@ bool SwitchHeaderManager::EnsureInclude(std::wstring& text,
     out_error.clear();
 
     if (include_path.empty()) {
-        out_error = L"#include ‚·‚éƒwƒbƒ_‚ÌƒpƒX‚ª‹ó‚Å‚·B";
+        out_error = L"#include ã™ã‚‹ãƒ˜ãƒƒãƒ€ã®ãƒ‘ã‚¹ãŒç©ºã§ã™ã€‚";
         return false;
     }
     if (HasInclude(text, include_path)) return true;
@@ -569,13 +569,13 @@ bool SwitchHeaderManager::EnsureInclude(std::wstring& text,
 
     int insert_at = -1;
 
-    // 1) ÅŒã‚Ì #include ‚Ì’¼Œã
+    // 1) æœ€å¾Œã® #include ã®ç›´å¾Œ
     for (size_t i = 0; i < lines.size(); ++i) {
         std::wstring t = util::Trim(lines[i]);
         if (t.compare(0, 8, L"#include") == 0) insert_at = (int)i + 1;
     }
 
-    // 2) ƒCƒ“ƒNƒ‹[ƒhƒK[ƒhi#ifndef X / #define Xj‚Ì’¼Œã
+    // 2) ã‚¤ãƒ³ã‚¯ãƒ«ãƒ¼ãƒ‰ã‚¬ãƒ¼ãƒ‰ï¼ˆ#ifndef X / #define Xï¼‰ã®ç›´å¾Œ
     if (insert_at < 0) {
         for (size_t i = 0; i + 1 < lines.size(); ++i) {
             std::wstring a = util::Trim(lines[i]);
@@ -587,7 +587,7 @@ bool SwitchHeaderManager::EnsureInclude(std::wstring& text,
         }
     }
 
-    // 3) æ“ª‚ÌƒRƒƒ“ƒgƒuƒƒbƒNE‹ós‚ÌŒã‚ë
+    // 3) å…ˆé ­ã®ã‚³ãƒ¡ãƒ³ãƒˆãƒ–ãƒ­ãƒƒã‚¯ãƒ»ç©ºè¡Œã®å¾Œã‚
     if (insert_at < 0) {
         insert_at = 0;
         bool in_block = false;
@@ -627,7 +627,7 @@ bool SwitchHeaderManager::EnsureInclude(std::wstring& text,
     if (trailing_newline && (text.empty() || text[text.size() - 1] != L'\n')) text += L"\n";
 
     out_added = true;
-    out_line = insert_at + 1;      // 1 ‹N“_
+    out_line = insert_at + 1;      // 1 èµ·ç‚¹
     return true;
 }
 

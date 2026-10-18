@@ -1,7 +1,7 @@
-// =============================================================================
+ï»¿// =============================================================================
 // SpecGenerator.h
-// ƒVƒXƒeƒ€î•ñ + AI API ‚©‚çu•ÏXd—l‘vuŒŸ¸d—l‘v‚ğ¶¬‚·‚é
-//   - ƒvƒƒ“ƒvƒg¶¬ / Markdown ¨ HTML •ÏŠ· / ƒŒƒ|[ƒg‘‚«o‚µ
+// ã‚·ã‚¹ãƒ†ãƒ æƒ…å ± + AI API ã‹ã‚‰ã€Œå¤‰æ›´ä»•æ§˜æ›¸ã€ã€Œæ¤œæŸ»ä»•æ§˜æ›¸ã€ã‚’ç”Ÿæˆã™ã‚‹
+//   - ãƒ—ãƒ­ãƒ³ãƒ—ãƒˆç”Ÿæˆ / Markdown â†’ HTML å¤‰æ› / ãƒ¬ãƒãƒ¼ãƒˆæ›¸ãå‡ºã—
 // =============================================================================
 #pragma once
 
@@ -9,40 +9,40 @@
 
 namespace ms {
 
-// d—l‘¶¬‚Ì“ü—ÍiƒVƒXƒeƒ€î•ñ + ˆÚs‘ÎÛ‚Ìî•ñj
+// ä»•æ§˜æ›¸ç”Ÿæˆã®å…¥åŠ›ï¼ˆã‚·ã‚¹ãƒ†ãƒ æƒ…å ± + ç§»è¡Œå¯¾è±¡ã®æƒ…å ±ï¼‰
 struct SpecInput {
-    std::wstring system_name;         // ƒVƒXƒeƒ€–¼
-    std::wstring overview;            // ƒVƒXƒeƒ€ŠT—v
-    std::wstring purpose;             // –Ú“I
-    std::wstring modification;        // C³‰ÓŠŠT—v
-    std::wstring extra;               // ’Ç‰Áw¦i”CˆÓj
-    std::wstring switch_name;         // ƒXƒCƒbƒ`–¼
-    std::wstring old_code;            // ‹ŒƒR[ƒh
-    std::wstring new_code;            // VƒR[ƒh
-    std::wstring target_summary;      // ‘ÎÛƒtƒ@ƒCƒ‹ / Œ”‚Ì—v–ñ
-    std::wstring switch_header_text;  // ƒXƒCƒbƒ`’è‹`ƒwƒbƒ_‚Ì“à—ei”CˆÓj
-    std::wstring created_at;          // ¶¬“ú
+    std::wstring system_name;         // ã‚·ã‚¹ãƒ†ãƒ å
+    std::wstring overview;            // ã‚·ã‚¹ãƒ†ãƒ æ¦‚è¦
+    std::wstring purpose;             // ç›®çš„
+    std::wstring modification;        // ä¿®æ­£ç®‡æ‰€æ¦‚è¦
+    std::wstring extra;               // è¿½åŠ æŒ‡ç¤ºï¼ˆä»»æ„ï¼‰
+    std::wstring switch_name;         // ã‚¹ã‚¤ãƒƒãƒå
+    std::wstring old_code;            // æ—§ã‚³ãƒ¼ãƒ‰
+    std::wstring new_code;            // æ–°ã‚³ãƒ¼ãƒ‰
+    std::wstring target_summary;      // å¯¾è±¡ãƒ•ã‚¡ã‚¤ãƒ« / ä»¶æ•°ã®è¦ç´„
+    std::wstring switch_header_text;  // ã‚¹ã‚¤ãƒƒãƒå®šç¾©ãƒ˜ãƒƒãƒ€ã®å†…å®¹ï¼ˆä»»æ„ï¼‰
+    std::wstring created_at;          // ç”Ÿæˆæ—¥æ™‚
 };
 
 enum SpecKind {
-    SPEC_CHANGE     = 0,   // •ÏXd—l‘
-    SPEC_INSPECTION = 1    // ŒŸ¸d—l‘
+    SPEC_CHANGE     = 0,   // å¤‰æ›´ä»•æ§˜æ›¸
+    SPEC_INSPECTION = 1    // æ¤œæŸ»ä»•æ§˜æ›¸
 };
 
 class SpecGenerator {
 public:
-    static std::wstring KindLabel(int kind);           // •ÏXd—l‘ / ŒŸ¸d—l‘
+    static std::wstring KindLabel(int kind);           // å¤‰æ›´ä»•æ§˜æ›¸ / æ¤œæŸ»ä»•æ§˜æ›¸
     static std::wstring KindTag(int kind);             // changespec / inspectspec
 
     static std::wstring BuildChangeSpecPrompt(const SpecInput& in);
     static std::wstring BuildInspectionSpecPrompt(const SpecInput& in);
 
-    // AI ƒ`ƒƒƒbƒg‚Ö‚»‚Ì‚Ü‚Ü“\‚è•t‚¯‚ç‚ê‚éˆË—Š•¶ƒeƒLƒXƒgiAPI ‚ğg‚í‚È‚¢‰^—pŒü‚¯j
-    //   E–`“ª‚Éug‚¢•ûvA–{•¶‚É AI ‚Ö‚ÌˆË—Š•¶A––”ö‚É“\‚è–ß‚µæ‚Ìƒƒ‚‚ğ•t‚¯‚é
+    // AI ãƒãƒ£ãƒƒãƒˆã¸ãã®ã¾ã¾è²¼ã‚Šä»˜ã‘ã‚‰ã‚Œã‚‹ä¾é ¼æ–‡ãƒ†ã‚­ã‚¹ãƒˆï¼ˆAPI ã‚’ä½¿ã‚ãªã„é‹ç”¨å‘ã‘ï¼‰
+    //   ãƒ»å†’é ­ã«ã€Œä½¿ã„æ–¹ã€ã€æœ¬æ–‡ã« AI ã¸ã®ä¾é ¼æ–‡ã€æœ«å°¾ã«è²¼ã‚Šæˆ»ã—å…ˆã®ãƒ¡ãƒ¢ã‚’ä»˜ã‘ã‚‹
     static std::wstring BuildPromptTxt(int kind, const SpecInput& in);
     static std::wstring MakePromptFileName(const std::wstring& system_name,
                                            int kind, const std::wstring& stamp);
-    // ‰üs‚ğ CRLF ‚É“ˆê‚·‚éiWindows ‚Ìƒƒ‚’ Eƒ`ƒƒƒbƒg“\‚è•t‚¯Œü‚¯j
+    // æ”¹è¡Œã‚’ CRLF ã«çµ±ä¸€ã™ã‚‹ï¼ˆWindows ã®ãƒ¡ãƒ¢å¸³ãƒ»ãƒãƒ£ãƒƒãƒˆè²¼ã‚Šä»˜ã‘å‘ã‘ï¼‰
     static std::wstring ToCrlf(const std::wstring& s);
 
     static std::wstring EscapeHtml(const std::wstring& s);

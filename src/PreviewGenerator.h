@@ -1,8 +1,8 @@
-// =============================================================================
-// PreviewGenerator.h / BackupManager.h / UndoManager.h ‘Š“–‚ÌéŒ¾‚ÍŠeƒtƒ@ƒCƒ‹‚É•ªŠ„
+ï»¿// =============================================================================
+// PreviewGenerator.h / BackupManager.h / UndoManager.h ç›¸å½“ã®å®£è¨€ã¯å„ãƒ•ã‚¡ã‚¤ãƒ«ã«åˆ†å‰²
 // -----------------------------------------------------------------------------
 // PreviewGenerator.h
-// İŒv‘ 5.7uƒvƒŒƒrƒ…[ƒ^ƒuv/ 7.2.6 PreviewGenerator
+// è¨­è¨ˆæ›¸ 5.7ã€Œãƒ—ãƒ¬ãƒ“ãƒ¥ãƒ¼ã‚¿ãƒ–ã€/ 7.2.6 PreviewGenerator
 // =============================================================================
 #pragma once
 
@@ -15,41 +15,41 @@ namespace ms {
 
 class PreviewGenerator {
 public:
-    // ‘ÎÛ‰ÓŠ‚Ì‘OŒã context_lines s‚ğØ‚èo‚µ‚Äs”Ô†•t‚«‚Å•Ô‚·
+    // å¯¾è±¡ç®‡æ‰€ã®å‰å¾Œ context_lines è¡Œã‚’åˆ‡ã‚Šå‡ºã—ã¦è¡Œç•ªå·ä»˜ãã§è¿”ã™
     static std::wstring MakeExcerpt(const std::wstring& text,
                                     int start_line, int end_line,
                                     int context_lines,
                                     int& out_start_line);
 
-    // 5.7.2 •\¦ƒ‚[ƒh•Ê‚Ì®Œ`
+    // 5.7.2 è¡¨ç¤ºãƒ¢ãƒ¼ãƒ‰åˆ¥ã®æ•´å½¢
     static std::wstring BuildSimple(const std::wstring& after_excerpt);
     static std::wstring BuildTopBottom(const std::wstring& before_excerpt,
                                        const std::wstring& after_excerpt);
     static std::wstring BuildSideBySide(const std::wstring& before_excerpt,
                                         const std::wstring& after_excerpt);
 
-    // ‘I‘ğ‚³‚ê‚½‘Sˆê’v‰ÓŠ‚ğ‚Ü‚Æ‚ß‚Ä·‚µ‘Ö‚¦‚½‰¼‘zƒtƒ@ƒCƒ‹“à—e‚ğ¶¬
+    // é¸æŠã•ã‚ŒãŸå…¨ä¸€è‡´ç®‡æ‰€ã‚’ã¾ã¨ã‚ã¦å·®ã—æ›¿ãˆãŸä»®æƒ³ãƒ•ã‚¡ã‚¤ãƒ«å†…å®¹ã‚’ç”Ÿæˆ
     static std::wstring BuildAfterText(const std::wstring& text,
                                        std::vector<MatchResult>& matches,
                                        const std::wstring& block_for_all);
 
-    // ˆê’v‰ÓŠ‚²‚Æ‚ÉˆÙ‚È‚éƒuƒƒbƒN‚Å·‚µ‘Ö‚¦‚½‰¼‘zƒtƒ@ƒCƒ‹“à—e‚ğ¶¬iˆêŠ‡ˆ——pj
-    // s’†ˆê’vi—á: "    return old_function(x);"j‚Ís“ªƒzƒCƒXƒg‚ğs‚¢A
-    // #ifdef/#else/#endif ‚ğs“ª‚ÖˆÚ‚µ‚Ä‘OŒã‚ÌƒR[ƒh‚ğŠe•ªŠò‚Ö•¡»‚·‚éB
+    // ä¸€è‡´ç®‡æ‰€ã”ã¨ã«ç•°ãªã‚‹ãƒ–ãƒ­ãƒƒã‚¯ã§å·®ã—æ›¿ãˆãŸä»®æƒ³ãƒ•ã‚¡ã‚¤ãƒ«å†…å®¹ã‚’ç”Ÿæˆï¼ˆä¸€æ‹¬å‡¦ç†ç”¨ï¼‰
+    // è¡Œä¸­ä¸€è‡´ï¼ˆä¾‹: "    return old_function(x);"ï¼‰ã¯è¡Œé ­ãƒ›ã‚¤ã‚¹ãƒˆã‚’è¡Œã„ã€
+    // #ifdef/#else/#endif ã‚’è¡Œé ­ã¸ç§»ã—ã¦å‰å¾Œã®ã‚³ãƒ¼ãƒ‰ã‚’å„åˆ†å²ã¸è¤‡è£½ã™ã‚‹ã€‚
     static std::wstring BuildAfterTextEach(const std::wstring& text,
                                            const std::vector<MatchResult>& matches,
                                            const std::vector<std::wstring>& blocks);
 
-    // s’†ˆê’v‚ÌƒzƒCƒXƒg‚ª•K—v‚©is‘S‘Ì‚Ìˆê’v‚È‚ç falsej
+    // è¡Œä¸­ä¸€è‡´ã®ãƒ›ã‚¤ã‚¹ãƒˆãŒå¿…è¦ã‹ï¼ˆè¡Œå…¨ä½“ã®ä¸€è‡´ãªã‚‰ falseï¼‰
     static bool NeedsHoist(const std::wstring& text, const MatchResult& m,
                            size_t& out_line_start, size_t& out_line_end);
 
-    // ƒuƒƒbƒN‚ğƒzƒCƒXƒg‚µ‚½•¶š—ñ‚ğ•Ô‚·i\‘¢‚ªæ‚ê‚È‚¢ê‡‚ÍŒ³‚ÌƒuƒƒbƒN‚ğ•Ô‚·j
+    // ãƒ–ãƒ­ãƒƒã‚¯ã‚’ãƒ›ã‚¤ã‚¹ãƒˆã—ãŸæ–‡å­—åˆ—ã‚’è¿”ã™ï¼ˆæ§‹é€ ãŒå–ã‚Œãªã„å ´åˆã¯å…ƒã®ãƒ–ãƒ­ãƒƒã‚¯ã‚’è¿”ã™ï¼‰
     static std::wstring HoistBlock(const std::wstring& text, const MatchResult& m,
                                    const std::wstring& block,
                                    size_t line_start, size_t line_end);
 
-    // •ÏX‘O^•ÏXŒã‚Ì”²ˆi‘I‘ğ‰ÓŠ‘S‘Ì‚ğƒJƒo[‚·‚éj
+    // å¤‰æ›´å‰ï¼å¤‰æ›´å¾Œã®æŠœç²‹ï¼ˆé¸æŠç®‡æ‰€å…¨ä½“ã‚’ã‚«ãƒãƒ¼ã™ã‚‹ï¼‰
     static bool BuildExcerpts(const std::wstring& before_text,
                               const std::wstring& after_text,
                               const std::vector<MatchResult>& matches,

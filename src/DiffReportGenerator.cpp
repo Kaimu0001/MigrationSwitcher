@@ -1,6 +1,6 @@
-// =============================================================================
+ï»¿// =============================================================================
 // DiffReportGenerator.cpp
-// 12.3 HTML ƒŒƒ|[ƒg CSS •ûj‚É]‚Á‚½F•ª‚¯‚ğÀ‘•‚·‚é
+// 12.3 HTML ãƒ¬ãƒãƒ¼ãƒˆ CSS æ–¹é‡ã«å¾“ã£ãŸè‰²åˆ†ã‘ã‚’å®Ÿè£…ã™ã‚‹
 // =============================================================================
 #include "DiffReportGenerator.h"
 #include <cstdio>
@@ -41,7 +41,7 @@ std::wstring CommonCss()
     h += L"table.diff td{border:1px solid #e6e9ed;padding:2px 8px;white-space:pre-wrap;}\n";
     h += L"table.diff td.ln{width:64px;text-align:right;color:#6e7781;"
          L"background:#f6f8fa;user-select:none;}\n";
-    // 12.3 HTML ƒŒƒ|[ƒg CSS •ûj
+    // 12.3 HTML ãƒ¬ãƒãƒ¼ãƒˆ CSS æ–¹é‡
     h += L".added{background-color:#e6ffed;}\n";
     h += L".deleted{background-color:#ffeef0;}\n";
     h += L".changed{background-color:#fff5b1;}\n";
@@ -78,48 +78,48 @@ std::wstring FolderExtText(const std::vector<std::wstring>& exts)
         if (i) out += L" ";
         out += exts[i];
     }
-    return out.empty() ? std::wstring(L"(Šù’è)") : out;
+    return out.empty() ? std::wstring(L"(æ—¢å®š)") : out;
 }
 
 std::wstring StatusBadge(const std::wstring& status)
 {
-    if (status == L"Success")  return L"<span class=\"badge ok\">¬Œ÷</span>";
-    if (status == L"Failed")   return L"<span class=\"badge ng\">¸”s</span>";
-    if (status == L"Warning")  return L"<span class=\"badge warn\">Œx</span>";
-    if (status == L"Skipped")  return L"<span class=\"badge skip\">ƒXƒLƒbƒv</span>";
-    if (status == L"DryRun")   return L"<span class=\"badge skip\">ƒhƒ‰ƒCƒ‰ƒ“</span>";
-    if (status == L"‘ÎÛŠO")   return L"<span class=\"badge skip\">‘ÎÛŠO</span>";
-    if (status.empty())        return L"<span class=\"badge skip\">–¢Às</span>";
+    if (status == L"Success")  return L"<span class=\"badge ok\">æˆåŠŸ</span>";
+    if (status == L"Failed")   return L"<span class=\"badge ng\">å¤±æ•—</span>";
+    if (status == L"Warning")  return L"<span class=\"badge warn\">è­¦å‘Š</span>";
+    if (status == L"Skipped")  return L"<span class=\"badge skip\">ã‚¹ã‚­ãƒƒãƒ—</span>";
+    if (status == L"DryRun")   return L"<span class=\"badge skip\">ãƒ‰ãƒ©ã‚¤ãƒ©ãƒ³</span>";
+    if (status == L"å¯¾è±¡å¤–")   return L"<span class=\"badge skip\">å¯¾è±¡å¤–</span>";
+    if (status.empty())        return L"<span class=\"badge skip\">æœªå®Ÿè¡Œ</span>";
     return L"<span class=\"badge warn\">" + util::EscapeHtml(status) + L"</span>";
 }
 
 std::wstring MatchTypeText(MatchType t)
 {
     switch (t) {
-    case MatchType::Normalized: return L"³‹K‰»ˆê’v";
-    case MatchType::Similar:    return L"—Ş—ˆê’v";
-    default:                    return L"Š®‘Sˆê’v";
+    case MatchType::Normalized: return L"æ­£è¦åŒ–ä¸€è‡´";
+    case MatchType::Similar:    return L"é¡ä¼¼ä¸€è‡´";
+    default:                    return L"å®Œå…¨ä¸€è‡´";
     }
 }
 
 std::wstring MatchStatusText(MatchStatus s)
 {
     switch (s) {
-    case MatchStatus::Excluded: return L"œŠO";
-    case MatchStatus::Warning:  return L"Œx";
-    case MatchStatus::Error:    return L"ƒGƒ‰[";
-    default:                    return L"‘ÎÛ";
+    case MatchStatus::Excluded: return L"é™¤å¤–";
+    case MatchStatus::Warning:  return L"è­¦å‘Š";
+    case MatchStatus::Error:    return L"ã‚¨ãƒ©ãƒ¼";
+    default:                    return L"å¯¾è±¡";
     }
 }
 
-// ‘ÎÛ‰ÓŠˆê——‚Ì•\
+// å¯¾è±¡ç®‡æ‰€ä¸€è¦§ã®è¡¨
 std::wstring MatchTable(const std::vector<MatchResult>& matches, bool with_file)
 {
     std::wstring h;
     h += L"<table class=\"meta\">\n<tr>";
-    if (with_file) h += L"<th>ƒtƒ@ƒCƒ‹</th>";
-    h += L"<th>No</th><th>ŠJns</th><th>I—¹s</th><th>ŠJn—ñ</th>"
-         L"<th>ˆê’ví•Ê</th><th>ó‘Ô</th></tr>\n";
+    if (with_file) h += L"<th>ãƒ•ã‚¡ã‚¤ãƒ«</th>";
+    h += L"<th>No</th><th>é–‹å§‹è¡Œ</th><th>çµ‚äº†è¡Œ</th><th>é–‹å§‹åˆ—</th>"
+         L"<th>ä¸€è‡´ç¨®åˆ¥</th><th>çŠ¶æ…‹</th></tr>\n";
     for (size_t i = 0; i < matches.size(); ++i) {
         const MatchResult& m = matches[i];
         h += L"<tr>";
@@ -137,7 +137,7 @@ std::wstring MatchTable(const std::vector<MatchResult>& matches, bool with_file)
     return h;
 }
 
-// •ÏX‘OE•ÏXŒãE·•ªi1 ƒtƒ@ƒCƒ‹•ªj
+// å¤‰æ›´å‰ãƒ»å¤‰æ›´å¾Œãƒ»å·®åˆ†ï¼ˆ1 ãƒ•ã‚¡ã‚¤ãƒ«åˆ†ï¼‰
 std::wstring FileDiffBody(const std::vector<MatchResult>& matches,
                           const std::wstring& before_text,
                           const std::wstring& after_text)
@@ -163,13 +163,13 @@ std::wstring FileDiffBody(const std::vector<MatchResult>& matches,
     DiffEngine::ComputeLineDiff(b_ex, a_ex, diff);
 
     std::wstring h;
-    h += L"<h2>•ÏX‘O</h2>\n<pre class=\"code\">";
+    h += L"<h2>å¤‰æ›´å‰</h2>\n<pre class=\"code\">";
     h += DiffEngine::PreWithLineNumbers(b_ex, b_from);
     h += L"</pre>\n";
-    h += L"<h2>•ÏXŒã</h2>\n<pre class=\"code\">";
+    h += L"<h2>å¤‰æ›´å¾Œ</h2>\n<pre class=\"code\">";
     h += DiffEngine::PreWithLineNumbers(a_ex, a_from);
     h += L"</pre>\n";
-    h += L"<h2>·•ª•\¦</h2>\n<table class=\"diff\">\n";
+    h += L"<h2>å·®åˆ†è¡¨ç¤º</h2>\n<table class=\"diff\">\n";
     h += DiffEngine::RenderRows(diff);
     h += L"</table>\n";
     return h;
@@ -181,8 +181,8 @@ std::wstring WarningList(const std::vector<MatchResult>& matches)
     std::wstring h;
     for (size_t i = 0; i < matches.size(); ++i) {
         for (size_t w = 0; w < matches[i].warning_flags.size(); ++w) {
-            if (!any) { h += L"<h2>Œx</h2>\n<ul class=\"warnlist\">\n"; any = true; }
-            h += L"<li>No." + std::to_wstring(matches[i].match_id) + L" (s " +
+            if (!any) { h += L"<h2>è­¦å‘Š</h2>\n<ul class=\"warnlist\">\n"; any = true; }
+            h += L"<li>No." + std::to_wstring(matches[i].match_id) + L" (è¡Œ " +
                  std::to_wstring(matches[i].start_line) + L"): " +
                  util::EscapeHtml(matches[i].warning_flags[w]) + L"</li>\n";
         }
@@ -213,7 +213,7 @@ std::wstring DiffReportGenerator::BuildIntegratedReportPath(const std::wstring& 
 }
 
 // -----------------------------------------------------------------------------
-// 6.12 ’Pˆêƒtƒ@ƒCƒ‹”Å
+// 6.12 å˜ä¸€ãƒ•ã‚¡ã‚¤ãƒ«ç‰ˆ
 // -----------------------------------------------------------------------------
 std::wstring DiffReportGenerator::BuildHtml(const OperationContext& ctx,
                                             const std::vector<MatchResult>& matches,
@@ -225,35 +225,35 @@ std::wstring DiffReportGenerator::BuildHtml(const OperationContext& ctx,
     body += L"<h1>Migration Switch Report</h1>\n";
 
     body += L"<table class=\"meta\">\n";
-    body += L"<tr><th>Às“ú</th><td>" + util::EscapeHtml(ctx.started_at) + L"</td></tr>\n";
-    body += L"<tr><th>‘ÎÛƒtƒ@ƒCƒ‹</th><td>" + util::EscapeHtml(ctx.target_file_path) + L"</td></tr>\n";
-    body += L"<tr><th>ƒXƒCƒbƒ`–¼</th><td><code>" + util::EscapeHtml(ctx.switch_name) + L"</code></td></tr>\n";
-    body += L"<tr><th>Àsƒ‚[ƒh</th><td>" +
+    body += L"<tr><th>å®Ÿè¡Œæ—¥æ™‚</th><td>" + util::EscapeHtml(ctx.started_at) + L"</td></tr>\n";
+    body += L"<tr><th>å¯¾è±¡ãƒ•ã‚¡ã‚¤ãƒ«</th><td>" + util::EscapeHtml(ctx.target_file_path) + L"</td></tr>\n";
+    body += L"<tr><th>ã‚¹ã‚¤ãƒƒãƒå</th><td><code>" + util::EscapeHtml(ctx.switch_name) + L"</code></td></tr>\n";
+    body += L"<tr><th>å®Ÿè¡Œãƒ¢ãƒ¼ãƒ‰</th><td>" +
             std::wstring(ctx.execution_mode == ExecutionMode::DryRun
-                         ? L"ƒhƒ‰ƒCƒ‰ƒ“iƒtƒ@ƒCƒ‹–¢•ÏXj" : L"–{Às") + L"</td></tr>\n";
-    body += L"<tr><th>ƒqƒbƒgŒ”</th><td>" + std::to_wstring((int)matches.size()) + L" Œ</td></tr>\n";
-    body += L"<tr><th>’uŠ·Œ”</th><td>" + std::to_wstring(result.replaced_count) + L" Œ</td></tr>\n";
-    body += L"<tr><th>•¶šƒR[ƒh</th><td>" +
+                         ? L"ãƒ‰ãƒ©ã‚¤ãƒ©ãƒ³ï¼ˆãƒ•ã‚¡ã‚¤ãƒ«æœªå¤‰æ›´ï¼‰" : L"æœ¬å®Ÿè¡Œ") + L"</td></tr>\n";
+    body += L"<tr><th>ãƒ’ãƒƒãƒˆä»¶æ•°</th><td>" + std::to_wstring((int)matches.size()) + L" ä»¶</td></tr>\n";
+    body += L"<tr><th>ç½®æ›ä»¶æ•°</th><td>" + std::to_wstring(result.replaced_count) + L" ä»¶</td></tr>\n";
+    body += L"<tr><th>æ–‡å­—ã‚³ãƒ¼ãƒ‰</th><td>" +
             std::wstring(EncodingDetector::EncodingName(ctx.encoding)) + L"</td></tr>\n";
-    body += L"<tr><th>‰üsƒR[ƒh</th><td>" +
+    body += L"<tr><th>æ”¹è¡Œã‚³ãƒ¼ãƒ‰</th><td>" +
             std::wstring(ctx.newline == NewlineKind::CRLF ? L"CRLF" :
                          (ctx.newline == NewlineKind::CR ? L"CR" : L"LF")) + L"</td></tr>\n";
     if (!result.backup_file_path.empty())
-        body += L"<tr><th>ƒoƒbƒNƒAƒbƒv</th><td>" +
+        body += L"<tr><th>ãƒãƒƒã‚¯ã‚¢ãƒƒãƒ—</th><td>" +
                 util::EscapeHtml(result.backup_file_path) + L"</td></tr>\n";
     if (result.switch_header_updated && !result.switch_header_path.empty()) {
-        body += L"<tr><th>ƒXƒCƒbƒ`’è‹`ƒwƒbƒ_</th><td>" +
+        body += L"<tr><th>ã‚¹ã‚¤ãƒƒãƒå®šç¾©ãƒ˜ãƒƒãƒ€</th><td>" +
                 util::EscapeHtml(result.switch_header_path) +
-                (result.switch_header_added ? L"iƒXƒCƒbƒ`‚ğV‹K“o˜^j"
-                                            : L"iŠù‘¶ƒXƒCƒbƒ`‚ğXVj") + L"</td></tr>\n";
+                (result.switch_header_added ? L"ï¼ˆã‚¹ã‚¤ãƒƒãƒã‚’æ–°è¦ç™»éŒ²ï¼‰"
+                                            : L"ï¼ˆæ—¢å­˜ã‚¹ã‚¤ãƒƒãƒã‚’æ›´æ–°ï¼‰") + L"</td></tr>\n";
     }
     if (result.include_added)
-        body += L"<tr><th>#include ’Ç‰Á</th><td>" +
-                std::to_wstring(result.include_line) + L" s–Ú‚É’Ç‰Á</td></tr>\n";
-    body += L"<tr><th>Œ‹‰Ê</th><td>" + StatusBadge(result.status) + L"</td></tr>\n";
+        body += L"<tr><th>#include è¿½åŠ </th><td>" +
+                std::to_wstring(result.include_line) + L" è¡Œç›®ã«è¿½åŠ </td></tr>\n";
+    body += L"<tr><th>çµæœ</th><td>" + StatusBadge(result.status) + L"</td></tr>\n";
     body += L"</table>\n";
 
-    body += L"<h2>‘ÎÛ‰ÓŠ</h2>\n";
+    body += L"<h2>å¯¾è±¡ç®‡æ‰€</h2>\n";
     body += MatchTable(matches, false);
     body += FileDiffBody(matches, before_text, after_text);
     if (result.warning_count > 0) body += WarningList(matches);
@@ -264,7 +264,7 @@ std::wstring DiffReportGenerator::BuildHtml(const OperationContext& ctx,
 }
 
 // -----------------------------------------------------------------------------
-// 17.2.2 è‡9 “‡ƒŒƒ|[ƒg
+// 17.2.2 æ‰‹é †9 çµ±åˆãƒ¬ãƒãƒ¼ãƒˆ
 // -----------------------------------------------------------------------------
 bool DiffReportGenerator::GenerateIntegrated(const std::wstring& report_path,
                                              const OperationContext& ctx,
@@ -282,44 +282,44 @@ bool DiffReportGenerator::GenerateIntegrated(const std::wstring& report_path,
     }
 
     std::wstring body;
-    body += L"<h1>Migration Switch Report (ˆêŠ‡ˆ—)</h1>\n";
+    body += L"<h1>Migration Switch Report (ä¸€æ‹¬å‡¦ç†)</h1>\n";
 
     body += L"<table class=\"meta\">\n";
-    body += L"<tr><th>Às“ú</th><td>" + util::EscapeHtml(ctx.started_at) + L"</td></tr>\n";
-    body += L"<tr><th>‘ÎÛƒtƒHƒ‹ƒ_</th><td>" + util::EscapeHtml(batch.folder) + L"</td></tr>\n";
-    body += L"<tr><th>Šg’£qƒtƒBƒ‹ƒ^</th><td>" +
+    body += L"<tr><th>å®Ÿè¡Œæ—¥æ™‚</th><td>" + util::EscapeHtml(ctx.started_at) + L"</td></tr>\n";
+    body += L"<tr><th>å¯¾è±¡ãƒ•ã‚©ãƒ«ãƒ€</th><td>" + util::EscapeHtml(batch.folder) + L"</td></tr>\n";
+    body += L"<tr><th>æ‹¡å¼µå­ãƒ•ã‚£ãƒ«ã‚¿</th><td>" +
             util::EscapeHtml(FolderExtText(ctx.extension_filter)) + L"</td></tr>\n";
-    body += L"<tr><th>ƒTƒuƒtƒHƒ‹ƒ_</th><td>" +
-            std::wstring(ctx.include_subdirs ? L"ŠÜ‚ß‚é" : L"ŠÜ‚ß‚È‚¢") + L"</td></tr>\n";
-    body += L"<tr><th>ƒXƒCƒbƒ`–¼</th><td><code>" + util::EscapeHtml(ctx.switch_name) + L"</code></td></tr>\n";
-    body += L"<tr><th>Àsƒ‚[ƒh</th><td>" +
+    body += L"<tr><th>ã‚µãƒ–ãƒ•ã‚©ãƒ«ãƒ€</th><td>" +
+            std::wstring(ctx.include_subdirs ? L"å«ã‚ã‚‹" : L"å«ã‚ãªã„") + L"</td></tr>\n";
+    body += L"<tr><th>ã‚¹ã‚¤ãƒƒãƒå</th><td><code>" + util::EscapeHtml(ctx.switch_name) + L"</code></td></tr>\n";
+    body += L"<tr><th>å®Ÿè¡Œãƒ¢ãƒ¼ãƒ‰</th><td>" +
             std::wstring(ctx.execution_mode == ExecutionMode::DryRun
-                         ? L"ƒhƒ‰ƒCƒ‰ƒ“iƒtƒ@ƒCƒ‹–¢•ÏXj" : L"–{Às") + L"</td></tr>\n";
-    body += L"<tr><th>‘ÎÛƒtƒ@ƒCƒ‹”</th><td>" +
-            std::to_wstring((int)ctx.target_files.size()) + L" ƒtƒ@ƒCƒ‹</td></tr>\n";
-    body += L"<tr><th>ƒqƒbƒgƒtƒ@ƒCƒ‹”</th><td>" +
-            std::to_wstring((int)sections.size()) + L" ƒtƒ@ƒCƒ‹</td></tr>\n";
-    body += L"<tr><th>ƒqƒbƒgŒ”</th><td>" + std::to_wstring(total_matches) + L" Œ</td></tr>\n";
-    body += L"<tr><th>’uŠ·Œ”</th><td>" + std::to_wstring(total_replaced) + L" Œ</td></tr>\n";
+                         ? L"ãƒ‰ãƒ©ã‚¤ãƒ©ãƒ³ï¼ˆãƒ•ã‚¡ã‚¤ãƒ«æœªå¤‰æ›´ï¼‰" : L"æœ¬å®Ÿè¡Œ") + L"</td></tr>\n";
+    body += L"<tr><th>å¯¾è±¡ãƒ•ã‚¡ã‚¤ãƒ«æ•°</th><td>" +
+            std::to_wstring((int)ctx.target_files.size()) + L" ãƒ•ã‚¡ã‚¤ãƒ«</td></tr>\n";
+    body += L"<tr><th>ãƒ’ãƒƒãƒˆãƒ•ã‚¡ã‚¤ãƒ«æ•°</th><td>" +
+            std::to_wstring((int)sections.size()) + L" ãƒ•ã‚¡ã‚¤ãƒ«</td></tr>\n";
+    body += L"<tr><th>ãƒ’ãƒƒãƒˆä»¶æ•°</th><td>" + std::to_wstring(total_matches) + L" ä»¶</td></tr>\n";
+    body += L"<tr><th>ç½®æ›ä»¶æ•°</th><td>" + std::to_wstring(total_replaced) + L" ä»¶</td></tr>\n";
     if (batch.switch_header_updated && !batch.switch_header_path.empty()) {
-        body += L"<tr><th>ƒXƒCƒbƒ`’è‹`ƒwƒbƒ_</th><td>" +
+        body += L"<tr><th>ã‚¹ã‚¤ãƒƒãƒå®šç¾©ãƒ˜ãƒƒãƒ€</th><td>" +
                 util::EscapeHtml(batch.switch_header_path) +
-                (batch.switch_header_added ? L"iƒXƒCƒbƒ`‚ğV‹K“o˜^j"
-                                           : L"iŠù‘¶ƒXƒCƒbƒ`‚ğXVj") + L"</td></tr>\n";
+                (batch.switch_header_added ? L"ï¼ˆã‚¹ã‚¤ãƒƒãƒã‚’æ–°è¦ç™»éŒ²ï¼‰"
+                                           : L"ï¼ˆæ—¢å­˜ã‚¹ã‚¤ãƒƒãƒã‚’æ›´æ–°ï¼‰") + L"</td></tr>\n";
     }
-    body += L"<tr><th>¬Œ÷ / ¸”s / ƒXƒLƒbƒv</th><td>" +
+    body += L"<tr><th>æˆåŠŸ / å¤±æ•— / ã‚¹ã‚­ãƒƒãƒ—</th><td>" +
             std::to_wstring(batch.replaced_count > 0 ? batch.replaced_count : 0) +
-            L" Œ / " + std::to_wstring(batch.error_count) + L" Œ / " +
-            std::to_wstring(batch.skipped_count) + L" Œ</td></tr>\n";
-    body += L"<tr><th>Œ‹‰Ê</th><td>" + StatusBadge(batch.status) + L"</td></tr>\n";
+            L" ä»¶ / " + std::to_wstring(batch.error_count) + L" ä»¶ / " +
+            std::to_wstring(batch.skipped_count) + L" ä»¶</td></tr>\n";
+    body += L"<tr><th>çµæœ</th><td>" + StatusBadge(batch.status) + L"</td></tr>\n";
     body += L"</table>\n";
 
-    // ---- ƒtƒ@ƒCƒ‹•ÊƒTƒ}ƒŠ ----
-    body += L"<h2>ƒtƒ@ƒCƒ‹•ÊƒTƒ}ƒŠ</h2>\n";
+    // ---- ãƒ•ã‚¡ã‚¤ãƒ«åˆ¥ã‚µãƒãƒª ----
+    body += L"<h2>ãƒ•ã‚¡ã‚¤ãƒ«åˆ¥ã‚µãƒãƒª</h2>\n";
     body += L"<table class=\"meta\">\n";
-    body += L"<tr><th>No</th><th>ƒtƒ@ƒCƒ‹</th><th>ƒqƒbƒg</th><th>’uŠ·</th>"
-            L"<th>#include</th><th>•¶šƒR[ƒh</th><th>‰üs</th>"
-            L"<th>ó‘Ô</th><th>ƒoƒbƒNƒAƒbƒv</th></tr>\n";
+    body += L"<tr><th>No</th><th>ãƒ•ã‚¡ã‚¤ãƒ«</th><th>ãƒ’ãƒƒãƒˆ</th><th>ç½®æ›</th>"
+            L"<th>#include</th><th>æ–‡å­—ã‚³ãƒ¼ãƒ‰</th><th>æ”¹è¡Œ</th>"
+            L"<th>çŠ¶æ…‹</th><th>ãƒãƒƒã‚¯ã‚¢ãƒƒãƒ—</th></tr>\n";
     for (size_t i = 0; i < sections.size(); ++i) {
         const ReportFileSection& s = sections[i];
         body += L"<tr><td>" + std::to_wstring((int)i + 1) + L"</td>";
@@ -327,8 +327,8 @@ bool DiffReportGenerator::GenerateIntegrated(const std::wstring& report_path,
         body += L"<td>" + std::to_wstring((int)s.matches.size()) + L"</td>";
         body += L"<td>" + std::to_wstring(s.result.replaced_count) + L"</td>";
         body += L"<td>" + (s.include_added
-                           ? (L"’Ç‰Á (" + std::to_wstring(s.include_line) + L" s–Ú)")
-                           : std::wstring(L"Šù‘¶")) + L"</td>";
+                           ? (L"è¿½åŠ  (" + std::to_wstring(s.include_line) + L" è¡Œç›®)")
+                           : std::wstring(L"æ—¢å­˜")) + L"</td>";
         body += L"<td>" + util::EscapeHtml(s.encoding_name) + L"</td>";
         body += L"<td>" + util::EscapeHtml(s.newline_name) + L"</td>";
         body += L"<td>" + StatusBadge(s.result.status);
@@ -341,29 +341,29 @@ bool DiffReportGenerator::GenerateIntegrated(const std::wstring& report_path,
     }
     body += L"</table>\n";
 
-    // ---- ƒtƒ@ƒCƒ‹•ÊÚ× ----
+    // ---- ãƒ•ã‚¡ã‚¤ãƒ«åˆ¥è©³ç´° ----
     for (size_t i = 0; i < sections.size(); ++i) {
         const ReportFileSection& s = sections[i];
-        body += L"<h3>ƒtƒ@ƒCƒ‹ " + std::to_wstring((int)i + 1) + L": " +
+        body += L"<h3>ãƒ•ã‚¡ã‚¤ãƒ« " + std::to_wstring((int)i + 1) + L": " +
                 util::EscapeHtml(s.file_path) + L"</h3>\n";
 
         body += L"<table class=\"meta\">\n";
-        body += L"<tr><th>ƒqƒbƒgŒ”</th><td>" + std::to_wstring((int)s.matches.size()) + L" Œ</td></tr>\n";
-        body += L"<tr><th>’uŠ·Œ”</th><td>" + std::to_wstring(s.result.replaced_count) + L" Œ</td></tr>\n";
-        body += L"<tr><th>•¶šƒR[ƒh</th><td>" + util::EscapeHtml(s.encoding_name) + L"</td></tr>\n";
-        body += L"<tr><th>‰üsƒR[ƒh</th><td>" + util::EscapeHtml(s.newline_name) + L"</td></tr>\n";
+        body += L"<tr><th>ãƒ’ãƒƒãƒˆä»¶æ•°</th><td>" + std::to_wstring((int)s.matches.size()) + L" ä»¶</td></tr>\n";
+        body += L"<tr><th>ç½®æ›ä»¶æ•°</th><td>" + std::to_wstring(s.result.replaced_count) + L" ä»¶</td></tr>\n";
+        body += L"<tr><th>æ–‡å­—ã‚³ãƒ¼ãƒ‰</th><td>" + util::EscapeHtml(s.encoding_name) + L"</td></tr>\n";
+        body += L"<tr><th>æ”¹è¡Œã‚³ãƒ¼ãƒ‰</th><td>" + util::EscapeHtml(s.newline_name) + L"</td></tr>\n";
         if (s.include_added)
-            body += L"<tr><th>#include ’Ç‰Á</th><td>" +
-                    std::to_wstring(s.include_line) + L" s–Ú‚É’Ç‰Á</td></tr>\n";
+            body += L"<tr><th>#include è¿½åŠ </th><td>" +
+                    std::to_wstring(s.include_line) + L" è¡Œç›®ã«è¿½åŠ </td></tr>\n";
         if (!s.result.backup_file_path.empty())
-            body += L"<tr><th>ƒoƒbƒNƒAƒbƒv</th><td>" +
+            body += L"<tr><th>ãƒãƒƒã‚¯ã‚¢ãƒƒãƒ—</th><td>" +
                     util::EscapeHtml(s.result.backup_file_path) + L"</td></tr>\n";
-        body += L"<tr><th>ó‘Ô</th><td>" + StatusBadge(s.result.status) + L"</td></tr>\n";
+        body += L"<tr><th>çŠ¶æ…‹</th><td>" + StatusBadge(s.result.status) + L"</td></tr>\n";
         if (!s.result.error.empty())
-            body += L"<tr><th>ƒGƒ‰[</th><td>" + util::EscapeHtml(s.result.error) + L"</td></tr>\n";
+            body += L"<tr><th>ã‚¨ãƒ©ãƒ¼</th><td>" + util::EscapeHtml(s.result.error) + L"</td></tr>\n";
         body += L"</table>\n";
 
-        body += L"<h2>‘ÎÛ‰ÓŠ</h2>\n";
+        body += L"<h2>å¯¾è±¡ç®‡æ‰€</h2>\n";
         body += MatchTable(s.matches, false);
         body += FileDiffBody(s.matches, s.before_text, s.after_text);
         if (s.result.warning_count > 0) body += WarningList(s.matches);
@@ -372,11 +372,11 @@ bool DiffReportGenerator::GenerateIntegrated(const std::wstring& report_path,
     body += L"<p class=\"foot\">Generated by CopyMigration Switcher (Migration Switch Tool) - "
             L"Integrated Migration Switch Report</p>\n";
 
-    std::wstring html = WrapHtml(L"Migration Switch Report (ˆêŠ‡ˆ—)", body);
+    std::wstring html = WrapHtml(L"Migration Switch Report (ä¸€æ‹¬å‡¦ç†)", body);
 
     std::wstring dir = util::GetDirectoryOf(report_path);
     if (!dir.empty() && !util::EnsureDirectory(dir)) {
-        out_error = L"ƒŒƒ|[ƒgo—ÍƒtƒHƒ‹ƒ_‚ğì¬‚Å‚«‚Ü‚¹‚ñ: " + dir;
+        out_error = L"ãƒ¬ãƒãƒ¼ãƒˆå‡ºåŠ›ãƒ•ã‚©ãƒ«ãƒ€ã‚’ä½œæˆã§ãã¾ã›ã‚“: " + dir;
         return false;
     }
 
@@ -390,7 +390,7 @@ bool DiffReportGenerator::GenerateIntegrated(const std::wstring& report_path,
     HANDLE h = ::CreateFileW(report_path.c_str(), GENERIC_WRITE, 0, nullptr,
                              CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, nullptr);
     if (h == INVALID_HANDLE_VALUE) {
-        out_error = L"ƒŒƒ|[ƒgƒtƒ@ƒCƒ‹‚ğì¬‚Å‚«‚Ü‚¹‚ñ: " +
+        out_error = L"ãƒ¬ãƒãƒ¼ãƒˆãƒ•ã‚¡ã‚¤ãƒ«ã‚’ä½œæˆã§ãã¾ã›ã‚“: " +
                     FileManager::LastErrorMessage(::GetLastError());
         return false;
     }
@@ -398,7 +398,7 @@ bool DiffReportGenerator::GenerateIntegrated(const std::wstring& report_path,
     BOOL ok = ::WriteFile(h, with_bom.data(), (DWORD)with_bom.size(), &written, nullptr);
     ::CloseHandle(h);
     if (!ok || written != (DWORD)with_bom.size()) {
-        out_error = L"ƒŒƒ|[ƒg‚Ì‘‚«‚İ‚É¸”s‚µ‚Ü‚µ‚½B";
+        out_error = L"ãƒ¬ãƒãƒ¼ãƒˆã®æ›¸ãè¾¼ã¿ã«å¤±æ•—ã—ã¾ã—ãŸã€‚";
         return false;
     }
     return true;
@@ -418,7 +418,7 @@ bool DiffReportGenerator::Generate(const std::wstring& report_path,
 
     std::wstring dir = util::GetDirectoryOf(report_path);
     if (!dir.empty() && !util::EnsureDirectory(dir)) {
-        out_error = L"ƒŒƒ|[ƒgo—ÍƒtƒHƒ‹ƒ_‚ğì¬‚Å‚«‚Ü‚¹‚ñ: " + dir;
+        out_error = L"ãƒ¬ãƒãƒ¼ãƒˆå‡ºåŠ›ãƒ•ã‚©ãƒ«ãƒ€ã‚’ä½œæˆã§ãã¾ã›ã‚“: " + dir;
         return false;
     }
 
@@ -432,7 +432,7 @@ bool DiffReportGenerator::Generate(const std::wstring& report_path,
     HANDLE h = ::CreateFileW(report_path.c_str(), GENERIC_WRITE, 0, nullptr,
                              CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, nullptr);
     if (h == INVALID_HANDLE_VALUE) {
-        out_error = L"ƒŒƒ|[ƒgƒtƒ@ƒCƒ‹‚ğì¬‚Å‚«‚Ü‚¹‚ñ: " +
+        out_error = L"ãƒ¬ãƒãƒ¼ãƒˆãƒ•ã‚¡ã‚¤ãƒ«ã‚’ä½œæˆã§ãã¾ã›ã‚“: " +
                     FileManager::LastErrorMessage(::GetLastError());
         return false;
     }
@@ -440,7 +440,7 @@ bool DiffReportGenerator::Generate(const std::wstring& report_path,
     BOOL ok = ::WriteFile(h, with_bom.data(), (DWORD)with_bom.size(), &written, nullptr);
     ::CloseHandle(h);
     if (!ok || written != (DWORD)with_bom.size()) {
-        out_error = L"ƒŒƒ|[ƒg‚Ì‘‚«‚İ‚É¸”s‚µ‚Ü‚µ‚½B";
+        out_error = L"ãƒ¬ãƒãƒ¼ãƒˆã®æ›¸ãè¾¼ã¿ã«å¤±æ•—ã—ã¾ã—ãŸã€‚";
         return false;
     }
     return true;
@@ -448,7 +448,7 @@ bool DiffReportGenerator::Generate(const std::wstring& report_path,
 
 
 // =============================================================================
-// Œã‘±”Å: Markdown / JSON ƒŒƒ|[ƒg
+// å¾Œç¶šç‰ˆ: Markdown / JSON ãƒ¬ãƒãƒ¼ãƒˆ
 // =============================================================================
 std::wstring DiffReportGenerator::JsonEscape(const std::wstring& s)
 {
@@ -485,12 +485,12 @@ std::wstring DiffReportGenerator::MarkdownCell(const std::wstring& s)
 std::wstring DiffReportGenerator::StyleName(SwitchStyle st)
 {
     switch (st) {
-    case SwitchStyle::IfdefNewFirst:    return L"•û®A: #ifdef VƒR[ƒh—Dæ";
-    case SwitchStyle::IfndefOldFirst:   return L"•û®B: #ifndef ‹ŒƒR[ƒh—Dæ";
-    case SwitchStyle::IfdefWithComments:return L"•û®C: ƒRƒƒ“ƒg•t‚«•û®";
-    case SwitchStyle::BlockCommentStyle:return L"•û®D: ŠJnI—¹ƒRƒƒ“ƒg•û®";
-    case SwitchStyle::CustomTemplate:   return L"•û®: ƒ†[ƒU[ƒeƒ“ƒvƒŒ[ƒg";
-    default: return L"(•s–¾)";
+    case SwitchStyle::IfdefNewFirst:    return L"æ–¹å¼A: #ifdef æ–°ã‚³ãƒ¼ãƒ‰å„ªå…ˆ";
+    case SwitchStyle::IfndefOldFirst:   return L"æ–¹å¼B: #ifndef æ—§ã‚³ãƒ¼ãƒ‰å„ªå…ˆ";
+    case SwitchStyle::IfdefWithComments:return L"æ–¹å¼C: ã‚³ãƒ¡ãƒ³ãƒˆä»˜ãæ–¹å¼";
+    case SwitchStyle::BlockCommentStyle:return L"æ–¹å¼D: é–‹å§‹çµ‚äº†ã‚³ãƒ¡ãƒ³ãƒˆæ–¹å¼";
+    case SwitchStyle::CustomTemplate:   return L"æ–¹å¼: ãƒ¦ãƒ¼ã‚¶ãƒ¼ãƒ†ãƒ³ãƒ—ãƒ¬ãƒ¼ãƒˆ";
+    default: return L"(ä¸æ˜)";
     }
 }
 
@@ -500,7 +500,7 @@ std::wstring DiffReportGenerator::NewlineName(NewlineKind nl)
     case NewlineKind::LF:   return L"LF";
     case NewlineKind::CRLF: return L"CRLF";
     case NewlineKind::CR:   return L"CR";
-    default: return L"(•s–¾)";
+    default: return L"(ä¸æ˜)";
     }
 }
 
@@ -520,7 +520,7 @@ static bool WriteReportFile(const std::wstring& path, const std::wstring& text,
     out_error.clear();
     std::wstring dir = util::GetDirectoryOf(path);
     if (!dir.empty() && !util::EnsureDirectory(dir)) {
-        out_error = L"o—ÍæƒtƒHƒ‹ƒ_‚ğì¬‚Å‚«‚Ü‚¹‚ñ: " + dir;
+        out_error = L"å‡ºåŠ›å…ˆãƒ•ã‚©ãƒ«ãƒ€ã‚’ä½œæˆã§ãã¾ã›ã‚“: " + dir;
         return false;
     }
     return FileManager::WriteTextAtomic(path, text,
@@ -535,39 +535,39 @@ std::wstring DiffReportGenerator::BuildMarkdown(const OperationContext& ctx,
                                                 const ReplaceResult& result)
 {
     std::wstring md;
-    md += L"# •ÏX·•ªƒŒƒ|[ƒg\n\n";
-    md += L"| €–Ú | “à—e |\n|---|---|\n";
-    md += L"| ‘€ì ID | " + MarkdownCell(ctx.operation_id) + L" |\n";
-    md += L"| ‘ÎÛƒtƒ@ƒCƒ‹ | `" + MarkdownCell(ctx.target_file_path) + L"` |\n";
-    md += L"| ƒXƒCƒbƒ`–¼ | `" + MarkdownCell(ctx.switch_name) + L"` |\n";
-    md += L"| ’uŠ·•û® | " + StyleName(ctx.switch_style) + L" |\n";
-    md += L"| •¶šƒR[ƒh | " + std::wstring(EncodingDetector::EncodingName(ctx.encoding)) + L" |\n";
-    md += L"| ‰üsƒR[ƒh | " + NewlineName(ctx.newline) + L" |\n";
-    md += L"| Às“ú | " + MarkdownCell(ctx.started_at) + L" |\n";
-    md += L"| ÀsŒ‹‰Ê | " + (result.status.empty() ? std::wstring(L"(–¢Às)") : result.status) + L" |\n";
-    md += L"| ’uŠ·Œ” | " + std::to_wstring(result.replaced_count) + L" Œ |\n";
+    md += L"# å¤‰æ›´å·®åˆ†ãƒ¬ãƒãƒ¼ãƒˆ\n\n";
+    md += L"| é …ç›® | å†…å®¹ |\n|---|---|\n";
+    md += L"| æ“ä½œ ID | " + MarkdownCell(ctx.operation_id) + L" |\n";
+    md += L"| å¯¾è±¡ãƒ•ã‚¡ã‚¤ãƒ« | `" + MarkdownCell(ctx.target_file_path) + L"` |\n";
+    md += L"| ã‚¹ã‚¤ãƒƒãƒå | `" + MarkdownCell(ctx.switch_name) + L"` |\n";
+    md += L"| ç½®æ›æ–¹å¼ | " + StyleName(ctx.switch_style) + L" |\n";
+    md += L"| æ–‡å­—ã‚³ãƒ¼ãƒ‰ | " + std::wstring(EncodingDetector::EncodingName(ctx.encoding)) + L" |\n";
+    md += L"| æ”¹è¡Œã‚³ãƒ¼ãƒ‰ | " + NewlineName(ctx.newline) + L" |\n";
+    md += L"| å®Ÿè¡Œæ—¥æ™‚ | " + MarkdownCell(ctx.started_at) + L" |\n";
+    md += L"| å®Ÿè¡Œçµæœ | " + (result.status.empty() ? std::wstring(L"(æœªå®Ÿè¡Œ)") : result.status) + L" |\n";
+    md += L"| ç½®æ›ä»¶æ•° | " + std::to_wstring(result.replaced_count) + L" ä»¶ |\n";
     if (!result.switch_header_path.empty()) {
-        md += L"| ƒXƒCƒbƒ`’è‹`ƒwƒbƒ_ | `" + MarkdownCell(result.switch_header_path) + L"`";
-        md += result.switch_header_updated ? L"iXVj" : L"";
+        md += L"| ã‚¹ã‚¤ãƒƒãƒå®šç¾©ãƒ˜ãƒƒãƒ€ | `" + MarkdownCell(result.switch_header_path) + L"`";
+        md += result.switch_header_updated ? L"ï¼ˆæ›´æ–°ï¼‰" : L"";
         md += L" |\n";
     }
-    md += L"\n## ˆê’v‰ÓŠ\n\n";
+    md += L"\n## ä¸€è‡´ç®‡æ‰€\n\n";
     if (matches.empty()) {
-        md += L"iˆê’v‰ÓŠ‚È‚µj\n";
+        md += L"ï¼ˆä¸€è‡´ç®‡æ‰€ãªã—ï¼‰\n";
     } else {
-        md += L"| No | ‘I‘ğ | s | —ñ | ˆê’ví•Ê | ˆê’v—¦ | ó‘Ô | ˆê’v•¶š—ñ |\n";
+        md += L"| No | é¸æŠ | è¡Œ | åˆ— | ä¸€è‡´ç¨®åˆ¥ | ä¸€è‡´ç‡ | çŠ¶æ…‹ | ä¸€è‡´æ–‡å­—åˆ— |\n";
         md += L"|---:|:---:|---:|---:|---|---:|---|---|\n";
         for (size_t i = 0; i < matches.size(); ++i) {
             const MatchResult& m = matches[i];
-            std::wstring type = L"Š®‘Sˆê’v";
-            if (m.match_type == MatchType::Normalized) type = L"³‹K‰»ˆê’v";
-            else if (m.match_type == MatchType::Similar) type = L"—Ş—ˆê’v";
-            std::wstring st = L"‘ÎÛ";
-            if (m.status == MatchStatus::Excluded) st = L"œŠO";
-            else if (m.status == MatchStatus::Warning) st = L"Œx";
-            else if (m.status == MatchStatus::Error) st = L"ƒGƒ‰[";
+            std::wstring type = L"å®Œå…¨ä¸€è‡´";
+            if (m.match_type == MatchType::Normalized) type = L"æ­£è¦åŒ–ä¸€è‡´";
+            else if (m.match_type == MatchType::Similar) type = L"é¡ä¼¼ä¸€è‡´";
+            std::wstring st = L"å¯¾è±¡";
+            if (m.status == MatchStatus::Excluded) st = L"é™¤å¤–";
+            else if (m.status == MatchStatus::Warning) st = L"è­¦å‘Š";
+            else if (m.status == MatchStatus::Error) st = L"ã‚¨ãƒ©ãƒ¼";
             md += L"| " + std::to_wstring(m.match_id) +
-                  L" | " + (m.selected ? L"›" : L"") +
+                  L" | " + (m.selected ? L"â—‹" : L"") +
                   L" | " + std::to_wstring(m.start_line) +
                   L" | " + std::to_wstring(m.start_column) +
                   L" | " + type +
@@ -576,8 +576,8 @@ std::wstring DiffReportGenerator::BuildMarkdown(const OperationContext& ctx,
                   L" | `" + MarkdownCell(m.matched_text) + L"` |\n";
         }
     }
-    md += L"\n## •ÏŠ·‘O\n\n```c\n" + before_text + L"\n```\n\n";
-    md += L"## •ÏŠ·Œã\n\n```c\n" + after_text + L"\n```\n";
+    md += L"\n## å¤‰æ›å‰\n\n```c\n" + before_text + L"\n```\n\n";
+    md += L"## å¤‰æ›å¾Œ\n\n```c\n" + after_text + L"\n```\n";
     return md;
 }
 
@@ -663,19 +663,19 @@ std::wstring DiffReportGenerator::BuildIntegratedMarkdown(const OperationContext
                                                           const BatchExecuteResult& batch)
 {
     std::wstring md;
-    md += L"# ˆêŠ‡ˆ— •ÏX·•ªƒŒƒ|[ƒg\n\n";
-    md += L"| €–Ú | “à—e |\n|---|---|\n";
-    md += L"| ‘€ì ID | " + MarkdownCell(batch.operation_id) + L" |\n";
-    md += L"| ‘ÎÛƒtƒHƒ‹ƒ_ | `" + MarkdownCell(batch.folder) + L"` |\n";
-    md += L"| ƒXƒCƒbƒ`–¼ | `" + MarkdownCell(ctx.switch_name) + L"` |\n";
-    md += L"| Às“ú | " + MarkdownCell(batch.executed_at) + L" |\n";
-    md += L"| Œ‹‰Ê | " + batch.status + L" |\n";
-    md += L"| ‘ÎÛƒtƒ@ƒCƒ‹ | " + std::to_wstring((int)sections.size()) + L" Œ |\n";
-    md += L"| ’uŠ·Œ” | " + std::to_wstring(batch.replaced_count) + L" Œ |\n";
-    md += L"| ƒGƒ‰[ | " + std::to_wstring(batch.error_count) + L" Œ |\n";
-    md += L"| ƒXƒLƒbƒv | " + std::to_wstring(batch.skipped_count) + L" Œ |\n\n";
-    md += L"## ƒtƒ@ƒCƒ‹•ÊŒ‹‰Ê\n\n";
-    md += L"| No | ƒtƒ@ƒCƒ‹ | ’uŠ· | ó‘Ô | ƒGƒ‰[ |\n|---:|---|---:|---|---|\n";
+    md += L"# ä¸€æ‹¬å‡¦ç† å¤‰æ›´å·®åˆ†ãƒ¬ãƒãƒ¼ãƒˆ\n\n";
+    md += L"| é …ç›® | å†…å®¹ |\n|---|---|\n";
+    md += L"| æ“ä½œ ID | " + MarkdownCell(batch.operation_id) + L" |\n";
+    md += L"| å¯¾è±¡ãƒ•ã‚©ãƒ«ãƒ€ | `" + MarkdownCell(batch.folder) + L"` |\n";
+    md += L"| ã‚¹ã‚¤ãƒƒãƒå | `" + MarkdownCell(ctx.switch_name) + L"` |\n";
+    md += L"| å®Ÿè¡Œæ—¥æ™‚ | " + MarkdownCell(batch.executed_at) + L" |\n";
+    md += L"| çµæœ | " + batch.status + L" |\n";
+    md += L"| å¯¾è±¡ãƒ•ã‚¡ã‚¤ãƒ« | " + std::to_wstring((int)sections.size()) + L" ä»¶ |\n";
+    md += L"| ç½®æ›ä»¶æ•° | " + std::to_wstring(batch.replaced_count) + L" ä»¶ |\n";
+    md += L"| ã‚¨ãƒ©ãƒ¼ | " + std::to_wstring(batch.error_count) + L" ä»¶ |\n";
+    md += L"| ã‚¹ã‚­ãƒƒãƒ— | " + std::to_wstring(batch.skipped_count) + L" ä»¶ |\n\n";
+    md += L"## ãƒ•ã‚¡ã‚¤ãƒ«åˆ¥çµæœ\n\n";
+    md += L"| No | ãƒ•ã‚¡ã‚¤ãƒ« | ç½®æ› | çŠ¶æ…‹ | ã‚¨ãƒ©ãƒ¼ |\n|---:|---|---:|---|---|\n";
     for (size_t i = 0; i < sections.size(); ++i) {
         const ReportFileSection& s = sections[i];
         md += L"| " + std::to_wstring((int)i + 1) +
@@ -688,12 +688,12 @@ std::wstring DiffReportGenerator::BuildIntegratedMarkdown(const OperationContext
     for (size_t i = 0; i < sections.size(); ++i) {
         const ReportFileSection& s = sections[i];
         md += L"## " + std::to_wstring((int)i + 1) + L". `" + MarkdownCell(s.file_path) + L"`\n\n";
-        md += L"- •¶šƒR[ƒh: " + (s.encoding_name.empty() ? std::wstring(L"(•s–¾)") : s.encoding_name) +
-              L" / ‰üs: " + (s.newline_name.empty() ? std::wstring(L"(•s–¾)") : s.newline_name) + L"\n";
+        md += L"- æ–‡å­—ã‚³ãƒ¼ãƒ‰: " + (s.encoding_name.empty() ? std::wstring(L"(ä¸æ˜)") : s.encoding_name) +
+              L" / æ”¹è¡Œ: " + (s.newline_name.empty() ? std::wstring(L"(ä¸æ˜)") : s.newline_name) + L"\n";
         if (s.include_added)
-            md += L"- #include ‚ğ " + std::to_wstring(s.include_line) + L" s–Ú‚Ö’Ç‰Á\n";
-        md += L"\n### •ÏŠ·‘O\n\n```c\n" + s.before_text + L"\n```\n\n";
-        md += L"### •ÏŠ·Œã\n\n```c\n" + s.after_text + L"\n```\n\n";
+            md += L"- #include ã‚’ " + std::to_wstring(s.include_line) + L" è¡Œç›®ã¸è¿½åŠ \n";
+        md += L"\n### å¤‰æ›å‰\n\n```c\n" + s.before_text + L"\n```\n\n";
+        md += L"### å¤‰æ›å¾Œ\n\n```c\n" + s.after_text + L"\n```\n\n";
     }
     return md;
 }

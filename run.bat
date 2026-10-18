@@ -1,10 +1,10 @@
 @echo off
 rem ===========================================================================
-rem  Migration Switcher - Às
+rem  Migration Switcher - å®Ÿè¡Œ
 rem
-rem    run.bat       ƒrƒ‹ƒhÏ‚İ‚ÌÀsƒtƒ@ƒCƒ‹‚ğ‹N“®‚µ‚Ü‚·
+rem    run.bat       ãƒ“ãƒ«ãƒ‰æ¸ˆã¿ã®å®Ÿè¡Œãƒ•ã‚¡ã‚¤ãƒ«ã‚’èµ·å‹•ã—ã¾ã™
 rem
-rem  Àsƒtƒ@ƒCƒ‹‚ªŒ©‚Â‚©‚ç‚È‚¢ê‡‚Í build.bat ‚ğæ‚ÉÀs‚µ‚Ä‚­‚¾‚³‚¢B
+rem  å®Ÿè¡Œãƒ•ã‚¡ã‚¤ãƒ«ãŒè¦‹ã¤ã‹ã‚‰ãªã„å ´åˆã¯ build.bat ã‚’å…ˆã«å®Ÿè¡Œã—ã¦ãã ã•ã„ã€‚
 rem ===========================================================================
 setlocal
 chcp 932 >nul
@@ -17,14 +17,14 @@ if not defined EXE if exist "%ROOT%\build\MigrationSwitcher.exe" set "EXE=%ROOT%
 
 if not defined EXE (
   echo.
-  echo [ERROR] Àsƒtƒ@ƒCƒ‹‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñB
-  echo         æ‚É  build.bat  ‚ğÀs‚µ‚Ä‚­‚¾‚³‚¢B
-  echo         Šm”F‚µ‚½êŠ:
+  echo [ERROR] å®Ÿè¡Œãƒ•ã‚¡ã‚¤ãƒ«ãŒè¦‹ã¤ã‹ã‚Šã¾ã›ã‚“ã€‚
+  echo         å…ˆã«  build.bat  ã‚’å®Ÿè¡Œã—ã¦ãã ã•ã„ã€‚
+  echo         ç¢ºèªã—ãŸå ´æ‰€:
   echo           %ROOT%\build\Release\MigrationSwitcher.exe
   echo           %ROOT%\build\MigrationSwitcher.exe
   exit /b 1
 )
 
-echo  ‹N“®: %EXE%
+echo  èµ·å‹•: %EXE%
 start "" "%EXE%"
 exit /b 0

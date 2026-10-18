@@ -1,11 +1,11 @@
 @echo off
 rem ===========================================================================
-rem  Migration Switcher - MinGW-w64 / MSYS2 ƒrƒ‹ƒh
+rem  Migration Switcher - MinGW-w64 / MSYS2 ãƒ“ãƒ«ãƒ‰
 rem
-rem    build_mingw.bat            ƒrƒ‹ƒhiMakefile ‚ðŽg—pj
-rem    build_mingw.bat clean      ¶¬•¨‚ðíœ
+rem    build_mingw.bat            ãƒ“ãƒ«ãƒ‰ï¼ˆMakefile ã‚’ä½¿ç”¨ï¼‰
+rem    build_mingw.bat clean      ç”Ÿæˆç‰©ã‚’å‰Šé™¤
 rem
-rem  MSYS2 ‚Ì UCRT64 ƒVƒFƒ‹‘Š“–‚ÌŠÂ‹«‚ÅŽÀs‚µ‚Ä‚­‚¾‚³‚¢B
+rem  MSYS2 ã® UCRT64 ã‚·ã‚§ãƒ«ç›¸å½“ã®ç’°å¢ƒã§å®Ÿè¡Œã—ã¦ãã ã•ã„ã€‚
 rem    pacman -S mingw-w64-ucrt-x86_64-gcc make
 rem ===========================================================================
 setlocal
@@ -15,11 +15,11 @@ if "%ROOT:~-1%"=="\" set "ROOT=%ROOT:~0,-1%"
 set "EXE=%ROOT%\build\MigrationSwitcher.exe"
 
 echo ============================================================
-echo  Migration Switcher - MinGW-w64 / MSYS2 ƒrƒ‹ƒh
+echo  Migration Switcher - MinGW-w64 / MSYS2 ãƒ“ãƒ«ãƒ‰
 echo ============================================================
-echo  ƒ‹[ƒg: %ROOT%
+echo  ãƒ«ãƒ¼ãƒˆ: %ROOT%
 
-rem ---- make ƒRƒ}ƒ“ƒh‚ÌŒŸo ----------------------------------------------------
+rem ---- make ã‚³ãƒžãƒ³ãƒ‰ã®æ¤œå‡º ----------------------------------------------------
 set "MK="
 mingw32-make --version >nul 2>nul
 if not errorlevel 1 set "MK=mingw32-make"
@@ -30,64 +30,64 @@ if not defined MK (
 if not defined MK goto :nomake
 echo  make: %MK%
 
-rem ---- ƒRƒ“ƒpƒCƒ‰‚ÌŒŸoiƒlƒCƒeƒBƒu‚È‚ç CROSS ‚ð‹ó‚É‚·‚éj--------------------
+rem ---- ã‚³ãƒ³ãƒ‘ã‚¤ãƒ©ã®æ¤œå‡ºï¼ˆãƒã‚¤ãƒ†ã‚£ãƒ–ãªã‚‰ CROSS ã‚’ç©ºã«ã™ã‚‹ï¼‰--------------------
 set "CROSSOPT="
 g++ --version >nul 2>nul
 if not errorlevel 1 set "CROSSOPT=CROSS="
 if defined CROSSOPT goto :go
 x86_64-w64-mingw32-g++ --version >nul 2>nul
 if errorlevel 1 goto :nocxx
-echo  ƒRƒ“ƒpƒCƒ‰: x86_64-w64-mingw32-g++
+echo  ã‚³ãƒ³ãƒ‘ã‚¤ãƒ©: x86_64-w64-mingw32-g++
 goto :go
 
 :go
 cd /d "%ROOT%"
 
 if /i "%~1"=="clean" (
-  echo  --- ¶¬•¨‚ðíœ‚µ‚Ä‚¢‚Ü‚· ---
+  echo  --- ç”Ÿæˆç‰©ã‚’å‰Šé™¤ã—ã¦ã„ã¾ã™ ---
   %MK% %CROSSOPT% clean
-  echo  Š®—¹‚µ‚Ü‚µ‚½B
+  echo  å®Œäº†ã—ã¾ã—ãŸã€‚
   exit /b 0
 )
 
-echo  --- ƒrƒ‹ƒh‚µ‚Ä‚¢‚Ü‚· ---
+echo  --- ãƒ“ãƒ«ãƒ‰ã—ã¦ã„ã¾ã™ ---
 %MK% %CROSSOPT% all
 if errorlevel 1 goto :buildfail
 
 if not exist "%EXE%" goto :noexe
 echo.
 echo ============================================================
-echo  ƒrƒ‹ƒh¬Œ÷
+echo  ãƒ“ãƒ«ãƒ‰æˆåŠŸ
 echo ============================================================
-for %%f in ("%EXE%") do echo  o—Í: %%f  (%%~zf ƒoƒCƒg)
+for %%f in ("%EXE%") do echo  å‡ºåŠ›: %%f  (%%~zf ãƒã‚¤ãƒˆ)
 echo.
-echo  ŽÀs‚·‚é‚É‚Í:  run.bat
-echo  ƒeƒXƒg‚·‚é‚É‚Í: build.bat test
+echo  å®Ÿè¡Œã™ã‚‹ã«ã¯:  run.bat
+echo  ãƒ†ã‚¹ãƒˆã™ã‚‹ã«ã¯: build.bat test
 exit /b 0
 
 :nomake
 echo.
-echo [ERROR] make / mingw32-make ‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñB
-echo         MSYS2 ‚Ì UCRT64 ƒVƒFƒ‹‚ÅŽŸ‚ðŽÀs‚µ‚Ä‚­‚¾‚³‚¢B
+echo [ERROR] make / mingw32-make ãŒè¦‹ã¤ã‹ã‚Šã¾ã›ã‚“ã€‚
+echo         MSYS2 ã® UCRT64 ã‚·ã‚§ãƒ«ã§æ¬¡ã‚’å®Ÿè¡Œã—ã¦ãã ã•ã„ã€‚
 echo           pacman -S mingw-w64-ucrt-x86_64-gcc make
 exit /b 1
 
 :nocxx
 echo.
-echo [ERROR] g++ ‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñB
-echo         MSYS2 ‚Ì UCRT64 ƒVƒFƒ‹‚ÅŽŸ‚ðŽÀs‚µ‚Ä‚­‚¾‚³‚¢B
+echo [ERROR] g++ ãŒè¦‹ã¤ã‹ã‚Šã¾ã›ã‚“ã€‚
+echo         MSYS2 ã® UCRT64 ã‚·ã‚§ãƒ«ã§æ¬¡ã‚’å®Ÿè¡Œã—ã¦ãã ã•ã„ã€‚
 echo           pacman -S mingw-w64-ucrt-x86_64-gcc make
-echo         iMinGW-w64 ‚ð PATH ‚É’Ç‰Á‚µ‚Ä‚©‚çÄŽÀs‚µ‚Ä‚­‚¾‚³‚¢j
+echo         ï¼ˆMinGW-w64 ã‚’ PATH ã«è¿½åŠ ã—ã¦ã‹ã‚‰å†å®Ÿè¡Œã—ã¦ãã ã•ã„ï¼‰
 exit /b 1
 
 :buildfail
 echo.
-echo [ERROR] ƒrƒ‹ƒh‚ÉŽ¸”s‚µ‚Ü‚µ‚½B
-echo         ã‚ÌƒRƒ“ƒpƒCƒ‰ ƒGƒ‰[‚ðŠm”F‚µ‚Ä‚­‚¾‚³‚¢B
+echo [ERROR] ãƒ“ãƒ«ãƒ‰ã«å¤±æ•—ã—ã¾ã—ãŸã€‚
+echo         ä¸Šã®ã‚³ãƒ³ãƒ‘ã‚¤ãƒ© ã‚¨ãƒ©ãƒ¼ã‚’ç¢ºèªã—ã¦ãã ã•ã„ã€‚
 exit /b 1
 
 :noexe
 echo.
-echo [ERROR] ƒrƒ‹ƒh‚ÍŠ®—¹‚µ‚Ü‚µ‚½‚ªŽÀsƒtƒ@ƒCƒ‹‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñB
-echo         Šú‘Ò‚µ‚½êŠ: %EXE%
+echo [ERROR] ãƒ“ãƒ«ãƒ‰ã¯å®Œäº†ã—ã¾ã—ãŸãŒå®Ÿè¡Œãƒ•ã‚¡ã‚¤ãƒ«ãŒè¦‹ã¤ã‹ã‚Šã¾ã›ã‚“ã€‚
+echo         æœŸå¾…ã—ãŸå ´æ‰€: %EXE%
 exit /b 1

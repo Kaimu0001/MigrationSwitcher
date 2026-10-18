@@ -1,6 +1,6 @@
-// =============================================================================
+ï»¿// =============================================================================
 // SwitchGenerator.h
-// İŒv‘ 6.7uƒRƒ“ƒpƒCƒ‹ƒXƒCƒbƒ`•ÏŠ·‹@”\v/ 6.8uƒCƒ“ƒfƒ“ƒg©“®’²®v/ 18Í ƒeƒ“ƒvƒŒ[ƒg
+// è¨­è¨ˆæ›¸ 6.7ã€Œã‚³ãƒ³ãƒ‘ã‚¤ãƒ«ã‚¹ã‚¤ãƒƒãƒå¤‰æ›æ©Ÿèƒ½ã€/ 6.8ã€Œã‚¤ãƒ³ãƒ‡ãƒ³ãƒˆè‡ªå‹•èª¿æ•´ã€/ 18ç«  ãƒ†ãƒ³ãƒ—ãƒ¬ãƒ¼ãƒˆ
 // =============================================================================
 #pragma once
 
@@ -13,8 +13,8 @@ namespace ms {
 
 class SwitchGenerator {
 public:
-    // •ÏŠ·•û® A`D / ƒeƒ“ƒvƒŒ[ƒg•û®‚ÅƒRƒ“ƒpƒCƒ‹ƒXƒCƒbƒ`ƒuƒƒbƒN‚ğ¶¬‚·‚é
-    // old_code / new_code ‚Í LF ³‹K‰»Ï‚İ‚Ì“à•”•\Œ»
+    // å¤‰æ›æ–¹å¼ Aï½D / ãƒ†ãƒ³ãƒ—ãƒ¬ãƒ¼ãƒˆæ–¹å¼ã§ã‚³ãƒ³ãƒ‘ã‚¤ãƒ«ã‚¹ã‚¤ãƒƒãƒãƒ–ãƒ­ãƒƒã‚¯ã‚’ç”Ÿæˆã™ã‚‹
+    // old_code / new_code ã¯ LF æ­£è¦åŒ–æ¸ˆã¿ã®å†…éƒ¨è¡¨ç¾
     static std::wstring Generate(SwitchStyle style,
                                  const std::wstring& switch_name,
                                  const std::wstring& old_code,
@@ -23,7 +23,7 @@ public:
                                  const std::wstring& custom_template,
                                  std::vector<std::wstring>& out_warnings);
 
-    // indent_hint ”Åi6.8: ‘ÎÛs‚ÌÀÛ‚ÌƒCƒ“ƒfƒ“ƒg‚ğ©“®’²®‚É—˜—p‚·‚éj
+    // indent_hint ç‰ˆï¼ˆ6.8: å¯¾è±¡è¡Œã®å®Ÿéš›ã®ã‚¤ãƒ³ãƒ‡ãƒ³ãƒˆã‚’è‡ªå‹•èª¿æ•´ã«åˆ©ç”¨ã™ã‚‹ï¼‰
     static std::wstring GenerateEx(SwitchStyle style,
                                    const std::wstring& switch_name,
                                    const std::wstring& old_code,
@@ -33,10 +33,10 @@ public:
                                    const std::wstring& indent_hint,
                                    std::vector<std::wstring>& out_warnings);
 
-    // 18Í ƒeƒ“ƒvƒŒ[ƒg‚Ì‘Ã“–«ŒŸØ
+    // 18ç«  ãƒ†ãƒ³ãƒ—ãƒ¬ãƒ¼ãƒˆã®å¦¥å½“æ€§æ¤œè¨¼
     static bool ValidateTemplate(const std::wstring& tpl, std::wstring& out_error);
 
-    // 18.3 ’uŠ·•Ï”‚Ì“WŠJ
+    // 18.3 ç½®æ›å¤‰æ•°ã®å±•é–‹
     static std::wstring ExpandTemplate(const std::wstring& tpl,
                                        const std::wstring& switch_name,
                                        const std::wstring& old_code,
@@ -45,8 +45,8 @@ public:
 
     static const wchar_t* StyleName(SwitchStyle style);
 
-    // 6.8 ƒCƒ“ƒfƒ“ƒg©“®’²®‚Ì“K—pinew_code ‚ÌŠes‚Ö‹ŒƒR[ƒhæ“ªs‚ÌƒCƒ“ƒfƒ“ƒg‚ğ•t—^j
-    // indent_hint: ‹ŒƒR[ƒh‚É“ü—ÍƒCƒ“ƒfƒ“ƒg‚ª–³‚¢ê‡‚Ég—p‚·‚éƒCƒ“ƒfƒ“ƒgi‘ÎÛs‚©‚çæ“¾j
+    // 6.8 ã‚¤ãƒ³ãƒ‡ãƒ³ãƒˆè‡ªå‹•èª¿æ•´ã®é©ç”¨ï¼ˆnew_code ã®å„è¡Œã¸æ—§ã‚³ãƒ¼ãƒ‰å…ˆé ­è¡Œã®ã‚¤ãƒ³ãƒ‡ãƒ³ãƒˆã‚’ä»˜ä¸ï¼‰
+    // indent_hint: æ—§ã‚³ãƒ¼ãƒ‰ã«å…¥åŠ›ã‚¤ãƒ³ãƒ‡ãƒ³ãƒˆãŒç„¡ã„å ´åˆã«ä½¿ç”¨ã™ã‚‹ã‚¤ãƒ³ãƒ‡ãƒ³ãƒˆï¼ˆå¯¾è±¡è¡Œã‹ã‚‰å–å¾—ï¼‰
     static std::wstring ApplyAutoIndent(const std::wstring& old_code,
                                         const std::wstring& new_code,
                                         std::vector<std::wstring>& out_warnings,

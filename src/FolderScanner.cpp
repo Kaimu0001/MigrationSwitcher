@@ -1,4 +1,4 @@
-// =============================================================================
+ï»¿// =============================================================================
 // FolderScanner.cpp
 // =============================================================================
 #include "FolderScanner.h"
@@ -15,7 +15,7 @@ const unsigned long long FolderScanner::kMaxFileSize = 8ull * 1024 * 1024;
 
 std::vector<std::wstring> FolderScanner::DefaultExtensions()
 {
-    // İŒv‘ 17.2.1 ‚Ì‰Šúƒ`ƒFƒbƒNó‘Ôi.c .cpp .h ‚ª ONA.hpp .cs .java ‚ª OFFj
+    // è¨­è¨ˆæ›¸ 17.2.1 ã®åˆæœŸãƒã‚§ãƒƒã‚¯çŠ¶æ…‹ï¼ˆ.c .cpp .h ãŒ ONã€.hpp .cs .java ãŒ OFFï¼‰
     std::vector<std::wstring> v;
     v.push_back(L".c");
     v.push_back(L".cpp");
@@ -93,8 +93,8 @@ void FolderScanner::ScanRecursive(const std::wstring& dir,
     if (h == INVALID_HANDLE_VALUE) {
         DWORD e = ::GetLastError();
         if (e != ERROR_FILE_NOT_FOUND) {
-            out.errors.push_back(L"ƒtƒHƒ‹ƒ_‚ğ‘–¸‚Å‚«‚Ü‚¹‚ñ: " + dir + L"i" +
-                                 std::to_wstring((long long)e) + L"j");
+            out.errors.push_back(L"ãƒ•ã‚©ãƒ«ãƒ€ã‚’èµ°æŸ»ã§ãã¾ã›ã‚“: " + dir + L"ï¼ˆ" +
+                                 std::to_wstring((long long)e) + L"ï¼‰");
         }
         return;
     }
@@ -109,7 +109,7 @@ void FolderScanner::ScanRecursive(const std::wstring& dir,
         std::wstring full = util::JoinPath(dir, name);
 
         if ((fd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) != 0) {
-            // ƒVƒ“ƒ{ƒŠƒbƒNƒŠƒ“ƒN^ƒWƒƒƒ“ƒNƒVƒ‡ƒ“‚Í–³ŒÀƒ‹[ƒv–h~‚Ì‚½‚ß’H‚ç‚È‚¢
+            // ã‚·ãƒ³ãƒœãƒªãƒƒã‚¯ãƒªãƒ³ã‚¯ï¼ã‚¸ãƒ£ãƒ³ã‚¯ã‚·ãƒ§ãƒ³ã¯ç„¡é™ãƒ«ãƒ¼ãƒ—é˜²æ­¢ã®ãŸã‚è¾¿ã‚‰ãªã„
             if (fd.dwFileAttributes & FILE_ATTRIBUTE_REPARSE_POINT) continue;
             if (include_subdirs) subdirs.push_back(full);
             continue;
@@ -121,8 +121,8 @@ void FolderScanner::ScanRecursive(const std::wstring& dir,
         sz.LowPart  = fd.nFileSizeLow;
         sz.HighPart = fd.nFileSizeHigh;
         if (sz.QuadPart > kMaxFileSize) {
-            out.skipped.push_back(full + L"iƒTƒCƒY‰ß‘å: " +
-                                  std::to_wstring((long long)sz.QuadPart) + L" bytesj");
+            out.skipped.push_back(full + L"ï¼ˆã‚µã‚¤ã‚ºéå¤§: " +
+                                  std::to_wstring((long long)sz.QuadPart) + L" bytesï¼‰");
             continue;
         }
 
@@ -146,25 +146,25 @@ void FolderScanner::Scan(const std::wstring& folder,
 {
     out = ScanResult();
     if (folder.empty()) {
-        out.errors.push_back(L"‘ÎÛƒtƒHƒ‹ƒ_‚ªw’è‚³‚ê‚Ä‚¢‚Ü‚¹‚ñB");
+        out.errors.push_back(L"å¯¾è±¡ãƒ•ã‚©ãƒ«ãƒ€ãŒæŒ‡å®šã•ã‚Œã¦ã„ã¾ã›ã‚“ã€‚");
         return;
     }
     if (!util::PathExists(folder)) {
-        out.errors.push_back(L"w’è‚³‚ê‚½ƒtƒHƒ‹ƒ_‚ª‘¶İ‚µ‚Ü‚¹‚ñ: " + folder);
+        out.errors.push_back(L"æŒ‡å®šã•ã‚ŒãŸãƒ•ã‚©ãƒ«ãƒ€ãŒå­˜åœ¨ã—ã¾ã›ã‚“: " + folder);
         return;
     }
 
     DWORD attr = ::GetFileAttributesW(folder.c_str());
     if (attr == INVALID_FILE_ATTRIBUTES ||
         (attr & FILE_ATTRIBUTE_DIRECTORY) == 0) {
-        out.errors.push_back(L"w’è‚³‚ê‚½ƒpƒX‚ÍƒtƒHƒ‹ƒ_‚Å‚Í‚ ‚è‚Ü‚¹‚ñ: " + folder);
+        out.errors.push_back(L"æŒ‡å®šã•ã‚ŒãŸãƒ‘ã‚¹ã¯ãƒ•ã‚©ãƒ«ãƒ€ã§ã¯ã‚ã‚Šã¾ã›ã‚“: " + folder);
         return;
     }
 
     std::vector<std::wstring> ext = extensions.empty() ? DefaultExtensions() : extensions;
     ScanRecursive(folder, ext, include_subdirs, out);
 
-    // ‘–¸‡‚ğˆÀ’è‚³‚¹‚éiƒtƒHƒ‹ƒ_‘–¸‡‚Í OS ˆË‘¶‚Ì‚½‚ßj
+    // èµ°æŸ»é †ã‚’å®‰å®šã•ã›ã‚‹ï¼ˆãƒ•ã‚©ãƒ«ãƒ€èµ°æŸ»é †ã¯ OS ä¾å­˜ã®ãŸã‚ï¼‰
     std::sort(out.files.begin(), out.files.end());
 }
 

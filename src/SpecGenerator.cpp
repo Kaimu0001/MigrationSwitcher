@@ -1,4 +1,4 @@
-// =============================================================================
+ï»¿// =============================================================================
 // SpecGenerator.cpp
 // =============================================================================
 #include "SpecGenerator.h"
@@ -12,7 +12,7 @@ namespace ms {
 
 std::wstring SpecGenerator::KindLabel(int kind)
 {
-    return (kind == SPEC_INSPECTION) ? L"ŒŸ¸d—l‘" : L"•ÏXd—l‘";
+    return (kind == SPEC_INSPECTION) ? L"æ¤œæŸ»ä»•æ§˜æ›¸" : L"å¤‰æ›´ä»•æ§˜æ›¸";
 }
 
 std::wstring SpecGenerator::KindTag(int kind)
@@ -21,51 +21,51 @@ std::wstring SpecGenerator::KindTag(int kind)
 }
 
 // -----------------------------------------------------------------------------
-// ƒvƒƒ“ƒvƒg¶¬
+// ãƒ—ãƒ­ãƒ³ãƒ—ãƒˆç”Ÿæˆ
 // -----------------------------------------------------------------------------
 static std::wstring CommonContext(const SpecInput& in)
 {
     std::wstring s;
-    s += L"# ‘ÎÛƒVƒXƒeƒ€î•ñ\n";
-    s += L"- ƒVƒXƒeƒ€–¼: " + (in.system_name.empty() ? L"(–¢“ü—Í)" : in.system_name) + L"\n";
-    s += L"- ƒVƒXƒeƒ€ŠT—v: " + (in.overview.empty() ? L"(–¢“ü—Í)" : in.overview) + L"\n";
-    s += L"- –Ú“I: " + (in.purpose.empty() ? L"(–¢“ü—Í)" : in.purpose) + L"\n";
-    s += L"- C³‰ÓŠŠT—v: " + (in.modification.empty() ? L"(–¢“ü—Í)" : in.modification) + L"\n";
-    if (!in.switch_name.empty()) s += L"- ƒRƒ“ƒpƒCƒ‹ƒXƒCƒbƒ`–¼: " + in.switch_name + L"\n";
-    if (!in.target_summary.empty()) s += L"- ‘ÎÛ: " + in.target_summary + L"\n";
-    if (!in.old_code.empty()) s += L"\n## ‹ŒƒR[ƒh\n```\n" + in.old_code + L"\n```\n";
-    if (!in.new_code.empty()) s += L"\n## VƒR[ƒh\n```\n" + in.new_code + L"\n```\n";
+    s += L"# å¯¾è±¡ã‚·ã‚¹ãƒ†ãƒ æƒ…å ±\n";
+    s += L"- ã‚·ã‚¹ãƒ†ãƒ å: " + (in.system_name.empty() ? L"(æœªå…¥åŠ›)" : in.system_name) + L"\n";
+    s += L"- ã‚·ã‚¹ãƒ†ãƒ æ¦‚è¦: " + (in.overview.empty() ? L"(æœªå…¥åŠ›)" : in.overview) + L"\n";
+    s += L"- ç›®çš„: " + (in.purpose.empty() ? L"(æœªå…¥åŠ›)" : in.purpose) + L"\n";
+    s += L"- ä¿®æ­£ç®‡æ‰€æ¦‚è¦: " + (in.modification.empty() ? L"(æœªå…¥åŠ›)" : in.modification) + L"\n";
+    if (!in.switch_name.empty()) s += L"- ã‚³ãƒ³ãƒ‘ã‚¤ãƒ«ã‚¹ã‚¤ãƒƒãƒå: " + in.switch_name + L"\n";
+    if (!in.target_summary.empty()) s += L"- å¯¾è±¡: " + in.target_summary + L"\n";
+    if (!in.old_code.empty()) s += L"\n## æ—§ã‚³ãƒ¼ãƒ‰\n```\n" + in.old_code + L"\n```\n";
+    if (!in.new_code.empty()) s += L"\n## æ–°ã‚³ãƒ¼ãƒ‰\n```\n" + in.new_code + L"\n```\n";
     if (!in.switch_header_text.empty()) {
-        s += L"\n## ƒXƒCƒbƒ`’è‹`ƒwƒbƒ_i”²ˆj\n```\n" + in.switch_header_text + L"\n```\n";
+        s += L"\n## ã‚¹ã‚¤ãƒƒãƒå®šç¾©ãƒ˜ãƒƒãƒ€ï¼ˆæŠœç²‹ï¼‰\n```\n" + in.switch_header_text + L"\n```\n";
     }
-    if (!in.extra.empty()) s += L"\n## ’Ç‰Áw¦\n" + in.extra + L"\n";
+    if (!in.extra.empty()) s += L"\n## è¿½åŠ æŒ‡ç¤º\n" + in.extra + L"\n";
     return s;
 }
 
 static const wchar_t* kCommonRules =
-    L"\n# o—Í‚ÌŒµç–€\n"
-    L"- o—Í‚Í Markdown ‚Ì‚İB‘O’u‚«EŒã‘‚«E‚ ‚¢‚³‚ÂEuˆÈ‰º‚É¦‚µ‚Ü‚·v“™‚Í‘‚©‚È‚¢B\n"
-    L"- ‘S‘Ì‚ğ ``` ‚ÅˆÍ‚Ü‚È‚¢iƒR[ƒhƒuƒƒbƒN‚Í•K—v‚È‰ÓŠ‚Ì‚İjB\n"
-    L"- Œ©o‚µ‚Í ## ‚Æ ### ‚ğg‚¢A•\‚Í Markdown ‚Ì•\‚Å‹LÚ‚·‚éB\n"
-    L"- “ú–{Œê‚ÅAƒŒƒrƒ…[‰Â”\‚È‹ï‘Ì“I‹Lq‚É‚·‚éB•s–¾‚È“_‚Íu—vŠm”Fv‚Æ–¾‹L‚µA„‘ª‚Å’f’è‚µ‚È‚¢B\n"
-    L"- —^‚¦‚ç‚ê‚Ä‚¢‚È‚¢–Ài»•i–¼E’S“–Ò–¼E“ú•tE”’l‚È‚Çj‚ğ‘nì‚µ‚È‚¢B\n";
+    L"\n# å‡ºåŠ›ã®å³å®ˆäº‹é …\n"
+    L"- å‡ºåŠ›ã¯ Markdown ã®ã¿ã€‚å‰ç½®ããƒ»å¾Œæ›¸ããƒ»ã‚ã„ã•ã¤ãƒ»ã€Œä»¥ä¸‹ã«ç¤ºã—ã¾ã™ã€ç­‰ã¯æ›¸ã‹ãªã„ã€‚\n"
+    L"- å…¨ä½“ã‚’ ``` ã§å›²ã¾ãªã„ï¼ˆã‚³ãƒ¼ãƒ‰ãƒ–ãƒ­ãƒƒã‚¯ã¯å¿…è¦ãªç®‡æ‰€ã®ã¿ï¼‰ã€‚\n"
+    L"- è¦‹å‡ºã—ã¯ ## ã¨ ### ã‚’ä½¿ã„ã€è¡¨ã¯ Markdown ã®è¡¨ã§è¨˜è¼‰ã™ã‚‹ã€‚\n"
+    L"- æ—¥æœ¬èªã§ã€ãƒ¬ãƒ“ãƒ¥ãƒ¼å¯èƒ½ãªå…·ä½“çš„è¨˜è¿°ã«ã™ã‚‹ã€‚ä¸æ˜ãªç‚¹ã¯ã€Œè¦ç¢ºèªã€ã¨æ˜è¨˜ã—ã€æ¨æ¸¬ã§æ–­å®šã—ãªã„ã€‚\n"
+    L"- ä¸ãˆã‚‰ã‚Œã¦ã„ãªã„äº‹å®Ÿï¼ˆè£½å“åãƒ»æ‹…å½“è€…åãƒ»æ—¥ä»˜ãƒ»æ•°å€¤ãªã©ï¼‰ã‚’å‰µä½œã—ãªã„ã€‚\n";
 
 std::wstring SpecGenerator::BuildChangeSpecPrompt(const SpecInput& in)
 {
     std::wstring s;
-    s += L"‚ ‚È‚½‚Í‘g‚İ/‹Æ–±ƒVƒXƒeƒ€‚ÌˆÚsiƒ}ƒCƒOƒŒ[ƒVƒ‡ƒ“j‚É¸’Ê‚µ‚½ƒVƒjƒAƒGƒ“ƒWƒjƒA‚Å‚·B\n";
-    s += L"ˆÈ‰º‚Ìî•ñ‚ğŠî‚ÉAƒŒƒrƒ…[‚Æ³”F‚Ég‚¦‚éu•ÏXd—l‘v‚ğì¬‚µ‚Ä‚­‚¾‚³‚¢B\n\n";
+    s += L"ã‚ãªãŸã¯çµ„è¾¼ã¿/æ¥­å‹™ã‚·ã‚¹ãƒ†ãƒ ã®ç§»è¡Œï¼ˆãƒã‚¤ã‚°ãƒ¬ãƒ¼ã‚·ãƒ§ãƒ³ï¼‰ã«ç²¾é€šã—ãŸã‚·ãƒ‹ã‚¢ã‚¨ãƒ³ã‚¸ãƒ‹ã‚¢ã§ã™ã€‚\n";
+    s += L"ä»¥ä¸‹ã®æƒ…å ±ã‚’åŸºã«ã€ãƒ¬ãƒ“ãƒ¥ãƒ¼ã¨æ‰¿èªã«ä½¿ãˆã‚‹ã€Œå¤‰æ›´ä»•æ§˜æ›¸ã€ã‚’ä½œæˆã—ã¦ãã ã•ã„ã€‚\n\n";
     s += CommonContext(in);
-    s += L"\n# ‹LÚ‚·‚éÍ—§‚Äi‚±‚Ì‡˜E‚±‚ÌŒ©o‚µ‚Åj\n";
-    s += L"## 1. •ÏXŠT—v\n";
-    s += L"## 2. •ÏX–Ú“IE”wŒi\n";
-    s += L"## 3. •ÏX‘ÎÛ\n";
-    s += L"## 4. •ÏX“à—ei•ÏX‘O / •ÏXŒãj\n";
-    s += L"## 5. ƒRƒ“ƒpƒCƒ‹ƒXƒCƒbƒ`d—liƒXƒCƒbƒ`–¼EŠù’è’lEØ‘Öè‡j\n";
-    s += L"## 6. ‰e‹¿”ÍˆÍ‚Æ”ñ‰e‹¿”ÍˆÍ\n";
-    s += L"## 7. “K—pè‡iƒoƒbƒNƒAƒbƒvE“K—pEŠm”Fj\n";
-    s += L"## 8. ƒ[ƒ‹ƒoƒbƒNè‡\n";
-    s += L"## 9. –¢Šm’è–€EŠm”F–€\n";
+    s += L"\n# è¨˜è¼‰ã™ã‚‹ç« ç«‹ã¦ï¼ˆã“ã®é †åºãƒ»ã“ã®è¦‹å‡ºã—ã§ï¼‰\n";
+    s += L"## 1. å¤‰æ›´æ¦‚è¦\n";
+    s += L"## 2. å¤‰æ›´ç›®çš„ãƒ»èƒŒæ™¯\n";
+    s += L"## 3. å¤‰æ›´å¯¾è±¡\n";
+    s += L"## 4. å¤‰æ›´å†…å®¹ï¼ˆå¤‰æ›´å‰ / å¤‰æ›´å¾Œï¼‰\n";
+    s += L"## 5. ã‚³ãƒ³ãƒ‘ã‚¤ãƒ«ã‚¹ã‚¤ãƒƒãƒä»•æ§˜ï¼ˆã‚¹ã‚¤ãƒƒãƒåãƒ»æ—¢å®šå€¤ãƒ»åˆ‡æ›¿æ‰‹é †ï¼‰\n";
+    s += L"## 6. å½±éŸ¿ç¯„å›²ã¨éå½±éŸ¿ç¯„å›²\n";
+    s += L"## 7. é©ç”¨æ‰‹é †ï¼ˆãƒãƒƒã‚¯ã‚¢ãƒƒãƒ—ãƒ»é©ç”¨ãƒ»ç¢ºèªï¼‰\n";
+    s += L"## 8. ãƒ­ãƒ¼ãƒ«ãƒãƒƒã‚¯æ‰‹é †\n";
+    s += L"## 9. æœªç¢ºå®šäº‹é …ãƒ»ç¢ºèªäº‹é …\n";
     s += kCommonRules;
     return s;
 }
@@ -73,20 +73,20 @@ std::wstring SpecGenerator::BuildChangeSpecPrompt(const SpecInput& in)
 std::wstring SpecGenerator::BuildInspectionSpecPrompt(const SpecInput& in)
 {
     std::wstring s;
-    s += L"‚ ‚È‚½‚Í‘g‚İ/‹Æ–±ƒVƒXƒeƒ€‚ÌŒŸØ‚É¸’Ê‚µ‚½ƒeƒXƒgƒŠ[ƒh‚Å‚·B\n";
-    s += L"ˆÈ‰º‚Ìî•ñ‚ğŠî‚ÉA‚»‚Ì‚Ü‚ÜŒ±€–Ú‘‚Æ‚µ‚Äg‚¦‚éuŒŸ¸d—l‘v‚ğì¬‚µ‚Ä‚­‚¾‚³‚¢B\n\n";
+    s += L"ã‚ãªãŸã¯çµ„è¾¼ã¿/æ¥­å‹™ã‚·ã‚¹ãƒ†ãƒ ã®æ¤œè¨¼ã«ç²¾é€šã—ãŸãƒ†ã‚¹ãƒˆãƒªãƒ¼ãƒ‰ã§ã™ã€‚\n";
+    s += L"ä»¥ä¸‹ã®æƒ…å ±ã‚’åŸºã«ã€ãã®ã¾ã¾è©¦é¨“é …ç›®æ›¸ã¨ã—ã¦ä½¿ãˆã‚‹ã€Œæ¤œæŸ»ä»•æ§˜æ›¸ã€ã‚’ä½œæˆã—ã¦ãã ã•ã„ã€‚\n\n";
     s += CommonContext(in);
-    s += L"\n# ‹LÚ‚·‚éÍ—§‚Äi‚±‚Ì‡˜E‚±‚ÌŒ©o‚µ‚Åj\n";
-    s += L"## 1. ŒŸ¸–Ú“I\n";
-    s += L"## 2. ŒŸ¸”ÍˆÍ‚Æ‘ÎÛŠO\n";
-    s += L"## 3. ŒŸ¸ŠÏ“_ˆê——i•\FID / ŠÏ“_ / Šm”F“à—e / Šú‘ÒŒ‹‰Êj\n";
-    s += L"## 4. ³íŒnƒeƒXƒgƒP[ƒXi•\FNo / è‡ / “ü—ÍE‘O’ñ / Šú‘ÒŒ‹‰Êj\n";
-    s += L"## 5. ˆÙíŒnE‹«ŠE’lƒeƒXƒgƒP[ƒX\n";
-    s += L"## 6. ƒXƒCƒbƒ`Ø‘Ö‚ÌŠm”F€–ÚiƒXƒCƒbƒ` OFF=‹ŒƒR[ƒh / ON=VƒR[ƒhj\n";
-    s += L"## 7. ‰ñ‹AŠm”F€–Ú\n";
-    s += L"## 8. À{ŠÂ‹«E‘O’ñğŒ\n";
-    s += L"## 9. ‡”Û”»’èŠî€\n";
-    s += L"## 10. ØÕiƒGƒrƒfƒ“ƒXj‚Æ‚µ‚Äc‚·‚à‚Ì\n";
+    s += L"\n# è¨˜è¼‰ã™ã‚‹ç« ç«‹ã¦ï¼ˆã“ã®é †åºãƒ»ã“ã®è¦‹å‡ºã—ã§ï¼‰\n";
+    s += L"## 1. æ¤œæŸ»ç›®çš„\n";
+    s += L"## 2. æ¤œæŸ»ç¯„å›²ã¨å¯¾è±¡å¤–\n";
+    s += L"## 3. æ¤œæŸ»è¦³ç‚¹ä¸€è¦§ï¼ˆè¡¨ï¼šID / è¦³ç‚¹ / ç¢ºèªå†…å®¹ / æœŸå¾…çµæœï¼‰\n";
+    s += L"## 4. æ­£å¸¸ç³»ãƒ†ã‚¹ãƒˆã‚±ãƒ¼ã‚¹ï¼ˆè¡¨ï¼šNo / æ‰‹é † / å…¥åŠ›ãƒ»å‰æ / æœŸå¾…çµæœï¼‰\n";
+    s += L"## 5. ç•°å¸¸ç³»ãƒ»å¢ƒç•Œå€¤ãƒ†ã‚¹ãƒˆã‚±ãƒ¼ã‚¹\n";
+    s += L"## 6. ã‚¹ã‚¤ãƒƒãƒåˆ‡æ›¿ã®ç¢ºèªé …ç›®ï¼ˆã‚¹ã‚¤ãƒƒãƒ OFF=æ—§ã‚³ãƒ¼ãƒ‰ / ON=æ–°ã‚³ãƒ¼ãƒ‰ï¼‰\n";
+    s += L"## 7. å›å¸°ç¢ºèªé …ç›®\n";
+    s += L"## 8. å®Ÿæ–½ç’°å¢ƒãƒ»å‰ææ¡ä»¶\n";
+    s += L"## 9. åˆå¦åˆ¤å®šåŸºæº–\n";
+    s += L"## 10. è¨¼è·¡ï¼ˆã‚¨ãƒ“ãƒ‡ãƒ³ã‚¹ï¼‰ã¨ã—ã¦æ®‹ã™ã‚‚ã®\n";
     s += kCommonRules;
     return s;
 }
@@ -112,32 +112,32 @@ std::wstring SpecGenerator::BuildPromptTxt(int kind, const SpecInput& in)
 
     std::wstring s;
     s += bar + nl;
-    s += L" " + label + L" ì¬ˆË—ŠiAI ƒ`ƒƒƒbƒg‚Ö“\‚è•t‚¯‚Ä‚­‚¾‚³‚¢j" + nl;
+    s += L" " + label + L" ä½œæˆä¾é ¼ï¼ˆAI ãƒãƒ£ãƒƒãƒˆã¸è²¼ã‚Šä»˜ã‘ã¦ãã ã•ã„ï¼‰" + nl;
     s += bar + nl + nl;
-    s += L"y‚±‚Ìƒtƒ@ƒCƒ‹‚Ìg‚¢•ûz" + nl;
-    s += L"1. ‚±‚Ìƒtƒ@ƒCƒ‹‚Ì“à—e‚ğu‚·‚×‚ÄvƒRƒs[‚µAAI ƒ`ƒƒƒbƒgiChatGPT / Claude / Gemini ‚È‚Çj‚É" + nl;
-    s += L"   ‚»‚Ì‚Ü‚Ü“\‚è•t‚¯‚Ä‘—M‚µ‚Ä‚­‚¾‚³‚¢B" + nl;
-    s += L"2. AI ‚ª " + label + L" ‚ğ Markdown Œ`®‚Å•Ô‚µ‚Ü‚·B" + nl;
-    s += L"3. •Ô‚Á‚Ä‚«‚½‰ñ“š‚ğu‚·‚×‚ÄvƒRƒs[‚µACopyMigration Switcher ‚Ì" + nl;
-    s += L"   uƒVƒXƒeƒ€î•ñvƒ^ƒu‚Ìo—Í—“‚É“\‚è•t‚¯‚ÄA‰º‚Ìƒ{ƒ^ƒ“‚ğ‰Ÿ‚µ‚Ä‚­‚¾‚³‚¢B" + nl;
-    s += L"     Eu‚±‚Ì“à—e‚ğ" + label + L"‚É‚·‚év c HTML ƒŒƒ|[ƒg‚ğì¬‚µ‚Ü‚·" + nl;
-    s += L"     EuƒŒƒ|[ƒg‚ğŠJ‚­v            c ì¬‚µ‚½ƒŒƒ|[ƒg‚ğŠJ‚«‚Ü‚·" + nl + nl;
-    s += L"¦ API ƒL[‚ğİ’è‚µ‚Ä‚¢‚ê‚ÎA‚±‚Ì‘€ì‚ğ‚¹‚¸‚Éu" + label + L"‚ğ¶¬vƒ{ƒ^ƒ“‚¾‚¯‚Å" + nl;
-    s += L"   “¯‚¶“à—e‚ğ©“®¶¬‚Å‚«‚Ü‚·i‚±‚Ìƒtƒ@ƒCƒ‹‚Í API ‚ğg‚¦‚È‚¢ŠÂ‹«Œü‚¯‚Å‚·jB" + nl + nl;
+    s += L"ã€ã“ã®ãƒ•ã‚¡ã‚¤ãƒ«ã®ä½¿ã„æ–¹ã€‘" + nl;
+    s += L"1. ã“ã®ãƒ•ã‚¡ã‚¤ãƒ«ã®å†…å®¹ã‚’ã€Œã™ã¹ã¦ã€ã‚³ãƒ”ãƒ¼ã—ã€AI ãƒãƒ£ãƒƒãƒˆï¼ˆChatGPT / Claude / Gemini ãªã©ï¼‰ã«" + nl;
+    s += L"   ãã®ã¾ã¾è²¼ã‚Šä»˜ã‘ã¦é€ä¿¡ã—ã¦ãã ã•ã„ã€‚" + nl;
+    s += L"2. AI ãŒ " + label + L" ã‚’ Markdown å½¢å¼ã§è¿”ã—ã¾ã™ã€‚" + nl;
+    s += L"3. è¿”ã£ã¦ããŸå›ç­”ã‚’ã€Œã™ã¹ã¦ã€ã‚³ãƒ”ãƒ¼ã—ã€CopyMigration Switcher ã®" + nl;
+    s += L"   ã€Œã‚·ã‚¹ãƒ†ãƒ æƒ…å ±ã€ã‚¿ãƒ–ã®å‡ºåŠ›æ¬„ã«è²¼ã‚Šä»˜ã‘ã¦ã€ä¸‹ã®ãƒœã‚¿ãƒ³ã‚’æŠ¼ã—ã¦ãã ã•ã„ã€‚" + nl;
+    s += L"     ãƒ»ã€Œã“ã®å†…å®¹ã‚’" + label + L"ã«ã™ã‚‹ã€ â€¦ HTML ãƒ¬ãƒãƒ¼ãƒˆã‚’ä½œæˆã—ã¾ã™" + nl;
+    s += L"     ãƒ»ã€Œãƒ¬ãƒãƒ¼ãƒˆã‚’é–‹ãã€            â€¦ ä½œæˆã—ãŸãƒ¬ãƒãƒ¼ãƒˆã‚’é–‹ãã¾ã™" + nl + nl;
+    s += L"â€» API ã‚­ãƒ¼ã‚’è¨­å®šã—ã¦ã„ã‚Œã°ã€ã“ã®æ“ä½œã‚’ã›ãšã«ã€Œ" + label + L"ã‚’ç”Ÿæˆã€ãƒœã‚¿ãƒ³ã ã‘ã§" + nl;
+    s += L"   åŒã˜å†…å®¹ã‚’è‡ªå‹•ç”Ÿæˆã§ãã¾ã™ï¼ˆã“ã®ãƒ•ã‚¡ã‚¤ãƒ«ã¯ API ã‚’ä½¿ãˆãªã„ç’°å¢ƒå‘ã‘ã§ã™ï¼‰ã€‚" + nl + nl;
     s += thin + nl;
-    s += L"¥ ‚±‚±‚©‚ç‰º‚ª AI ‚Ö‚ÌˆË—Š•¶‚Å‚·i‚±‚Ì‚Ü‚Ü‘—M‚µ‚Ä‚­‚¾‚³‚¢j" + nl;
+    s += L"â–¼ ã“ã“ã‹ã‚‰ä¸‹ãŒ AI ã¸ã®ä¾é ¼æ–‡ã§ã™ï¼ˆã“ã®ã¾ã¾é€ä¿¡ã—ã¦ãã ã•ã„ï¼‰" + nl;
     s += thin + nl + nl;
     s += (kind == SPEC_INSPECTION) ? BuildInspectionSpecPrompt(in)
                                    : BuildChangeSpecPrompt(in);
     s += nl + thin + nl;
-    s += L"£ ˆË—Š•¶‚Í‚±‚±‚Ü‚Å‚Å‚·" + nl;
+    s += L"â–² ä¾é ¼æ–‡ã¯ã“ã“ã¾ã§ã§ã™" + nl;
     s += thin + nl + nl;
-    s += L"y‰ñ“š‚ğ“\‚è–ß‚·‚Æ‚«‚Ìƒƒ‚z" + nl;
-    s += L"- ƒVƒXƒeƒ€–¼: " + (in.system_name.empty() ? L"(–¢“ü—Í)" : in.system_name) + nl;
-    if (!in.switch_name.empty()) s += L"- ƒXƒCƒbƒ`–¼: " + in.switch_name + nl;
-    if (!in.target_summary.empty()) s += L"- ‘ÎÛ: " + in.target_summary + nl;
-    s += L"- ì¬“ú: " + in.created_at + nl;
-    s += L"- í•Ê: " + label + nl;
+    s += L"ã€å›ç­”ã‚’è²¼ã‚Šæˆ»ã™ã¨ãã®ãƒ¡ãƒ¢ã€‘" + nl;
+    s += L"- ã‚·ã‚¹ãƒ†ãƒ å: " + (in.system_name.empty() ? L"(æœªå…¥åŠ›)" : in.system_name) + nl;
+    if (!in.switch_name.empty()) s += L"- ã‚¹ã‚¤ãƒƒãƒå: " + in.switch_name + nl;
+    if (!in.target_summary.empty()) s += L"- å¯¾è±¡: " + in.target_summary + nl;
+    s += L"- ä½œæˆæ—¥æ™‚: " + in.created_at + nl;
+    s += L"- ç¨®åˆ¥: " + label + nl;
     return ToCrlf(s);
 }
 
@@ -154,7 +154,7 @@ std::wstring SpecGenerator::MakePromptFileName(const std::wstring& system_name,
 }
 
 // -----------------------------------------------------------------------------
-// Markdown ¨ HTML
+// Markdown â†’ HTML
 // -----------------------------------------------------------------------------
 std::wstring SpecGenerator::EscapeHtml(const std::wstring& s)
 {
@@ -257,14 +257,14 @@ std::wstring SpecGenerator::MarkdownToHtml(const std::wstring& md)
 
         if (t.empty()) { Closer::Close(out, in_ul, in_ol); continue; }
 
-        // …•½ü
+        // æ°´å¹³ç·š
         if (t == L"---" || t == L"***" || t == L"___") {
             Closer::Close(out, in_ul, in_ol);
             out += L"<hr>\n";
             continue;
         }
 
-        // Œ©o‚µ
+        // è¦‹å‡ºã—
         if (t[0] == L'#') {
             size_t n = 0;
             while (n < t.size() && t[n] == L'#') ++n;
@@ -278,7 +278,7 @@ std::wstring SpecGenerator::MarkdownToHtml(const std::wstring& md)
             }
         }
 
-        // •\
+        // è¡¨
         if (t.find(L'|') != std::wstring::npos && i + 1 < lines.size() &&
             IsTableSep(lines[i + 1])) {
             Closer::Close(out, in_ul, in_ol);
@@ -302,7 +302,7 @@ std::wstring SpecGenerator::MarkdownToHtml(const std::wstring& md)
             continue;
         }
 
-        // ‰Óğ‘‚«
+        // ç®‡æ¡æ›¸ã
         bool is_ul = (t.size() > 1 && (t[0] == L'-' || t[0] == L'*' || t[0] == L'+') && t[1] == L' ');
         bool is_ol = false;
         if (!is_ul && t.size() > 2 && t[0] >= L'0' && t[0] <= L'9') {
@@ -360,25 +360,25 @@ std::wstring SpecGenerator::WrapReportHtml(const std::wstring& title,
          L"</style>\n</head>\n<body>\n";
     h += L"<h1>" + EscapeHtml(title) + L"</h1>\n";
     h += L"<div class=\"meta\"><table>\n";
-    h += L"<tr><td>ƒVƒXƒeƒ€–¼</td><td>" + EscapeHtml(in.system_name) + L"</td></tr>\n";
+    h += L"<tr><td>ã‚·ã‚¹ãƒ†ãƒ å</td><td>" + EscapeHtml(in.system_name) + L"</td></tr>\n";
     if (!in.purpose.empty())
-        h += L"<tr><td>–Ú“I</td><td>" + EscapeHtml(in.purpose) + L"</td></tr>\n";
+        h += L"<tr><td>ç›®çš„</td><td>" + EscapeHtml(in.purpose) + L"</td></tr>\n";
     if (!in.switch_name.empty())
-        h += L"<tr><td>ƒXƒCƒbƒ`–¼</td><td>" + EscapeHtml(in.switch_name) + L"</td></tr>\n";
+        h += L"<tr><td>ã‚¹ã‚¤ãƒƒãƒå</td><td>" + EscapeHtml(in.switch_name) + L"</td></tr>\n";
     if (!in.target_summary.empty())
-        h += L"<tr><td>‘ÎÛ</td><td>" + EscapeHtml(in.target_summary) + L"</td></tr>\n";
-    h += L"<tr><td>¶¬“ú</td><td>" + EscapeHtml(in.created_at) + L"</td></tr>\n";
-    h += L"<tr><td>¶¬•û–@</td><td>CopyMigration Switcher / AI ˜AŒgiGenspark APIj</td></tr>\n";
+        h += L"<tr><td>å¯¾è±¡</td><td>" + EscapeHtml(in.target_summary) + L"</td></tr>\n";
+    h += L"<tr><td>ç”Ÿæˆæ—¥æ™‚</td><td>" + EscapeHtml(in.created_at) + L"</td></tr>\n";
+    h += L"<tr><td>ç”Ÿæˆæ–¹æ³•</td><td>CopyMigration Switcher / AI é€£æºï¼ˆGenspark APIï¼‰</td></tr>\n";
     h += L"</table></div>\n";
     h += body_html;
-    h += L"<div class=\"note\">–{‘‚ÍƒVƒXƒeƒ€î•ñ‚ÆˆÚs‘ÎÛî•ñ‚ğŠî‚É AI ‚ª¶¬‚µ‚½‘ˆÄ‚Å‚·B"
-         L"“à—e‚ğŠm”FEC³‚Ì‚¤‚¦A³®‚Èd—l‘‚Æ‚µ‚Ä‚²—˜—p‚­‚¾‚³‚¢B</div>\n";
+    h += L"<div class=\"note\">æœ¬æ›¸ã¯ã‚·ã‚¹ãƒ†ãƒ æƒ…å ±ã¨ç§»è¡Œå¯¾è±¡æƒ…å ±ã‚’åŸºã« AI ãŒç”Ÿæˆã—ãŸè‰æ¡ˆã§ã™ã€‚"
+         L"å†…å®¹ã‚’ç¢ºèªãƒ»ä¿®æ­£ã®ã†ãˆã€æ­£å¼ãªä»•æ§˜æ›¸ã¨ã—ã¦ã”åˆ©ç”¨ãã ã•ã„ã€‚</div>\n";
     h += L"</body>\n</html>\n";
     return h;
 }
 
 // -----------------------------------------------------------------------------
-// ƒtƒ@ƒCƒ‹–¼ / ‘‚«o‚µ
+// ãƒ•ã‚¡ã‚¤ãƒ«å / æ›¸ãå‡ºã—
 // -----------------------------------------------------------------------------
 std::wstring SpecGenerator::SanitizeFileName(const std::wstring& s)
 {
@@ -416,7 +416,7 @@ bool SpecGenerator::WriteReportFile(const std::wstring& path, const std::wstring
     HANDLE h = ::CreateFileW(path.c_str(), GENERIC_WRITE, 0, nullptr,
                              CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, nullptr);
     if (h == INVALID_HANDLE_VALUE) {
-        out_error = L"ƒŒƒ|[ƒg‚ğ‘‚«‚ß‚Ü‚¹‚ñ: " + path;
+        out_error = L"ãƒ¬ãƒãƒ¼ãƒˆã‚’æ›¸ãè¾¼ã‚ã¾ã›ã‚“: " + path;
         return false;
     }
     const unsigned char bom[3] = { 0xEF, 0xBB, 0xBF };

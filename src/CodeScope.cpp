@@ -1,4 +1,4 @@
-// =============================================================================
+ï»¿// =============================================================================
 // CodeScope.cpp
 // =============================================================================
 #include "CodeScope.h"
@@ -14,11 +14,11 @@ bool CodeScope::IsIdentifierChar(wchar_t c)
     if (c >= L'A' && c <= L'Z') return true;
     if (c >= L'a' && c <= L'z') return true;
     if (c == L'_') return true;
-    if (c >= 0x80) return true;      // “ú–{Œê¯•Êqiˆê•”ƒRƒ“ƒpƒCƒ‰j‚à‹–—e
+    if (c >= 0x80) return true;      // æ—¥æœ¬èªè­˜åˆ¥å­ï¼ˆä¸€éƒ¨ã‚³ãƒ³ãƒ‘ã‚¤ãƒ©ï¼‰ã‚‚è¨±å®¹
     return false;
 }
 
-// •¶š—ñE•¶šƒŠƒeƒ‰ƒ‹EƒRƒƒ“ƒg‚ğ“Ç‚İ”ò‚Î‚µ‚È‚ª‚ç‘–¸‚·‚é‚½‚ß‚Ìó‘Ô
+// æ–‡å­—åˆ—ãƒ»æ–‡å­—ãƒªãƒ†ãƒ©ãƒ«ãƒ»ã‚³ãƒ¡ãƒ³ãƒˆã‚’èª­ã¿é£›ã°ã—ãªãŒã‚‰èµ°æŸ»ã™ã‚‹ãŸã‚ã®çŠ¶æ…‹
 namespace {
 struct ScanState {
     bool in_line = false;
@@ -29,7 +29,7 @@ struct ScanState {
     void Reset() { in_line = in_block = in_str = in_chr = escape = false; }
 };
 
-// text[i] ‚ğˆ—‚·‚éB“Ç‚İ”ò‚Î‚µ‚½ê‡‚Í true ‚ğ•Ô‚·ii ‚ği‚ß‚éj
+// text[i] ã‚’å‡¦ç†ã™ã‚‹ã€‚èª­ã¿é£›ã°ã—ãŸå ´åˆã¯ true ã‚’è¿”ã™ï¼ˆi ã‚’é€²ã‚ã‚‹ï¼‰
 inline bool SkipOne(const std::wstring& t, size_t& i, ScanState& s)
 {
     wchar_t c = t[i];
@@ -107,11 +107,11 @@ bool CodeScope::FindFunctionBody(const std::wstring& text,
 
     std::wstring name = util::Trim(function_name);
     if (name.empty()) {
-        out_error = L"ŠÖ”–¼‚ğ“ü—Í‚µ‚Ä‚­‚¾‚³‚¢B";
+        out_error = L"é–¢æ•°åã‚’å…¥åŠ›ã—ã¦ãã ã•ã„ã€‚";
         return false;
     }
     if (text.empty()) {
-        out_error = L"ŒŸõ‘ÎÛ‚ÌƒeƒLƒXƒg‚ª‹ó‚Å‚·B";
+        out_error = L"æ¤œç´¢å¯¾è±¡ã®ãƒ†ã‚­ã‚¹ãƒˆãŒç©ºã§ã™ã€‚";
         return false;
     }
 
@@ -121,12 +121,12 @@ bool CodeScope::FindFunctionBody(const std::wstring& text,
         if (f == std::wstring::npos) break;
         pos = f + 1;
 
-        // ¯•Êq‚Ìˆê•”imy_stock_alloc ‚È‚Çj‚Ö‚ÌŒëˆê’v‚ğœŠO‚·‚é
+        // è­˜åˆ¥å­ã®ä¸€éƒ¨ï¼ˆmy_stock_alloc ãªã©ï¼‰ã¸ã®èª¤ä¸€è‡´ã‚’é™¤å¤–ã™ã‚‹
         if (f > 0 && IsIdentifierChar(text[f - 1])) continue;
         size_t after = f + name.size();
         if (after < text.size() && IsIdentifierChar(text[after])) continue;
 
-        // ’¼Œã‚Ì”ñ‹ó”’‚ª '(' ‚Å‚ ‚é‚±‚ÆiéŒ¾E’è‹`‚Ìˆø”ƒŠƒXƒgj
+        // ç›´å¾Œã®éç©ºç™½ãŒ '(' ã§ã‚ã‚‹ã“ã¨ï¼ˆå®£è¨€ãƒ»å®šç¾©ã®å¼•æ•°ãƒªã‚¹ãƒˆï¼‰
         size_t p = after;
         while (p < text.size() && (text[p] == L' ' || text[p] == L'\t' ||
                                    text[p] == L'\r' || text[p] == L'\n')) ++p;
@@ -135,12 +135,12 @@ bool CodeScope::FindFunctionBody(const std::wstring& text,
         size_t pclose = 0;
         if (!MatchParen(text, p, pclose)) continue;
 
-        // ˆø”ƒŠƒXƒg‚ÌŒãAÅ‰‚Ì '{' ‚ğ’T‚·iconst / noexcept / ‘®«‚È‚Ç‚ğ“Ç‚İ”ò‚Î‚·j
+        // å¼•æ•°ãƒªã‚¹ãƒˆã®å¾Œã€æœ€åˆã® '{' ã‚’æ¢ã™ï¼ˆconst / noexcept / å±æ€§ãªã©ã‚’èª­ã¿é£›ã°ã™ï¼‰
         size_t b = pclose + 1;
         while (b < text.size()) {
             wchar_t c = text[b];
             if (c == L'{') break;
-            if (c == L';') { b = std::wstring::npos; break; }   // éŒ¾‚Ì‚İi–{‘Ì‚È‚µj
+            if (c == L';') { b = std::wstring::npos; break; }   // å®£è¨€ã®ã¿ï¼ˆæœ¬ä½“ãªã—ï¼‰
             ++b;
         }
         if (b == std::wstring::npos || b >= text.size()) continue;
@@ -156,13 +156,13 @@ bool CodeScope::FindFunctionBody(const std::wstring& text,
         return true;
     }
 
-    out_error = L"ŠÖ”u" + name + L"v‚Ì–{‘Ì‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñ‚Å‚µ‚½B";
+    out_error = L"é–¢æ•°ã€Œ" + name + L"ã€ã®æœ¬ä½“ãŒè¦‹ã¤ã‹ã‚Šã¾ã›ã‚“ã§ã—ãŸã€‚";
     return false;
 }
 
 std::wstring CodeScope::EnclosingFunctionName(const std::wstring& text, size_t offset)
 {
-    // offset ‚æ‚è‘O‚ÅÅ‚à‹ß‚¢ '{' ‚É‘Î‰‚·‚éŠÖ”–¼‚ğ„’è‚·‚éiŠÈˆÕÀ‘•j
+    // offset ã‚ˆã‚Šå‰ã§æœ€ã‚‚è¿‘ã„ '{' ã«å¯¾å¿œã™ã‚‹é–¢æ•°åã‚’æ¨å®šã™ã‚‹ï¼ˆç°¡æ˜“å®Ÿè£…ï¼‰
     size_t best = std::wstring::npos;
     for (size_t i = 0; i < offset && i < text.size(); ++i) {
         if (text[i] != L'{') continue;
@@ -172,7 +172,7 @@ std::wstring CodeScope::EnclosingFunctionName(const std::wstring& text, size_t o
     }
     if (best == std::wstring::npos) return std::wstring();
 
-    // '{' ‚Ì’¼‘O‚Ì¯•Êqiˆø”ƒŠƒXƒg‚Ì’¼‘Oj‚ğŠÖ”–¼‚Æ‚İ‚È‚·
+    // '{' ã®ç›´å‰ã®è­˜åˆ¥å­ï¼ˆå¼•æ•°ãƒªã‚¹ãƒˆã®ç›´å‰ï¼‰ã‚’é–¢æ•°åã¨ã¿ãªã™
     size_t p = best;
     while (p > 0 && (text[p - 1] == L' ' || text[p - 1] == L'\t' ||
                      text[p - 1] == L'\r' || text[p - 1] == L'\n')) --p;

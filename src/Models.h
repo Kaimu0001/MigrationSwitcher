@@ -1,7 +1,7 @@
-// =============================================================================
+ï»¿// =============================================================================
 // Models.h
-// Migration Switcher - ƒf[ƒ^ƒ‚ƒfƒ‹’è‹`
-// İŒv‘ 8Íuƒf[ƒ^İŒvv/ 6.5.4uŒŸõŒ‹‰Êv‚É‘Î‰
+// Migration Switcher - ãƒ‡ãƒ¼ã‚¿ãƒ¢ãƒ‡ãƒ«å®šç¾©
+// è¨­è¨ˆæ›¸ 8ç« ã€Œãƒ‡ãƒ¼ã‚¿è¨­è¨ˆã€/ 6.5.4ã€Œæ¤œç´¢çµæœã€ã«å¯¾å¿œ
 // =============================================================================
 #pragma once
 
@@ -11,65 +11,65 @@
 namespace ms {
 
 // -----------------------------------------------------------------------------
-// ’uŠ·•û®iİŒv‘ 6.7 •ÏŠ·•û®A`D + 18Í ƒeƒ“ƒvƒŒ[ƒgj
+// ç½®æ›æ–¹å¼ï¼ˆè¨­è¨ˆæ›¸ 6.7 å¤‰æ›æ–¹å¼Aï½D + 18ç«  ãƒ†ãƒ³ãƒ—ãƒ¬ãƒ¼ãƒˆï¼‰
 // -----------------------------------------------------------------------------
 enum class SwitchStyle {
-    IfdefNewFirst = 0,   // •û®A: #ifdef VƒR[ƒh—Dæ•û®
-    IfndefOldFirst,      // •û®B: #ifndef ‹ŒƒR[ƒh—Dæ•û®
-    IfdefWithComments,   // •û®C: ƒRƒƒ“ƒg•t‚«•û®
-    BlockCommentStyle,   // •û®D: ŠJnI—¹ƒRƒƒ“ƒg•û®
-    CustomTemplate       // 18Í: ƒ†[ƒU[ƒeƒ“ƒvƒŒ[ƒg
+    IfdefNewFirst = 0,   // æ–¹å¼A: #ifdef æ–°ã‚³ãƒ¼ãƒ‰å„ªå…ˆæ–¹å¼
+    IfndefOldFirst,      // æ–¹å¼B: #ifndef æ—§ã‚³ãƒ¼ãƒ‰å„ªå…ˆæ–¹å¼
+    IfdefWithComments,   // æ–¹å¼C: ã‚³ãƒ¡ãƒ³ãƒˆä»˜ãæ–¹å¼
+    BlockCommentStyle,   // æ–¹å¼D: é–‹å§‹çµ‚äº†ã‚³ãƒ¡ãƒ³ãƒˆæ–¹å¼
+    CustomTemplate       // 18ç« : ãƒ¦ãƒ¼ã‚¶ãƒ¼ãƒ†ãƒ³ãƒ—ãƒ¬ãƒ¼ãƒˆ
 };
 
 // -----------------------------------------------------------------------------
-// ˆê’ví•ÊiİŒv‘ 5.6.1 ŒŸõŒ‹‰ÊƒJƒ‰ƒ€j
+// ä¸€è‡´ç¨®åˆ¥ï¼ˆè¨­è¨ˆæ›¸ 5.6.1 æ¤œç´¢çµæœã‚«ãƒ©ãƒ ï¼‰
 // -----------------------------------------------------------------------------
 enum class MatchType {
-    Exact = 0,      // Š®‘Sˆê’v
-    Normalized,     // ³‹K‰»ˆê’viŒã‘±”Åj
-    Similar         // —Ş—ˆê’viŒã‘±”Åj
+    Exact = 0,      // å®Œå…¨ä¸€è‡´
+    Normalized,     // æ­£è¦åŒ–ä¸€è‡´ï¼ˆå¾Œç¶šç‰ˆï¼‰
+    Similar         // é¡ä¼¼ä¸€è‡´ï¼ˆå¾Œç¶šç‰ˆï¼‰
 };
 
 // -----------------------------------------------------------------------------
-// ˆê’v‰ÓŠ‚Ìó‘ÔiİŒv‘ 5.6.1 / 8.3j
+// ä¸€è‡´ç®‡æ‰€ã®çŠ¶æ…‹ï¼ˆè¨­è¨ˆæ›¸ 5.6.1 / 8.3ï¼‰
 // -----------------------------------------------------------------------------
 enum class MatchStatus {
-    Target = 0,     // ‘ÎÛ
-    Excluded,       // œŠO
-    Warning,        // Œx
-    Error           // ƒGƒ‰[
+    Target = 0,     // å¯¾è±¡
+    Excluded,       // é™¤å¤–
+    Warning,        // è­¦å‘Š
+    Error           // ã‚¨ãƒ©ãƒ¼
 };
 
 // -----------------------------------------------------------------------------
-// Àsƒ‚[ƒhiİŒv‘ 6.11 ƒhƒ‰ƒCƒ‰ƒ“ / 6.12 ƒŒƒ|[ƒgj
+// å®Ÿè¡Œãƒ¢ãƒ¼ãƒ‰ï¼ˆè¨­è¨ˆæ›¸ 6.11 ãƒ‰ãƒ©ã‚¤ãƒ©ãƒ³ / 6.12 ãƒ¬ãƒãƒ¼ãƒˆï¼‰
 // -----------------------------------------------------------------------------
 enum class ExecutionMode {
-    DryRun = 0,     // ƒhƒ‰ƒCƒ‰ƒ“
-    Real            // –{Às
+    DryRun = 0,     // ãƒ‰ãƒ©ã‚¤ãƒ©ãƒ³
+    Real            // æœ¬å®Ÿè¡Œ
 };
 
 // -----------------------------------------------------------------------------
-// ƒqƒbƒg‚Ì“®ìiİŒv‘ 5.3.1 [ƒqƒbƒg‚Ì“®ì]j
+// ãƒ’ãƒƒãƒˆæ™‚ã®å‹•ä½œï¼ˆè¨­è¨ˆæ›¸ 5.3.1 [ãƒ’ãƒƒãƒˆæ™‚ã®å‹•ä½œ]ï¼‰
 // -----------------------------------------------------------------------------
 enum class HitBehavior {
-    AutoSelectSingle = 0,  // 1Œ‚Ìê‡‚Ì‚İ©“®‘I‘ğ
-    FirstOnly,             // Å‰‚Ì1Œ‚ğ‘ÎÛ‚É‚·‚é
-    AllMatches,            // ‚·‚×‚Ä‚Ìˆê’v‚ğ‘ÎÛ‚É‚·‚é
-    Manual                 // ƒ†[ƒU[‚ªˆê——‚©‚ç‘I‘ğ‚·‚é
+    AutoSelectSingle = 0,  // 1ä»¶ã®å ´åˆã®ã¿è‡ªå‹•é¸æŠ
+    FirstOnly,             // æœ€åˆã®1ä»¶ã‚’å¯¾è±¡ã«ã™ã‚‹
+    AllMatches,            // ã™ã¹ã¦ã®ä¸€è‡´ã‚’å¯¾è±¡ã«ã™ã‚‹
+    Manual                 // ãƒ¦ãƒ¼ã‚¶ãƒ¼ãŒä¸€è¦§ã‹ã‚‰é¸æŠã™ã‚‹
 };
 
 // -----------------------------------------------------------------------------
-// ƒvƒŒƒrƒ…[•\¦ƒ‚[ƒhiİŒv‘ 5.7.2j
+// ãƒ—ãƒ¬ãƒ“ãƒ¥ãƒ¼è¡¨ç¤ºãƒ¢ãƒ¼ãƒ‰ï¼ˆè¨­è¨ˆæ›¸ 5.7.2ï¼‰
 // -----------------------------------------------------------------------------
 enum class PreviewMode {
-    Simple = 0,     // ’Pƒ•\¦
-    TopBottom,      // ‘OŒã”äŠr•\¦
-    SideBySide,     // ¶‰E”äŠr•\¦
-    Html            // HTML•\¦
+    Simple = 0,     // å˜ç´”è¡¨ç¤º
+    TopBottom,      // å‰å¾Œæ¯”è¼ƒè¡¨ç¤º
+    SideBySide,     // å·¦å³æ¯”è¼ƒè¡¨ç¤º
+    Html            // HTMLè¡¨ç¤º
 };
 
 // -----------------------------------------------------------------------------
-// ƒAƒvƒŠƒP[ƒVƒ‡ƒ“ó‘ÔiİŒv‘ 13.1j
+// ã‚¢ãƒ—ãƒªã‚±ãƒ¼ã‚·ãƒ§ãƒ³çŠ¶æ…‹ï¼ˆè¨­è¨ˆæ›¸ 13.1ï¼‰
 // -----------------------------------------------------------------------------
 enum class AppState {
     INIT = 0,
@@ -79,23 +79,23 @@ enum class AppState {
     PREVIEWED,
     EXECUTING,
     COMPLETED,
-    Error,          // Windows ‚Ì ERROR ƒ}ƒNƒiwingdi.hj‚ÆÕ“Ë‚·‚é‚½‚ß Error ‚Æ‚·‚é
+    Error,          // Windows ã® ERROR ãƒã‚¯ãƒ­ï¼ˆwingdi.hï¼‰ã¨è¡çªã™ã‚‹ãŸã‚ Error ã¨ã™ã‚‹
     UNDO_AVAILABLE
 };
 
 // -----------------------------------------------------------------------------
-// ƒƒOƒŒƒxƒ‹iİŒv‘ 6.14.3j
+// ãƒ­ã‚°ãƒ¬ãƒ™ãƒ«ï¼ˆè¨­è¨ˆæ›¸ 6.14.3ï¼‰
 // -----------------------------------------------------------------------------
 enum class LogLevel {
     DEBUG = 0,
     INFO,
     WARN,
-    Error,          // Windows ‚Ì ERROR ƒ}ƒNƒ‚ÆÕ“Ë‚·‚é‚½‚ß Error ‚Æ‚·‚é
+    Error,          // Windows ã® ERROR ãƒã‚¯ãƒ­ã¨è¡çªã™ã‚‹ãŸã‚ Error ã¨ã™ã‚‹
     FATAL
 };
 
 // -----------------------------------------------------------------------------
-// ƒeƒLƒXƒg•¶šƒR[ƒhiİŒv‘ 3.4j
+// ãƒ†ã‚­ã‚¹ãƒˆæ–‡å­—ã‚³ãƒ¼ãƒ‰ï¼ˆè¨­è¨ˆæ›¸ 3.4ï¼‰
 // -----------------------------------------------------------------------------
 enum class TextEncoding {
     UTF8 = 0,
@@ -103,31 +103,31 @@ enum class TextEncoding {
     ShiftJIS,
     UTF16LE,
     Unknown,
-    EucJp           // EUC-JPiŒã‘±”Å‘Î‰ / –¾¦w’è‚Ü‚½‚Í©“®”»’èj
+    EucJp           // EUC-JPï¼ˆå¾Œç¶šç‰ˆå¯¾å¿œ / æ˜ç¤ºæŒ‡å®šã¾ãŸã¯è‡ªå‹•åˆ¤å®šï¼‰
 };
 
 // -----------------------------------------------------------------------------
-// ƒŒƒ|[ƒgo—ÍŒ`®i6.12 ·•ªƒŒƒ|[ƒg / Œã‘±”Å‚Ì MarkdownEJSON ‘Î‰j
+// ãƒ¬ãƒãƒ¼ãƒˆå‡ºåŠ›å½¢å¼ï¼ˆ6.12 å·®åˆ†ãƒ¬ãƒãƒ¼ãƒˆ / å¾Œç¶šç‰ˆã® Markdownãƒ»JSON å¯¾å¿œï¼‰
 // -----------------------------------------------------------------------------
 enum class ReportFormat {
-    Html = 0,       // HTMLiŠù’èj
+    Html = 0,       // HTMLï¼ˆæ—¢å®šï¼‰
     Markdown,       // Markdown
     Json,           // JSON
-    All             // ‚·‚×‚Äo—Í
+    All             // ã™ã¹ã¦å‡ºåŠ›
 };
 
 // -----------------------------------------------------------------------------
-// ŒŸõğŒ‚Ìí•Êi—Ş—ˆê’v / w’ès”ÍˆÍ / ŠÖ”’PˆÊj
+// æ¤œç´¢æ¡ä»¶ã®ç¨®åˆ¥ï¼ˆé¡ä¼¼ä¸€è‡´ / æŒ‡å®šè¡Œç¯„å›² / é–¢æ•°å˜ä½ï¼‰
 // -----------------------------------------------------------------------------
 enum class SearchMode {
-    Exact = 0,      // Š®‘Sˆê’v
-    Similar,        // —Ş—ˆê’vi‹ó”’‚Ì—h‚ê‚ğ‹–—ej
-    LineRange,      // w’ès”ÍˆÍ
-    Function        // ŠÖ”’PˆÊ
+    Exact = 0,      // å®Œå…¨ä¸€è‡´
+    Similar,        // é¡ä¼¼ä¸€è‡´ï¼ˆç©ºç™½ã®æºã‚Œã‚’è¨±å®¹ï¼‰
+    LineRange,      // æŒ‡å®šè¡Œç¯„å›²
+    Function        // é–¢æ•°å˜ä½
 };
 
 // -----------------------------------------------------------------------------
-// ‰üsƒR[ƒh
+// æ”¹è¡Œã‚³ãƒ¼ãƒ‰
 // -----------------------------------------------------------------------------
 enum class NewlineKind {
     LF = 0,     // \n
@@ -135,27 +135,27 @@ enum class NewlineKind {
     CR          // \r
 };
 
-// ‘ÎÛí•ÊiİŒv‘ 17.2.1 [‘ÎÛí•Ê]j
+// å¯¾è±¡ç¨®åˆ¥ï¼ˆè¨­è¨ˆæ›¸ 17.2.1 [å¯¾è±¡ç¨®åˆ¥]ï¼‰
 enum class TargetKind {
-    SingleFile = 0,   // ’Pˆêƒtƒ@ƒCƒ‹
-    Folder            // ƒtƒHƒ‹ƒ_
+    SingleFile = 0,   // å˜ä¸€ãƒ•ã‚¡ã‚¤ãƒ«
+    Folder            // ãƒ•ã‚©ãƒ«ãƒ€
 };
 
 // -----------------------------------------------------------------------------
-// 8.3 ŒŸõŒ‹‰Ê
+// 8.3 æ¤œç´¢çµæœ
 // -----------------------------------------------------------------------------
 struct MatchResult {
     int             match_id = 0;
     std::wstring    file_path;
     size_t          start_offset = 0;
     size_t          end_offset = 0;
-    int             start_line = 0;      // 1 ‹N“_
+    int             start_line = 0;      // 1 èµ·ç‚¹
     int             end_line = 0;
-    int             start_column = 0;    // 1 ‹N“_
+    int             start_column = 0;    // 1 èµ·ç‚¹
     int             end_column = 0;
     std::wstring    matched_text;
     MatchType       match_type = MatchType::Exact;
-    int             match_rate = 100;    // —Ş—ˆê’v‚Ìˆê’v—¦(%)
+    int             match_rate = 100;    // é¡ä¼¼ä¸€è‡´æ™‚ã®ä¸€è‡´ç‡(%)
     bool            selected = false;
     MatchStatus     status = MatchStatus::Target;
     std::vector<std::wstring> warning_flags;
@@ -164,7 +164,7 @@ struct MatchResult {
 };
 
 // -----------------------------------------------------------------------------
-// 8.1 İ’èî•ñ
+// 8.1 è¨­å®šæƒ…å ±
 // -----------------------------------------------------------------------------
 struct AppConfig {
     std::wstring last_target_directory;
@@ -178,68 +178,68 @@ struct AppConfig {
     bool         warn_comment_match = false;
     bool         warn_existing_preprocessor = false;
     std::wstring winmerge_path;
-    std::wstring default_report_directory;   // Šù’è: reports
-    std::wstring default_backup_directory;   // Šù’è: backups
+    std::wstring default_report_directory;   // æ—¢å®š: reports
+    std::wstring default_backup_directory;   // æ—¢å®š: backups
     std::wstring encoding_mode;              // auto / utf8 / utf8bom / sjis
     HitBehavior  hit_behavior = HitBehavior::AutoSelectSingle;
     PreviewMode  preview_mode = PreviewMode::TopBottom;
     int          preprocessor_scan_lines = 5;
-    std::wstring custom_template;            // 18Í
+    std::wstring custom_template;            // 18ç« 
 
-    // ---- 17Í •¡”ƒtƒ@ƒCƒ‹ˆêŠ‡ˆ—iPhase 4j----
-    TargetKind   target_kind = TargetKind::SingleFile;  // ‘ÎÛí•Ê
-    std::wstring last_target_folder;                    // ‘O‰ñ‚Ì‘ÎÛƒtƒHƒ‹ƒ_
-    std::vector<std::wstring> extension_filter;         // Šg’£qƒtƒBƒ‹ƒ^i—á: {L".c", L".h"}j
-    bool         include_subdirs = true;                // ƒTƒuƒtƒHƒ‹ƒ_‚ğŠÜ‚ß‚é
+    // ---- 17ç«  è¤‡æ•°ãƒ•ã‚¡ã‚¤ãƒ«ä¸€æ‹¬å‡¦ç†ï¼ˆPhase 4ï¼‰----
+    TargetKind   target_kind = TargetKind::SingleFile;  // å¯¾è±¡ç¨®åˆ¥
+    std::wstring last_target_folder;                    // å‰å›ã®å¯¾è±¡ãƒ•ã‚©ãƒ«ãƒ€
+    std::vector<std::wstring> extension_filter;         // æ‹¡å¼µå­ãƒ•ã‚£ãƒ«ã‚¿ï¼ˆä¾‹: {L".c", L".h"}ï¼‰
+    bool         include_subdirs = true;                // ã‚µãƒ–ãƒ•ã‚©ãƒ«ãƒ€ã‚’å«ã‚ã‚‹
 
-    // ---- ƒXƒCƒbƒ`’è‹`ƒwƒbƒ_‚ÌˆêŒ³ŠÇ— ----
-    bool         manage_switch_header = true;           // ƒXƒCƒbƒ`’è‹`ƒwƒbƒ_‚ğ¶¬/XV‚·‚é
-    bool         add_switch_header_include = true;      // ‘ÎÛƒtƒ@ƒCƒ‹‚Ö #include ‚ğ’Ç‰Á‚·‚é
-    std::wstring switch_header_name;                    // Šù’è: migration_switch.h
-    std::wstring switch_header_dir;                     // ‹ó = ‘ÎÛ‚Æ“¯ˆêƒtƒHƒ‹ƒ_
-    std::wstring switch_memo;                           // ƒXƒCƒbƒ`‚Ì—p“rƒƒ‚
-    std::wstring last_switch_header_path;               // ’¼‹ß‚Éˆµ‚Á‚½ƒwƒbƒ_
+    // ---- ã‚¹ã‚¤ãƒƒãƒå®šç¾©ãƒ˜ãƒƒãƒ€ã®ä¸€å…ƒç®¡ç† ----
+    bool         manage_switch_header = true;           // ã‚¹ã‚¤ãƒƒãƒå®šç¾©ãƒ˜ãƒƒãƒ€ã‚’ç”Ÿæˆ/æ›´æ–°ã™ã‚‹
+    bool         add_switch_header_include = true;      // å¯¾è±¡ãƒ•ã‚¡ã‚¤ãƒ«ã¸ #include ã‚’è¿½åŠ ã™ã‚‹
+    std::wstring switch_header_name;                    // æ—¢å®š: migration_switch.h
+    std::wstring switch_header_dir;                     // ç©º = å¯¾è±¡ã¨åŒä¸€ãƒ•ã‚©ãƒ«ãƒ€
+    std::wstring switch_memo;                           // ã‚¹ã‚¤ãƒƒãƒã®ç”¨é€”ãƒ¡ãƒ¢
+    std::wstring last_switch_header_path;               // ç›´è¿‘ã«æ‰±ã£ãŸãƒ˜ãƒƒãƒ€
 
-    // ---- AI ˜AŒgi•ÏXd—l‘ / ŒŸ¸d—l‘‚Ì¶¬j----
-    int          ai_provider = 0;                       // 0=Genspark API / 1=OpenAI ŒİŠ· API
-    std::wstring ai_openai_key;                         // OpenAI ŒİŠ· API ƒL[
-    std::wstring ai_openai_endpoint;                    // Šù’è: https://api.openai.com/v1/chat/completions
-    std::wstring ai_openai_model;                       // —á: gpt-4o-mini
-    std::wstring ai_api_key;                            // Genspark API ƒL[
-    std::wstring ai_endpoint;                           // Šù’è: https://www.genspark.ai/api/tool_cli/agent_ask
-    std::wstring ai_model;                              // ‹ó = ƒT[ƒoŠù’è
-    std::wstring ai_task_type;                          // Šù’è: super_agent
+    // ---- AI é€£æºï¼ˆå¤‰æ›´ä»•æ§˜æ›¸ / æ¤œæŸ»ä»•æ§˜æ›¸ã®ç”Ÿæˆï¼‰----
+    int          ai_provider = 0;                       // 0=Genspark API / 1=OpenAI äº’æ› API
+    std::wstring ai_openai_key;                         // OpenAI äº’æ› API ã‚­ãƒ¼
+    std::wstring ai_openai_endpoint;                    // æ—¢å®š: https://api.openai.com/v1/chat/completions
+    std::wstring ai_openai_model;                       // ä¾‹: gpt-4o-mini
+    std::wstring ai_api_key;                            // Genspark API ã‚­ãƒ¼
+    std::wstring ai_endpoint;                           // æ—¢å®š: https://www.genspark.ai/api/tool_cli/agent_ask
+    std::wstring ai_model;                              // ç©º = ã‚µãƒ¼ãƒæ—¢å®š
+    std::wstring ai_task_type;                          // æ—¢å®š: super_agent
     int          ai_timeout_sec = 600;
-    bool         ai_open_report = true;                 // ¶¬Œã‚ÉƒŒƒ|[ƒg‚ğŠJ‚­
-    std::wstring sys_name;                              // ƒVƒXƒeƒ€–¼
-    std::wstring sys_overview;                          // ƒVƒXƒeƒ€ŠT—v
-    std::wstring sys_purpose;                           // –Ú“I
-    std::wstring sys_modification;                      // C³‰ÓŠŠT—v
-    std::wstring sys_extra;                             // ’Ç‰Áw¦
-    std::wstring last_spec_report_path;                 // ’¼‹ß‚É¶¬‚µ‚½d—l‘
+    bool         ai_open_report = true;                 // ç”Ÿæˆå¾Œã«ãƒ¬ãƒãƒ¼ãƒˆã‚’é–‹ã
+    std::wstring sys_name;                              // ã‚·ã‚¹ãƒ†ãƒ å
+    std::wstring sys_overview;                          // ã‚·ã‚¹ãƒ†ãƒ æ¦‚è¦
+    std::wstring sys_purpose;                           // ç›®çš„
+    std::wstring sys_modification;                      // ä¿®æ­£ç®‡æ‰€æ¦‚è¦
+    std::wstring sys_extra;                             // è¿½åŠ æŒ‡ç¤º
+    std::wstring last_spec_report_path;                 // ç›´è¿‘ã«ç”Ÿæˆã—ãŸä»•æ§˜æ›¸
 
-    // ---- ŒŸõğŒ‚ÌŠg’£i—Ş—ˆê’v / w’ès”ÍˆÍ / ŠÖ”’PˆÊj----
-    bool         search_similar = false;                // —Ş—ˆê’vŒŸõ‚ğ—LŒø‚É‚·‚é
-    int          search_similar_threshold = 70;         // ˆê’v—¦‚Ì‚µ‚«‚¢’l(%)
-    bool         search_line_range = false;             // w’ès”ÍˆÍ‚ÅŒŸõ‚·‚é
-    int          search_line_from = 1;                  // ŠJnsi1 ‹N“_j
-    int          search_line_to = 0;                    // I—¹si0 = ÅIs‚Ü‚Åj
-    bool         search_function = false;               // ŠÖ”’PˆÊ‚ÅŒŸõ‚·‚é
-    std::wstring search_function_name;                  // ‘ÎÛ‚ÌŠÖ”–¼
+    // ---- æ¤œç´¢æ¡ä»¶ã®æ‹¡å¼µï¼ˆé¡ä¼¼ä¸€è‡´ / æŒ‡å®šè¡Œç¯„å›² / é–¢æ•°å˜ä½ï¼‰----
+    bool         search_similar = false;                // é¡ä¼¼ä¸€è‡´æ¤œç´¢ã‚’æœ‰åŠ¹ã«ã™ã‚‹
+    int          search_similar_threshold = 70;         // ä¸€è‡´ç‡ã®ã—ãã„å€¤(%)
+    bool         search_line_range = false;             // æŒ‡å®šè¡Œç¯„å›²ã§æ¤œç´¢ã™ã‚‹
+    int          search_line_from = 1;                  // é–‹å§‹è¡Œï¼ˆ1 èµ·ç‚¹ï¼‰
+    int          search_line_to = 0;                    // çµ‚äº†è¡Œï¼ˆ0 = æœ€çµ‚è¡Œã¾ã§ï¼‰
+    bool         search_function = false;               // é–¢æ•°å˜ä½ã§æ¤œç´¢ã™ã‚‹
+    std::wstring search_function_name;                  // å¯¾è±¡ã®é–¢æ•°å
 
-    // ---- ƒŒƒ|[ƒgo—ÍŒ`®iHTML ‚É‰Á‚¦‚Ä Markdown / JSONj----
+    // ---- ãƒ¬ãƒãƒ¼ãƒˆå‡ºåŠ›å½¢å¼ï¼ˆHTML ã«åŠ ãˆã¦ Markdown / JSONï¼‰----
     bool         report_markdown = false;
     bool         report_json = false;
 
-    // ---- •¡”¢‘ã Undo ----
-    int          undo_max_generations = 10;             // •Û‚·‚é‘€ì¢‘ã”
+    // ---- è¤‡æ•°ä¸–ä»£ Undo ----
+    int          undo_max_generations = 10;             // ä¿æŒã™ã‚‹æ“ä½œä¸–ä»£æ•°
 
-    // ---- ŒŸõŒ‹‰Ê‚ÌƒGƒNƒXƒ|[ƒgiCSV / Markdown / JSONj----
-    std::wstring last_export_path;                      // ’¼‹ß‚Éo—Í‚µ‚½ƒGƒNƒXƒ|[ƒg
+    // ---- æ¤œç´¢çµæœã®ã‚¨ã‚¯ã‚¹ãƒãƒ¼ãƒˆï¼ˆCSV / Markdown / JSONï¼‰----
+    std::wstring last_export_path;                      // ç›´è¿‘ã«å‡ºåŠ›ã—ãŸã‚¨ã‚¯ã‚¹ãƒãƒ¼ãƒˆ
 };
 
 // -----------------------------------------------------------------------------
-// 8.2 ÀsƒRƒ“ƒeƒLƒXƒg
+// 8.2 å®Ÿè¡Œã‚³ãƒ³ãƒ†ã‚­ã‚¹ãƒˆ
 // -----------------------------------------------------------------------------
 struct OperationContext {
     std::wstring  operation_id;
@@ -257,22 +257,22 @@ struct OperationContext {
     NewlineKind   newline = NewlineKind::CRLF;
     std::wstring  started_at;
 
-    // ---- 17Í •¡”ƒtƒ@ƒCƒ‹ˆêŠ‡ˆ—iPhase 4j----
+    // ---- 17ç«  è¤‡æ•°ãƒ•ã‚¡ã‚¤ãƒ«ä¸€æ‹¬å‡¦ç†ï¼ˆPhase 4ï¼‰----
     TargetKind    target_kind = TargetKind::SingleFile;
-    std::wstring  target_folder;              // ‘ÎÛƒtƒHƒ‹ƒ_
+    std::wstring  target_folder;              // å¯¾è±¡ãƒ•ã‚©ãƒ«ãƒ€
     std::vector<std::wstring> extension_filter;
     bool          include_subdirs = true;
-    std::vector<std::wstring> target_files;   // ‘–¸‚Å’Šo‚³‚ê‚½‘ÎÛƒtƒ@ƒCƒ‹ˆê——
+    std::vector<std::wstring> target_files;   // èµ°æŸ»ã§æŠ½å‡ºã•ã‚ŒãŸå¯¾è±¡ãƒ•ã‚¡ã‚¤ãƒ«ä¸€è¦§
 
-    // ---- ƒXƒCƒbƒ`’è‹`ƒwƒbƒ_‚ÌˆêŒ³ŠÇ— ----
+    // ---- ã‚¹ã‚¤ãƒƒãƒå®šç¾©ãƒ˜ãƒƒãƒ€ã®ä¸€å…ƒç®¡ç† ----
     bool         manage_switch_header = false;
     bool         add_switch_header_include = false;
-    std::wstring switch_header_path;          // ƒwƒbƒ_‚Ìâ‘ÎƒpƒX
-    std::wstring switch_memo;                 // ƒXƒCƒbƒ`‚Ì—p“rƒƒ‚
+    std::wstring switch_header_path;          // ãƒ˜ãƒƒãƒ€ã®çµ¶å¯¾ãƒ‘ã‚¹
+    std::wstring switch_memo;                 // ã‚¹ã‚¤ãƒƒãƒã®ç”¨é€”ãƒ¡ãƒ¢
 };
 
 // -----------------------------------------------------------------------------
-// 8.4 •ÏŠ·Œ‹‰Ê
+// 8.4 å¤‰æ›çµæœ
 // -----------------------------------------------------------------------------
 struct ReplaceResult {
     std::wstring  operation_id;
@@ -286,15 +286,15 @@ struct ReplaceResult {
     int           error_count = 0;
     std::wstring  status;          // Success / Failed / Warning
     std::wstring  executed_at;
-    std::wstring  switch_header_path;      // XV‚µ‚½ƒXƒCƒbƒ`’è‹`ƒwƒbƒ_
+    std::wstring  switch_header_path;      // æ›´æ–°ã—ãŸã‚¹ã‚¤ãƒƒãƒå®šç¾©ãƒ˜ãƒƒãƒ€
     bool          switch_header_updated = false;
-    bool          switch_header_added = false;   // ƒXƒCƒbƒ`‚ªV‹K“o˜^‚³‚ê‚½‚©
-    bool          include_added = false;         // #include ‚ğ’Ç‰Á‚µ‚½‚©
+    bool          switch_header_added = false;   // ã‚¹ã‚¤ãƒƒãƒãŒæ–°è¦ç™»éŒ²ã•ã‚ŒãŸã‹
+    bool          include_added = false;         // #include ã‚’è¿½åŠ ã—ãŸã‹
     int           include_line = 0;
 };
 
 // -----------------------------------------------------------------------------
-// 8.5 Undo —š—ğ
+// 8.5 Undo å±¥æ­´
 // -----------------------------------------------------------------------------
 struct UndoRecord {
     std::wstring operation_id;
@@ -304,12 +304,12 @@ struct UndoRecord {
     std::wstring switch_name;
     std::wstring executed_at;
     bool         valid = false;
-    // V‹Kì¬‚³‚ê‚½ƒtƒ@ƒCƒ‹i—á: V‹K‚ÌƒXƒCƒbƒ`’è‹`ƒwƒbƒ_j‚Í Undo ‚Åíœ‚µ‚Ä–ß‚·
+    // æ–°è¦ä½œæˆã•ã‚ŒãŸãƒ•ã‚¡ã‚¤ãƒ«ï¼ˆä¾‹: æ–°è¦ã®ã‚¹ã‚¤ãƒƒãƒå®šç¾©ãƒ˜ãƒƒãƒ€ï¼‰ã¯ Undo ã§å‰Šé™¤ã—ã¦æˆ»ã™
     bool         remove_on_undo = false;
 };
 
 // -----------------------------------------------------------------------------
-// ƒtƒ@ƒCƒ‹‘I‘ğ‚Ì”»’èŒ‹‰ÊiİŒv‘ 6.1.3j
+// ãƒ•ã‚¡ã‚¤ãƒ«é¸æŠæ™‚ã®åˆ¤å®šçµæœï¼ˆè¨­è¨ˆæ›¸ 6.1.3ï¼‰
 // -----------------------------------------------------------------------------
 struct FileInfo {
     bool         exists = false;
@@ -326,24 +326,24 @@ struct FileInfo {
 };
 
 // -----------------------------------------------------------------------------
-// 17Í •¡”ƒtƒ@ƒCƒ‹ˆêŠ‡ˆ—iPhase 4j
+// 17ç«  è¤‡æ•°ãƒ•ã‚¡ã‚¤ãƒ«ä¸€æ‹¬å‡¦ç†ï¼ˆPhase 4ï¼‰
 // -----------------------------------------------------------------------------
 
-// 17.2.2 ˆêŠ‡ˆ—: ‘ÎÛƒtƒ@ƒCƒ‹ 1 Œ•ª‚Ìî•ñ
+// 17.2.2 ä¸€æ‹¬å‡¦ç†: å¯¾è±¡ãƒ•ã‚¡ã‚¤ãƒ« 1 ä»¶åˆ†ã®æƒ…å ±
 struct BatchFileEntry {
     std::wstring path;
-    std::wstring text;          // LF ³‹K‰»Ï‚İiƒqƒbƒg‚µ‚½ƒtƒ@ƒCƒ‹‚Ì‚İ•Ûj
+    std::wstring text;          // LF æ­£è¦åŒ–æ¸ˆã¿ï¼ˆãƒ’ãƒƒãƒˆã—ãŸãƒ•ã‚¡ã‚¤ãƒ«ã®ã¿ä¿æŒï¼‰
     FileInfo     info;
     int          hit_count = 0;
     int          selected_count = 0;
-    bool         selected = true;      // ˆêŠ‡ˆ—‚Ì‘ÎÛ‚ÉŠÜ‚ß‚é‚©
-    std::wstring status;               // ‘Ò‹@ / ¬Œ÷ / ¸”s / •ÏXŒŸo / ‘ÎÛŠO
+    bool         selected = true;      // ä¸€æ‹¬å‡¦ç†ã®å¯¾è±¡ã«å«ã‚ã‚‹ã‹
+    std::wstring status;               // å¾…æ©Ÿ / æˆåŠŸ / å¤±æ•— / å¤‰æ›´æ¤œå‡º / å¯¾è±¡å¤–
     std::wstring error;
-    bool         include_added = false;   // #include ‚ğ’Ç‰Á‚µ‚½‚©
-    int          include_line = 0;        // ’Ç‰Á‚µ‚½s”Ô†
+    bool         include_added = false;   // #include ã‚’è¿½åŠ ã—ãŸã‹
+    int          include_line = 0;        // è¿½åŠ ã—ãŸè¡Œç•ªå·
 };
 
-// 17.2.2 è‡7-8: ƒtƒ@ƒCƒ‹’PˆÊ‚Ì•ÏŠ·Œ‹‰Ê
+// 17.2.2 æ‰‹é †7-8: ãƒ•ã‚¡ã‚¤ãƒ«å˜ä½ã®å¤‰æ›çµæœ
 struct FileReplaceResult {
     std::wstring file_path;
     std::wstring backup_file_path;
@@ -353,7 +353,7 @@ struct FileReplaceResult {
     std::wstring error;
 };
 
-// 9Í “‡ƒŒƒ|[ƒg—p‚ÌˆêŠ‡ÀsŒ‹‰Ê
+// 9ç«  çµ±åˆãƒ¬ãƒãƒ¼ãƒˆç”¨ã®ä¸€æ‹¬å®Ÿè¡Œçµæœ
 struct BatchExecuteResult {
     std::wstring operation_id;
     std::vector<FileReplaceResult> files;
@@ -365,9 +365,9 @@ struct BatchExecuteResult {
     std::wstring executed_at;
     std::wstring report_file_path;
     std::wstring folder;
-    std::wstring switch_header_path;    // XV‚µ‚½ƒXƒCƒbƒ`’è‹`ƒwƒbƒ_
+    std::wstring switch_header_path;    // æ›´æ–°ã—ãŸã‚¹ã‚¤ãƒƒãƒå®šç¾©ãƒ˜ãƒƒãƒ€
     bool         switch_header_updated = false;
-    bool         switch_header_added = false;   // ƒXƒCƒbƒ`‚ªV‹K’Ç‰Á‚³‚ê‚½‚©
+    bool         switch_header_added = false;   // ã‚¹ã‚¤ãƒƒãƒãŒæ–°è¦è¿½åŠ ã•ã‚ŒãŸã‹
 };
 
 } // namespace ms

@@ -1,4 +1,4 @@
-// =============================================================================
+ï»¿// =============================================================================
 // DiffEngine.cpp
 // =============================================================================
 #include "DiffEngine.h"
@@ -47,7 +47,7 @@ void DiffEngine::ComputeLineDiff(const std::vector<std::wstring>& a,
 {
     out.clear();
 
-    // 12.1: ‰Šú”Å‚Í‚“x‚È·•ªƒAƒ‹ƒSƒŠƒYƒ€‚ğ•K{‚Æ‚µ‚È‚¢B‹K–Í’´‰ß‚ÍƒuƒƒbƒN·•ª
+    // 12.1: åˆæœŸç‰ˆã¯é«˜åº¦ãªå·®åˆ†ã‚¢ãƒ«ã‚´ãƒªã‚ºãƒ ã‚’å¿…é ˆã¨ã—ãªã„ã€‚è¦æ¨¡è¶…éæ™‚ã¯ãƒ–ãƒ­ãƒƒã‚¯å·®åˆ†
     if (a.size() * b.size() > 2000000ULL) {
         ComputeBlockDiff(a, b, out);
         return;
@@ -82,7 +82,7 @@ void DiffEngine::ComputeLineDiff(const std::vector<std::wstring>& a,
         raw.push_back(d); ++j;
     }
 
-    // ˜A‘±‚·‚éíœ{’Ç‰Á‚Íu•ÏXsv‚Æ‚µ‚Ä‚Ü‚Æ‚ß‚éi12.3 .changedj
+    // é€£ç¶šã™ã‚‹å‰Šé™¤ï¼‹è¿½åŠ ã¯ã€Œå¤‰æ›´è¡Œã€ã¨ã—ã¦ã¾ã¨ã‚ã‚‹ï¼ˆ12.3 .changedï¼‰
     for (size_t k = 0; k < raw.size(); ) {
         if (raw[k].type == DIFF_DELETED) {
             size_t del_start = k;
@@ -160,7 +160,7 @@ void DiffEngine::MakeExcerpt(const std::vector<std::wstring>& before,
         out_before.push_back(before[(size_t)ln - 1]);
     out_before_from = b_from;
 
-    // •ÏXŒã‚Í‘}“üs”‚Ô‚ñŒã•û‚Ö‚¸‚ê‚é
+    // å¤‰æ›´å¾Œã¯æŒ¿å…¥è¡Œæ•°ã¶ã‚“å¾Œæ–¹ã¸ãšã‚Œã‚‹
     int inserted = (int)after.size() - (int)before.size();
     int a_from = b_from;
     int a_to   = b_to + (inserted > 0 ? inserted : 0);

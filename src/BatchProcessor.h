@@ -1,7 +1,7 @@
-// =============================================================================
+ï»¿// =============================================================================
 // BatchProcessor.h
-// İŒv‘ 17Íu•¡”ƒtƒ@ƒCƒ‹‘Î‰İŒvviPhase 4j
-// 17.2.2 ˆ—d—l è‡1`8 ‚ğ UI ”ñˆË‘¶‚ÅÀ‘•‚·‚é
+// è¨­è¨ˆæ›¸ 17ç« ã€Œè¤‡æ•°ãƒ•ã‚¡ã‚¤ãƒ«å¯¾å¿œè¨­è¨ˆã€ï¼ˆPhase 4ï¼‰
+// 17.2.2 å‡¦ç†ä»•æ§˜ æ‰‹é †1ï½8 ã‚’ UI éä¾å­˜ã§å®Ÿè£…ã™ã‚‹
 // =============================================================================
 #pragma once
 
@@ -13,15 +13,15 @@
 
 namespace ms {
 
-// i’»’Ê’midone: ˆ—Ï‚İŒ” / total: ‘Œ” / current: Œ»İ‚Ìƒtƒ@ƒCƒ‹j
+// é€²æ—é€šçŸ¥ï¼ˆdone: å‡¦ç†æ¸ˆã¿ä»¶æ•° / total: ç·ä»¶æ•° / current: ç¾åœ¨ã®ãƒ•ã‚¡ã‚¤ãƒ«ï¼‰
 typedef std::function<void(int done, int total, const std::wstring& current)> BatchProgressFn;
 
 struct BatchSearchResult {
-    std::vector<BatchFileEntry> entries;      // ƒqƒbƒg‚µ‚½ƒtƒ@ƒCƒ‹itext ‚ğ•Ûj
-    std::vector<std::wstring>   all_files;    // ‘–¸‚Å’Šo‚³‚ê‚½‘Sƒtƒ@ƒCƒ‹
-    std::vector<std::wstring>   errors;       // “Ç‚İ‚İ¸”s‚È‚Ç
-    std::vector<std::wstring>   skipped;      // ƒTƒCƒY‰ß‘å‚È‚Ç‚ÅœŠO
-    std::vector<MatchResult>    matches;      // W–ñ‚³‚ê‚½ƒqƒbƒgˆê——
+    std::vector<BatchFileEntry> entries;      // ãƒ’ãƒƒãƒˆã—ãŸãƒ•ã‚¡ã‚¤ãƒ«ï¼ˆtext ã‚’ä¿æŒï¼‰
+    std::vector<std::wstring>   all_files;    // èµ°æŸ»ã§æŠ½å‡ºã•ã‚ŒãŸå…¨ãƒ•ã‚¡ã‚¤ãƒ«
+    std::vector<std::wstring>   errors;       // èª­ã¿è¾¼ã¿å¤±æ•—ãªã©
+    std::vector<std::wstring>   skipped;      // ã‚µã‚¤ã‚ºéå¤§ãªã©ã§é™¤å¤–
+    std::vector<MatchResult>    matches;      // é›†ç´„ã•ã‚ŒãŸãƒ’ãƒƒãƒˆä¸€è¦§
     int  scanned_count = 0;
     int  hit_file_count = 0;
     int  total_matches = 0;
@@ -30,7 +30,7 @@ struct BatchSearchResult {
 
 class BatchProcessor {
 public:
-    // è‡1-4: ‘–¸ ¨ Šg’£qƒtƒBƒ‹ƒ^ ¨ Šeƒtƒ@ƒCƒ‹‚ğŒŸõ ¨ ƒqƒbƒgˆê——‚ÖW–ñ
+    // æ‰‹é †1-4: èµ°æŸ» â†’ æ‹¡å¼µå­ãƒ•ã‚£ãƒ«ã‚¿ â†’ å„ãƒ•ã‚¡ã‚¤ãƒ«ã‚’æ¤œç´¢ â†’ ãƒ’ãƒƒãƒˆä¸€è¦§ã¸é›†ç´„
     static bool SearchFolder(const std::wstring& folder,
                              const std::vector<std::wstring>& extensions,
                              bool include_subdirs,
@@ -40,9 +40,9 @@ public:
                              BatchSearchResult& out,
                              std::wstring& out_error);
 
-    // è‡7-8: ˆêŠ‡ƒoƒbƒNƒAƒbƒv‚ÆˆêŠ‡•ÏŠ·
-    //   blocks ‚Í matches ‚Æ“¯‚¶•À‚Ñimatches[i] ‚É‘Î‰‚·‚é’uŠ·ƒuƒƒbƒNB–¢‘I‘ğ—v‘f‚Í‹ó‚Å‰Âj
-    //   ctx.execution_mode == DryRun ‚Ìê‡‚ÍƒoƒbƒNƒAƒbƒv‚à‘‚«Š·‚¦‚às‚í‚È‚¢
+    // æ‰‹é †7-8: ä¸€æ‹¬ãƒãƒƒã‚¯ã‚¢ãƒƒãƒ—ã¨ä¸€æ‹¬å¤‰æ›
+    //   blocks ã¯ matches ã¨åŒã˜ä¸¦ã³ï¼ˆmatches[i] ã«å¯¾å¿œã™ã‚‹ç½®æ›ãƒ–ãƒ­ãƒƒã‚¯ã€‚æœªé¸æŠè¦ç´ ã¯ç©ºã§å¯ï¼‰
+    //   ctx.execution_mode == DryRun ã®å ´åˆã¯ãƒãƒƒã‚¯ã‚¢ãƒƒãƒ—ã‚‚æ›¸ãæ›ãˆã‚‚è¡Œã‚ãªã„
     static bool ExecuteBatch(const OperationContext& ctx,
                              const std::wstring& encoding_mode,
                              std::vector<BatchFileEntry>& entries,

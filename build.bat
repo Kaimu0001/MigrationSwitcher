@@ -1,15 +1,15 @@
 @echo off
 rem ===========================================================================
-rem  Migration Switcher - ƒrƒ‹ƒh ƒGƒ“ƒgƒŠiƒc[ƒ‹ƒ`ƒF[ƒ“‚ğ©“®”»’è‚µ‚Ü‚·j
+rem  Migration Switcher - ãƒ“ãƒ«ãƒ‰ ã‚¨ãƒ³ãƒˆãƒªï¼ˆãƒ„ãƒ¼ãƒ«ãƒã‚§ãƒ¼ãƒ³ã‚’è‡ªå‹•åˆ¤å®šã—ã¾ã™ï¼‰
 rem
-rem    build.bat            ƒc[ƒ‹ƒ`ƒF[ƒ“‚ğ©“®”»’è‚µ‚Äƒrƒ‹ƒh
-rem    build.bat msvc       Visual Studio 2022 (cl.exe) ‚Åƒrƒ‹ƒh
-rem    build.bat mingw      MinGW-w64 / MSYS2 (g++) ‚Åƒrƒ‹ƒh
-rem    build.bat test       ’P‘ÌƒeƒXƒg‚ğƒrƒ‹ƒh‚µ‚ÄÀs
-rem    build.bat clean      ¶¬•¨‚ğíœ
-rem    build.bat help       ‚±‚Ìg‚¢•û‚ğ•\¦
+rem    build.bat            ãƒ„ãƒ¼ãƒ«ãƒã‚§ãƒ¼ãƒ³ã‚’è‡ªå‹•åˆ¤å®šã—ã¦ãƒ“ãƒ«ãƒ‰
+rem    build.bat msvc       Visual Studio 2022 (cl.exe) ã§ãƒ“ãƒ«ãƒ‰
+rem    build.bat mingw      MinGW-w64 / MSYS2 (g++) ã§ãƒ“ãƒ«ãƒ‰
+rem    build.bat test       å˜ä½“ãƒ†ã‚¹ãƒˆã‚’ãƒ“ãƒ«ãƒ‰ã—ã¦å®Ÿè¡Œ
+rem    build.bat clean      ç”Ÿæˆç‰©ã‚’å‰Šé™¤
+rem    build.bat help       ã“ã®ä½¿ã„æ–¹ã‚’è¡¨ç¤º
 rem
-rem  ƒ\[ƒX‚Í Shift_JIS (CP932) / ‰üs CRLF ‚Å‚·B
+rem  ã‚½ãƒ¼ã‚¹ã¯ Shift_JIS (CP932) / æ”¹è¡Œ CRLF ã§ã™ã€‚
 rem ===========================================================================
 setlocal
 chcp 932 >nul
@@ -25,7 +25,7 @@ if /i "%MODE%"=="-h"    goto :usage
 if /i "%MODE%"=="--help" goto :usage
 if not "%MODE%"=="" goto :usage
 
-rem ---- ƒc[ƒ‹ƒ`ƒF[ƒ“‚Ì©“®”»’èiVisual Studio ‚ğ—Dæj----
+rem ---- ãƒ„ãƒ¼ãƒ«ãƒã‚§ãƒ¼ãƒ³ã®è‡ªå‹•åˆ¤å®šï¼ˆVisual Studio ã‚’å„ªå…ˆï¼‰----
 call :detect_msvc
 if "%HAVE_MSVC%"=="1" goto :do_msvc
 
@@ -33,17 +33,17 @@ call :detect_mingw
 if "%HAVE_MINGW%"=="1" goto :do_mingw
 
 echo.
-echo [ERROR] ƒrƒ‹ƒh‚Ég‚¦‚é C++ ƒRƒ“ƒpƒCƒ‰‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñ‚Å‚µ‚½B
+echo [ERROR] ãƒ“ãƒ«ãƒ‰ã«ä½¿ãˆã‚‹ C++ ã‚³ãƒ³ãƒ‘ã‚¤ãƒ©ãŒè¦‹ã¤ã‹ã‚Šã¾ã›ã‚“ã§ã—ãŸã€‚
 echo.
-echo   Visual Studio 2022 ‚ğg‚¤ê‡:
-echo     Visual Studio Installer ‚Å
-echo     uC++ ‚É‚æ‚éƒfƒXƒNƒgƒbƒvŠJ”­vƒ[ƒNƒ[ƒh‚ğƒCƒ“ƒXƒg[ƒ‹‚µ‚Ä‚­‚¾‚³‚¢B
+echo   Visual Studio 2022 ã‚’ä½¿ã†å ´åˆ:
+echo     Visual Studio Installer ã§
+echo     ã€ŒC++ ã«ã‚ˆã‚‹ãƒ‡ã‚¹ã‚¯ãƒˆãƒƒãƒ—é–‹ç™ºã€ãƒ¯ãƒ¼ã‚¯ãƒ­ãƒ¼ãƒ‰ã‚’ã‚¤ãƒ³ã‚¹ãƒˆãƒ¼ãƒ«ã—ã¦ãã ã•ã„ã€‚
 echo.
-echo   MinGW-w64 / MSYS2 ‚ğg‚¤ê‡:
-echo     MSYS2 ‚Ì UCRT64 ƒVƒFƒ‹‚ÅŸ‚ğÀs‚µ‚Ä‚­‚¾‚³‚¢B
+echo   MinGW-w64 / MSYS2 ã‚’ä½¿ã†å ´åˆ:
+echo     MSYS2 ã® UCRT64 ã‚·ã‚§ãƒ«ã§æ¬¡ã‚’å®Ÿè¡Œã—ã¦ãã ã•ã„ã€‚
 echo       pacman -S mingw-w64-ucrt-x86_64-gcc make
 echo.
-echo   ƒCƒ“ƒXƒg[ƒ‹ŒãA‚±‚Ì build.bat ‚ğ‚à‚¤ˆê“xÀs‚µ‚Ä‚­‚¾‚³‚¢B
+echo   ã‚¤ãƒ³ã‚¹ãƒˆãƒ¼ãƒ«å¾Œã€ã“ã® build.bat ã‚’ã‚‚ã†ä¸€åº¦å®Ÿè¡Œã—ã¦ãã ã•ã„ã€‚
 exit /b 1
 
 :do_msvc
@@ -63,22 +63,22 @@ call "%ROOT%clean.bat"
 exit /b %errorlevel%
 
 :usage
-echo Migration Switcher - ƒrƒ‹ƒh ƒXƒNƒŠƒvƒg
+echo Migration Switcher - ãƒ“ãƒ«ãƒ‰ ã‚¹ã‚¯ãƒªãƒ—ãƒˆ
 echo.
-echo   build.bat            ƒc[ƒ‹ƒ`ƒF[ƒ“‚ğ©“®”»’è‚µ‚Äƒrƒ‹ƒh
-echo   build.bat msvc       Visual Studio 2022 (cl.exe) ‚Åƒrƒ‹ƒh
-echo   build.bat mingw      MinGW-w64 / MSYS2 (g++) ‚Åƒrƒ‹ƒh
-echo   build.bat test       ’P‘ÌƒeƒXƒg‚ğƒrƒ‹ƒh‚µ‚ÄÀs
-echo   build.bat clean      ¶¬•¨‚ğíœ
-echo   build.bat help       ‚±‚Ìg‚¢•û‚ğ•\¦
+echo   build.bat            ãƒ„ãƒ¼ãƒ«ãƒã‚§ãƒ¼ãƒ³ã‚’è‡ªå‹•åˆ¤å®šã—ã¦ãƒ“ãƒ«ãƒ‰
+echo   build.bat msvc       Visual Studio 2022 (cl.exe) ã§ãƒ“ãƒ«ãƒ‰
+echo   build.bat mingw      MinGW-w64 / MSYS2 (g++) ã§ãƒ“ãƒ«ãƒ‰
+echo   build.bat test       å˜ä½“ãƒ†ã‚¹ãƒˆã‚’ãƒ“ãƒ«ãƒ‰ã—ã¦å®Ÿè¡Œ
+echo   build.bat clean      ç”Ÿæˆç‰©ã‚’å‰Šé™¤
+echo   build.bat help       ã“ã®ä½¿ã„æ–¹ã‚’è¡¨ç¤º
 echo.
-echo ¶¬•¨:
+echo ç”Ÿæˆç‰©:
 echo   build\Release\MigrationSwitcher.exe  (Visual Studio)
 echo   build\MigrationSwitcher.exe          (MinGW)
 exit /b 0
 
 rem ---------------------------------------------------------------------------
-rem  Visual Studio ‚ÌŒŸoivcvars64.bat ‚ÌÀİ‚Å”»’è‚·‚éj
+rem  Visual Studio ã®æ¤œå‡ºï¼ˆvcvars64.bat ã®å®Ÿåœ¨ã§åˆ¤å®šã™ã‚‹ï¼‰
 rem ---------------------------------------------------------------------------
 :detect_msvc
 set "HAVE_MSVC=0"
@@ -99,7 +99,7 @@ set "HAVE_MSVC=1"
 exit /b 0
 
 rem ---------------------------------------------------------------------------
-rem  MinGW-w64 / MSYS2 ‚ÌŒŸoiÀÛ‚É‹N“®‚µ‚Ä”»’è‚·‚éj
+rem  MinGW-w64 / MSYS2 ã®æ¤œå‡ºï¼ˆå®Ÿéš›ã«èµ·å‹•ã—ã¦åˆ¤å®šã™ã‚‹ï¼‰
 rem ---------------------------------------------------------------------------
 :detect_mingw
 set "HAVE_MINGW=0"

@@ -1,10 +1,10 @@
-// =============================================================================
+﻿// =============================================================================
 // resource.h
-// �R���g���[�� ID ��`�i�݌v�� 5.2 �R���g���[���ꗗ / 17.2.1 �ǉ�UI �ɑΉ��j
+// コントロール ID 定義（設計書 5.2 コントロール一覧 / 17.2.1 追加UI に対応）
 // =============================================================================
 #pragma once
 
-// ---- ���� ----
+// ---- 共通 ----
 #define IDC_LBL_FILE            1000
 #define IDC_EDIT_TARGETFILE     1001
 #define IDC_BTN_BROWSE          1002
@@ -21,7 +21,7 @@
 #define IDC_BTN_UNDO            1014
 #define IDC_BTN_EXIT            1015
 
-// ---- ��{�ݒ�^�u ----
+// ---- 基本設定タブ ----
 #define IDC_GRP_STYLE           1100
 #define IDC_RAD_STYLE_A         1101
 #define IDC_RAD_STYLE_B         1102
@@ -46,31 +46,31 @@
 #define IDC_RAD_HIT_ALL         1123
 #define IDC_RAD_HIT_MANUAL      1124
 
-// ---- ���R�[�h�^�u ----
+// ---- 旧コードタブ ----
 #define IDC_EDIT_OLDCODE        1200
 #define IDC_LBL_OLDINFO         1201
 
-// ---- �V�R�[�h�^�u ----
+// ---- 新コードタブ ----
 #define IDC_EDIT_NEWCODE        1300
 #define IDC_LBL_NEWINFO         1301
 
-// ---- �������ʃ^�u ----
+// ---- 検索結果タブ ----
 #define IDC_LIST_MATCHES        1400
 #define IDC_LBL_RESULTINFO      1401
 #define IDC_BTN_SELECTALL       1402
 #define IDC_BTN_CLELSEL         1403
 #define IDC_BTN_CLEARSEL        1403
 
-// ---- �v���r���[�^�u ----
+// ---- プレビュータブ ----
 #define IDC_EDIT_PREVIEW        1500
 #define IDC_CMB_PREVIEWMODE     1501
 #define IDC_BTN_OPENHTML        1502
 
-// ---- ���O�^�u ----
+// ---- ログタブ ----
 #define IDC_EDIT_LOG            1600
 #define IDC_BTN_CLEARLOG        1601
 
-// ---- �ꊇ�����^�u�i�݌v�� 17.2.1 �ǉ�UI�j----
+// ---- 一括処理タブ（設計書 17.2.1 追加UI）----
 #define IDC_GRP_TARGETKIND      1700
 #define IDC_RAD_TARGET_FILE     1701
 #define IDC_RAD_TARGET_FOLDER   1702
@@ -78,7 +78,7 @@
 #define IDC_EDIT_FOLDER         1704
 #define IDC_BTN_FOLDERBROWSE    1705
 #define IDC_GRP_EXTFILTER       1706
-#define IDC_CHK_EXT_BASE        1710   // 1710�`1715: .c .cpp .h .hpp .cs .java
+#define IDC_CHK_EXT_BASE        1710   // 1710～1715: .c .cpp .h .hpp .cs .java
 #define IDC_CHK_SUBDIRS         1720
 #define IDC_BTN_SCAN            1721
 #define IDC_BTN_FILESELALL      1722
@@ -86,7 +86,7 @@
 #define IDC_LBL_SCANINFO        1724
 #define IDC_LIST_FILES          1725
 
-// ---- �X�C�b�`�Ǘ��^�u�i�X�C�b�`��`�w�b�_�̈ꌳ�Ǘ��j----
+// ---- スイッチ管理タブ（スイッチ定義ヘッダの一元管理）----
 #define IDC_LBL_SWHEADER        1800
 #define IDC_EDIT_SWHEADER       1801
 #define IDC_BTN_SWHEADERBROWSE  1802
@@ -109,7 +109,7 @@
 #define IDC_BTN_SWOPEN          1819
 #define IDC_BTN_SWCREATE        1820
 
-// ---- �V�X�e�����^�u�i�d�l�������̓��́j----
+// ---- システム情報タブ（仕様書生成の入力）----
 #define IDC_LBL_SYSNAME         1900
 #define IDC_EDIT_SYSNAME        1901
 #define IDC_LBL_SYSOVERVIEW     1902
@@ -136,7 +136,7 @@
 #define IDC_BTN_MAKEINSPECT     1934
 #define IDC_LBL_PASTENOTE       1935
 
-// ---- AI �A�g�i��{�ݒ�^�u�j----
+// ---- AI 連携（基本設定タブ）----
 #define IDC_GRP_AI              1920
 #define IDC_LBL_AIKEY           1921
 #define IDC_EDIT_AIKEY          1922
@@ -150,7 +150,7 @@
 #define IDC_LBL_AIPROVIDER      1936
 #define IDC_CMB_AIPROVIDER      1937
 
-// ---- ���������^�u�i�㑱��: �ގ���v / �w��s�͈� / �֐��P�� / �o�͌`�� / WinMerge�j----
+// ---- 検索条件タブ（後続版: 類似一致 / 指定行範囲 / 関数単位 / 出力形式 / WinMerge）----
 #define IDC_GRP_SIMILAR         1150
 #define IDC_CHK_SIMILAR         1151
 #define IDC_LBL_SIMTHRESHOLD    1152
@@ -179,15 +179,15 @@
 #define IDC_EDIT_UNDOMAX        1175
 #define IDC_LBL_SEARCHINFO      1176
 
-// ---- �������ʃ^�u�i�㑱��: �G�N�X�|�[�g�j----
+// ---- 検索結果タブ（後続版: エクスポート）----
 #define IDC_BTN_EXPORTCSV       1404
 #define IDC_BTN_EXPORTMD        1405
 #define IDC_BTN_EXPORTJSON      1406
 
-// ---- �v���r���[�^�u�i�㑱��: WinMerge �A�g�j----
+// ---- プレビュータブ（後続版: WinMerge 連携）----
 #define IDC_BTN_WINMERGE        1503
 
-// ---- ���j���[ ----
+// ---- メニュー ----
 #define IDM_FILE_OPEN           2001
 #define IDM_FILE_EXIT           2002
 #define IDM_HELP_ABOUT          2003

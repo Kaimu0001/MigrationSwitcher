@@ -1,2 +1,7 @@
-# ソースは Shift_JIS(CP932) + CRLF 前提のため、改行コードを自動変換させない
+# ソースは UTF-8 (BOM 付き) + CRLF 前提のため、改行コードを自動変換させない
 * -text
+# バッチファイルは cmd.exe が CP932 を前提とするため、作業ツリーは CP932 のまま、
+# リポジトリ（GitHub）には UTF-8 で格納する。
+# ※ GitHub から ZIP をダウンロードした場合、.bat は UTF-8 になり日本語の
+#   メッセージは化けますが、コマンド自体は ASCII なので動作に影響しません。
+*.bat working-tree-encoding=CP932

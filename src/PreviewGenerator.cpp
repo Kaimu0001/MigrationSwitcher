@@ -1,4 +1,4 @@
-// =============================================================================
+ï»¿// =============================================================================
 // PreviewGenerator.cpp
 // =============================================================================
 #include "PreviewGenerator.h"
@@ -40,7 +40,7 @@ std::wstring PreviewGenerator::MakeExcerpt(const std::wstring& text,
 std::wstring PreviewGenerator::BuildSimple(const std::wstring& after_excerpt)
 {
     std::wstring out;
-    out += L"===== •ÏXŒã =====\r\n\r\n";
+    out += L"===== å¤‰æ›´å¾Œ =====\r\n\r\n";
     out += after_excerpt;
     return out;
 }
@@ -49,9 +49,9 @@ std::wstring PreviewGenerator::BuildTopBottom(const std::wstring& before_excerpt
                                               const std::wstring& after_excerpt)
 {
     std::wstring out;
-    out += L"===== •ÏX‘O =====\r\n\r\n";
+    out += L"===== å¤‰æ›´å‰ =====\r\n\r\n";
     out += before_excerpt;
-    out += L"\r\n===== •ÏXŒã =====\r\n\r\n";
+    out += L"\r\n===== å¤‰æ›´å¾Œ =====\r\n\r\n";
     out += after_excerpt;
     return out;
 }
@@ -62,7 +62,7 @@ std::wstring PreviewGenerator::BuildSideBySide(const std::wstring& before_excerp
     std::vector<std::wstring> a = util::SplitLines(before_excerpt);
     std::vector<std::wstring> b = util::SplitLines(after_excerpt);
 
-    // ¶‰E‚ÌƒJƒ‰ƒ€•‚ğ‘µ‚¦‚é
+    // å·¦å³ã®ã‚«ãƒ©ãƒ å¹…ã‚’æƒãˆã‚‹
     size_t widthA = 0;
     for (size_t i = 0; i < a.size(); ++i)
         if (a[i].size() > widthA) widthA = a[i].size();
@@ -72,9 +72,9 @@ std::wstring PreviewGenerator::BuildSideBySide(const std::wstring& before_excerp
     size_t rows = a.size() > b.size() ? a.size() : b.size();
 
     std::wstring out;
-    out += L"===== •ÏX‘O";
+    out += L"===== å¤‰æ›´å‰";
     for (size_t i = 8; i < widthA; ++i) out += L' ';
-    out += L"| ===== •ÏXŒã\r\n\r\n";
+    out += L"| ===== å¤‰æ›´å¾Œ\r\n\r\n";
 
     for (size_t i = 0; i < rows; ++i) {
         std::wstring left  = (i < a.size()) ? a[i] : std::wstring();
@@ -91,11 +91,11 @@ std::wstring PreviewGenerator::BuildSideBySide(const std::wstring& before_excerp
 }
 
 // -----------------------------------------------------------------------------
-// s’†ˆê’v‚ÌƒzƒCƒXƒgi6.7 •â‘«j
-//   "    return old_function(x);" ‚Ì‚æ‚¤‚Éˆê’v‰ÓŠ‚ªs‚Ì“r’†‚É‚ ‚éê‡A
-//   ƒuƒƒbƒN‚ğ‚»‚Ì‚Ü‚Ü·‚µ‚Ş‚Æ "#ifdef ‚ªs’†‚É—ˆ‚Ä C ‚Æ‚µ‚Ä•s³" ‚É‚È‚éB
-//   ‚»‚±‚Å #ifdef/#else/#endif ‚ğs“ª‚ÖˆÚ‚µAs‚Ì‘OŒã‚ÌƒR[ƒhi"    return " ‚Æ ";"j
-//   ‚ğŠe•ªŠò‚Ö•¡»‚·‚éB
+// è¡Œä¸­ä¸€è‡´ã®ãƒ›ã‚¤ã‚¹ãƒˆï¼ˆ6.7 è£œè¶³ï¼‰
+//   "    return old_function(x);" ã®ã‚ˆã†ã«ä¸€è‡´ç®‡æ‰€ãŒè¡Œã®é€”ä¸­ã«ã‚ã‚‹å ´åˆã€
+//   ãƒ–ãƒ­ãƒƒã‚¯ã‚’ãã®ã¾ã¾å·®ã—è¾¼ã‚€ã¨ "#ifdef ãŒè¡Œä¸­ã«æ¥ã¦ C ã¨ã—ã¦ä¸æ­£" ã«ãªã‚‹ã€‚
+//   ãã“ã§ #ifdef/#else/#endif ã‚’è¡Œé ­ã¸ç§»ã—ã€è¡Œã®å‰å¾Œã®ã‚³ãƒ¼ãƒ‰ï¼ˆ"    return " ã¨ ";"ï¼‰
+//   ã‚’å„åˆ†å²ã¸è¤‡è£½ã™ã‚‹ã€‚
 // -----------------------------------------------------------------------------
 static bool IsBlankRange(const std::wstring& text, size_t from, size_t to)
 {
@@ -132,7 +132,7 @@ bool PreviewGenerator::NeedsHoist(const std::wstring& text, const MatchResult& m
 
     out_line_start = ls;
     out_line_end = le;
-    // s‘S‘Ìi‘OŒã‚Ì‹ó”’‚ğœ‚¢‚Äˆê’v‰ÓŠ‚Ì‚İj‚È‚çƒzƒCƒXƒg•s—v
+    // è¡Œå…¨ä½“ï¼ˆå‰å¾Œã®ç©ºç™½ã‚’é™¤ã„ã¦ä¸€è‡´ç®‡æ‰€ã®ã¿ï¼‰ãªã‚‰ãƒ›ã‚¤ã‚¹ãƒˆä¸è¦
     return !(IsBlankRange(text, ls, m.start_offset) &&
              IsBlankRange(text, m.end_offset, le));
 }
@@ -153,15 +153,15 @@ std::wstring PreviewGenerator::HoistBlock(const std::wstring& text, const MatchR
         if (if_idx >= 0 && else_idx < 0 && t.compare(0, 5, L"#else") == 0) { else_idx = (int)i; continue; }
         if (else_idx >= 0 && end_idx < 0 && t.compare(0, 6, L"#endif") == 0) { end_idx = (int)i; break; }
     }
-    if (if_idx < 0 || else_idx < 0 || end_idx < 0) return block;  // \‘¢•s–¾iƒeƒ“ƒvƒŒ[ƒg“™j‚Í‚»‚Ì‚Ü‚Ü
+    if (if_idx < 0 || else_idx < 0 || end_idx < 0) return block;  // æ§‹é€ ä¸æ˜ï¼ˆãƒ†ãƒ³ãƒ—ãƒ¬ãƒ¼ãƒˆç­‰ï¼‰ã¯ãã®ã¾ã¾
 
-    // ‹ŒƒR[ƒh‘¤‚Ì•ªŠò‚ğ”»’èiˆê’v•¶š—ñ‚ğŠÜ‚Ş•ûj
+    // æ—§ã‚³ãƒ¼ãƒ‰å´ã®åˆ†å²ã‚’åˆ¤å®šï¼ˆä¸€è‡´æ–‡å­—åˆ—ã‚’å«ã‚€æ–¹ï¼‰
     std::wstring a_text, b_text;
     for (int i = if_idx + 1; i < else_idx; ++i) a_text += lines[(size_t)i] + L"\n";
     for (int i = else_idx + 1; i < end_idx; ++i) b_text += lines[(size_t)i] + L"\n";
     bool old_is_a = (a_text.find(m.matched_text) != std::wstring::npos);
 
-    // •ªŠò‚²‚Æ‚ÌuÅ‰‚Ì”ñ‹ósvuÅŒã‚Ì”ñ‹ósv
+    // åˆ†å²ã”ã¨ã®ã€Œæœ€åˆã®éç©ºè¡Œã€ã€Œæœ€å¾Œã®éç©ºè¡Œã€
     int first_a = -1, last_a = -1, first_b = -1, last_b = -1;
     for (int i = if_idx + 1; i < else_idx; ++i)
         if (!util::IsBlank(lines[(size_t)i])) { if (first_a < 0) first_a = i; last_a = i; }
@@ -216,7 +216,7 @@ std::wstring PreviewGenerator::BuildAfterTextEach(const std::wstring& text,
         size_t ls = 0, le = 0;
         if (!NeedsHoist(text, adj[i], ls, le)) continue;
 
-        // “¯ˆês‚É•¡”‚Ìˆê’v‚ª‚ ‚éê‡‚Í”ÍˆÍ‚ªd‚È‚é‚½‚ßƒzƒCƒXƒg‚µ‚È‚¢iˆÀ‘S‘¤j
+        // åŒä¸€è¡Œã«è¤‡æ•°ã®ä¸€è‡´ãŒã‚ã‚‹å ´åˆã¯ç¯„å›²ãŒé‡ãªã‚‹ãŸã‚ãƒ›ã‚¤ã‚¹ãƒˆã—ãªã„ï¼ˆå®‰å…¨å´ï¼‰
         bool overlap = false;
         for (size_t j = 0; j < adj.size(); ++j) {
             if (j == i) continue;
@@ -254,11 +254,11 @@ bool PreviewGenerator::BuildExcerpts(const std::wstring& before_text,
     int dummy = 0;
     out_before = MakeExcerpt(before_text, first_line, last_line, context_lines, dummy);
 
-    // •ÏXŒã‚Ìs”ÍˆÍ: ‘}“üs”‚ğ‰Á–¡‚µ‚ÄL‚ß‚Éæ‚é
+    // å¤‰æ›´å¾Œã®è¡Œç¯„å›²: æŒ¿å…¥è¡Œæ•°ã‚’åŠ å‘³ã—ã¦åºƒã‚ã«å–ã‚‹
     int after_end = last_line;
     for (size_t i = 0; i < matches.size(); ++i) {
         std::wstring mt = matches[i].matched_text;
-        int extra = util::CountLines(mt) + 6;   // #ifdef/#else/#endif + —]—T
+        int extra = util::CountLines(mt) + 6;   // #ifdef/#else/#endif + ä½™è£•
         if (matches[i].end_line + extra > after_end) after_end = matches[i].end_line + extra;
     }
     int after_start = first_line - 1;

@@ -1,6 +1,6 @@
-// =============================================================================
+ï»¿// =============================================================================
 // LogManager.h / LogManager.cpp
-// İŒv‘ 6.14uÀsƒƒO‹@”\v/ 7.2.10 LogManager
+// è¨­è¨ˆæ›¸ 6.14ã€Œå®Ÿè¡Œãƒ­ã‚°æ©Ÿèƒ½ã€/ 7.2.10 LogManager
 // =============================================================================
 #pragma once
 
@@ -12,7 +12,7 @@
 
 namespace ms {
 
-// ƒƒO 1 s‚ğ UI ‚Ö‚à—¬‚·‚½‚ß‚ÌƒR[ƒ‹ƒoƒbƒN
+// ãƒ­ã‚° 1 è¡Œã‚’ UI ã¸ã‚‚æµã™ãŸã‚ã®ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯
 typedef std::function<void(const std::wstring&)> LogSink;
 
 class LogManager {
@@ -20,7 +20,7 @@ public:
     LogManager();
     ~LogManager();
 
-    // o—Íæ‚ğ <appDir>\logs ‚É‰Šú‰»‚·‚é
+    // å‡ºåŠ›å…ˆã‚’ <appDir>\logs ã«åˆæœŸåŒ–ã™ã‚‹
     void Initialize(const std::wstring& app_dir, bool enabled);
     void Shutdown();
 
@@ -35,7 +35,7 @@ public:
     void Error(const std::wstring& m) { Write(LogLevel::Error, m); }
     void Fatal(const std::wstring& m) { Write(LogLevel::FATAL, m); }
 
-    // UI ‚Ö‚¾‚¯—¬‚·iƒtƒ@ƒCƒ‹o—Í‚µ‚È‚¢j
+    // UI ã¸ã ã‘æµã™ï¼ˆãƒ•ã‚¡ã‚¤ãƒ«å‡ºåŠ›ã—ãªã„ï¼‰
     void ToUi(const std::wstring& m);
 
     static const wchar_t* LevelName(LogLevel level);

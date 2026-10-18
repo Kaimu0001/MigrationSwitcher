@@ -1,4 +1,4 @@
-// =============================================================================
+ï»¿// =============================================================================
 // LogManager.cpp
 // =============================================================================
 #include "LogManager.h"
@@ -53,7 +53,7 @@ void LogManager::OpenTodayFile()
                              FILE_SHARE_READ | FILE_SHARE_WRITE, nullptr,
                              OPEN_ALWAYS, FILE_ATTRIBUTE_NORMAL, nullptr);
     if (h == INVALID_HANDLE_VALUE) return;
-    // UTF-8 BOM ‚ğæ“ª‚É•t—^iV‹Kì¬‚Ì‚İj
+    // UTF-8 BOM ã‚’å…ˆé ­ã«ä»˜ä¸ï¼ˆæ–°è¦ä½œæˆæ™‚ã®ã¿ï¼‰
     DWORD size = ::GetFileSize(h, nullptr);
     if (size == 0) {
         const unsigned char bom[3] = { 0xEF, 0xBB, 0xBF };

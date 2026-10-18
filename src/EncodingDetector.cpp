@@ -1,4 +1,4 @@
-// =============================================================================
+ï»¿// =============================================================================
 // EncodingDetector.cpp
 // =============================================================================
 #include "EncodingDetector.h"
@@ -37,16 +37,16 @@ bool EncodingDetector::IsValidShiftJis(const std::string& bytes)
     return r > 0;
 }
 
-// Ql’lBƒR[ƒhƒy[ƒW 51932 (EUC-JP) ‚Í kernel32 ‚É‚Í‘¶İ‚µ‚È‚¢B
-// IsValidCodePage(51932) ‚Í 0 ‚ğ•Ô‚µAMultiByteToWideChar(51932, ...) ‚à
-// ERROR_INVALID_PARAMETER (87) ‚Å¸”s‚·‚éi51932 ‚Í MLang ‘¤‚ÌƒR[ƒhƒy[ƒWjB
-// ‚»‚Ì‚½‚ß”»’èE•ÏŠ·‚Í“à‘ ƒe[ƒuƒ‹ (EucJpTable.h) ‚Ås‚¤B
+// å‚è€ƒå€¤ã€‚ã‚³ãƒ¼ãƒ‰ãƒšãƒ¼ã‚¸ 51932 (EUC-JP) ã¯ kernel32 ã«ã¯å­˜åœ¨ã—ãªã„ã€‚
+// IsValidCodePage(51932) ã¯ 0 ã‚’è¿”ã—ã€MultiByteToWideChar(51932, ...) ã‚‚
+// ERROR_INVALID_PARAMETER (87) ã§å¤±æ•—ã™ã‚‹ï¼ˆ51932 ã¯ MLang å´ã®ã‚³ãƒ¼ãƒ‰ãƒšãƒ¼ã‚¸ï¼‰ã€‚
+// ãã®ãŸã‚åˆ¤å®šãƒ»å¤‰æ›ã¯å†…è”µãƒ†ãƒ¼ãƒ–ãƒ« (EucJpTable.h) ã§è¡Œã†ã€‚
 unsigned int EncodingDetector::EucJpCodePage()
 {
     return 51932;
 }
 
-// EUC-JP ‚Í“à‘ ƒe[ƒuƒ‹‚Å”»’èE•ÏŠ·‚·‚é‚½‚ßí‚É—˜—p‚Å‚«‚é
+// EUC-JP ã¯å†…è”µãƒ†ãƒ¼ãƒ–ãƒ«ã§åˆ¤å®šãƒ»å¤‰æ›ã™ã‚‹ãŸã‚å¸¸ã«åˆ©ç”¨ã§ãã‚‹
 bool EncodingDetector::IsEucJpAvailable()
 {
     return true;
@@ -58,16 +58,16 @@ bool EncodingDetector::IsValidEucJp(const std::string& bytes)
     return eucjp::IsValidBytes(bytes);
 }
 
-// ‘SŠp‚Ì“ú–{Œê•¶ši‚©‚ÈEŠ¿šE‘SŠp‹L†j‚Ì”B”¼ŠpƒJƒ^ƒJƒi‚ÍŠÜ‚ß‚È‚¢B
+// å…¨è§’ã®æ—¥æœ¬èªæ–‡å­—ï¼ˆã‹ãªãƒ»æ¼¢å­—ãƒ»å…¨è§’è¨˜å·ï¼‰ã®æ•°ã€‚åŠè§’ã‚«ã‚¿ã‚«ãƒŠã¯å«ã‚ãªã„ã€‚
 static int CountWideJapanese(const std::wstring& s)
 {
     int n = 0;
     for (size_t i = 0; i < s.size(); ++i) {
         wchar_t c = s[i];
-        if (c >= 0x3040 && c <= 0x30FF)      ++n;   // ‚©‚È
-        else if (c >= 0x4E00 && c <= 0x9FFF) ++n;   // Š¿š
-        else if (c >= 0xFF01 && c <= 0xFF60) ++n;   // ‘SŠp‹L†E‘SŠp‰p”
-        else if (c == 0x3000)                ++n;   // ‘SŠpƒXƒy[ƒX
+        if (c >= 0x3040 && c <= 0x30FF)      ++n;   // ã‹ãª
+        else if (c >= 0x4E00 && c <= 0x9FFF) ++n;   // æ¼¢å­—
+        else if (c >= 0xFF01 && c <= 0xFF60) ++n;   // å…¨è§’è¨˜å·ãƒ»å…¨è§’è‹±æ•°
+        else if (c == 0x3000)                ++n;   // å…¨è§’ã‚¹ãƒšãƒ¼ã‚¹
     }
     return n;
 }
@@ -97,15 +97,15 @@ TextEncoding EncodingDetector::Detect(const std::string& raw, size_t& bom_length
         bom_length = 2;
         return TextEncoding::UTF16LE;
     }
-    // BOM ‚È‚µ: ‚Ü‚¸ UTF-8 ‚Æ‚µ‚ÄŒµ–§”»’è
+    // BOM ãªã—: ã¾ãš UTF-8 ã¨ã—ã¦å³å¯†åˆ¤å®š
     if (IsValidUtf8(raw)) return TextEncoding::UTF8;
 
     bool cp932 = IsValidShiftJis(raw);
     bool eucjp = IsValidEucJp(raw);
 
-    // EUC-JP ‚ÌŠ¿šE‚©‚Èi0xA1-0xFE ƒŠ[ƒhj‚Í CP932 ‚Å‚àu”¼ŠpƒJƒ^ƒJƒi 2 •¶šv‚Æ‚µ‚Ä
-    // ‘Ã“–‚É‚È‚Á‚Ä‚µ‚Ü‚¤BCP932 ‚Æ‚µ‚Ä“Ç‚Ş‚Æ”¼ŠpƒJƒ^ƒJƒi‚ªŒ»‚êA‚©‚Â‘SŠp‚Ì“ú–{Œê•¶š‚ª
-    // EUC-JP ‚Æ‚µ‚Ä“Ç‚ñ‚¾‚Æ‚«‚æ‚è­‚È‚¢ê‡‚Í EUC-JP ‚ÌŒë“Ç‚Æ”»’f‚·‚éB
+    // EUC-JP ã®æ¼¢å­—ãƒ»ã‹ãªï¼ˆ0xA1-0xFE ãƒªãƒ¼ãƒ‰ï¼‰ã¯ CP932 ã§ã‚‚ã€ŒåŠè§’ã‚«ã‚¿ã‚«ãƒŠ 2 æ–‡å­—ã€ã¨ã—ã¦
+    // å¦¥å½“ã«ãªã£ã¦ã—ã¾ã†ã€‚CP932 ã¨ã—ã¦èª­ã‚€ã¨åŠè§’ã‚«ã‚¿ã‚«ãƒŠãŒç¾ã‚Œã€ã‹ã¤å…¨è§’ã®æ—¥æœ¬èªæ–‡å­—ãŒ
+    // EUC-JP ã¨ã—ã¦èª­ã‚“ã ã¨ãã‚ˆã‚Šå°‘ãªã„å ´åˆã¯ EUC-JP ã®èª¤èª­ã¨åˆ¤æ–­ã™ã‚‹ã€‚
     if (cp932 && eucjp) {
         std::wstring a = util::MultiByteToWide(raw, 932);
         std::wstring b = eucjp::Decode(raw);
@@ -180,7 +180,7 @@ bool EncodingDetector::Decode(const std::string& raw,
     default:
         break;
     }
-    // ”»’è•s”\: ‚»‚Ì‚Ü‚Ü UTF-8 ‚Æ‚µ‚Ä“Ç‚Şi•¶š‰»‚¯‚ÍŒÄ‚Ño‚µ‘¤‚ÅŒxj
+    // åˆ¤å®šä¸èƒ½: ãã®ã¾ã¾ UTF-8 ã¨ã—ã¦èª­ã‚€ï¼ˆæ–‡å­—åŒ–ã‘ã¯å‘¼ã³å‡ºã—å´ã§è­¦å‘Šï¼‰
     out_encoding = TextEncoding::Unknown;
     out_text = util::MultiByteToWide(raw, CP_ACP);
     return false;

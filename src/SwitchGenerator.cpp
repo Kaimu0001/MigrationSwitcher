@@ -1,4 +1,4 @@
-// =============================================================================
+ï»¿// =============================================================================
 // SwitchGenerator.cpp
 // =============================================================================
 #include "SwitchGenerator.h"
@@ -11,17 +11,17 @@ namespace ms {
 const wchar_t* SwitchGenerator::StyleName(SwitchStyle style)
 {
     switch (style) {
-    case SwitchStyle::IfdefNewFirst:     return L"#ifdef VƒR[ƒh—Dæ•û® (A)";
-    case SwitchStyle::IfndefOldFirst:    return L"#ifndef ‹ŒƒR[ƒh—Dæ•û® (B)";
-    case SwitchStyle::IfdefWithComments: return L"ƒRƒƒ“ƒg•t‚«•û® (C)";
-    case SwitchStyle::BlockCommentStyle: return L"ŠJnI—¹ƒRƒƒ“ƒg•û® (D)";
-    case SwitchStyle::CustomTemplate:    return L"ƒeƒ“ƒvƒŒ[ƒg•û®";
+    case SwitchStyle::IfdefNewFirst:     return L"#ifdef æ–°ã‚³ãƒ¼ãƒ‰å„ªå…ˆæ–¹å¼ (A)";
+    case SwitchStyle::IfndefOldFirst:    return L"#ifndef æ—§ã‚³ãƒ¼ãƒ‰å„ªå…ˆæ–¹å¼ (B)";
+    case SwitchStyle::IfdefWithComments: return L"ã‚³ãƒ¡ãƒ³ãƒˆä»˜ãæ–¹å¼ (C)";
+    case SwitchStyle::BlockCommentStyle: return L"é–‹å§‹çµ‚äº†ã‚³ãƒ¡ãƒ³ãƒˆæ–¹å¼ (D)";
+    case SwitchStyle::CustomTemplate:    return L"ãƒ†ãƒ³ãƒ—ãƒ¬ãƒ¼ãƒˆæ–¹å¼";
     }
-    return L"•s–¾";
+    return L"ä¸æ˜";
 }
 
 // -----------------------------------------------------------------------------
-// 6.8 ƒCƒ“ƒfƒ“ƒg©“®’²®
+// 6.8 ã‚¤ãƒ³ãƒ‡ãƒ³ãƒˆè‡ªå‹•èª¿æ•´
 // -----------------------------------------------------------------------------
 std::wstring SwitchGenerator::ApplyAutoIndent(const std::wstring& old_code,
                                               const std::wstring& new_code,
@@ -32,44 +32,44 @@ std::wstring SwitchGenerator::ApplyAutoIndent(const std::wstring& old_code,
     if (old_lines.empty()) return new_code;
 
     std::wstring indent = util::LeadingIndentText(old_lines[0]);
-    // 6.8: “ü—Í‚³‚ê‚½‹ŒƒR[ƒh‚ÉƒCƒ“ƒfƒ“ƒg‚ª–³‚¢ê‡‚ÍA‘ÎÛs‚ÌÀÛ‚ÌƒCƒ“ƒfƒ“ƒg‚ğ—˜—p‚·‚é
+    // 6.8: å…¥åŠ›ã•ã‚ŒãŸæ—§ã‚³ãƒ¼ãƒ‰ã«ã‚¤ãƒ³ãƒ‡ãƒ³ãƒˆãŒç„¡ã„å ´åˆã¯ã€å¯¾è±¡è¡Œã®å®Ÿéš›ã®ã‚¤ãƒ³ãƒ‡ãƒ³ãƒˆã‚’åˆ©ç”¨ã™ã‚‹
     if (indent.empty()) indent = indent_hint;
     if (indent.empty()) return new_code;
 
-    // 6.8.3 ƒ^ƒu‚ÆƒXƒy[ƒX‚Ì¬İ‚ğŒx
+    // 6.8.3 ã‚¿ãƒ–ã¨ã‚¹ãƒšãƒ¼ã‚¹ã®æ··åœ¨ã‚’è­¦å‘Š
     bool has_space = false, has_tab = false;
     for (size_t i = 0; i < indent.size(); ++i) {
         if (indent[i] == L' ') has_space = true;
         if (indent[i] == L'\t') has_tab = true;
     }
     if (has_space && has_tab) {
-        out_warnings.push_back(L"ƒCƒ“ƒfƒ“ƒg‚Éƒ^ƒu‚ÆƒXƒy[ƒX‚ª¬İ‚µ‚Ä‚¢‚Ü‚·B"
-                               L"©“®’²®Œ‹‰Ê‚ğŠm”F‚µ‚Ä‚­‚¾‚³‚¢B");
+        out_warnings.push_back(L"ã‚¤ãƒ³ãƒ‡ãƒ³ãƒˆã«ã‚¿ãƒ–ã¨ã‚¹ãƒšãƒ¼ã‚¹ãŒæ··åœ¨ã—ã¦ã„ã¾ã™ã€‚"
+                               L"è‡ªå‹•èª¿æ•´çµæœã‚’ç¢ºèªã—ã¦ãã ã•ã„ã€‚");
     }
 
     std::vector<std::wstring> new_lines = util::SplitLines(new_code);
 
-    // 6.8.3 VƒR[ƒh‚ÉŠù‚ÉƒCƒ“ƒfƒ“ƒg‚ª‚ ‚éê‡‚Í’²®‚µ‚È‚¢
+    // 6.8.3 æ–°ã‚³ãƒ¼ãƒ‰ã«æ—¢ã«ã‚¤ãƒ³ãƒ‡ãƒ³ãƒˆãŒã‚ã‚‹å ´åˆã¯èª¿æ•´ã—ãªã„
     int already_indented = 0;
     for (size_t i = 0; i < new_lines.size(); ++i) {
         if (util::IsBlank(new_lines[i])) continue;
         if (util::LeadingIndentWidth(new_lines[i]) > 0) ++already_indented;
     }
     if (already_indented > 0) {
-        out_warnings.push_back(L"VƒR[ƒh‚ÉŠù‚ÉƒCƒ“ƒfƒ“ƒg‚ªŠÜ‚Ü‚ê‚Ä‚¢‚Ü‚·B"
-                               L"ƒCƒ“ƒfƒ“ƒg©“®’²®‚ğ“K—p‚µ‚Ü‚¹‚ñ‚Å‚µ‚½B");
+        out_warnings.push_back(L"æ–°ã‚³ãƒ¼ãƒ‰ã«æ—¢ã«ã‚¤ãƒ³ãƒ‡ãƒ³ãƒˆãŒå«ã¾ã‚Œã¦ã„ã¾ã™ã€‚"
+                               L"ã‚¤ãƒ³ãƒ‡ãƒ³ãƒˆè‡ªå‹•èª¿æ•´ã‚’é©ç”¨ã—ã¾ã›ã‚“ã§ã—ãŸã€‚");
         return new_code;
     }
 
-    // •¡”s‚ÅƒCƒ“ƒfƒ“ƒg\‘¢‚ªˆÙ‚È‚éê‡‚ÍŒx
+    // è¤‡æ•°è¡Œã§ã‚¤ãƒ³ãƒ‡ãƒ³ãƒˆæ§‹é€ ãŒç•°ãªã‚‹å ´åˆã¯è­¦å‘Š
     if (old_lines.size() > 1) {
         std::wstring first = util::LeadingIndentText(old_lines[0]);
         for (size_t i = 1; i < old_lines.size(); ++i) {
             if (util::IsBlank(old_lines[i])) continue;
             std::wstring cur = util::LeadingIndentText(old_lines[i]);
             if (cur.size() < first.size()) {
-                out_warnings.push_back(L"‹ŒƒR[ƒh‚Ì•¡”s‚ÅƒCƒ“ƒfƒ“ƒg\‘¢‚ªˆÙ‚È‚è‚Ü‚·B"
-                                       L"©“®’²®Œ‹‰Ê‚ğŠm”F‚µ‚Ä‚­‚¾‚³‚¢B");
+                out_warnings.push_back(L"æ—§ã‚³ãƒ¼ãƒ‰ã®è¤‡æ•°è¡Œã§ã‚¤ãƒ³ãƒ‡ãƒ³ãƒˆæ§‹é€ ãŒç•°ãªã‚Šã¾ã™ã€‚"
+                                       L"è‡ªå‹•èª¿æ•´çµæœã‚’ç¢ºèªã—ã¦ãã ã•ã„ã€‚");
                 break;
             }
         }
@@ -85,22 +85,22 @@ std::wstring SwitchGenerator::ApplyAutoIndent(const std::wstring& old_code,
 }
 
 // -----------------------------------------------------------------------------
-// 18Í ƒeƒ“ƒvƒŒ[ƒg
+// 18ç«  ãƒ†ãƒ³ãƒ—ãƒ¬ãƒ¼ãƒˆ
 // -----------------------------------------------------------------------------
 bool SwitchGenerator::ValidateTemplate(const std::wstring& tpl, std::wstring& out_error)
 {
     out_error.clear();
     if (tpl.empty()) {
-        out_error = L"ƒeƒ“ƒvƒŒ[ƒg‚ª‹ó‚Å‚·B";
+        out_error = L"ãƒ†ãƒ³ãƒ—ãƒ¬ãƒ¼ãƒˆãŒç©ºã§ã™ã€‚";
         return false;
     }
     if (tpl.find(L"${NEW_CODE}") == std::wstring::npos &&
         tpl.find(L"${OLD_CODE}") == std::wstring::npos) {
-        out_error = L"ƒeƒ“ƒvƒŒ[ƒg‚É ${NEW_CODE} ‚Ü‚½‚Í ${OLD_CODE} ‚ªŠÜ‚Ü‚ê‚Ä‚¢‚Ü‚¹‚ñB";
+        out_error = L"ãƒ†ãƒ³ãƒ—ãƒ¬ãƒ¼ãƒˆã« ${NEW_CODE} ã¾ãŸã¯ ${OLD_CODE} ãŒå«ã¾ã‚Œã¦ã„ã¾ã›ã‚“ã€‚";
         return false;
     }
     if (tpl.find(L"${SWITCH}") == std::wstring::npos) {
-        out_error = L"ƒeƒ“ƒvƒŒ[ƒg‚É ${SWITCH} ‚ªŠÜ‚Ü‚ê‚Ä‚¢‚Ü‚¹‚ñB";
+        out_error = L"ãƒ†ãƒ³ãƒ—ãƒ¬ãƒ¼ãƒˆã« ${SWITCH} ãŒå«ã¾ã‚Œã¦ã„ã¾ã›ã‚“ã€‚";
         return false;
     }
     return true;
@@ -127,7 +127,7 @@ std::wstring SwitchGenerator::ExpandTemplate(const std::wstring& tpl,
 }
 
 // -----------------------------------------------------------------------------
-// –{‘Ì¶¬
+// æœ¬ä½“ç”Ÿæˆ
 // -----------------------------------------------------------------------------
 std::wstring SwitchGenerator::Generate(SwitchStyle style,
                                        const std::wstring& switch_name,
@@ -155,7 +155,7 @@ std::wstring SwitchGenerator::GenerateEx(SwitchStyle style,
 
     switch (style) {
     case SwitchStyle::IfdefNewFirst: {
-        // 6.7.2 •ÏŠ·•û®A
+        // 6.7.2 å¤‰æ›æ–¹å¼A
         std::wstring s;
         s += L"#ifdef " + switch_name + L"\n";
         s += nc;
@@ -167,7 +167,7 @@ std::wstring SwitchGenerator::GenerateEx(SwitchStyle style,
         return s;
     }
     case SwitchStyle::IfndefOldFirst: {
-        // 6.7.3 •ÏŠ·•û®B
+        // 6.7.3 å¤‰æ›æ–¹å¼B
         std::wstring s;
         s += L"#ifndef " + switch_name + L"\n";
         s += old_code;
@@ -179,7 +179,7 @@ std::wstring SwitchGenerator::GenerateEx(SwitchStyle style,
         return s;
     }
     case SwitchStyle::IfdefWithComments: {
-        // 6.7.4 •ÏŠ·•û®C
+        // 6.7.4 å¤‰æ›æ–¹å¼C
         std::wstring s;
         s += L"#ifdef " + switch_name + L"  /* migration start */\n";
         s += nc;
@@ -191,7 +191,7 @@ std::wstring SwitchGenerator::GenerateEx(SwitchStyle style,
         return s;
     }
     case SwitchStyle::BlockCommentStyle: {
-        // 6.7.5 •ÏŠ·•û®D
+        // 6.7.5 å¤‰æ›æ–¹å¼D
         std::wstring s;
         s += L"/* " + switch_name + L" start */\n";
         s += L"#ifdef " + switch_name + L"\n";
@@ -206,17 +206,17 @@ std::wstring SwitchGenerator::GenerateEx(SwitchStyle style,
     }
     case SwitchStyle::CustomTemplate:
     default: {
-        // 18Í ƒeƒ“ƒvƒŒ[ƒg
+        // 18ç«  ãƒ†ãƒ³ãƒ—ãƒ¬ãƒ¼ãƒˆ
         std::wstring tpl = custom_template;
         std::wstring err;
         if (!ValidateTemplate(tpl, err)) {
-            // ƒeƒ“ƒvƒŒ[ƒg•s”õ‚Í•û®A‚ÖƒtƒH[ƒ‹ƒoƒbƒN
-            out_warnings.push_back(L"ƒeƒ“ƒvƒŒ[ƒg‚ª•s³‚È‚½‚ß•û®A‚ğg—p‚µ‚Ü‚µ‚½: " + err);
+            // ãƒ†ãƒ³ãƒ—ãƒ¬ãƒ¼ãƒˆä¸å‚™æ™‚ã¯æ–¹å¼Aã¸ãƒ•ã‚©ãƒ¼ãƒ«ãƒãƒƒã‚¯
+            out_warnings.push_back(L"ãƒ†ãƒ³ãƒ—ãƒ¬ãƒ¼ãƒˆãŒä¸æ­£ãªãŸã‚æ–¹å¼Aã‚’ä½¿ç”¨ã—ã¾ã—ãŸ: " + err);
             return GenerateEx(SwitchStyle::IfdefNewFirst, switch_name,
                               old_code, new_code, auto_indent, L"",
                               indent_hint, out_warnings);
         }
-        // ƒeƒ“ƒvƒŒ[ƒg–{•¶‚Í‰üs LF ³‹K‰»‚µ‚Ä‚©‚ç“WŠJ‚·‚é
+        // ãƒ†ãƒ³ãƒ—ãƒ¬ãƒ¼ãƒˆæœ¬æ–‡ã¯æ”¹è¡Œ LF æ­£è¦åŒ–ã—ã¦ã‹ã‚‰å±•é–‹ã™ã‚‹
         tpl = util::NormalizeNewlines(tpl);
         return ExpandTemplate(tpl, switch_name, old_code, nc, L"");
     }

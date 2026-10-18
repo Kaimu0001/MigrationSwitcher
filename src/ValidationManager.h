@@ -1,6 +1,6 @@
-// =============================================================================
+ï»¿// =============================================================================
 // ValidationManager.h
-// İŒv‘ 6.2.3 ƒXƒCƒbƒ`–¼ƒoƒŠƒf[ƒVƒ‡ƒ“ / 6.3 ‹ŒƒR[ƒh / 6.4 VƒR[ƒh / 14Í Às‘Oƒ`ƒFƒbƒN
+// è¨­è¨ˆæ›¸ 6.2.3 ã‚¹ã‚¤ãƒƒãƒåãƒãƒªãƒ‡ãƒ¼ã‚·ãƒ§ãƒ³ / 6.3 æ—§ã‚³ãƒ¼ãƒ‰ / 6.4 æ–°ã‚³ãƒ¼ãƒ‰ / 14ç«  å®Ÿè¡Œå‰ãƒã‚§ãƒƒã‚¯
 // =============================================================================
 #pragma once
 
@@ -13,8 +13,8 @@ namespace ms {
 
 struct ValidationResult {
     bool ok = true;
-    std::wstring error;                    // ’v–½“IƒGƒ‰[iˆ—’†’fj
-    std::vector<std::wstring> warnings;    // Œxi‘±s‰Âj
+    std::wstring error;                    // è‡´å‘½çš„ã‚¨ãƒ©ãƒ¼ï¼ˆå‡¦ç†ä¸­æ–­ï¼‰
+    std::vector<std::wstring> warnings;    // è­¦å‘Šï¼ˆç¶šè¡Œå¯ï¼‰
 
     void AddError(const std::wstring& m) { ok = false; error = m; }
     void AddWarning(const std::wstring& m) { warnings.push_back(m); }
@@ -22,25 +22,25 @@ struct ValidationResult {
 
 class ValidationManager {
 public:
-    // 6.2.3 ƒRƒ“ƒpƒCƒ‹ƒXƒCƒbƒ`–¼
+    // 6.2.3 ã‚³ãƒ³ãƒ‘ã‚¤ãƒ«ã‚¹ã‚¤ãƒƒãƒå
     static ValidationResult ValidateSwitchName(const std::wstring& name);
 
-    // 6.3.2 ·‚µ‘Ö‚¦‘ÎÛƒR[ƒh
+    // 6.3.2 å·®ã—æ›¿ãˆå¯¾è±¡ã‚³ãƒ¼ãƒ‰
     static ValidationResult ValidateOldCode(const std::wstring& old_code);
 
-    // 6.4.2 VƒR[ƒh
+    // 6.4.2 æ–°ã‚³ãƒ¼ãƒ‰
     static ValidationResult ValidateNewCode(const std::wstring& old_code,
                                             const std::wstring& new_code);
 
-    // 6.1.4 / 19.2 ‘ÎÛƒtƒ@ƒCƒ‹
+    // 6.1.4 / 19.2 å¯¾è±¡ãƒ•ã‚¡ã‚¤ãƒ«
     static ValidationResult ValidateTargetFile(const std::wstring& path,
                                                const FileInfo& info);
 
-    // 14.1 Às‘Oƒ`ƒFƒbƒNiŒÂ•Êj
+    // 14.1 å®Ÿè¡Œå‰ãƒã‚§ãƒƒã‚¯ï¼ˆå€‹åˆ¥ï¼‰
     static bool IsReservedWord(const std::wstring& name);
     static bool IsValidSymbolChars(const std::wstring& name, int& bad_index, wchar_t& bad_char);
 
-    // 16Í / 15Í ŒxƒƒbƒZ[ƒW¶¬
+    // 16ç«  / 15ç«  è­¦å‘Šãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ç”Ÿæˆ
     static std::wstring BuildWarningSummary(const std::vector<std::wstring>& warnings);
 };
 

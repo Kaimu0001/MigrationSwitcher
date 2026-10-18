@@ -1,6 +1,6 @@
-// =============================================================================
+ï»¿// =============================================================================
 // main.cpp
-// ƒGƒ“ƒgƒŠƒ|ƒCƒ“ƒgiİŒv‘ 9.1 ƒAƒvƒŠ‹N“®ƒtƒ[j
+// ã‚¨ãƒ³ãƒˆãƒªãƒã‚¤ãƒ³ãƒˆï¼ˆè¨­è¨ˆæ›¸ 9.1 ã‚¢ãƒ—ãƒªèµ·å‹•æ™‚ãƒ•ãƒ­ãƒ¼ï¼‰
 // =============================================================================
 #include <windows.h>
 #include <commctrl.h>
@@ -14,14 +14,14 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
     (void)hPrevInstance;
     (void)lpCmdLine;
 
-    // 9.1 è‡2: Common Controls ‰Šú‰»
+    // 9.1 æ‰‹é †2: Common Controls åˆæœŸåŒ–
     INITCOMMONCONTROLSEX icc;
     icc.dwSize = sizeof(INITCOMMONCONTROLSEX);
     icc.dwICC  = ICC_WIN95_CLASSES | ICC_BAR_CLASSES |
                  ICC_PROGRESS_CLASS | ICC_LISTVIEW_CLASSES | ICC_TAB_CLASSES;
     ::InitCommonControlsEx(&icc);
 
-    // ‚ DPI ‘Î‰
+    // é«˜ DPI å¯¾å¿œ
     typedef BOOL (WINAPI *SetDpiFn)(void);
     HMODULE user32 = ::GetModuleHandleW(L"user32.dll");
     if (user32) {
@@ -31,7 +31,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 
     ms::App app;
     if (!app.Initialize(hInstance, nCmdShow)) {
-        ::MessageBoxW(nullptr, L"ƒAƒvƒŠƒP[ƒVƒ‡ƒ“‚Ì‰Šú‰»‚É¸”s‚µ‚Ü‚µ‚½B",
+        ::MessageBoxW(nullptr, L"ã‚¢ãƒ—ãƒªã‚±ãƒ¼ã‚·ãƒ§ãƒ³ã®åˆæœŸåŒ–ã«å¤±æ•—ã—ã¾ã—ãŸã€‚",
                       L"CopyMigration Switcher", MB_ICONERROR | MB_OK);
         return 1;
     }

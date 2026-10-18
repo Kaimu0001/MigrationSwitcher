@@ -5,8 +5,9 @@
 #   cmake .. -G "Visual Studio 17 2022" -A x64
 #   cmake --build . --config Release
 #
-# NOTE: The source files are saved as Shift_JIS (CP932) with CRLF line endings,
-#       so MSVC is told to read them as code page 932.
+# NOTE: The source files are saved as UTF-8 with a BOM and CRLF line endings.
+#       The execution character set stays code page 932 so the narrow (ANSI)
+#       string literals in the binary are unchanged.
 # =============================================================================
 cmake_minimum_required(VERSION 3.15)
 project(MigrationSwitcher VERSION 1.0.0 LANGUAGES CXX)
@@ -30,15 +31,19 @@ add_executable(MigrationSwitcher WIN32 ${MS_SOURCES})
 target_include_directories(MigrationSwitcher PRIVATE src)
 target_compile_definitions(MigrationSwitcher PRIVATE UNICODE _UNICODE)
 
+if(NOT MSVC)
+    set(CMAKE_RC_FLAGS "${CMAKE_RC_FLAGS} --codepage=65001")
+endif()
+
 if(MSVC)
     # Source and execution code page 932 (Shift_JIS) - matches the files on disk.
     target_compile_options(MigrationSwitcher PRIVATE
-        /source-charset:.932 /execution-charset:.932 /W3 /EHsc /MP)
+        /source-charset:utf-8 /execution-charset:.932 /W3 /EHsc /MP)
     set_target_properties(MigrationSwitcher PROPERTIES
         LINK_FLAGS "/MANIFEST:NO")
 else()
     target_compile_options(MigrationSwitcher PRIVATE
-        -Wall -Wextra -finput-charset=CP932 -fexec-charset=CP932)
+        -Wall -Wextra -finput-charset=UTF-8 -fexec-charset=CP932)
     target_link_options(MigrationSwitcher PRIVATE
         -mwindows -static -static-libgcc -static-libstdc++)
 endif()

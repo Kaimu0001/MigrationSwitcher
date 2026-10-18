@@ -1,6 +1,6 @@
-// =============================================================================
+ï»¿// =============================================================================
 // FolderScanner.h
-// İŒv‘ 17.2.2uˆ—d—lvè‡1-2 ƒtƒHƒ‹ƒ_”z‰º‚Ì‘–¸‚ÆŠg’£qƒtƒBƒ‹ƒ^
+// è¨­è¨ˆæ›¸ 17.2.2ã€Œå‡¦ç†ä»•æ§˜ã€æ‰‹é †1-2 ãƒ•ã‚©ãƒ«ãƒ€é…ä¸‹ã®èµ°æŸ»ã¨æ‹¡å¼µå­ãƒ•ã‚£ãƒ«ã‚¿
 // =============================================================================
 #pragma once
 
@@ -10,36 +10,36 @@
 namespace ms {
 
 struct ScanResult {
-    std::vector<std::wstring> files;                    // ’Šo‚³‚ê‚½‘ÎÛƒtƒ@ƒCƒ‹
-    std::vector<std::wstring> skipped;                  // ƒTƒCƒY‰ß‘å‚È‚Ç‚ÅœŠO‚µ‚½ƒtƒ@ƒCƒ‹
-    std::vector<std::wstring> errors;                   // ‘–¸’†‚ÌƒGƒ‰[
+    std::vector<std::wstring> files;                    // æŠ½å‡ºã•ã‚ŒãŸå¯¾è±¡ãƒ•ã‚¡ã‚¤ãƒ«
+    std::vector<std::wstring> skipped;                  // ã‚µã‚¤ã‚ºéå¤§ãªã©ã§é™¤å¤–ã—ãŸãƒ•ã‚¡ã‚¤ãƒ«
+    std::vector<std::wstring> errors;                   // èµ°æŸ»ä¸­ã®ã‚¨ãƒ©ãƒ¼
     int  scanned_directories = 0;
-    bool truncated = false;                             // ãŒÀŒ”‚É’B‚µ‚½
+    bool truncated = false;                             // ä¸Šé™ä»¶æ•°ã«é”ã—ãŸ
 };
 
 class FolderScanner {
 public:
-    // ãŒÀi–\‘––h~j
+    // ä¸Šé™ï¼ˆæš´èµ°é˜²æ­¢ï¼‰
     static const int          kMaxFiles;        // 20000
     static const unsigned long long kMaxFileSize; // 8MB
 
-    // è‡1: ƒtƒHƒ‹ƒ_”z‰º‚ğ‘–¸ / è‡2: Šg’£qƒtƒBƒ‹ƒ^‚Å‘ÎÛ’Šo
-    // extensions ‚Í L".c" Œ`®B‹ó‚Ìê‡‚Í DefaultExtensions() ‚ğg—p‚·‚éB
+    // æ‰‹é †1: ãƒ•ã‚©ãƒ«ãƒ€é…ä¸‹ã‚’èµ°æŸ» / æ‰‹é †2: æ‹¡å¼µå­ãƒ•ã‚£ãƒ«ã‚¿ã§å¯¾è±¡æŠ½å‡º
+    // extensions ã¯ L".c" å½¢å¼ã€‚ç©ºã®å ´åˆã¯ DefaultExtensions() ã‚’ä½¿ç”¨ã™ã‚‹ã€‚
     static void Scan(const std::wstring& folder,
                      const std::vector<std::wstring>& extensions,
                      bool include_subdirs,
                      ScanResult& out);
 
-    // İŒv‘ 17.2.1 ‚ÌŠg’£qƒtƒBƒ‹ƒ^‰Šú’l
+    // è¨­è¨ˆæ›¸ 17.2.1 ã®æ‹¡å¼µå­ãƒ•ã‚£ãƒ«ã‚¿åˆæœŸå€¤
     static std::vector<std::wstring> DefaultExtensions();
-    // ƒ`ƒFƒbƒNƒ{ƒbƒNƒX‚É•À‚×‚éŒó•â
+    // ãƒã‚§ãƒƒã‚¯ãƒœãƒƒã‚¯ã‚¹ã«ä¸¦ã¹ã‚‹å€™è£œ
     static std::vector<std::wstring> CandidateExtensions();
 
-    // Šg’£q‚ªƒtƒBƒ‹ƒ^‚ÉŠÜ‚Ü‚ê‚é‚©i‘å•¶š¬•¶š‚ğ‹æ•Ê‚µ‚È‚¢j
+    // æ‹¡å¼µå­ãŒãƒ•ã‚£ãƒ«ã‚¿ã«å«ã¾ã‚Œã‚‹ã‹ï¼ˆå¤§æ–‡å­—å°æ–‡å­—ã‚’åŒºåˆ¥ã—ãªã„ï¼‰
     static bool MatchesExtension(const std::wstring& path,
                                  const std::vector<std::wstring>& extensions);
 
-    // Šg’£qƒŠƒXƒg‚ğ "c,cpp,h" Œ`®‚Ö^‚©‚ç•ÏŠ·iconfig.ini •Û‘¶—pj
+    // æ‹¡å¼µå­ãƒªã‚¹ãƒˆã‚’ "c,cpp,h" å½¢å¼ã¸ï¼ã‹ã‚‰å¤‰æ›ï¼ˆconfig.ini ä¿å­˜ç”¨ï¼‰
     static std::wstring JoinExtensions(const std::vector<std::wstring>& extensions);
     static std::vector<std::wstring> SplitExtensions(const std::wstring& text);
 

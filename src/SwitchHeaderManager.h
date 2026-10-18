@@ -1,10 +1,10 @@
-// =============================================================================
+ï»¿// =============================================================================
 // SwitchHeaderManager.h
-// ƒXƒCƒbƒ`’è‹`ƒwƒbƒ_i—á: migration_switch.hj‚ÌˆêŒ³ŠÇ—
+// ã‚¹ã‚¤ãƒƒãƒå®šç¾©ãƒ˜ãƒƒãƒ€ï¼ˆä¾‹: migration_switch.hï¼‰ã®ä¸€å…ƒç®¡ç†
 //
-// ‚±‚ê‚Ü‚ÅŠeƒ\[ƒX“à‚ÉUİ‚µ‚Ä‚¢‚½ƒRƒ“ƒpƒCƒ‹ƒXƒCƒbƒ`‚Ìu’è‹`v‚ğ 1 ‚Â‚Ì
-// ƒwƒbƒ_ƒtƒ@ƒCƒ‹‚ÖW–ñ‚µA‘ÎÛƒ\[ƒX‚Í #include ‚µ‚Ä #ifdef ‚ÅQÆ‚·‚éB
-// ƒXƒCƒbƒ`‚Ì’Ç‰ÁE—LŒø‰»E–³Œø‰»Eˆê——‚ğ‚±‚Ìƒ‚ƒWƒ…[ƒ‹‚ª’S‚¤B
+// ã“ã‚Œã¾ã§å„ã‚½ãƒ¼ã‚¹å†…ã«æ•£åœ¨ã—ã¦ã„ãŸã‚³ãƒ³ãƒ‘ã‚¤ãƒ«ã‚¹ã‚¤ãƒƒãƒã®ã€Œå®šç¾©ã€ã‚’ 1 ã¤ã®
+// ãƒ˜ãƒƒãƒ€ãƒ•ã‚¡ã‚¤ãƒ«ã¸é›†ç´„ã—ã€å¯¾è±¡ã‚½ãƒ¼ã‚¹ã¯ #include ã—ã¦ #ifdef ã§å‚ç…§ã™ã‚‹ã€‚
+// ã‚¹ã‚¤ãƒƒãƒã®è¿½åŠ ãƒ»æœ‰åŠ¹åŒ–ãƒ»ç„¡åŠ¹åŒ–ãƒ»ä¸€è¦§ã‚’ã“ã®ãƒ¢ã‚¸ãƒ¥ãƒ¼ãƒ«ãŒæ‹…ã†ã€‚
 // =============================================================================
 #pragma once
 
@@ -13,52 +13,52 @@
 
 namespace ms {
 
-// ƒXƒCƒbƒ` 1 Œ•ª‚Ìî•ñ
+// ã‚¹ã‚¤ãƒƒãƒ 1 ä»¶åˆ†ã®æƒ…å ±
 struct SwitchEntry {
-    std::wstring name;          // ƒXƒCƒbƒ`–¼i—á: MIGRATION_001j
-    std::wstring comment;       // —p“rƒƒ‚il‚ª“Ç‚Şà–¾j
-    std::wstring summary;       // ‹Œ¨V‚Ì—v–ñi©“®¶¬j
-    std::vector<std::wstring> files;   // ‚±‚ÌƒXƒCƒbƒ`‚ğg—p‚µ‚Ä‚¢‚éƒ\[ƒXƒtƒ@ƒCƒ‹–¼
-    std::wstring updated_at;    // ÅIXV“ú
-    bool         enabled = false;      // #define ‚ª—LŒø‚©
+    std::wstring name;          // ã‚¹ã‚¤ãƒƒãƒåï¼ˆä¾‹: MIGRATION_001ï¼‰
+    std::wstring comment;       // ç”¨é€”ãƒ¡ãƒ¢ï¼ˆäººãŒèª­ã‚€èª¬æ˜ï¼‰
+    std::wstring summary;       // æ—§â†’æ–°ã®è¦ç´„ï¼ˆè‡ªå‹•ç”Ÿæˆï¼‰
+    std::vector<std::wstring> files;   // ã“ã®ã‚¹ã‚¤ãƒƒãƒã‚’ä½¿ç”¨ã—ã¦ã„ã‚‹ã‚½ãƒ¼ã‚¹ãƒ•ã‚¡ã‚¤ãƒ«å
+    std::wstring updated_at;    // æœ€çµ‚æ›´æ–°æ—¥æ™‚
+    bool         enabled = false;      // #define ãŒæœ‰åŠ¹ã‹
 };
 
-// ƒwƒbƒ_ƒtƒ@ƒCƒ‹‚Ì‰ğÍŒ‹‰Ê
+// ãƒ˜ãƒƒãƒ€ãƒ•ã‚¡ã‚¤ãƒ«ã®è§£æçµæœ
 struct SwitchHeaderInfo {
     std::wstring path;
     bool         exists = false;
     bool         has_managed_section = false;
     std::vector<SwitchEntry> entries;
-    std::wstring before_section;   // ŠÇ——Ìˆæ‚æ‚è‘O‚Ì“à—e
-    std::wstring after_section;    // ŠÇ——Ìˆæ‚æ‚èŒã‚Ì“à—e
-    std::wstring guard;            // ƒCƒ“ƒNƒ‹[ƒhƒK[ƒh–¼
+    std::wstring before_section;   // ç®¡ç†é ˜åŸŸã‚ˆã‚Šå‰ã®å†…å®¹
+    std::wstring after_section;    // ç®¡ç†é ˜åŸŸã‚ˆã‚Šå¾Œã®å†…å®¹
+    std::wstring guard;            // ã‚¤ãƒ³ã‚¯ãƒ«ãƒ¼ãƒ‰ã‚¬ãƒ¼ãƒ‰å
 };
 
 class SwitchHeaderManager {
 public:
-    // ---- ƒpƒX ----
+    // ---- ãƒ‘ã‚¹ ----
     static std::wstring DefaultHeaderName();                              // migration_switch.h
     static std::wstring GuardFromName(const std::wstring& header_name);
     static bool ValidateHeaderName(const std::wstring& header_name, std::wstring& out_error);
 
-    // ƒwƒbƒ_‚Ìâ‘ÎƒpƒX‚ğŒˆ‚ß‚éiheader_dir ‚ª‹ó‚È‚ç base_dir ‚Æ“¯ˆêƒtƒHƒ‹ƒ_j
+    // ãƒ˜ãƒƒãƒ€ã®çµ¶å¯¾ãƒ‘ã‚¹ã‚’æ±ºã‚ã‚‹ï¼ˆheader_dir ãŒç©ºãªã‚‰ base_dir ã¨åŒä¸€ãƒ•ã‚©ãƒ«ãƒ€ï¼‰
     static std::wstring ResolveHeaderPath(const std::wstring& base_dir,
                                           const std::wstring& header_dir,
                                           const std::wstring& header_name);
 
-    // source_path ‚©‚ç header_path ‚ğQÆ‚·‚é #include —p‚Ì•¶š—ñ‚ğ•Ô‚·
-    // i“¯ˆêƒtƒHƒ‹ƒ_‚È‚ç "name.h"A•ÊƒtƒHƒ‹ƒ_‚È‚ç‘Š‘ÎƒpƒXA•s‰Â‚È‚çâ‘ÎƒpƒXj
+    // source_path ã‹ã‚‰ header_path ã‚’å‚ç…§ã™ã‚‹ #include ç”¨ã®æ–‡å­—åˆ—ã‚’è¿”ã™
+    // ï¼ˆåŒä¸€ãƒ•ã‚©ãƒ«ãƒ€ãªã‚‰ "name.h"ã€åˆ¥ãƒ•ã‚©ãƒ«ãƒ€ãªã‚‰ç›¸å¯¾ãƒ‘ã‚¹ã€ä¸å¯ãªã‚‰çµ¶å¯¾ãƒ‘ã‚¹ï¼‰
     static std::wstring MakeIncludePath(const std::wstring& source_path,
                                         const std::wstring& header_path);
 
-    // ---- “Ç‚İ‚İE‘‚«‚İ ----
+    // ---- èª­ã¿è¾¼ã¿ãƒ»æ›¸ãè¾¼ã¿ ----
     static bool Load(const std::wstring& header_path, SwitchHeaderInfo& out);
     static bool Write(const std::wstring& header_path,
                       const SwitchHeaderInfo& info,
                       std::wstring& out_error);
 
-    // ƒXƒCƒbƒ`‚ğ“o˜^‚·‚éiŠù‘¶‚È‚ç files / comment / summary ‚ğXV‚µ‚Äd•¡‚ğì‚ç‚È‚¢j
-    // out_added: V‹K’Ç‰Á‚³‚ê‚½ê‡ true
+    // ã‚¹ã‚¤ãƒƒãƒã‚’ç™»éŒ²ã™ã‚‹ï¼ˆæ—¢å­˜ãªã‚‰ files / comment / summary ã‚’æ›´æ–°ã—ã¦é‡è¤‡ã‚’ä½œã‚‰ãªã„ï¼‰
+    // out_added: æ–°è¦è¿½åŠ ã•ã‚ŒãŸå ´åˆ true
     static bool RegisterSwitch(const std::wstring& header_path,
                                const std::wstring& switch_name,
                                const std::wstring& memo,
@@ -69,21 +69,21 @@ public:
                                bool& out_added,
                                std::wstring& out_error);
 
-    // —LŒø^–³Œø‚ğØ‚è‘Ö‚¦‚é
+    // æœ‰åŠ¹ï¼ç„¡åŠ¹ã‚’åˆ‡ã‚Šæ›¿ãˆã‚‹
     static bool SetEnabled(const std::wstring& header_path,
                            const std::wstring& switch_name,
                            bool enabled,
                            SwitchHeaderInfo& out_info,
                            std::wstring& out_error);
 
-    // ƒXƒCƒbƒ`‚ğŠÇ——Ìˆæ‚©‚çíœ‚·‚é
+    // ã‚¹ã‚¤ãƒƒãƒã‚’ç®¡ç†é ˜åŸŸã‹ã‚‰å‰Šé™¤ã™ã‚‹
     static bool RemoveSwitch(const std::wstring& header_path,
                              const std::wstring& switch_name,
                              SwitchHeaderInfo& out_info,
                              std::wstring& out_error);
 
-    // ---- ƒ\[ƒX‚Ö‚Ì #include ’Ç‰Á ----
-    // text ‚Í LF ³‹K‰»Ï‚İB’Ç‰Á‚µ‚½ê‡‚Í out_added = true / out_line ‚Í 1 ‹N“_s”Ô†
+    // ---- ã‚½ãƒ¼ã‚¹ã¸ã® #include è¿½åŠ  ----
+    // text ã¯ LF æ­£è¦åŒ–æ¸ˆã¿ã€‚è¿½åŠ ã—ãŸå ´åˆã¯ out_added = true / out_line ã¯ 1 èµ·ç‚¹è¡Œç•ªå·
     static bool EnsureInclude(std::wstring& text,
                               const std::wstring& include_path,
                               bool& out_added,
@@ -92,7 +92,7 @@ public:
 
     static bool HasInclude(const std::wstring& text, const std::wstring& include_path);
 
-    // —v–ñ•¶š—ñ‚ğì‚éi—á: "old_function(); -> new_function();"j
+    // è¦ç´„æ–‡å­—åˆ—ã‚’ä½œã‚‹ï¼ˆä¾‹: "old_function(); -> new_function();"ï¼‰
     static std::wstring MakeSummary(const std::wstring& old_code,
                                     const std::wstring& new_code);
 

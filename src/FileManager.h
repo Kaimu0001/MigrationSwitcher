@@ -1,6 +1,6 @@
-// =============================================================================
+ï»¿// =============================================================================
 // FileManager.h
-// İŒv‘ 6.1u‘ÎÛƒtƒ@ƒCƒ‹‘I‘ğ‹@”\v/ 7.2.2 FileManager / 19.1 ƒtƒ@ƒCƒ‹”j‘¹–h~
+// è¨­è¨ˆæ›¸ 6.1ã€Œå¯¾è±¡ãƒ•ã‚¡ã‚¤ãƒ«é¸æŠæ©Ÿèƒ½ã€/ 7.2.2 FileManager / 19.1 ãƒ•ã‚¡ã‚¤ãƒ«ç ´æé˜²æ­¢
 // =============================================================================
 #pragma once
 
@@ -12,19 +12,19 @@ namespace ms {
 
 class FileManager {
 public:
-    // 6.1.3 ƒtƒ@ƒCƒ‹‘¶İŠm”FE“Ç‚İ‘‚«Œ ŒÀEƒTƒCƒYE•¶šƒR[ƒhE‰üsƒR[ƒh”»’è
+    // 6.1.3 ãƒ•ã‚¡ã‚¤ãƒ«å­˜åœ¨ç¢ºèªãƒ»èª­ã¿æ›¸ãæ¨©é™ãƒ»ã‚µã‚¤ã‚ºãƒ»æ–‡å­—ã‚³ãƒ¼ãƒ‰ãƒ»æ”¹è¡Œã‚³ãƒ¼ãƒ‰åˆ¤å®š
     static FileInfo Inspect(const std::wstring& path, const std::wstring& encoding_mode);
 
-    // ¶ƒoƒCƒg—ñ‚Ì“Ç‚İ‚İ
+    // ç”Ÿãƒã‚¤ãƒˆåˆ—ã®èª­ã¿è¾¼ã¿
     static bool ReadAllBytes(const std::wstring& path, std::string& out_bytes);
 
-    // “à•”•\Œ»i‰üs LF ³‹K‰»Ï‚İj‚Å“Ç‚İ‚Ş
+    // å†…éƒ¨è¡¨ç¾ï¼ˆæ”¹è¡Œ LF æ­£è¦åŒ–æ¸ˆã¿ï¼‰ã§èª­ã¿è¾¼ã‚€
     static bool ReadText(const std::wstring& path,
                          const std::wstring& encoding_mode,
                          std::wstring& out_text,
                          FileInfo& out_info);
 
-    // 19.1 ˆêƒtƒ@ƒCƒ‹‚Ö‘‚«o‚µ‚Ä‚©‚ç’uŠ·‚·‚éiŒ´q“I‘‚«‚İj
+    // 19.1 ä¸€æ™‚ãƒ•ã‚¡ã‚¤ãƒ«ã¸æ›¸ãå‡ºã—ã¦ã‹ã‚‰ç½®æ›ã™ã‚‹ï¼ˆåŸå­çš„æ›¸ãè¾¼ã¿ï¼‰
     static bool WriteTextAtomic(const std::wstring& path,
                                 const std::wstring& text_lf_normalized,
                                 TextEncoding encoding,
@@ -32,11 +32,11 @@ public:
                                 NewlineKind newline,
                                 std::wstring& out_error);
 
-    // ’PƒƒRƒs[iUndo •œŒ³EƒoƒbƒNƒAƒbƒv—pj
+    // å˜ç´”ã‚³ãƒ”ãƒ¼ï¼ˆUndo å¾©å…ƒãƒ»ãƒãƒƒã‚¯ã‚¢ãƒƒãƒ—ç”¨ï¼‰
     static bool CopyFileTo(const std::wstring& from, const std::wstring& to,
                          std::wstring& out_error);
 
-    // ˆêƒtƒ@ƒCƒ‹‚ğì¬‚µ‚Äƒtƒ‹ƒpƒX‚ğ•Ô‚·
+    // ä¸€æ™‚ãƒ•ã‚¡ã‚¤ãƒ«ã‚’ä½œæˆã—ã¦ãƒ•ãƒ«ãƒ‘ã‚¹ã‚’è¿”ã™
     static std::wstring MakeTempFilePath(const std::wstring& base_name,
                                          const std::wstring& ext);
 

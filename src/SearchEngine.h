@@ -1,6 +1,6 @@
-// =============================================================================
+ï»¿// =============================================================================
 // SearchEngine.h
-// İŒv‘ 6.5uŒŸõ‹@”\v/ 6.6u•¡”ƒqƒbƒgˆ—v/ 15Í Šù‘¶ƒXƒCƒbƒ`ŒŸo / 16Í ƒRƒƒ“ƒg“àƒqƒbƒg
+// è¨­è¨ˆæ›¸ 6.5ã€Œæ¤œç´¢æ©Ÿèƒ½ã€/ 6.6ã€Œè¤‡æ•°ãƒ’ãƒƒãƒˆå‡¦ç†ã€/ 15ç«  æ—¢å­˜ã‚¹ã‚¤ãƒƒãƒæ¤œå‡º / 16ç«  ã‚³ãƒ¡ãƒ³ãƒˆå†…ãƒ’ãƒƒãƒˆ
 // =============================================================================
 #pragma once
 
@@ -13,62 +13,62 @@ namespace ms {
 
 class SearchEngine {
 public:
-    // 6.5.3 Š®‘Sˆê’vŒŸõBtext ‚Í‰üs LF ³‹K‰»Ï‚İ‚Å‚ ‚é‚±‚Æ‚ğ‘O’ñ‚Æ‚·‚éB
+    // 6.5.3 å®Œå…¨ä¸€è‡´æ¤œç´¢ã€‚text ã¯æ”¹è¡Œ LF æ­£è¦åŒ–æ¸ˆã¿ã§ã‚ã‚‹ã“ã¨ã‚’å‰æã¨ã™ã‚‹ã€‚
     static std::vector<MatchResult> Search(const std::wstring& text,
                                            const std::wstring& pattern,
                                            const std::wstring& file_path);
 
-    // 15Í Šù‘¶ƒRƒ“ƒpƒCƒ‹ƒXƒCƒbƒ`ŒŸoi‘ÎÛs‚Ì‘OŒã scan_lines sj
+    // 15ç«  æ—¢å­˜ã‚³ãƒ³ãƒ‘ã‚¤ãƒ«ã‚¹ã‚¤ãƒƒãƒæ¤œå‡ºï¼ˆå¯¾è±¡è¡Œã®å‰å¾Œ scan_lines è¡Œï¼‰
     static bool DetectNearbyPreprocessor(const std::wstring& text,
                                          int start_line, int end_line,
                                          int scan_lines,
                                          std::wstring& out_detail);
 
-    // 16Í ƒRƒƒ“ƒg“àƒqƒbƒg”»’èiŠÈˆÕ”»’èj
+    // 16ç«  ã‚³ãƒ¡ãƒ³ãƒˆå†…ãƒ’ãƒƒãƒˆåˆ¤å®šï¼ˆç°¡æ˜“åˆ¤å®šï¼‰
     static bool IsInsideComment(const std::wstring& text, size_t offset);
 
-    // w’è‚µ‚½ˆê’v‰ÓŠ‚ğ‚Ü‚Æ‚ß‚Ä’uŠ·‚·‚éiŒã‚ë‚©‚ç’uŠ·‚µ‚ÄˆÊ’u‚¸‚ê‚ğ–h‚®j
+    // æŒ‡å®šã—ãŸä¸€è‡´ç®‡æ‰€ã‚’ã¾ã¨ã‚ã¦ç½®æ›ã™ã‚‹ï¼ˆå¾Œã‚ã‹ã‚‰ç½®æ›ã—ã¦ä½ç½®ãšã‚Œã‚’é˜²ãï¼‰
     static std::wstring ApplyReplacements(const std::wstring& text,
                                           std::vector<MatchResult>& matches,
                                           const std::wstring& replacement_for_all);
 
-    // ˆê’v‰ÓŠ‚²‚Æ‚ÉˆÙ‚È‚é’uŠ·•¶š—ñ‚ğ“K—p‚·‚éiblocks[i] ‚Í matches[i] ‚É‘Î‰j
+    // ä¸€è‡´ç®‡æ‰€ã”ã¨ã«ç•°ãªã‚‹ç½®æ›æ–‡å­—åˆ—ã‚’é©ç”¨ã™ã‚‹ï¼ˆblocks[i] ã¯ matches[i] ã«å¯¾å¿œï¼‰
     static std::wstring ApplyReplacementsEach(const std::wstring& text,
                                               const std::vector<MatchResult>& matches,
                                               const std::vector<std::wstring>& blocks);
 
-    // 6.8 ƒCƒ“ƒfƒ“ƒg©“®’²®—p: ˆê’v‰ÓŠ‚Ìs“ªƒCƒ“ƒfƒ“ƒgi‹ó”’Eƒ^ƒu‚Ì‚İj‚ğæ“¾‚·‚é
+    // 6.8 ã‚¤ãƒ³ãƒ‡ãƒ³ãƒˆè‡ªå‹•èª¿æ•´ç”¨: ä¸€è‡´ç®‡æ‰€ã®è¡Œé ­ã‚¤ãƒ³ãƒ‡ãƒ³ãƒˆï¼ˆç©ºç™½ãƒ»ã‚¿ãƒ–ã®ã¿ï¼‰ã‚’å–å¾—ã™ã‚‹
     static std::wstring IndentHintAt(const std::wstring& text, const MatchResult& m);
 
-    // ˜A”Ô‚ğU‚è’¼‚·
+    // é€£ç•ªã‚’æŒ¯ã‚Šç›´ã™
     static void Renumber(std::vector<MatchResult>& matches);
-    // ---- —Ş—ˆê’vŒŸõi‹ó”’‚Ì—h‚ê‚ğ‹–—e‚µ‚½ˆê’vj----
-    // –ß‚è’l‚Ì MatchResult ‚ÍŒ³‚Ì•\‹Li‹ó”’‚ğ•Ûj‚ÅˆÊ’u‚ğ•Ô‚·B
+    // ---- é¡ä¼¼ä¸€è‡´æ¤œç´¢ï¼ˆç©ºç™½ã®æºã‚Œã‚’è¨±å®¹ã—ãŸä¸€è‡´ï¼‰----
+    // æˆ»ã‚Šå€¤ã® MatchResult ã¯å…ƒã®è¡¨è¨˜ï¼ˆç©ºç™½ã‚’ä¿æŒï¼‰ã§ä½ç½®ã‚’è¿”ã™ã€‚
     static std::vector<MatchResult> SearchSimilar(const std::wstring& text,
                                                   const std::wstring& pattern,
                                                   const std::wstring& file_path,
                                                   int threshold_percent);
 
-    // ‹ó”’‚Ì˜A‘±‚ğ 1 ‚Â‚Öô‚İA‘OŒã‚Ì‹ó”’‚ğœ‹‚·‚é
+    // ç©ºç™½ã®é€£ç¶šã‚’ 1 ã¤ã¸ç•³ã¿ã€å‰å¾Œã®ç©ºç™½ã‚’é™¤å»ã™ã‚‹
     static std::wstring NormalizeForSimilar(const std::wstring& s);
-    // 2 •¶š‘giƒoƒCƒOƒ‰ƒ€j‚Ì Dice ŒW”‚ğ % ‚Å•Ô‚·i0`100j
+    // 2 æ–‡å­—çµ„ï¼ˆãƒã‚¤ã‚°ãƒ©ãƒ ï¼‰ã® Dice ä¿‚æ•°ã‚’ % ã§è¿”ã™ï¼ˆ0ï½100ï¼‰
     static int SimilarityPercent(const std::wstring& a, const std::wstring& b);
 
-    // ---- w’ès”ÍˆÍŒŸõ ----
-    // to_line ‚ª 0 ˆÈ‰º‚Ìê‡‚ÍÅIs‚Ü‚Å‚ğ‘ÎÛ‚Æ‚·‚éB
+    // ---- æŒ‡å®šè¡Œç¯„å›²æ¤œç´¢ ----
+    // to_line ãŒ 0 ä»¥ä¸‹ã®å ´åˆã¯æœ€çµ‚è¡Œã¾ã§ã‚’å¯¾è±¡ã¨ã™ã‚‹ã€‚
     static std::vector<MatchResult> SearchInRange(const std::wstring& text,
                                                   const std::wstring& pattern,
                                                   const std::wstring& file_path,
                                                   int from_line, int to_line);
 
-    // ---- ŠÖ”’PˆÊŒŸõ ----
+    // ---- é–¢æ•°å˜ä½æ¤œç´¢ ----
     static std::vector<MatchResult> SearchInFunction(const std::wstring& text,
                                                      const std::wstring& pattern,
                                                      const std::wstring& file_path,
                                                      const std::wstring& function_name,
                                                      std::wstring& out_error);
 
-    // ---- w’ès”ÍˆÍ‚Ì’Šois”Ô†ƒtƒBƒ‹ƒ^j----
+    // ---- æŒ‡å®šè¡Œç¯„å›²ã®æŠ½å‡ºï¼ˆè¡Œç•ªå·ãƒ•ã‚£ãƒ«ã‚¿ï¼‰----
     static std::vector<MatchResult> FilterByLineRange(const std::vector<MatchResult>& in,
                                                       int from_line, int to_line);
 };} // namespace ms
