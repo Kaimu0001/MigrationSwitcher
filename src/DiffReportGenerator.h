@@ -57,6 +57,58 @@ public:
                                   const std::wstring& before_text,
                                   const std::wstring& after_text,
                                   const ReplaceResult& result);
+
+    // ---- å„ë±î≈: Markdown / JSON ÉåÉ|Å[Ég ----
+    static std::wstring JsonEscape(const std::wstring& s);
+    static std::wstring MarkdownCell(const std::wstring& s);
+    static std::wstring StyleName(SwitchStyle st);
+    static std::wstring NewlineName(NewlineKind nl);
+
+    static std::wstring BuildMarkdown(const OperationContext& ctx,
+                                      const std::vector<MatchResult>& matches,
+                                      const std::wstring& before_text,
+                                      const std::wstring& after_text,
+                                      const ReplaceResult& result);
+    static std::wstring BuildJson(const OperationContext& ctx,
+                                  const std::vector<MatchResult>& matches,
+                                  const std::wstring& before_text,
+                                  const std::wstring& after_text,
+                                  const ReplaceResult& result);
+    static bool GenerateMarkdown(const std::wstring& report_path,
+                                 const OperationContext& ctx,
+                                 const std::vector<MatchResult>& matches,
+                                 const std::wstring& before_text,
+                                 const std::wstring& after_text,
+                                 const ReplaceResult& result,
+                                 std::wstring& out_error);
+    static bool GenerateJson(const std::wstring& report_path,
+                             const OperationContext& ctx,
+                             const std::vector<MatchResult>& matches,
+                             const std::wstring& before_text,
+                             const std::wstring& after_text,
+                             const ReplaceResult& result,
+                             std::wstring& out_error);
+    static std::wstring BuildReportPathExt(const std::wstring& report_dir,
+                                           const std::wstring& target_file,
+                                           const std::wstring& stamp,
+                                           const std::wstring& ext);
+
+    static std::wstring BuildIntegratedMarkdown(const OperationContext& ctx,
+                                                const std::vector<ReportFileSection>& sections,
+                                                const BatchExecuteResult& batch);
+    static std::wstring BuildIntegratedJson(const OperationContext& ctx,
+                                            const std::vector<ReportFileSection>& sections,
+                                            const BatchExecuteResult& batch);
+    static bool GenerateIntegratedMarkdown(const std::wstring& report_path,
+                                           const OperationContext& ctx,
+                                           const std::vector<ReportFileSection>& sections,
+                                           const BatchExecuteResult& batch,
+                                           std::wstring& out_error);
+    static bool GenerateIntegratedJson(const std::wstring& report_path,
+                                       const OperationContext& ctx,
+                                       const std::vector<ReportFileSection>& sections,
+                                       const BatchExecuteResult& batch,
+                                       std::wstring& out_error);
 };
 
 } // namespace ms

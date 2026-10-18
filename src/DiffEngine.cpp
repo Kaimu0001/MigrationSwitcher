@@ -2,6 +2,7 @@
 // DiffEngine.cpp
 // =============================================================================
 #include "DiffEngine.h"
+#include <cstdio>
 #include "Utils.h"
 
 #include <windows.h>

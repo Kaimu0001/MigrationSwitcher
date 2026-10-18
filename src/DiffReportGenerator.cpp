@@ -3,6 +3,9 @@
 // 12.3 HTML レポート CSS 方針に従った色分けを実装する
 // =============================================================================
 #include "DiffReportGenerator.h"
+#include <cstdio>
+#include "EncodingDetector.h"
+#include "FileManager.h"
 #include "DiffEngine.h"
 #include "EncodingDetector.h"
 #include "FileManager.h"
@@ -443,4 +446,309 @@ bool DiffReportGenerator::Generate(const std::wstring& report_path,
     return true;
 }
 
+
+// =============================================================================
+// 後続版: Markdown / JSON レポート
+// =============================================================================
+std::wstring DiffReportGenerator::JsonEscape(const std::wstring& s)
+{
+    std::wstring o;
+    o.reserve(s.size() + 8);
+    for (size_t i = 0; i < s.size(); ++i) {
+        wchar_t c = s[i];
+        if (c == L'"')       o += L"\\\"";
+        else if (c == L'\\') o += L"\\\\";
+        else if (c == L'\n') o += L"\\n";
+        else if (c == L'\r') o += L"\\r";
+        else if (c == L'\t') o += L"\\t";
+        else if (c < 0x20) {
+            wchar_t b[16];
+            swprintf(b, 16, L"\\u%04X", (unsigned)c);
+            o += b;
+        } else o += c;
+    }
+    return o;
+}
+
+std::wstring DiffReportGenerator::MarkdownCell(const std::wstring& s)
+{
+    std::wstring o;
+    for (size_t i = 0; i < s.size(); ++i) {
+        wchar_t c = s[i];
+        if (c == L'|') o += L"\\|";
+        else if (c == L'\n' || c == L'\r') o += L' ';
+        else o += c;
+    }
+    return o;
+}
+
+std::wstring DiffReportGenerator::StyleName(SwitchStyle st)
+{
+    switch (st) {
+    case SwitchStyle::IfdefNewFirst:    return L"方式A: #ifdef 新コード優先";
+    case SwitchStyle::IfndefOldFirst:   return L"方式B: #ifndef 旧コード優先";
+    case SwitchStyle::IfdefWithComments:return L"方式C: コメント付き方式";
+    case SwitchStyle::BlockCommentStyle:return L"方式D: 開始終了コメント方式";
+    case SwitchStyle::CustomTemplate:   return L"方式: ユーザーテンプレート";
+    default: return L"(不明)";
+    }
+}
+
+std::wstring DiffReportGenerator::NewlineName(NewlineKind nl)
+{
+    switch (nl) {
+    case NewlineKind::LF:   return L"LF";
+    case NewlineKind::CRLF: return L"CRLF";
+    case NewlineKind::CR:   return L"CR";
+    default: return L"(不明)";
+    }
+}
+
+std::wstring DiffReportGenerator::BuildReportPathExt(const std::wstring& report_dir,
+                                                     const std::wstring& target_file,
+                                                     const std::wstring& stamp,
+                                                     const std::wstring& ext)
+{
+    std::wstring name = util::GetBaseNameNoExt(target_file);
+    if (name.empty()) name = L"target";
+    return util::JoinPath(report_dir, stamp + L"_" + name + L"_diff" + ext);
+}
+
+static bool WriteReportFile(const std::wstring& path, const std::wstring& text,
+                            bool with_bom, std::wstring& out_error)
+{
+    out_error.clear();
+    std::wstring dir = util::GetDirectoryOf(path);
+    if (!dir.empty() && !util::EnsureDirectory(dir)) {
+        out_error = L"出力先フォルダを作成できません: " + dir;
+        return false;
+    }
+    return FileManager::WriteTextAtomic(path, text,
+                                        with_bom ? TextEncoding::UTF8BOM : TextEncoding::UTF8,
+                                        with_bom, NewlineKind::CRLF, out_error);
+}
+
+std::wstring DiffReportGenerator::BuildMarkdown(const OperationContext& ctx,
+                                                const std::vector<MatchResult>& matches,
+                                                const std::wstring& before_text,
+                                                const std::wstring& after_text,
+                                                const ReplaceResult& result)
+{
+    std::wstring md;
+    md += L"# 変更差分レポート\n\n";
+    md += L"| 項目 | 内容 |\n|---|---|\n";
+    md += L"| 操作 ID | " + MarkdownCell(ctx.operation_id) + L" |\n";
+    md += L"| 対象ファイル | `" + MarkdownCell(ctx.target_file_path) + L"` |\n";
+    md += L"| スイッチ名 | `" + MarkdownCell(ctx.switch_name) + L"` |\n";
+    md += L"| 置換方式 | " + StyleName(ctx.switch_style) + L" |\n";
+    md += L"| 文字コード | " + std::wstring(EncodingDetector::EncodingName(ctx.encoding)) + L" |\n";
+    md += L"| 改行コード | " + NewlineName(ctx.newline) + L" |\n";
+    md += L"| 実行日時 | " + MarkdownCell(ctx.started_at) + L" |\n";
+    md += L"| 実行結果 | " + (result.status.empty() ? std::wstring(L"(未実行)") : result.status) + L" |\n";
+    md += L"| 置換件数 | " + std::to_wstring(result.replaced_count) + L" 件 |\n";
+    if (!result.switch_header_path.empty()) {
+        md += L"| スイッチ定義ヘッダ | `" + MarkdownCell(result.switch_header_path) + L"`";
+        md += result.switch_header_updated ? L"（更新）" : L"";
+        md += L" |\n";
+    }
+    md += L"\n## 一致箇所\n\n";
+    if (matches.empty()) {
+        md += L"（一致箇所なし）\n";
+    } else {
+        md += L"| No | 選択 | 行 | 列 | 一致種別 | 一致率 | 状態 | 一致文字列 |\n";
+        md += L"|---:|:---:|---:|---:|---|---:|---|---|\n";
+        for (size_t i = 0; i < matches.size(); ++i) {
+            const MatchResult& m = matches[i];
+            std::wstring type = L"完全一致";
+            if (m.match_type == MatchType::Normalized) type = L"正規化一致";
+            else if (m.match_type == MatchType::Similar) type = L"類似一致";
+            std::wstring st = L"対象";
+            if (m.status == MatchStatus::Excluded) st = L"除外";
+            else if (m.status == MatchStatus::Warning) st = L"警告";
+            else if (m.status == MatchStatus::Error) st = L"エラー";
+            md += L"| " + std::to_wstring(m.match_id) +
+                  L" | " + (m.selected ? L"○" : L"") +
+                  L" | " + std::to_wstring(m.start_line) +
+                  L" | " + std::to_wstring(m.start_column) +
+                  L" | " + type +
+                  L" | " + std::to_wstring(m.match_rate) + L"%" +
+                  L" | " + st +
+                  L" | `" + MarkdownCell(m.matched_text) + L"` |\n";
+        }
+    }
+    md += L"\n## 変換前\n\n```c\n" + before_text + L"\n```\n\n";
+    md += L"## 変換後\n\n```c\n" + after_text + L"\n```\n";
+    return md;
+}
+
+std::wstring DiffReportGenerator::BuildJson(const OperationContext& ctx,
+                                            const std::vector<MatchResult>& matches,
+                                            const std::wstring& before_text,
+                                            const std::wstring& after_text,
+                                            const ReplaceResult& result)
+{
+    std::wstring j;
+    j += L"{\n";
+    j += L"  \"report_type\": \"diff\",\n";
+    j += L"  \"operation_id\": \"" + JsonEscape(ctx.operation_id) + L"\",\n";
+    j += L"  \"target_file\": \"" + JsonEscape(ctx.target_file_path) + L"\",\n";
+    j += L"  \"target_kind\": \"" +
+         std::wstring(ctx.target_kind == TargetKind::Folder ? L"folder" : L"single_file") + L"\",\n";
+    j += L"  \"switch_name\": \"" + JsonEscape(ctx.switch_name) + L"\",\n";
+    j += L"  \"switch_style\": \"" + JsonEscape(StyleName(ctx.switch_style)) + L"\",\n";
+    j += L"  \"encoding\": \"" + JsonEscape(EncodingDetector::EncodingName(ctx.encoding)) + L"\",\n";
+    j += L"  \"newline\": \"" + JsonEscape(NewlineName(ctx.newline)) + L"\",\n";
+    j += L"  \"executed_at\": \"" + JsonEscape(ctx.started_at) + L"\",\n";
+    j += L"  \"status\": \"" + JsonEscape(result.status) + L"\",\n";
+    j += L"  \"replaced_count\": " + std::to_wstring(result.replaced_count) + L",\n";
+    j += L"  \"match_count\": " + std::to_wstring((int)matches.size()) + L",\n";
+    j += L"  \"switch_header_path\": \"" + JsonEscape(result.switch_header_path) + L"\",\n";
+    j += L"  \"switch_header_updated\": " + std::wstring(result.switch_header_updated ? L"true" : L"false") + L",\n";
+    j += L"  \"matches\": [\n";
+    for (size_t i = 0; i < matches.size(); ++i) {
+        const MatchResult& m = matches[i];
+        std::wstring type = L"exact";
+        if (m.match_type == MatchType::Normalized) type = L"normalized";
+        else if (m.match_type == MatchType::Similar) type = L"similar";
+        std::wstring st = L"target";
+        if (m.status == MatchStatus::Excluded) st = L"excluded";
+        else if (m.status == MatchStatus::Warning) st = L"warning";
+        else if (m.status == MatchStatus::Error) st = L"error";
+        j += L"    { \"no\": " + std::to_wstring(m.match_id) +
+             L", \"file\": \"" + JsonEscape(m.file_path) +
+             L"\", \"line\": " + std::to_wstring(m.start_line) +
+             L", \"column\": " + std::to_wstring(m.start_column) +
+             L", \"end_line\": " + std::to_wstring(m.end_line) +
+             L", \"match_type\": \"" + type +
+             L"\", \"match_rate\": " + std::to_wstring(m.match_rate) +
+             L", \"status\": \"" + st +
+             L"\", \"selected\": " + std::wstring(m.selected ? L"true" : L"false") +
+             L", \"text\": \"" + JsonEscape(m.matched_text) + L"\" }";
+        if (i + 1 < matches.size()) j += L",";
+        j += L"\n";
+    }
+    j += L"  ],\n";
+    j += L"  \"before_text\": \"" + JsonEscape(before_text) + L"\",\n";
+    j += L"  \"after_text\": \"" + JsonEscape(after_text) + L"\"\n";
+    j += L"}\n";
+    return j;
+}
+
+bool DiffReportGenerator::GenerateMarkdown(const std::wstring& report_path,
+                                           const OperationContext& ctx,
+                                           const std::vector<MatchResult>& matches,
+                                           const std::wstring& before_text,
+                                           const std::wstring& after_text,
+                                           const ReplaceResult& result,
+                                           std::wstring& out_error)
+{
+    return WriteReportFile(report_path, BuildMarkdown(ctx, matches, before_text, after_text, result),
+                           true, out_error);
+}
+
+bool DiffReportGenerator::GenerateJson(const std::wstring& report_path,
+                                       const OperationContext& ctx,
+                                       const std::vector<MatchResult>& matches,
+                                       const std::wstring& before_text,
+                                       const std::wstring& after_text,
+                                       const ReplaceResult& result,
+                                       std::wstring& out_error)
+{
+    return WriteReportFile(report_path, BuildJson(ctx, matches, before_text, after_text, result),
+                           false, out_error);
+}
+
+std::wstring DiffReportGenerator::BuildIntegratedMarkdown(const OperationContext& ctx,
+                                                          const std::vector<ReportFileSection>& sections,
+                                                          const BatchExecuteResult& batch)
+{
+    std::wstring md;
+    md += L"# 一括処理 変更差分レポート\n\n";
+    md += L"| 項目 | 内容 |\n|---|---|\n";
+    md += L"| 操作 ID | " + MarkdownCell(batch.operation_id) + L" |\n";
+    md += L"| 対象フォルダ | `" + MarkdownCell(batch.folder) + L"` |\n";
+    md += L"| スイッチ名 | `" + MarkdownCell(ctx.switch_name) + L"` |\n";
+    md += L"| 実行日時 | " + MarkdownCell(batch.executed_at) + L" |\n";
+    md += L"| 結果 | " + batch.status + L" |\n";
+    md += L"| 対象ファイル | " + std::to_wstring((int)sections.size()) + L" 件 |\n";
+    md += L"| 置換件数 | " + std::to_wstring(batch.replaced_count) + L" 件 |\n";
+    md += L"| エラー | " + std::to_wstring(batch.error_count) + L" 件 |\n";
+    md += L"| スキップ | " + std::to_wstring(batch.skipped_count) + L" 件 |\n\n";
+    md += L"## ファイル別結果\n\n";
+    md += L"| No | ファイル | 置換 | 状態 | エラー |\n|---:|---|---:|---|---|\n";
+    for (size_t i = 0; i < sections.size(); ++i) {
+        const ReportFileSection& s = sections[i];
+        md += L"| " + std::to_wstring((int)i + 1) +
+              L" | `" + MarkdownCell(s.file_path) + L"`" +
+              L" | " + std::to_wstring((int)s.matches.size()) +
+              L" | " + MarkdownCell(s.result.status) +
+              L" | " + MarkdownCell(s.result.error) + L" |\n";
+    }
+    md += L"\n";
+    for (size_t i = 0; i < sections.size(); ++i) {
+        const ReportFileSection& s = sections[i];
+        md += L"## " + std::to_wstring((int)i + 1) + L". `" + MarkdownCell(s.file_path) + L"`\n\n";
+        md += L"- 文字コード: " + (s.encoding_name.empty() ? std::wstring(L"(不明)") : s.encoding_name) +
+              L" / 改行: " + (s.newline_name.empty() ? std::wstring(L"(不明)") : s.newline_name) + L"\n";
+        if (s.include_added)
+            md += L"- #include を " + std::to_wstring(s.include_line) + L" 行目へ追加\n";
+        md += L"\n### 変換前\n\n```c\n" + s.before_text + L"\n```\n\n";
+        md += L"### 変換後\n\n```c\n" + s.after_text + L"\n```\n\n";
+    }
+    return md;
+}
+
+std::wstring DiffReportGenerator::BuildIntegratedJson(const OperationContext& ctx,
+                                                      const std::vector<ReportFileSection>& sections,
+                                                      const BatchExecuteResult& batch)
+{
+    std::wstring j;
+    j += L"{\n";
+    j += L"  \"report_type\": \"batch_diff\",\n";
+    j += L"  \"operation_id\": \"" + JsonEscape(batch.operation_id) + L"\",\n";
+    j += L"  \"folder\": \"" + JsonEscape(batch.folder) + L"\",\n";
+    j += L"  \"switch_name\": \"" + JsonEscape(ctx.switch_name) + L"\",\n";
+    j += L"  \"executed_at\": \"" + JsonEscape(batch.executed_at) + L"\",\n";
+    j += L"  \"status\": \"" + JsonEscape(batch.status) + L"\",\n";
+    j += L"  \"file_count\": " + std::to_wstring((int)sections.size()) + L",\n";
+    j += L"  \"replaced_count\": " + std::to_wstring(batch.replaced_count) + L",\n";
+    j += L"  \"error_count\": " + std::to_wstring(batch.error_count) + L",\n";
+    j += L"  \"skipped_count\": " + std::to_wstring(batch.skipped_count) + L",\n";
+    j += L"  \"files\": [\n";
+    for (size_t i = 0; i < sections.size(); ++i) {
+        const ReportFileSection& s = sections[i];
+        j += L"    { \"path\": \"" + JsonEscape(s.file_path) +
+             L"\", \"match_count\": " + std::to_wstring((int)s.matches.size()) +
+             L", \"status\": \"" + JsonEscape(s.result.status) +
+             L"\", \"error\": \"" + JsonEscape(s.result.error) +
+             L"\", \"encoding\": \"" + JsonEscape(s.encoding_name) +
+             L"\", \"newline\": \"" + JsonEscape(s.newline_name) +
+             L"\", \"include_added\": " + std::wstring(s.include_added ? L"true" : L"false") +
+             L", \"include_line\": " + std::to_wstring(s.include_line) +
+             L", \"before_text\": \"" + JsonEscape(s.before_text) +
+             L"\", \"after_text\": \"" + JsonEscape(s.after_text) + L"\" }";
+        if (i + 1 < sections.size()) j += L",";
+        j += L"\n";
+    }
+    j += L"  ]\n}\n";
+    return j;
+}
+
+bool DiffReportGenerator::GenerateIntegratedMarkdown(const std::wstring& report_path,
+                                                     const OperationContext& ctx,
+                                                     const std::vector<ReportFileSection>& sections,
+                                                     const BatchExecuteResult& batch,
+                                                     std::wstring& out_error)
+{
+    return WriteReportFile(report_path, BuildIntegratedMarkdown(ctx, sections, batch), true, out_error);
+}
+
+bool DiffReportGenerator::GenerateIntegratedJson(const std::wstring& report_path,
+                                                 const OperationContext& ctx,
+                                                 const std::vector<ReportFileSection>& sections,
+                                                 const BatchExecuteResult& batch,
+                                                 std::wstring& out_error)
+{
+    return WriteReportFile(report_path, BuildIntegratedJson(ctx, sections, batch), false, out_error);
+}
 } // namespace ms

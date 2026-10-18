@@ -56,8 +56,8 @@ void ConfigManager::Load(AppConfig& c)
     c.open_report_after_execution = GetInt(ini_path_, L"General", L"OpenReportAfterExecution", 0) != 0;
     c.dry_run_only   = GetInt(ini_path_, L"General", L"DryRunOnly", 0) != 0;
     c.auto_indent    = GetInt(ini_path_, L"General", L"AutoIndent", 0) != 0;
-    c.warn_comment_match = GetInt(ini_path_, L"General", L"WarnCommentMatch", 0) != 0;
-    c.warn_existing_preprocessor = GetInt(ini_path_, L"General", L"WarnExistingPreprocessor", 0) != 0;
+    c.warn_comment_match = GetInt(ini_path_, L"General", L"WarnCommentMatch", 1) != 0;
+    c.warn_existing_preprocessor = GetInt(ini_path_, L"General", L"WarnExistingPreprocessor", 1) != 0;
     c.preprocessor_scan_lines = GetInt(ini_path_, L"General", L"PreprocessorScanLines", 5);
     if (c.preprocessor_scan_lines < 0) c.preprocessor_scan_lines = 0;
     if (c.preprocessor_scan_lines > 100) c.preprocessor_scan_lines = 100;
@@ -80,6 +80,25 @@ void ConfigManager::Load(AppConfig& c)
     c.default_report_directory = GetStr(ini_path_, L"Report", L"DefaultReportDirectory", L"reports");
     c.default_backup_directory = GetStr(ini_path_, L"Backup", L"DefaultBackupDirectory", L"backups");
     c.winmerge_path = GetStr(ini_path_, L"ExternalTools", L"WinMergePath", L"");
+
+    // ---- 検索条件の拡張（類似一致 / 指定行範囲 / 関数単位 / 出力形式 / Undo 世代）----
+    c.search_similar = GetInt(ini_path_, L"Search", L"SimilarEnabled", 0) != 0;
+    c.search_similar_threshold = GetInt(ini_path_, L"Search", L"SimilarThreshold", 70);
+    if (c.search_similar_threshold < 1)   c.search_similar_threshold = 1;
+    if (c.search_similar_threshold > 100) c.search_similar_threshold = 100;
+    c.search_line_range = GetInt(ini_path_, L"Search", L"LineRangeEnabled", 0) != 0;
+    c.search_line_from = GetInt(ini_path_, L"Search", L"LineFrom", 1);
+    if (c.search_line_from < 1) c.search_line_from = 1;
+    c.search_line_to = GetInt(ini_path_, L"Search", L"LineTo", 0);
+    if (c.search_line_to < 0) c.search_line_to = 0;
+    c.search_function = GetInt(ini_path_, L"Search", L"FunctionEnabled", 0) != 0;
+    c.search_function_name = GetStr(ini_path_, L"Search", L"FunctionName", L"");
+    c.report_markdown = GetInt(ini_path_, L"Search", L"ReportMarkdown", 0) != 0;
+    c.report_json     = GetInt(ini_path_, L"Search", L"ReportJson", 0) != 0;
+    c.undo_max_generations = GetInt(ini_path_, L"Search", L"UndoMaxGenerations", 10);
+    if (c.undo_max_generations < 1)   c.undo_max_generations = 1;
+    if (c.undo_max_generations > 100) c.undo_max_generations = 100;
+    c.last_export_path = GetStr(ini_path_, L"Search", L"LastExportPath", L"");
 
     // ---- 17章 複数ファイル一括処理（Phase 4）----
     std::wstring tk = GetStr(ini_path_, L"Batch", L"TargetKind", L"SINGLE_FILE");
@@ -203,6 +222,19 @@ void ConfigManager::Save(const AppConfig& c)
     put(L"Report", L"DefaultReportDirectory", c.default_report_directory);
     put(L"Backup", L"DefaultBackupDirectory", c.default_backup_directory);
     put(L"ExternalTools", L"WinMergePath", c.winmerge_path);
+
+    // ---- 検索条件の拡張 ----
+    puti(L"Search", L"SimilarEnabled", c.search_similar ? 1 : 0);
+    puti(L"Search", L"SimilarThreshold", c.search_similar_threshold);
+    puti(L"Search", L"LineRangeEnabled", c.search_line_range ? 1 : 0);
+    puti(L"Search", L"LineFrom", c.search_line_from);
+    puti(L"Search", L"LineTo", c.search_line_to);
+    puti(L"Search", L"FunctionEnabled", c.search_function ? 1 : 0);
+    put(L"Search", L"FunctionName", c.search_function_name);
+    puti(L"Search", L"ReportMarkdown", c.report_markdown ? 1 : 0);
+    puti(L"Search", L"ReportJson", c.report_json ? 1 : 0);
+    puti(L"Search", L"UndoMaxGenerations", c.undo_max_generations);
+    put(L"Search", L"LastExportPath", c.last_export_path);
 
     // ---- 17章 複数ファイル一括処理（Phase 4）----
     put(L"Batch", L"TargetKind",

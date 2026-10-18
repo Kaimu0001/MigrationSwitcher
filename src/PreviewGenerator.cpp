@@ -2,6 +2,7 @@
 // PreviewGenerator.cpp
 // =============================================================================
 #include "PreviewGenerator.h"
+#include <cstdio>
 #include "SearchEngine.h"
 #include "Utils.h"
 

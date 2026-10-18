@@ -2,6 +2,7 @@
 // BackupManager.cpp
 // =============================================================================
 #include "BackupManager.h"
+#include <cstdio>
 #include "FileManager.h"
 #include "Utils.h"
 

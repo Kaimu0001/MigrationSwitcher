@@ -2,6 +2,7 @@
 // ValidationManager.cpp
 // =============================================================================
 #include "ValidationManager.h"
+#include <cstdio>
 #include "Utils.h"
 
 namespace ms {

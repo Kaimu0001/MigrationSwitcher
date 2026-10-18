@@ -2,6 +2,7 @@
 // SwitchHeaderManager.cpp
 // =============================================================================
 #include "SwitchHeaderManager.h"
+#include <cwchar>
 #include "EncodingDetector.h"
 #include "FileManager.h"
 #include "Utils.h"

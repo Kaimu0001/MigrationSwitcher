@@ -16,6 +16,7 @@ namespace util {
 std::wstring Utf8ToWide(const std::string& s);
 std::string  WideToUtf8(const std::wstring& s);
 std::wstring MultiByteToWide(const std::string& s, unsigned int code_page);
+std::string  WideToMultiByte(const std::wstring& s, unsigned int code_page);
 
 // ---- “úŽž -------------------------------------------------------------------
 std::wstring NowDateTime();        // yyyy-mm-dd hh:mm:ss

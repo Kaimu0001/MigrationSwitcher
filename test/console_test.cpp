@@ -13,6 +13,7 @@
 //   make test
 // =============================================================================
 #include <windows.h>
+#include <cwchar>
 #include <cstdio>
 #include <string>
 #include <vector>
@@ -22,6 +23,8 @@
 #include "EncodingDetector.h"
 #include "FileManager.h"
 #include "SearchEngine.h"
+#include "CodeScope.h"
+#include "ResultExporter.h"
 #include "SwitchGenerator.h"
 #include "PreviewGenerator.h"
 #include "DiffReportGenerator.h"
@@ -1854,6 +1857,476 @@ static void TestAiOpenAiCompat()
     Check(d.ai_api_key == L"gsk-keep", L"Genspark 側の設定が消えない");
 }
 
+static void TestCodeScope()
+{
+    Out(L"\n== 関数単位検索（CodeScope） ==\n");
+    std::wstring src =
+        L"int other(void) { return 0; }\n"
+        L"\n"
+        L"int stock_use(int item, int qty)\n"
+        L"{\n"
+        L"    int rc = stock_alloc(item, qty);\n"
+        L"    if (rc) { stock_alloc(item, qty); }\n"
+        L"    return rc;\n"
+        L"}\n"
+        L"\n"
+        L"int tail_use(int x)\n"
+        L"{\n"
+        L"    return stock_alloc(x, 1);\n"
+        L"}\n";
+
+    int s = 0, e = 0;
+    std::wstring err;
+    Check(CodeScope::FindFunctionBody(src, L"stock_use", s, e, err), L"関数本体を検出できる");
+    Check(s == 4 && e == 8, L"関数本体の行範囲が正しい（4～8 行）");
+    Check(!CodeScope::FindFunctionBody(src, L"no_such_fn", s, e, err), L"存在しない関数は失敗する");
+    Check(!err.empty(), L"失敗時に理由を返す");
+    Check(!CodeScope::FindFunctionBody(src, L"stock", s, e, err),
+          L"識別子の一部（stock）には誤一致しない");
+
+    std::vector<MatchResult> r =
+        SearchEngine::SearchInFunction(src, L"stock_alloc", L"t.c", L"stock_use", err);
+    Check(r.size() == 2, L"関数内の一致だけを 2 件返す");
+    for (size_t i = 0; i < r.size(); ++i)
+        Check(r[i].start_line >= 4 && r[i].start_line <= 8, L"関数外の一致を含まない");
+}
+
+static void TestSearchOptions()
+{
+    Out(L"\n== 類似一致 / 指定行範囲検索 ==\n");
+    Check(SearchEngine::NormalizeForSimilar(L"  int  rc = f( a , b );  ") == L"int rc = f( a , b );",
+          L"連続する空白を 1 つに畳む");
+    Check(SearchEngine::SimilarityPercent(L"abcde", L"abcde") == 100, L"同一文字列の類似度は 100%");
+    Check(SearchEngine::SimilarityPercent(L"abcde", L"abcde") >
+          SearchEngine::SimilarityPercent(L"abcde", L"xyzwv"),
+          L"似ている文字列の方が類似度が高い");
+
+    std::wstring text =
+        L"int a(void)\n"
+        L"{\n"
+        L"    int rc = stock_alloc(item, qty);\n"
+        L"    int rc2 = stock_alloc(item,  qty);\n"
+        L"    int rc3 = totally_different_call(x);\n"
+        L"}\n";
+
+    std::vector<MatchResult> sim =
+        SearchEngine::SearchSimilar(text, L"stock_alloc(item, qty)", L"t.c", 70);
+    Check(sim.size() == 1, L"空白だけが異なる行を 1 件だけ検出する（完全一致行は除外）");
+    if (!sim.empty()) {
+        Check(sim[0].match_type == MatchType::Similar, L"一致種別が類似一致になる");
+        Check(sim[0].match_rate >= 70, L"一致率がしきい値以上になる");
+        Check(sim[0].start_line == 4, L"類似一致の行番号が正しい");
+        Check(sim[0].matched_text.find(L"stock_alloc") != std::wstring::npos,
+              L"一致文字列を元の表記で返す");
+        Check(sim[0].status == MatchStatus::Warning, L"類似一致は警告状態になる");
+    }
+    Check(SearchEngine::SearchSimilar(text, L"stock_alloc(item, qty)", L"t.c", 10).size() >=
+          sim.size(), L"しきい値を下げると検出件数は減らない");
+
+    std::vector<MatchResult> rng =
+        SearchEngine::SearchInRange(text, L"stock_alloc", L"t.c", 1, 3);
+    Check(rng.size() == 1, L"指定行範囲（1～3 行）で 1 件だけ検出する");
+    if (!rng.empty()) Check(rng[0].start_line == 3, L"範囲内の行だけを返す");
+    Check(SearchEngine::SearchInRange(text, L"stock_alloc", L"t.c", 4, 0).size() == 1,
+          L"終了行 0 は最終行までを意味する");
+    Check(SearchEngine::SearchInRange(text, L"stock_alloc", L"t.c", 10, 20).empty(),
+          L"範囲外には一致しない");
+}
+
+static void TestEucJp()
+{
+    Out(L"\n== EUC-JP 対応 ==\n");
+    // コードページ 51932 は kernel32 に存在しないため、内蔵テーブルで判定・変換する。
+    Check(EncodingDetector::IsEucJpAvailable(), L"EUC-JP は内蔵テーブルで常に利用可能");
+
+    const unsigned char bytes[] = { 0xA4,0xA2, 0xA4,0xA4, 0xA4,0xA6, 0xA4,0xA8, 0xA4,0xAA };
+    std::string euc((const char*)bytes, sizeof(bytes));
+    const std::wstring expect = L"\u3042\u3044\u3046\u3048\u304A";
+
+    Check(EncodingDetector::IsValidEucJp(euc), L"EUC-JP のひらがなを妥当と判定する");
+    size_t bom = 0;
+    Check(EncodingDetector::Detect(euc, bom) == TextEncoding::EucJp,
+          L"CP932 では半角カタカナになるバイト列を EUC-JP と自動判定する");
+
+    std::wstring t; TextEncoding enc;
+    Check(EncodingDetector::Decode(euc, L"auto", t, enc) && t == expect,
+          L"EUC-JP を自動判定して読み込める");
+    std::wstring t2; TextEncoding enc2;
+    Check(EncodingDetector::Decode(euc, L"eucjp", t2, enc2) && enc2 == TextEncoding::EucJp && t2 == expect,
+          L"強制モード eucjp で読み込める");
+    std::string back;
+    Check(EncodingDetector::Encode(expect, TextEncoding::EucJp, false, back) && back == euc,
+          L"EUC-JP へ再エンコードすると元のバイト列に戻る");
+    Check(std::wstring(EncodingDetector::EncodingName(TextEncoding::EucJp)) == L"EUC-JP",
+          L"文字コード名を返す");
+
+    // 回帰: verify_kit/euc_sample.c 11 行目相当（CP932 では不正、EUC-JP では日本語コメント）
+    const unsigned char line[] = { 0xB5,0xEC, 0x20, 0x41,0x50,0x49, 0x20,
+                                   0xA4,0xF2, 0xB8,0xC6, 0xA4,0xD3, 0xBD,0xD0, 0xA4,0xB9 };
+    std::string eucLine((const char*)line, sizeof(line));
+    Check(!EncodingDetector::IsValidShiftJis(eucLine), L"EUC-JP の日本語コメントは CP932 としては不正");
+    Check(EncodingDetector::IsValidEucJp(eucLine), L"EUC-JP としては妥当");
+    Check(EncodingDetector::Detect(eucLine, bom) == TextEncoding::EucJp,
+          L"CP932 として不正な EUC-JP 行を EUC-JP と判定する（文字化けの回帰）");
+    std::wstring lt; TextEncoding lenc;
+    Check(EncodingDetector::Decode(eucLine, L"auto", lt, lenc) && lt == L"\u65E7\u0020\u0041\u0050\u0049\u0020\u3092\u547C\u3073\u51FA\u3059",
+          L"EUC-JP の日本語コメントが文字化けせずに読める");
+
+    // 半角カタカナ（0x8E リード）
+    const unsigned char hk[] = { 0x8E,0xB1, 0x8E,0xB2, 0x8E,0xB3 };
+    std::string hks((const char*)hk, sizeof(hk));
+    std::wstring ht; TextEncoding henc;
+    Check(EncodingDetector::IsValidEucJp(hks) &&
+          EncodingDetector::Decode(hks, L"eucjp", ht, henc) && ht == L"\uFF71\uFF72\uFF73",
+          L"半角カタカナ（0x8E リード）を強制モード eucjp で読み込める");
+
+    // JIS X 0212（0x8F リード）
+    const unsigned char j212[] = { 0x8F, 0xB0, 0xA1 };
+    std::string s212((const char*)j212, sizeof(j212));
+    std::wstring t212; TextEncoding e212;
+    Check(EncodingDetector::Decode(s212, L"eucjp", t212, e212) && t212 == L"\u4E02",
+          L"JIS X 0212（0x8F リード）を読み込める");
+
+    std::wstring dir = util::JoinPath(VerifyDir(), L"eucjp");
+    util::EnsureDirectory(dir);
+    std::wstring fp = util::JoinPath(dir, L"euc.txt");
+    std::wstring werr;
+    Check(FileManager::WriteTextAtomic(fp, expect, TextEncoding::EucJp, false,
+                                       NewlineKind::CRLF, werr),
+          L"EUC-JP でファイルへ書き出せる");
+    std::wstring rt; FileInfo fi;
+    Check(FileManager::ReadText(fp, L"auto", rt, fi) && fi.encoding == TextEncoding::EucJp && rt == expect,
+          L"書き出した EUC-JP ファイルを自動判定で読み戻せる");
+    std::wstring rt2; FileInfo fi2;
+    Check(FileManager::ReadText(fp, L"eucjp", rt2, fi2) && rt2 == expect,
+          L"強制モード eucjp でファイルを読み戻せる");
+}
+
+static void TestMultiGenerationUndo()
+{
+    Out(L"\n== 複数世代 Undo ==\n");
+    std::wstring dir = util::JoinPath(VerifyDir(), L"undo_gen");
+    util::EnsureDirectory(dir);
+    std::wstring target = util::JoinPath(dir, L"gen.txt");
+    std::wstring bak1   = util::JoinPath(dir, L"gen.txt.1.bak");
+    std::wstring bak2   = util::JoinPath(dir, L"gen.txt.2.bak");
+    std::wstring werr;
+    FileManager::WriteTextAtomic(bak1, L"v1", TextEncoding::UTF8, false, NewlineKind::LF, werr);
+    FileManager::WriteTextAtomic(bak2, L"v2", TextEncoding::UTF8, false, NewlineKind::LF, werr);
+    FileManager::WriteTextAtomic(target, L"v3", TextEncoding::UTF8, false, NewlineKind::LF, werr);
+
+    UndoManager u;
+    u.SetMaxGenerations(10);
+    UndoRecord r1;
+    r1.operation_id = L"OP_1";
+    r1.target_file_path = target;
+    r1.backup_file_path = bak1;
+    r1.executed_at = L"2026-01-01 00:00:00";
+    u.SetRecord(r1);
+
+    UndoRecord r2;
+    r2.operation_id = L"OP_2";
+    r2.target_file_path = target;
+    r2.backup_file_path = bak2;
+    r2.executed_at = L"2026-01-01 00:01:00";
+    u.SetRecord(r2);
+
+    Check(u.HistorySize() == 2, L"2 世代を保持する");
+    Check(u.FileCount() == 1, L"最新世代のファイル数は 1");
+    Check(u.GenerationLabel(0).find(L"OP_2") != std::wstring::npos, L"最新世代のラベルを返す");
+
+    std::vector<std::wstring> sc;
+    std::wstring err;
+    Check(u.Undo(err, sc), L"1 回目の Undo が成功する");
+    std::wstring a; FileInfo afi;
+    FileManager::ReadText(target, L"auto", a, afi);
+    Check(util::Trim(a) == L"v2", L"1 回目の Undo で 1 世代前（v2）へ戻る");
+    Check(u.HistorySize() == 1 && u.CanUndo(), L"1 世代残るので続けて Undo できる");
+
+    Check(u.Undo(err, sc), L"2 回目の Undo が成功する");
+    std::wstring b; FileInfo bfi;
+    FileManager::ReadText(target, L"auto", b, bfi);
+    Check(util::Trim(b) == L"v1", L"2 回目の Undo でさらに前（v1）へ戻る");
+    Check(u.HistorySize() == 0 && !u.CanUndo(), L"履歴を使い切ると Undo できない");
+    Check(!u.Undo(err, sc) && !err.empty(), L"履歴が無いときは理由を返して失敗する");
+
+    u.SetMaxGenerations(2);
+    for (int i = 0; i < 3; ++i) {
+        UndoRecord r;
+        r.target_file_path = target;
+        r.backup_file_path = bak1;
+        u.SetRecord(r);
+    }
+    Check(u.HistorySize() == 2, L"上限を超えた古い世代は破棄される");
+    Check(u.MaxGenerations() == 2, L"保持世代数を取得できる");
+}
+
+static void TestReportFormats()
+{
+    Out(L"\n== Markdown / JSON レポート ==\n");
+    OperationContext ctx;
+    ctx.operation_id = L"OP_TEST_0001";
+    ctx.target_file_path = L"C:\\work\\sample.c";
+    ctx.switch_name = L"MIGRATION_001";
+    ctx.old_code = L"stock_alloc(item, qty)";
+    ctx.new_code = L"new_stock_alloc(item, qty, 0)";
+    ctx.switch_style = SwitchStyle::IfdefNewFirst;
+    ctx.encoding = TextEncoding::ShiftJIS;
+    ctx.newline = NewlineKind::CRLF;
+    ctx.started_at = L"2026-01-01 00:00:00";
+
+    std::wstring before = L"int a;\n    stock_alloc(item, qty);\n";
+    std::wstring after  = L"int a;\n#ifdef MIGRATION_001\n    new_stock_alloc(item, qty, 0);\n#else\n    stock_alloc(item, qty);\n#endif\n";
+    std::vector<MatchResult> ms = SearchEngine::Search(before, ctx.old_code, ctx.target_file_path);
+    Check(ms.size() == 1, L"レポート用の一致を 1 件用意できる");
+
+    ReplaceResult res;
+    res.operation_id = ctx.operation_id;
+    res.target_file_path = ctx.target_file_path;
+    res.status = L"Success";
+    res.replaced_count = (int)ms.size();
+    res.switch_header_path = L"C:\\work\\migration_switch.h";
+    res.switch_header_updated = true;
+
+    std::wstring md = DiffReportGenerator::BuildMarkdown(ctx, ms, before, after, res);
+    Check(md.find(L"# 変更差分レポート") == 0, L"Markdown は見出しから始まる");
+    Check(md.find(L"MIGRATION_001") != std::wstring::npos, L"Markdown にスイッチ名を出力する");
+    Check(md.find(L"| No |") != std::wstring::npos, L"Markdown に一致箇所の表を出力する");
+    Check(md.find(L"## 変換前") != std::wstring::npos &&
+          md.find(L"## 変換後") != std::wstring::npos, L"Markdown に変換前後を出力する");
+
+    std::wstring js = DiffReportGenerator::BuildJson(ctx, ms, before, after, res);
+    Check(js.find(L"\"operation_id\": \"OP_TEST_0001\"") != std::wstring::npos,
+          L"JSON に operation_id を出力する");
+    Check(js.find(L"\"matches\"") != std::wstring::npos, L"JSON に matches 配列を出力する");
+    Check(js.find(L"\"switch_header_updated\": true") != std::wstring::npos,
+          L"JSON に真偽値を出力する");
+    Check(js.find(L"\\n") != std::wstring::npos, L"JSON の改行をエスケープする");
+
+    Check(DiffReportGenerator::JsonEscape(L"a\"b\\c\nd\te") == L"a\\\"b\\\\c\\nd\\te",
+          L"JSON 文字列をエスケープする");
+
+    std::wstring dir = util::JoinPath(VerifyDir(), L"report_fmt");
+    util::EnsureDirectory(dir);
+    std::wstring mdp = util::JoinPath(dir, L"test_diff.md");
+    std::wstring jsp = util::JoinPath(dir, L"test_diff.json");
+    std::wstring err;
+    Check(DiffReportGenerator::GenerateMarkdown(mdp, ctx, ms, before, after, res, err),
+          L"Markdown レポートを出力できる");
+    Check(DiffReportGenerator::GenerateJson(jsp, ctx, ms, before, after, res, err),
+          L"JSON レポートを出力できる");
+    Check(util::PathExists(mdp) && util::PathExists(jsp), L"レポートファイルが作成される");
+
+    std::wstring mt; FileInfo mfi;
+    Check(FileManager::ReadText(mdp, L"auto", mt, mfi) && mt.find(L"# 変更差分レポート") == 0,
+          L"Markdown レポートを読み戻せる");
+    Check(mfi.encoding == TextEncoding::UTF8BOM, L"Markdown は UTF-8 (BOM) で出力する");
+    std::wstring jt; FileInfo jfi;
+    Check(FileManager::ReadText(jsp, L"auto", jt, jfi) && jt.find(L"\"matches\"") != std::wstring::npos,
+          L"JSON レポートを読み戻せる");
+    Check(jfi.encoding == TextEncoding::UTF8, L"JSON は BOM なし UTF-8 で出力する");
+
+    Check(DiffReportGenerator::BuildReportPathExt(L"reports", L"C:\\work\\sample.c",
+                                                  L"20260101_000000", L".md")
+              .find(L"20260101_000000_sample_diff.md") != std::wstring::npos,
+          L"Markdown レポートのファイル名を組み立てる");
+}
+
+static void TestResultExporter()
+{
+    Out(L"\n== 検索結果エクスポート（CSV / Markdown / JSON） ==\n");
+    Check(ResultExporter::CsvEscape(L"abc") == L"abc", L"CSV: 通常の文字列はそのまま");
+    Check(ResultExporter::CsvEscape(L"a,b") == L"\"a,b\"", L"CSV: カンマを引用符で囲む");
+    Check(ResultExporter::CsvEscape(L"a\"b") == L"\"a\"\"b\"", L"CSV: 引用符を二重化する");
+    Check(ResultExporter::CsvEscape(L"a\nb") == L"\"a\nb\"", L"CSV: 改行を引用符で囲む");
+
+    std::vector<MatchResult> ms = SearchEngine::Search(
+        L"int a;\n    stock_alloc(item, qty);\n    stock_alloc(item, qty);\n",
+        L"stock_alloc(item, qty)", L"C:\\work\\sample.c");
+    Check(ms.size() == 2, L"エクスポート用の一致を 2 件用意できる");
+    ms[0].selected = true;
+
+    std::wstring csv = ResultExporter::BuildCsv(ms, L"OP_TEST_0001");
+    Check(csv.find(L"ファイル名") != std::wstring::npos, L"CSV にヘッダ行を出力する");
+    Check(csv.find(L"sample.c") != std::wstring::npos, L"CSV にファイル名を出力する");
+    Check(util::SplitLines(csv).size() == ms.size() + 1, L"CSV の行数がヘッダ + 件数になる");
+
+    std::wstring md = ResultExporter::BuildMarkdown(ms, L"OP_TEST_0001");
+    Check(md.find(L"OP_TEST_0001") != std::wstring::npos, L"Markdown に操作 ID を出力する");
+    Check(md.find(L"|---:") != std::wstring::npos, L"Markdown に表の区切りを出力する");
+
+    std::wstring js = ResultExporter::BuildJson(ms, L"OP_TEST_0001");
+    Check(js.find(L"\"total\": 2") != std::wstring::npos, L"JSON に件数を出力する");
+    Check(js.find(L"\"report_type\": \"search_result\"") != std::wstring::npos,
+          L"JSON にレポート種別を出力する");
+
+    std::wstring dir = util::JoinPath(VerifyDir(), L"export");
+    util::EnsureDirectory(dir);
+    std::wstring err;
+    std::wstring p1 = util::JoinPath(dir, L"result.csv");
+    std::wstring p2 = util::JoinPath(dir, L"result.md");
+    std::wstring p3 = util::JoinPath(dir, L"result.json");
+    Check(ResultExporter::Export(p1, ms, L"OP_TEST_0001", ExportFormat::Csv, L"utf8bom", err),
+          L"CSV を出力できる");
+    Check(ResultExporter::Export(p2, ms, L"OP_TEST_0001", ExportFormat::Markdown, L"utf8bom", err),
+          L"Markdown を出力できる");
+    Check(ResultExporter::Export(p3, ms, L"OP_TEST_0001", ExportFormat::Json, L"utf8bom", err),
+          L"JSON を出力できる");
+    Check(util::PathExists(p1) && util::PathExists(p2) && util::PathExists(p3),
+          L"3 形式のファイルが作成される");
+
+    std::wstring rt; FileInfo fi;
+    Check(FileManager::ReadText(p1, L"auto", rt, fi) && rt.find(L"ファイル名") != std::wstring::npos,
+          L"CSV を読み戻せる");
+    Check(fi.encoding == TextEncoding::UTF8BOM, L"CSV は UTF-8 (BOM) で出力する（Excel 向け）");
+    std::wstring jt; FileInfo jfi;
+    Check(FileManager::ReadText(p3, L"auto", jt, jfi) && jfi.encoding == TextEncoding::UTF8,
+          L"JSON は BOM なし UTF-8 で出力する");
+
+    std::wstring ep = ResultExporter::BuildExportPath(L"reports", L"20260101_000000",
+                                                      ExportFormat::Csv, L"sample");
+    Check(ep.find(L"20260101_000000_sample_result.csv") != std::wstring::npos,
+          L"エクスポートファイル名を組み立てる");
+}
+
+static void TestConfigRoundtripExt()
+{
+    Out(L"\n== 設定の往復（検索条件 / レポート形式 / Undo 世代 / EUC-JP） ==\n");
+    std::wstring dir = util::JoinPath(VerifyDir(), L"cfg_ext");
+    util::EnsureDirectory(dir);
+    std::wstring ini = util::JoinPath(dir, L"config.ini");
+    FileManager::RemoveFile(ini);
+
+    ConfigManager cm;
+    cm.SetPath(ini);
+    AppConfig c;
+    c.search_similar = true;
+    c.search_similar_threshold = 85;
+    c.search_line_range = true;
+    c.search_line_from = 10;
+    c.search_line_to = 200;
+    c.search_function = true;
+    c.search_function_name = L"stock_use";
+    c.report_markdown = true;
+    c.report_json = true;
+    c.undo_max_generations = 25;
+    c.encoding_mode = L"eucjp";
+    cm.Save(c);
+
+    AppConfig d;
+    cm.Load(d);
+    Check(d.search_similar && d.search_similar_threshold == 85, L"類似一致検索の設定を保存/復元できる");
+    Check(d.search_line_range && d.search_line_from == 10 && d.search_line_to == 200,
+          L"指定行範囲の設定を保存/復元できる");
+    Check(d.search_function && d.search_function_name == L"stock_use",
+          L"関数単位検索の設定を保存/復元できる");
+    Check(d.report_markdown && d.report_json, L"レポート形式の設定を保存/復元できる");
+    Check(d.undo_max_generations == 25, L"Undo 世代数の設定を保存/復元できる");
+    Check(d.encoding_mode == L"eucjp", L"EUC-JP の文字コード設定を保存/復元できる");
+
+    std::wstring ini2 = util::JoinPath(dir, L"config2.ini");
+    FileManager::RemoveFile(ini2);
+    ConfigManager cm2;
+    cm2.SetPath(ini2);
+    AppConfig e;
+    cm2.Load(e);
+    Check(e.search_similar_threshold == 70, L"類似一致の既定しきい値は 70%");
+    Check(e.undo_max_generations == 10, L"Undo の既定世代数は 10");
+    Check(e.search_line_from == 1 && e.search_line_to == 0, L"指定行範囲の既定値が正しい");
+}
+
+static void TestWarningDetection()
+{
+    Out(L"\n== 既存スイッチ警告 / include guard の除外 ==\n");
+    std::wstring detail;
+
+    // include guard だけのファイル
+    std::wstring guarded =
+        L"#ifndef SAMPLE_C\n"
+        L"#define SAMPLE_C\n"
+        L"\n"
+        L"int a(void)\n"
+        L"{\n"
+        L"    return 0;\n"
+        L"}\n"
+        L"\n"
+        L"int b(void)\n"
+        L"{\n"
+        L"    return 1;\n"
+        L"}\n"
+        L"\n"
+        L"#endif /* SAMPLE_C */\n";
+    Check(!SearchEngine::DetectNearbyPreprocessor(guarded, 5, 5, 5, detail),
+          L"include guard の #ifndef 近傍では警告しない");
+    Check(!SearchEngine::DetectNearbyPreprocessor(guarded, 12, 12, 5, detail),
+          L"include guard の #endif 近傍では警告しない（誤検出の修正）");
+    Check(detail.empty(), L"警告しないときは理由を残さない");
+
+    // include guard + 内部に移行スイッチがあるファイル
+    std::wstring inside =
+        L"#ifndef SAMPLE_C\n"
+        L"#define SAMPLE_C\n"
+        L"\n"
+        L"int a(void)\n"
+        L"{\n"
+        L"#ifdef LEGACY_MODE\n"
+        L"    stock_alloc(item, qty);\n"
+        L"#else\n"
+        L"    stock_alloc(item, qty);\n"
+        L"#endif\n"
+        L"    return 0;\n"
+        L"}\n"
+        L"\n"
+        L"#endif /* SAMPLE_C */\n";
+    Check(SearchEngine::DetectNearbyPreprocessor(inside, 7, 7, 5, detail),
+          L"既存スイッチの内側では警告する");
+    Check(detail.find(L"内側") != std::wstring::npos, L"内側であることを理由に含める");
+    Check(detail.find(L"LEGACY_MODE") != std::wstring::npos, L"検出したスイッチ名を含める");
+    Check(detail.find(L"6 行目") != std::wstring::npos, L"検出した指令の行番号を含める");
+
+    Check(SearchEngine::DetectNearbyPreprocessor(inside, 11, 11, 5, detail),
+          L"ブロックの外でも近傍に条件指令があれば警告する");
+    Check(detail.find(L"近傍") != std::wstring::npos, L"近傍であることを理由に含める");
+
+    // 条件指令がまったく無いファイル
+    Check(!SearchEngine::DetectNearbyPreprocessor(L"int a;\nint b;\nint c;\n", 2, 2, 5, detail),
+          L"条件指令が無ければ警告しない");
+
+    // 走査行数を 0 にすると近傍は検出しない（内側のみ）
+    Check(!SearchEngine::DetectNearbyPreprocessor(inside, 11, 11, 0, detail),
+          L"走査行数 0 では近傍を検出しない");
+    Check(SearchEngine::DetectNearbyPreprocessor(inside, 7, 7, 0, detail),
+          L"走査行数 0 でも内側は検出する");
+
+    // #if !defined(NAME) 形式の include guard
+    std::wstring guarded2 =
+        L"#if !defined(SAMPLE2_C)\n"
+        L"#define SAMPLE2_C\n"
+        L"\n"
+        L"int x(void)\n"
+        L"{\n"
+        L"    return 0;\n"
+        L"}\n"
+        L"\n"
+        L"#endif\n";
+    Check(!SearchEngine::DetectNearbyPreprocessor(guarded2, 5, 5, 5, detail),
+          L"#if !defined() 形式の include guard も除外する");
+
+    // include guard の外側にある本物のスイッチは検出する
+    std::wstring guarded3 =
+        L"#ifndef SAMPLE3_C\n"
+        L"#define SAMPLE3_C\n"
+        L"\n"
+        L"#ifdef REAL_SWITCH\n"
+        L"int a(void) { return 0; }\n"
+        L"#endif\n"
+        L"\n"
+        L"#endif /* SAMPLE3_C */\n";
+    Check(SearchEngine::DetectNearbyPreprocessor(guarded3, 5, 5, 5, detail),
+          L"include guard と併存する本物のスイッチは検出する");
+    Check(detail.find(L"REAL_SWITCH") != std::wstring::npos, L"本物のスイッチ名を含める");
+}
+
 static void TestAiLive(const std::wstring& keyfile)
 {
     Out(L"\n== AI 連携（Genspark API 実疎通）==\n");
@@ -1949,6 +2422,14 @@ int main(int argc, char** argv)
     TestSpecGenerator();
     TestAiConfigRoundtrip();
     TestAiOpenAiCompat();
+    TestWarningDetection();
+    TestCodeScope();
+    TestSearchOptions();
+    TestEucJp();
+    TestMultiGenerationUndo();
+    TestReportFormats();
+    TestResultExporter();
+    TestConfigRoundtripExt();
     if (live) TestAiLive(keyfile);
 
     Out(L"\n=====================================================\n");

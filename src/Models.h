@@ -102,7 +102,28 @@ enum class TextEncoding {
     UTF8BOM,
     ShiftJIS,
     UTF16LE,
-    Unknown
+    Unknown,
+    EucJp           // EUC-JP（後続版対応 / 明示指定または自動判定）
+};
+
+// -----------------------------------------------------------------------------
+// レポート出力形式（6.12 差分レポート / 後続版の Markdown・JSON 対応）
+// -----------------------------------------------------------------------------
+enum class ReportFormat {
+    Html = 0,       // HTML（既定）
+    Markdown,       // Markdown
+    Json,           // JSON
+    All             // すべて出力
+};
+
+// -----------------------------------------------------------------------------
+// 検索条件の種別（類似一致 / 指定行範囲 / 関数単位）
+// -----------------------------------------------------------------------------
+enum class SearchMode {
+    Exact = 0,      // 完全一致
+    Similar,        // 類似一致（空白の揺れを許容）
+    LineRange,      // 指定行範囲
+    Function        // 関数単位
 };
 
 // -----------------------------------------------------------------------------
@@ -196,6 +217,25 @@ struct AppConfig {
     std::wstring sys_modification;                      // 修正箇所概要
     std::wstring sys_extra;                             // 追加指示
     std::wstring last_spec_report_path;                 // 直近に生成した仕様書
+
+    // ---- 検索条件の拡張（類似一致 / 指定行範囲 / 関数単位）----
+    bool         search_similar = false;                // 類似一致検索を有効にする
+    int          search_similar_threshold = 70;         // 一致率のしきい値(%)
+    bool         search_line_range = false;             // 指定行範囲で検索する
+    int          search_line_from = 1;                  // 開始行（1 起点）
+    int          search_line_to = 0;                    // 終了行（0 = 最終行まで）
+    bool         search_function = false;               // 関数単位で検索する
+    std::wstring search_function_name;                  // 対象の関数名
+
+    // ---- レポート出力形式（HTML に加えて Markdown / JSON）----
+    bool         report_markdown = false;
+    bool         report_json = false;
+
+    // ---- 複数世代 Undo ----
+    int          undo_max_generations = 10;             // 保持する操作世代数
+
+    // ---- 検索結果のエクスポート（CSV / Markdown / JSON）----
+    std::wstring last_export_path;                      // 直近に出力したエクスポート
 };
 
 // -----------------------------------------------------------------------------

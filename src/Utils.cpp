@@ -431,4 +431,16 @@ bool IsSystemDirectoryPath(const std::wstring& path)
 }
 
 } // namespace util
+
+std::string WideToMultiByte(const std::wstring& s, unsigned int code_page)
+{
+    if (s.empty()) return std::string();
+    int need = ::WideCharToMultiByte(code_page, 0, s.data(), (int)s.size(),
+                                     nullptr, 0, nullptr, nullptr);
+    if (need <= 0) return std::string();
+    std::string out((size_t)need, '\0');
+    ::WideCharToMultiByte(code_page, 0, s.data(), (int)s.size(),
+                          &out[0], need, nullptr, nullptr);
+    return out;
+}
 } // namespace ms

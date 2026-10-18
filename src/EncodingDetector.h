@@ -36,6 +36,16 @@ public:
     static bool IsValidUtf8(const std::string& bytes);
     // Shift_JIS(CP932) として妥当か
     static bool IsValidShiftJis(const std::string& bytes);
+    // EUC-JP として妥当か（内蔵テーブルによる構造判定）
+    static bool IsValidEucJp(const std::string& bytes);
+
+    // EUC-JP が利用できるか（内蔵テーブルのため常に true）
+    static bool IsEucJpAvailable();
+    // EUC-JP のコードページ番号（参考値。kernel32 には存在しない）
+    static unsigned int EucJpCodePage();
+
+    // 半角カタカナの個数（CP932 / EUC-JP の自動判定ヒューリスティック用）
+    static int CountHalfwidthKatakana(const std::wstring& s);
 };
 
 } // namespace ms

@@ -25,14 +25,15 @@ namespace ms {
 enum PageIndex {
     PG_BASIC   = 0,   // 基本設定
     PG_BATCH   = 1,   // 一括処理（Phase 4）
-    PG_OLD     = 2,   // 旧コード
-    PG_NEW     = 3,   // 新コード
-    PG_RESULT  = 4,   // 検索結果
-    PG_PREVIEW = 5,   // プレビュー
-    PG_SWITCH  = 6,   // スイッチ管理
-    PG_SYSTEM  = 7,   // システム情報（仕様書生成）
-    PG_LOG     = 8,   // ログ
-    PG_COUNT   = 9
+    PG_SEARCH  = 2,   // 検索条件（類似一致 / 指定行範囲 / 関数単位 / 出力形式 / WinMerge）
+    PG_OLD     = 3,   // 旧コード
+    PG_NEW     = 4,   // 新コード
+    PG_RESULT  = 5,   // 検索結果
+    PG_PREVIEW = 6,   // プレビュー
+    PG_SWITCH  = 7,   // スイッチ管理
+    PG_SYSTEM  = 8,   // システム情報（仕様書生成）
+    PG_LOG     = 9,   // ログ
+    PG_COUNT   = 10
 };
 
 class App {
@@ -58,6 +59,7 @@ private:
     void CreateBasicPage();
     void CreateBatchPage();
     void CreateOldCodePage();
+    void CreateSearchPage();
     void CreateNewCodePage();
     void CreateResultPage();
     void CreatePreviewPage();
@@ -139,6 +141,35 @@ private:
     AiSettings  ReadAiSettings() const;
     SpecInput   BuildSpecInput() const;
     void PumpMessages();
+
+    // ---- 後続版: 検索条件の拡張 / エクスポート / WinMerge 連携 ----
+    void DoExportResults(int format);          // 0=CSV / 1=Markdown / 2=JSON
+    void DoWinMerge();
+    void DoWinMergeBrowse();
+    void DoEncodingModeChanged();
+    void LoadSearchOptionsFromConfig();
+    void SaveSearchOptionsToConfig();
+    void WriteExtraReportsAfterRun(bool batch_mode);
+    std::wstring FindWinMergePath() const;
+    // 比較用の内容（ファイル単位）
+    struct CompareItem {
+        std::wstring path;
+        std::wstring before;
+        std::wstring after;
+    };
+    // 選択された置換対象をファイル単位にまとめ、比較用の内容を作る
+    bool GetCompareItems(std::vector<CompareItem>& out, std::wstring& out_error);
+    bool SearchOptionsEnabled() const;
+    int  ReadSimilarThresholdFromUi() const;
+    int  ReadLineFromFromUi() const;
+    int  ReadLineToFromUi() const;
+    int  ReadUndoMaxFromUi() const;
+    std::wstring ReadEncodingModeFromUi() const;
+    std::vector<MatchResult> RunConfiguredSearch(const std::wstring& text,
+                                                 const std::wstring& pattern,
+                                                 const std::wstring& file_path,
+                                                 std::wstring& out_error);
+    void ApplySearchOptionsToBatch(const std::wstring& pattern);
 
     // ---- 内部処理 ----
     void ReadInputs(OperationContext& ctx);
@@ -251,6 +282,18 @@ private:
     HWND hLogEdit_, hBtnClearLog_;
 
     HWND hBtnSearch_, hBtnPreview_, hBtnDryRun_, hBtnExecute_, hBtnUndo_, hBtnExit_;
+
+    // page PG_SEARCH: 検索条件（後続版）
+    HWND hGrpSimilar_, hChkSimilar_, hLblSimThreshold_, hEditSimThreshold_;
+    HWND hGrpLineRange_, hChkLineRange_, hLblLineFrom_, hEditLineFrom_;
+    HWND hLblLineTo_, hEditLineTo_;
+    HWND hGrpFuncScope_, hChkFuncScope_, hLblFuncName_, hEditFuncName_;
+    HWND hGrpOutput_, hChkReportMd_, hChkReportJson_, hLblEncoding_, hCmbEncoding_;
+    HWND hGrpWinMerge_, hLblWinMerge_, hEditWinMerge_, hBtnWinMergeBrowse_;
+    HWND hGrpUndoOpt_, hLblUndoMax_, hEditUndoMax_;
+    HWND hLblSearchInfo_;
+    HWND hBtnExportCsv_, hBtnExportMd_, hBtnExportJson_;
+    HWND hBtnWinMerge_;
 
     HFONT hFontUi_, hFontMono_, hFontBold_;
 

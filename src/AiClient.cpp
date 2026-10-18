@@ -2,6 +2,7 @@
 // AiClient.cpp
 // =============================================================================
 #include "AiClient.h"
+#include <cstdio>
 
 #include <windows.h>
 #include <winhttp.h>

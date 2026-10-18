@@ -18,6 +18,30 @@
 #include "SwitchHeaderManager.h"
 #include "UndoManager.h"
 #include "ValidationManager.h"
+#include "CodeScope.h"
+#include "ResultExporter.h"
+
+// 文字列から整数を取り出す（数値以外が混ざる場合は既定値）
+static int ParseIntOr(const std::wstring& s, int def)
+{
+    if (s.empty()) return def;
+    int v = 0;
+    bool any = false;
+    for (size_t i = 0; i < s.size(); ++i) {
+        wchar_t c = s[i];
+        if (c >= L'0' && c <= L'9') {
+            v = v * 10 + (int)(c - L'0');
+            any = true;
+            if (v > 100000000) return def;
+        } else if (c == L' ' || c == L'\t') {
+            continue;
+        } else {
+            return def;
+        }
+    }
+    return any ? v : def;
+}
+
 
 #include <commdlg.h>
 #include <shlobj.h>
@@ -276,7 +300,11 @@ void App::EvaluateMatchWarnings()
 {
     bool warn_pre = IsChecked(hChkWarnPreproc_);
     bool warn_cmt = IsChecked(hChkWarnComment_);
-    if (!warn_pre && !warn_cmt) return;
+    if (!warn_pre && !warn_cmt) {
+        log_.Info(L"警告判定: 無効（基本設定タブの「コメント内の一致を警告する」"
+                  L"「既存コンパイルスイッチ近傍を警告する」が未チェックです）");
+        return;
+    }
 
     // ファイル単位に本文を取り出す
     int count = 0;
@@ -298,8 +326,7 @@ void App::EvaluateMatchWarnings()
             if (SearchEngine::DetectNearbyPreprocessor(*text, m.start_line, m.end_line,
                                                        cfg_.preprocessor_scan_lines, detail)) {
                 m.warning_flags.push_back(
-                    L"対象コードの近くに既存のプリプロセッサ命令があります（" + detail +
-                    L"）。二重にコンパイルスイッチで囲われる可能性があります。");
+                    detail + L"二重にコンパイルスイッチで囲われる可能性があります。");
                 if (m.status == MatchStatus::Target) m.status = MatchStatus::Warning;
                 ++count;
             }
@@ -314,7 +341,18 @@ void App::EvaluateMatchWarnings()
             }
         }
     }
-    if (count > 0) log_.Warn(L"警告付きの一致箇所: " + std::to_wstring(count) + L" 件");
+    if (count > 0) {
+        log_.Warn(L"警告付きの一致箇所: " + std::to_wstring(count) + L" 件");
+        for (size_t i = 0; i < matches_.size(); ++i) {
+            const MatchResult& m = matches_[i];
+            if (!m.HasWarning()) continue;
+            for (size_t k = 0; k < m.warning_flags.size(); ++k)
+                log_.Warn(L"  " + util::GetFileNameOf(m.file_path) + L" " +
+                          std::to_wstring(m.start_line) + L" 行目: " + m.warning_flags[k]);
+        }
+    } else if (warn_pre || warn_cmt) {
+        log_.Info(L"警告判定: 該当なし（コメント内の一致 / 既存スイッチ近傍なし）");
+    }
 }
 
 // -----------------------------------------------------------------------------
@@ -862,7 +900,14 @@ void App::DoSearch()
         return;
     }
 
-    matches_ = SearchEngine::Search(file_text_, pattern, target_path_);
+    std::wstring search_err;
+    matches_ = RunConfiguredSearch(file_text_, pattern, target_path_, search_err);
+    if (!search_err.empty()) {
+        ShowError(search_err);
+        log_.Error(search_err);
+        SetState(AppState::Error);
+        return;
+    }
     SearchEngine::Renumber(matches_);
 
     log_.Info(L"Match count: " + std::to_wstring((int)matches_.size()) + L".");
@@ -958,6 +1003,7 @@ void App::DoBatchSearch()
     batch_files_   = bs.all_files;
     batch_entries_ = bs.entries;
     matches_       = bs.matches;
+    ApplySearchOptionsToBatch(pattern);
     SearchEngine::Renumber(matches_);
 
     for (size_t i = 0; i < bs.errors.size() && i < 20; ++i) log_.Warn(bs.errors[i]);
@@ -1456,10 +1502,21 @@ void App::RunOperation(ExecutionMode mode)
 
     if (IsChecked(hChkOpenReport_) && !report_path.empty()) OpenPath(report_path);
 
+    // 置換後も検索結果は保持する（プレビュータブの WinMerge 比較をそのまま使えるように）。
+    // 検索結果を消すのは再走査・再検索を実行したときだけ。
     if (file_written) {
-        matches_.clear();
+        // 自分で書き換えた内容を保持し、次回実行時に
+        // 「検索後に変更されています」と誤判定して検索結果が消えるのを防ぐ。
+        FileInfo fi2;
+        std::wstring cur2;
+        if (FileManager::ReadText(target_path_, cfg_.encoding_mode, cur2, fi2)) {
+            file_text_ = cur2;
+            file_info_ = fi2;
+        }
         RefreshListView();
     }
+
+    WriteExtraReportsAfterRun(false);
 }
 
 // -----------------------------------------------------------------------------
@@ -1687,14 +1744,13 @@ void App::RunBatchOperation(ExecutionMode mode)
 
     if (IsChecked(hChkOpenReport_) && !report_path.empty()) OpenPath(report_path);
 
-    // 実行後は検索結果をクリア（ファイル内容が変わったため）
+    // 実行後も検索結果は保持する（プレビュータブの WinMerge 比較をそのまま使えるように）。
+    // 検索結果を消すのは再走査・再検索を実行したときだけ。
     if (mode == ExecutionMode::Real) {
-        matches_.clear();
-        for (size_t i = 0; i < batch_entries_.size(); ++i)
-            batch_entries_[i].selected_count = 0;
         RefreshListView();
-        RefreshFileList();
     }
+
+    WriteExtraReportsAfterRun(true);
 }
 
 
@@ -2062,6 +2118,8 @@ void App::DoUndo()
     int file_count = undo_.FileCount();
 
     std::wstring msg = L"直前の変更を元に戻します。よろしいですか？\n\n";
+    msg += L"Undo 履歴: " + std::to_wstring(undo_.HistorySize()) +
+           L" 世代（この操作で 1 世代戻ります）\n";
     if (file_count > 1) {
         msg += L"対象ファイル: " + std::to_wstring(file_count) + L" 件（一括処理）\n";
         msg += L"対象フォルダ: " + undo_.Record().target_file_path + L" ほか\n";
@@ -2097,7 +2155,13 @@ void App::DoUndo()
     }
     RefreshListView();
     SetState(AppState::FILE_SELECTED);
-    ShowInfo(L"MSG010: Undoが完了しました。");
+    {
+        int left = undo_.HistorySize();
+        std::wstring m = L"MSG010: Undoが完了しました。";
+        if (left > 0)
+            m += L"\nさらに元に戻せる操作が " + std::to_wstring(left) + L" 世代あります。";
+        ShowInfo(m);
+    }
 }
 
 // -----------------------------------------------------------------------------
@@ -2333,6 +2397,484 @@ void App::DoAiProviderChanged()
     SetStatus(newp == 1
               ? L"AI 連携: OpenAI 互換 API（GPT / Azure OpenAI / Ollama など）を使用します。"
               : L"AI 連携: Genspark API を使用します。");
+}
+
+
+// =============================================================================
+// 後続版: 検索条件の拡張 / 結果エクスポート / WinMerge 連携 / 追加レポート
+// =============================================================================
+bool App::SearchOptionsEnabled() const
+{
+    return IsChecked(hChkSimilar_) || IsChecked(hChkLineRange_) || IsChecked(hChkFuncScope_);
+}
+
+int App::ReadSimilarThresholdFromUi() const
+{
+    int v = ParseIntOr(util::Trim(GetEditText(hEditSimThreshold_)), 70);
+    if (v < 1)   v = 1;
+    if (v > 100) v = 100;
+    return v;
+}
+
+int App::ReadLineFromFromUi() const
+{
+    int v = ParseIntOr(util::Trim(GetEditText(hEditLineFrom_)), 1);
+    return (v < 1) ? 1 : v;
+}
+
+int App::ReadLineToFromUi() const
+{
+    int v = ParseIntOr(util::Trim(GetEditText(hEditLineTo_)), 0);
+    return (v < 0) ? 0 : v;
+}
+
+int App::ReadUndoMaxFromUi() const
+{
+    int v = ParseIntOr(util::Trim(GetEditText(hEditUndoMax_)), 10);
+    if (v < 1)   v = 1;
+    if (v > 100) v = 100;
+    return v;
+}
+
+std::wstring App::ReadEncodingModeFromUi() const
+{
+    int sel = (int)::SendMessageW(hCmbEncoding_, CB_GETCURSEL, 0, 0);
+    switch (sel) {
+    case 1: return L"utf8";
+    case 2: return L"utf8bom";
+    case 3: return L"sjis";
+    case 4: return L"eucjp";
+    default: return L"auto";
+    }
+}
+
+void App::LoadSearchOptionsFromConfig()
+{
+    SetChecked(hChkSimilar_, cfg_.search_similar);
+    SetEditText(hEditSimThreshold_, std::to_wstring(cfg_.search_similar_threshold));
+    SetChecked(hChkLineRange_, cfg_.search_line_range);
+    SetEditText(hEditLineFrom_, std::to_wstring(cfg_.search_line_from));
+    SetEditText(hEditLineTo_, std::to_wstring(cfg_.search_line_to));
+    SetChecked(hChkFuncScope_, cfg_.search_function);
+    SetEditText(hEditFuncName_, cfg_.search_function_name);
+    SetChecked(hChkReportMd_, cfg_.report_markdown);
+    SetChecked(hChkReportJson_, cfg_.report_json);
+    SetEditText(hEditWinMerge_, cfg_.winmerge_path);
+    SetEditText(hEditUndoMax_, std::to_wstring(cfg_.undo_max_generations));
+
+    std::wstring m = util::ToUpper(cfg_.encoding_mode);
+    int sel = 0;
+    if      (m == L"UTF8" || m == L"UTF-8")                          sel = 1;
+    else if (m == L"UTF8BOM")                                        sel = 2;
+    else if (m == L"SJIS" || m == L"SHIFT_JIS" || m == L"CP932")     sel = 3;
+    else if (m == L"EUCJP" || m == L"EUC-JP")                        sel = 4;
+    ::SendMessageW(hCmbEncoding_, CB_SETCURSEL, sel, 0);
+
+    undo_.SetMaxGenerations(cfg_.undo_max_generations);
+
+    if (hLblSearchInfo_) {
+        std::wstring info =
+            L"類似一致は置換対象へ自動選択されません（内容を確認して手動で選択してください）。"
+            L"指定行範囲・関数単位は完全一致検索と組み合わせて使えます。";
+        SetEditText(hLblSearchInfo_, info);
+    }
+}
+
+void App::SaveSearchOptionsToConfig()
+{
+    if (suppress_events_) return;
+    if (!hChkSimilar_) return;
+    cfg_.search_similar = IsChecked(hChkSimilar_);
+    cfg_.search_similar_threshold = ReadSimilarThresholdFromUi();
+    cfg_.search_line_range = IsChecked(hChkLineRange_);
+    cfg_.search_line_from = ReadLineFromFromUi();
+    cfg_.search_line_to = ReadLineToFromUi();
+    cfg_.search_function = IsChecked(hChkFuncScope_);
+    cfg_.search_function_name = util::Trim(GetEditText(hEditFuncName_));
+    cfg_.report_markdown = IsChecked(hChkReportMd_);
+    cfg_.report_json = IsChecked(hChkReportJson_);
+    cfg_.winmerge_path = util::Trim(GetEditText(hEditWinMerge_));
+    cfg_.undo_max_generations = ReadUndoMaxFromUi();
+    cfg_.encoding_mode = ReadEncodingModeFromUi();
+    undo_.SetMaxGenerations(cfg_.undo_max_generations);
+}
+
+std::vector<MatchResult> App::RunConfiguredSearch(const std::wstring& text,
+                                                  const std::wstring& pattern,
+                                                  const std::wstring& file_path,
+                                                  std::wstring& out_error)
+{
+    out_error.clear();
+    bool sim = IsChecked(hChkSimilar_);
+    bool rng = IsChecked(hChkLineRange_);
+    bool fnc = IsChecked(hChkFuncScope_);
+
+    int f1 = 1, t1 = 0;
+    if (fnc) {
+        std::wstring fname = util::Trim(GetEditText(hEditFuncName_));
+        if (fname.empty()) {
+            out_error = L"関数名を入力してください（関数単位検索）。";
+            return std::vector<MatchResult>();
+        }
+        int s = 0, e = 0;
+        if (!CodeScope::FindFunctionBody(text, fname, s, e, out_error))
+            return std::vector<MatchResult>();
+        f1 = s; t1 = e;
+    }
+
+    int f2 = 1, t2 = 0;
+    if (rng) {
+        f2 = ReadLineFromFromUi();
+        t2 = ReadLineToFromUi();
+        if (t2 > 0 && t2 < f2) {
+            out_error = L"指定行範囲が逆転しています（開始行 > 終了行）。";
+            return std::vector<MatchResult>();
+        }
+    }
+
+    int from = (f1 > f2) ? f1 : f2;
+    int to;
+    if      (t1 == 0) to = t2;
+    else if (t2 == 0) to = t1;
+    else              to = (t1 < t2) ? t1 : t2;
+    if (to > 0 && from > to) return std::vector<MatchResult>();
+
+    std::vector<MatchResult> r;
+    if (sim) {
+        r = SearchEngine::SearchSimilar(text, pattern, file_path, ReadSimilarThresholdFromUi());
+        if (from > 1 || to > 0) r = SearchEngine::FilterByLineRange(r, from, to);
+    } else {
+        r = SearchEngine::Search(text, pattern, file_path);
+        if (from > 1 || to > 0) r = SearchEngine::FilterByLineRange(r, from, to);
+    }
+    return r;
+}
+
+void App::ApplySearchOptionsToBatch(const std::wstring& pattern)
+{
+    if (!SearchOptionsEnabled()) return;
+    if (IsChecked(hChkFuncScope_) && util::Trim(GetEditText(hEditFuncName_)).empty()) {
+        log_.Warn(L"関数名が未入力のため、関数単位検索を行いませんでした。");
+        return;
+    }
+    std::vector<MatchResult> out;
+    for (size_t i = 0; i < batch_entries_.size(); ++i) {
+        BatchFileEntry& e = batch_entries_[i];
+        // 関数単位検索: 対象関数を持たないファイルはヒット 0 件として扱う
+        if (IsChecked(hChkFuncScope_)) {
+            int s = 0, en = 0;
+            std::wstring ferr;
+            if (!CodeScope::FindFunctionBody(e.text, util::Trim(GetEditText(hEditFuncName_)),
+                                             s, en, ferr)) {
+                e.hit_count = 0;
+                e.status = L"対象外";
+                continue;
+            }
+        }
+        std::wstring err;
+        std::vector<MatchResult> r = RunConfiguredSearch(e.text, pattern, e.path, err);
+        if (!err.empty()) {
+            log_.Warn(e.path + L": " + err);
+            e.error = err;
+            e.hit_count = 0;
+            e.status = L"対象外";
+            continue;
+        }
+        e.hit_count = (int)r.size();
+        for (size_t k = 0; k < r.size(); ++k) out.push_back(r[k]);
+    }
+    matches_ = out;
+}
+
+void App::DoExportResults(int format)
+{
+    if (matches_.empty()) {
+        ShowInfo(L"検索結果がありません。先に「検索」を実行してください。");
+        return;
+    }
+    ExportFormat fmt = ExportFormat::Csv;
+    if (format == 1)      fmt = ExportFormat::Markdown;
+    else if (format == 2) fmt = ExportFormat::Json;
+
+    std::wstring dir = ReportDirectory();
+    if (!util::EnsureDirectory(dir)) {
+        ShowError(L"出力先フォルダを作成できません: " + dir);
+        return;
+    }
+    std::wstring base = IsFolderMode()
+                        ? util::GetFileNameOf(batch_folder_)
+                        : util::GetBaseNameNoExt(target_path_);
+    if (base.empty()) base = L"result";
+
+    std::wstring path = ResultExporter::BuildExportPath(dir, util::TimestampFileName(), fmt, base);
+    std::wstring opid = util::NewOperationId();
+    std::wstring err;
+    if (!ResultExporter::Export(path, matches_, opid, fmt, cfg_.encoding_mode, err)) {
+        ShowError(L"エクスポートに失敗しました。\n" + err);
+        log_.Error(err);
+        return;
+    }
+    cfg_.last_export_path = path;
+    log_.Info(L"Exported search result: " + path);
+    ShowInfo(std::wstring(L"検索結果を ") + ResultExporter::FormatName(fmt) +
+             L" で出力しました。\n\n" + path);
+    if (Confirm(L"出力したファイルを開きますか？\n\n" + path)) OpenPath(path);
+}
+
+std::wstring App::FindWinMergePath() const
+{
+    std::wstring p = util::Trim(GetEditText(hEditWinMerge_));
+    if (p.empty()) p = cfg_.winmerge_path;
+    if (!p.empty()) return util::PathExists(p) ? p : std::wstring();
+
+    static const wchar_t* envs[3] = { L"ProgramFiles", L"ProgramFiles(x86)", L"LOCALAPPDATA" };
+    static const wchar_t* rels[3] = {
+        L"\\WinMerge\\WinMergeU.exe",
+        L"\\WinMerge\\WinMerge.exe",
+        L"\\Programs\\WinMerge\\WinMergeU.exe"
+    };
+    for (size_t e = 0; e < 3; ++e) {
+        wchar_t buf[512];
+        DWORD n = ::GetEnvironmentVariableW(envs[e], buf, 512);
+        if (n == 0 || n >= 512) continue;
+        for (size_t r = 0; r < 3; ++r) {
+            std::wstring c = std::wstring(buf) + rels[r];
+            if (util::PathExists(c)) return c;
+        }
+    }
+    return std::wstring();
+}
+
+bool App::GetCompareItems(std::vector<CompareItem>& out, std::wstring& out_error)
+{
+    out.clear();
+    out_error.clear();
+    std::vector<MatchResult> sel = GetSelectedMatches();
+    if (sel.empty()) {
+        out_error = L"置換対象が選択されていません。検索結果タブで対象を選択してください。";
+        return false;
+    }
+
+    OperationContext ctx;
+    ReadInputs(ctx);
+
+    // 選択された対象をファイル単位にまとめる（選択順を維持）
+    std::vector<std::wstring> order;
+    for (size_t i = 0; i < sel.size(); ++i) {
+        bool found = false;
+        for (size_t k = 0; k < order.size(); ++k)
+            if (order[k] == sel[i].file_path) { found = true; break; }
+        if (!found) order.push_back(sel[i].file_path);
+    }
+
+    for (size_t f = 0; f < order.size(); ++f) {
+        CompareItem item;
+        item.path = order[f];
+
+        std::vector<MatchResult> mine;
+        for (size_t i = 0; i < sel.size(); ++i)
+            if (sel[i].file_path == order[f]) mine.push_back(sel[i]);
+
+        std::wstring text;
+        if (IsFolderMode()) {
+            for (size_t i = 0; i < batch_entries_.size(); ++i) {
+                if (batch_entries_[i].path == item.path) { text = batch_entries_[i].text; break; }
+            }
+        } else {
+            item.path = util::MakeAbsolute(util::Trim(GetEditText(hTargetEdit_)));
+            text = file_text_;
+        }
+        if (text.empty()) {
+            FileInfo fi;
+            if (!FileManager::ReadText(item.path, cfg_.encoding_mode, text, fi)) {
+                out_error = L"比較対象のファイルを読み取れません: " + item.path;
+                return false;
+            }
+        }
+
+        std::vector<std::wstring> blocks = MakeBlocksFor(mine, ctx, text);
+        std::wstring after = PreviewGenerator::BuildAfterTextEach(text, mine, blocks);
+        if (ctx.add_switch_header_include && !ctx.switch_header_path.empty()) {
+            bool added = false;
+            int line = 0;
+            ApplyIncludeToText(after, item.path, ctx, added, line);
+        }
+        item.before = text;
+        item.after = after;
+        out.push_back(item);
+    }
+    return true;
+}
+
+void App::DoWinMerge()
+{
+    std::vector<CompareItem> items;
+    std::wstring err;
+    if (!GetCompareItems(items, err)) {
+        ShowError(err.empty() ? std::wstring(L"比較する内容を作成できません。") : err);
+        return;
+    }
+
+    std::wstring exe = FindWinMergePath();
+    if (exe.empty()) {
+        ShowError(L"WinMerge が見つかりません。\n\n"
+                  L"「検索条件」タブの「WinMergeU.exe のパス」で指定してください。\n"
+                  L"既定の確認先: C:\\Program Files\\WinMerge\\WinMergeU.exe");
+        log_.Warn(L"WinMerge not found.");
+        return;
+    }
+
+    // 選択されたファイルが多数ある場合の上限（1 ファイルにつき 1 ウィンドウ開くため）
+    const size_t kMaxFiles = 10;
+    size_t count = items.size();
+    if (count > kMaxFiles) count = kMaxFiles;
+
+    int launched = 0;
+    for (size_t n = 0; n < count; ++n) {
+        const CompareItem& item = items[n];
+        std::wstring ext = util::GetExtensionOf(item.path);
+        if (ext.empty()) ext = L".txt";
+        std::wstring pre = L"ms_before_" + std::to_wstring((int)(n + 1));
+        std::wstring post = L"ms_after_" + std::to_wstring((int)(n + 1));
+        std::wstring t1 = FileManager::MakeTempFilePath(pre.c_str(), ext);
+        std::wstring t2 = FileManager::MakeTempFilePath(post.c_str(), ext);
+        std::wstring werr;
+        if (!FileManager::WriteTextAtomic(t1, item.before, TextEncoding::UTF8, true, NewlineKind::CRLF, werr) ||
+            !FileManager::WriteTextAtomic(t2, item.after,  TextEncoding::UTF8, true, NewlineKind::CRLF, werr)) {
+            ShowError(L"比較用の一時ファイルを作成できません。\n" + werr);
+            return;
+        }
+
+        std::wstring fname = util::GetFileNameOf(item.path);
+        std::wstring args = L"\"" + t1 + L"\" \"" + t2 + L"\" /e /u";
+        // 複数ファイルを同時に比較するときは別ウィンドウで開く（/s- = 単一インスタンス設定を無視）
+        if (items.size() > 1) args += L" /s-";
+        args += L" /dl \"変換前: " + fname + L"\" /dr \"変換後: " + fname + L"\"";
+
+        HINSTANCE r = ::ShellExecuteW(nullptr, L"open", exe.c_str(), args.c_str(), nullptr, SW_SHOWNORMAL);
+        if ((INT_PTR)r <= 32) {
+            ShowError(L"WinMerge を起動できませんでした。\n\n" + exe);
+            log_.Error(L"Failed to launch WinMerge: " + exe);
+            return;
+        }
+        ++launched;
+        log_.Info(L"WinMerge launched: " + exe);
+        log_.Info(L"  " + fname);
+        log_.Info(L"    変換前: " + t1);
+        log_.Info(L"    変換後: " + t2);
+    }
+
+    std::wstring msg = L"WinMerge で比較しています（変換前 / 変換後）: "
+                     + std::to_wstring(launched) + L" ファイル。";
+    if (items.size() > kMaxFiles)
+        msg += L"（選択が " + std::to_wstring((int)items.size()) + L" 件のため先頭 "
+               + std::to_wstring((int)kMaxFiles) + L" 件のみ比較しました）";
+    SetStatus(msg);
+}
+
+void App::DoWinMergeBrowse()
+{
+    wchar_t buf[MAX_PATH * 4];
+    ::ZeroMemory(buf, sizeof(buf));
+    std::wstring cur = util::Trim(GetEditText(hEditWinMerge_));
+    lstrcpynW(buf, cur.c_str(), MAX_PATH * 4);
+
+    OPENFILENAMEW ofn;
+    ::ZeroMemory(&ofn, sizeof(ofn));
+    ofn.lStructSize = sizeof(ofn);
+    ofn.hwndOwner = hWnd_;
+    ofn.lpstrFilter = L"WinMerge (WinMergeU.exe)\0WinMergeU.exe\0実行ファイル (*.exe)\0*.exe\0すべて (*.*)\0*.*\0\0";
+    ofn.lpstrFile = buf;
+    ofn.nMaxFile = MAX_PATH * 4;
+    ofn.lpstrTitle = L"WinMergeU.exe を選択してください";
+    ofn.Flags = OFN_FILEMUSTEXIST | OFN_PATHMUSTEXIST | OFN_NOCHANGEDIR;
+    if (!::GetOpenFileNameW(&ofn)) return;
+
+    SetEditText(hEditWinMerge_, buf);
+    SaveSearchOptionsToConfig();
+    log_.Info(L"WinMerge path set: " + std::wstring(buf));
+}
+
+void App::WriteExtraReportsAfterRun(bool batch_mode)
+{
+    if (!cfg_.report_markdown && !cfg_.report_json) return;
+
+    OperationContext ctx;
+    ReadInputs(ctx);
+    std::wstring stamp = util::TimestampFileName();
+    std::wstring dir = ReportDirectory();
+    if (!util::EnsureDirectory(dir)) {
+        log_.Warn(L"レポート出力先を作成できません: " + dir);
+        return;
+    }
+
+    if (!batch_mode) {
+        if (last_result_.status.empty()) return;
+        if (target_path_.empty()) return;
+        ctx.operation_id = last_result_.operation_id;
+        ctx.target_file_path = last_result_.target_file_path;
+        std::wstring err;
+        if (cfg_.report_markdown) {
+            std::wstring p = DiffReportGenerator::BuildReportPathExt(dir, target_path_, stamp, L".md");
+            if (DiffReportGenerator::GenerateMarkdown(p, ctx, matches_, last_result_.before_text,
+                                                      last_result_.after_text, last_result_, err))
+                log_.Info(L"Markdown レポートを出力しました: " + p);
+            else
+                log_.Warn(L"Markdown レポートの出力に失敗しました: " + err);
+        }
+        if (cfg_.report_json) {
+            std::wstring p = DiffReportGenerator::BuildReportPathExt(dir, target_path_, stamp, L".json");
+            if (DiffReportGenerator::GenerateJson(p, ctx, matches_, last_result_.before_text,
+                                                  last_result_.after_text, last_result_, err))
+                log_.Info(L"JSON レポートを出力しました: " + p);
+            else
+                log_.Warn(L"JSON レポートの出力に失敗しました: " + err);
+        }
+        return;
+    }
+
+    std::vector<ReportFileSection> sections;
+    for (size_t i = 0; i < batch_entries_.size(); ++i) {
+        BatchFileEntry& e = batch_entries_[i];
+        std::vector<MatchResult> sel;
+        for (size_t k = 0; k < matches_.size(); ++k)
+            if (matches_[k].selected && matches_[k].file_path == e.path) sel.push_back(matches_[k]);
+        if (sel.empty()) continue;
+
+        ReportFileSection sec;
+        sec.file_path = e.path;
+        sec.matches = sel;
+        sec.before_text = e.text;
+        std::vector<std::wstring> blocks = MakeBlocksFor(sel, ctx, e.text);
+        sec.after_text = PreviewGenerator::BuildAfterTextEach(e.text, sel, blocks);
+        sec.encoding_name = EncodingDetector::EncodingName(e.info.encoding);
+        sec.newline_name = util::NewlineString(e.info.newline);
+        sec.include_added = e.include_added;
+        sec.include_line = e.include_line;
+        sec.result.file_path = e.path;
+        sec.result.status = e.status;
+        sec.result.error = e.error;
+        sections.push_back(sec);
+    }
+    if (sections.empty()) return;
+    ctx.operation_id = last_batch_result_.operation_id;
+    ctx.target_folder = batch_folder_;
+
+    std::wstring err;
+    if (cfg_.report_markdown) {
+        std::wstring p = DiffReportGenerator::BuildReportPathExt(dir, batch_folder_, stamp, L".md");
+        if (DiffReportGenerator::GenerateIntegratedMarkdown(p, ctx, sections, last_batch_result_, err))
+            log_.Info(L"Markdown 統合レポートを出力しました: " + p);
+        else
+            log_.Warn(L"Markdown 統合レポートの出力に失敗しました: " + err);
+    }
+    if (cfg_.report_json) {
+        std::wstring p = DiffReportGenerator::BuildReportPathExt(dir, batch_folder_, stamp, L".json");
+        if (DiffReportGenerator::GenerateIntegratedJson(p, ctx, sections, last_batch_result_, err))
+            log_.Info(L"JSON 統合レポートを出力しました: " + p);
+        else
+            log_.Warn(L"JSON 統合レポートの出力に失敗しました: " + err);
+    }
 }
 
 void App::DoAiTest()

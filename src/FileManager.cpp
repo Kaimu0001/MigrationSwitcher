@@ -2,6 +2,7 @@
 // FileManager.cpp
 // =============================================================================
 #include "FileManager.h"
+#include <cstdio>
 #include "EncodingDetector.h"
 #include "Utils.h"
 

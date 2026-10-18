@@ -260,6 +260,31 @@
 | 設定の保存 | 8章 設定ファイル | `[Ai] Provider / ApiKey / Endpoint / Model / OpenAiApiKey / OpenAiEndpoint / OpenAiModel`。種別ごとに独立保存し、切替時に入力欄を退避・復元 |
 | テスト | 20章 | 通常 316 PASS / 0 FAIL、`--live` 322 PASS / 0 FAIL（OpenAI 互換の URL 補完・本文生成・応答解析・設定往復を追加） |
 
+## 8.9 後続版の追加実装（検索条件 / レポート / エクスポート / WinMerge / 複数世代 Undo / EUC-JP）
+
+| 項目 | 実装 |
+|---|---|
+| CSV 結果出力 | `ResultExporter`（CSV / Markdown / JSON）。`,` `"` 改行を適切にエスケープ。CSV は UTF-8 BOM 既定（Excel 向け）、JSON は BOM なし UTF-8 |
+| 類似一致検索 | `SearchEngine::SearchSimilar` / `SimilarityPercent` / `NormalizeForSimilar`。空白の連続を 1 つへ畳んだうえで 2 文字組の Dice 係数を計算し、しきい値以上を検出。完全一致行は除外し、結果は `MatchStatus::Warning` のため自動選択されない |
+| 指定行範囲検索 | `SearchEngine::SearchInRange` / `FilterByLineRange`。終了行 0 は最終行まで |
+| 関数単位検索 | `CodeScope::FindFunctionBody` / `MatchParen` / `MatchBrace`。文字列・文字リテラル・コメントを考慮した括弧対応。識別子の一部への誤一致を除外。`SearchEngine::SearchInFunction` から利用 |
+| WinMerge 連携 | `App::DoWinMerge` / `FindWinMergePath` / `GetCompareTexts`。変換前後を一時ファイルへ書き出し `/e /u /dl /dr` 付きで起動。`[ExternalTools] WinMergePath` または環境変数から自動探索 |
+| 複数世代 Undo | `UndoManager` を世代スタック化（`history_`）。1 操作 = 1 世代、`SetMaxGenerations` で上限（1〜100、既定 10）。`Undo` は直近 1 世代のみ pop するため以前の世代も戻せる |
+| Markdown / JSON レポート | `DiffReportGenerator::BuildMarkdown` / `BuildJson` / `GenerateMarkdown` / `GenerateJson` と一括処理版。`App::WriteExtraReportsAfterRun` が実行後に追加出力 |
+| EUC-JP 対応 | `TextEncoding::EucJp`、`EncodingDetector::IsValidEucJp` / `IsEucJpAvailable` / `EucJpCodePage`（内蔵テーブル）。自動判定では CP932 と EUC-JP の双方が妥当な場合に半角カタカナの出現数で判別。強制モード `eucjp` にも対応 |
+| 設定 | `[Search]` セクション: `SimilarEnabled` / `SimilarThreshold` / `LineRangeEnabled` / `LineFrom` / `LineTo` / `FunctionEnabled` / `FunctionName` / `ReportMarkdown` / `ReportJson` / `UndoMaxGenerations` / `LastExportPath` |
+| 画面 | 「検索条件」タブを新設（タブは 10 枚）。「検索結果」タブに CSV / Markdown / JSON 出力ボタン、「プレビュー」タブに WinMerge 比較ボタンを追加 |
+
+## 8.10 既存スイッチ警告の判定精度改善
+
+| 項目 | 実装 |
+|---|---|
+| 内側判定 | 対象行が既存の条件ブロック（`#if` / `#ifdef` / `#ifndef` 〜 `#endif`）の内側かを depth で判定し、二重ネストの危険が最も高いケースとして先に警告する |
+| 近傍判定 | 対象行の前後 `PreprocessorScanLines` 行（既定 5）にある条件指令を検出する。走査行数 0 で無効化できる |
+| include guard の除外 | `#ifndef G` / `#define G` … `#endif`（`#if !defined(G)` 形式を含む）でファイル全体を包む形は移行スイッチではないため除外する。`CollectIncludeGuardLines` が最初の条件指令と対応する `#endif`（ファイル最後の条件指令）を特定して除外する |
+| メッセージ | 内側か近傍かを区別し、検出した指令の行番号・種別・マクロ名を含める |
+| テスト | `TestWarningDetection`（include guard 単独・`#if !defined()` 形式・内側・近傍・走査行数 0・guard と併存する本物のスイッチ） |
+
 ## 9. 後続版として残した項目
 
 設計書で「後続版」とされている機能は未実装です。拡張ポイントは以下です。
@@ -271,3 +296,9 @@
 | WinMerge 連携 | `FileManager::MakeTempFilePath` で before/after を出力し `CreateProcess` で起動（`winmerge_path` は設定済み） |
 | 複数世代 Undo | `UndoManager` の `record_` を `std::vector<UndoRecord>` へ変更 |
 | EUC-JP 対応 | `EncodingDetector::Detect/Decode/Encode` に CP20932 を追加 |
+
+---
+
+## 付録: EUC-JP の扱い
+
+EUC-JP の判定・変換は内蔵テーブル（JIS X 0208 / JIS X 0212、`src/EucJpTable.cpp`）で行います。コードページ 51932 は kernel32 に存在せず（`IsValidCodePage` が 0、`MultiByteToWideChar` は `ERROR_INVALID_PARAMETER` で失敗）、OS のコードページに依存すると実機で EUC-JP を判定できないためです。

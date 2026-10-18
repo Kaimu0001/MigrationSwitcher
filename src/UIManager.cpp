@@ -340,7 +340,7 @@ void App::CreateControls()
     ApplyFont(hTab_);
 
     static const wchar_t* titles[PG_COUNT] = {
-        L"基本設定", L"一括処理", L"旧コード", L"新コード",
+        L"基本設定", L"一括処理", L"検索条件", L"旧コード", L"新コード",
         L"検索結果", L"プレビュー", L"スイッチ管理", L"システム情報", L"ログ"
     };
     for (int i = 0; i < PG_COUNT; ++i) {
@@ -361,6 +361,7 @@ void App::CreateControls()
     CreateBasicPage();
     CreateBatchPage();
     CreateOldCodePage();
+    CreateSearchPage();
     CreateNewCodePage();
     CreateResultPage();
     CreatePreviewPage();
@@ -532,6 +533,9 @@ void App::CreateResultPage()
 
     hBtnSelectAll_ = MakeButton(p, L"すべて選択",   IDC_BTN_SELECTALL, BS_PUSHBUTTON, hFontUi_);
     hBtnClearSel_  = MakeButton(p, L"選択を解除",   IDC_BTN_CLEARSEL,  BS_PUSHBUTTON, hFontUi_);
+    hBtnExportCsv_ = MakeButton(p, L"CSV出力",      IDC_BTN_EXPORTCSV,  BS_PUSHBUTTON, hFontUi_);
+    hBtnExportMd_  = MakeButton(p, L"Markdown出力", IDC_BTN_EXPORTMD,   BS_PUSHBUTTON, hFontUi_);
+    hBtnExportJson_= MakeButton(p, L"JSON出力",     IDC_BTN_EXPORTJSON, BS_PUSHBUTTON, hFontUi_);
     hLblResultInfo_ = MakeStatic(p, L"", IDC_LBL_RESULTINFO, hFontUi_);
 
     hListView_ = ::CreateWindowExW(WS_EX_CLIENTEDGE, WC_LISTVIEWW, L"",
@@ -582,6 +586,7 @@ void App::CreatePreviewPage()
     ::SendMessageW(hCmbPreviewMode_, CB_SETCURSEL, 0, 0);
 
     hBtnOpenHtml_ = MakeButton(p, L"HTMLレポートを開く", IDC_BTN_OPENHTML, BS_PUSHBUTTON, hFontUi_);
+    hBtnWinMerge_ = MakeButton(p, L"WinMerge で比較", IDC_BTN_WINMERGE, BS_PUSHBUTTON, hFontUi_);
 
     hPreviewEdit_ = MakeEdit(p, IDC_EDIT_PREVIEW,
         ES_MULTILINE | ES_READONLY | ES_AUTOVSCROLL | ES_AUTOHSCROLL |
@@ -650,6 +655,60 @@ void App::CreateSwitchPage()
         c.fmt = cols[i].fmt;
         ::SendMessageW(hListSwitches_, LVM_INSERTCOLUMNW, (WPARAM)i, (LPARAM)&c);
     }
+}
+
+
+// =============================================================================
+// 検索条件タブ（後続版: 類似一致 / 指定行範囲 / 関数単位 / 出力形式 / WinMerge / Undo）
+// =============================================================================
+void App::CreateSearchPage()
+{
+    HWND p = hPage_[PG_SEARCH];
+
+    hGrpSimilar_ = MakeGroup(p, L"類似一致検索（空白の揺れを許容）", IDC_GRP_SIMILAR, hFontUi_);
+    hChkSimilar_ = MakeCheck(p, L"類似一致検索を有効にする（置換対象へは自動選択されません）",
+                             IDC_CHK_SIMILAR, hFontUi_);
+    hLblSimThreshold_ = MakeStatic(p, L"一致率のしきい値(%)", IDC_LBL_SIMTHRESHOLD, hFontUi_);
+    hEditSimThreshold_ = MakeEdit(p, IDC_EDIT_SIMTHRESHOLD, ES_AUTOHSCROLL | ES_NUMBER, hFontUi_);
+
+    hGrpLineRange_ = MakeGroup(p, L"指定行範囲検索", IDC_GRP_LINERANGE, hFontUi_);
+    hChkLineRange_ = MakeCheck(p, L"指定した行範囲だけを検索する", IDC_CHK_LINERANGE, hFontUi_);
+    hLblLineFrom_  = MakeStatic(p, L"開始行", IDC_LBL_LINEFROM, hFontUi_);
+    hEditLineFrom_ = MakeEdit(p, IDC_EDIT_LINEFROM, ES_AUTOHSCROLL | ES_NUMBER, hFontUi_);
+    hLblLineTo_    = MakeStatic(p, L"終了行", IDC_LBL_LINETO, hFontUi_);
+    hEditLineTo_   = MakeEdit(p, IDC_EDIT_LINETO, ES_AUTOHSCROLL | ES_NUMBER, hFontUi_);
+
+    hGrpFuncScope_ = MakeGroup(p, L"関数単位検索", IDC_GRP_FUNCSCOPE, hFontUi_);
+    hChkFuncScope_ = MakeCheck(p, L"指定した関数の本体（{ } の中）だけを検索する",
+                               IDC_CHK_FUNCSCOPE, hFontUi_);
+    hLblFuncName_  = MakeStatic(p, L"関数名", IDC_LBL_FUNCNAME, hFontUi_);
+    hEditFuncName_ = MakeEdit(p, IDC_EDIT_FUNCNAME, ES_AUTOHSCROLL, hFontUi_);
+
+    hGrpOutput_ = MakeGroup(p, L"出力形式", IDC_GRP_OUTPUT, hFontUi_);
+    hChkReportMd_   = MakeCheck(p, L"Markdown レポートも出力する (.md)", IDC_CHK_REPORTMD, hFontUi_);
+    hChkReportJson_ = MakeCheck(p, L"JSON レポートも出力する (.json)", IDC_CHK_REPORTJSON, hFontUi_);
+    hLblEncoding_   = MakeStatic(p, L"文字コード", IDC_LBL_ENCODING, hFontUi_);
+    hCmbEncoding_ = ::CreateWindowExW(0, L"COMBOBOX", L"",
+        WS_CHILD | WS_VISIBLE | WS_TABSTOP | CBS_DROPDOWNLIST | WS_VSCROLL,
+        0, 0, 10, 200, p, (HMENU)IDC_CMB_ENCODING, hInst_, nullptr);
+    ApplyFont(hCmbEncoding_);
+    static const wchar_t* encs[5] = {
+        L"自動判定", L"UTF-8", L"UTF-8 (BOM)", L"Shift_JIS", L"EUC-JP"
+    };
+    for (int i = 0; i < 5; ++i)
+        ::SendMessageW(hCmbEncoding_, CB_ADDSTRING, 0, (LPARAM)encs[i]);
+    ::SendMessageW(hCmbEncoding_, CB_SETCURSEL, 0, 0);
+
+    hGrpWinMerge_ = MakeGroup(p, L"WinMerge 連携", IDC_GRP_WINMERGE, hFontUi_);
+    hLblWinMerge_ = MakeStatic(p, L"WinMergeU.exe のパス", IDC_LBL_WINMERGE, hFontUi_);
+    hEditWinMerge_ = MakeEdit(p, IDC_EDIT_WINMERGE, ES_AUTOHSCROLL, hFontUi_);
+    hBtnWinMergeBrowse_ = MakeButton(p, L"参照...", IDC_BTN_WINMERGEBROWSE, BS_PUSHBUTTON, hFontUi_);
+
+    hGrpUndoOpt_ = MakeGroup(p, L"Undo（元に戻す）", IDC_GRP_UNDOOPT, hFontUi_);
+    hLblUndoMax_ = MakeStatic(p, L"保持する操作世代数", IDC_LBL_UNDOMAX, hFontUi_);
+    hEditUndoMax_ = MakeEdit(p, IDC_EDIT_UNDOMAX, ES_AUTOHSCROLL | ES_NUMBER, hFontUi_);
+
+    hLblSearchInfo_ = MakeStatic(p, L"", IDC_LBL_SEARCHINFO, hFontUi_);
 }
 
 void App::CreateLogPage()
@@ -764,10 +823,14 @@ void App::LayoutPage(int index, const RECT& rc)
         if (ay < gy + 96 + 10) ay = gy + 96 + 10;
         ::MoveWindow(hGrpAi_, M, ay, gw, aih, TRUE);
         ::MoveWindow(hLblAiProvider_, rx, ay + 22, 96, 18, TRUE);
-        int keyw = gw - 28 - 96 - 118 - 12;
-        if (keyw < 120) keyw = 120;
-        ::MoveWindow(hCmbAiProvider_, rx + 96, ay + 18, keyw + 118, 200, TRUE);
-        ::MoveWindow(hBtnAiTest_, rx + 96 + keyw + 124, ay + 18, 112, 22, TRUE);
+        // API 種別コンボと「接続テスト」ボタンがグループ内に収まるよう幅を配分する。
+        // （以前はボタン右端がグループ右端を約 92px 越えて画面外に出ていた）
+        const int aiBtnW = 112;
+        const int aiGap  = 12;
+        int aiComboW = gw - 28 - 96 - aiGap - aiBtnW;
+        if (aiComboW < 160) aiComboW = 160;
+        ::MoveWindow(hCmbAiProvider_, rx + 96, ay + 18, aiComboW, 200, TRUE);
+        ::MoveWindow(hBtnAiTest_, rx + 96 + aiComboW + aiGap, ay + 18, aiBtnW, 22, TRUE);
         ::MoveWindow(hLblAiKey_, rx, ay + 50, 96, 18, TRUE);
         ::MoveWindow(hEditAiKey_, rx + 96, ay + 46, gw - 28 - 96, 22, TRUE);
         ::MoveWindow(hLblAiEndpoint_, rx, ay + 78, 96, 18, TRUE);
@@ -828,11 +891,69 @@ void App::LayoutPage(int index, const RECT& rc)
         ::MoveWindow(info, M, H - M - infoH, W - M * 2, infoH, TRUE);
         break;
     }
+    case PG_SEARCH: {
+        int gw = W - M * 2;
+        int rx = M + 14;
+        int rw = gw - 28;
+        int y = M;
+        const int GH = 78;
+
+        ::MoveWindow(hGrpSimilar_, M, y, gw, GH, TRUE);
+        ::MoveWindow(hChkSimilar_, rx, y + 22, rw, 18, TRUE);
+        ::MoveWindow(hLblSimThreshold_, rx, y + 50, 150, 18, TRUE);
+        ::MoveWindow(hEditSimThreshold_, rx + 152, y + 46, 60, 22, TRUE);
+        y += GH + 8;
+
+        ::MoveWindow(hGrpLineRange_, M, y, gw, GH, TRUE);
+        ::MoveWindow(hChkLineRange_, rx, y + 22, rw, 18, TRUE);
+        ::MoveWindow(hLblLineFrom_, rx, y + 50, 46, 18, TRUE);
+        ::MoveWindow(hEditLineFrom_, rx + 48, y + 46, 60, 22, TRUE);
+        ::MoveWindow(hLblLineTo_, rx + 120, y + 50, 46, 18, TRUE);
+        ::MoveWindow(hEditLineTo_, rx + 168, y + 46, 60, 22, TRUE);
+        y += GH + 8;
+
+        ::MoveWindow(hGrpFuncScope_, M, y, gw, GH, TRUE);
+        ::MoveWindow(hChkFuncScope_, rx, y + 22, rw, 18, TRUE);
+        ::MoveWindow(hLblFuncName_, rx, y + 50, 70, 18, TRUE);
+        ::MoveWindow(hEditFuncName_, rx + 72, y + 46, 240, 22, TRUE);
+        y += GH + 8;
+
+        ::MoveWindow(hGrpOutput_, M, y, gw, GH, TRUE);
+        int cw2 = (gw - 28) / 2;
+        ::MoveWindow(hChkReportMd_, rx, y + 22, cw2, 18, TRUE);
+        ::MoveWindow(hChkReportJson_, rx + cw2, y + 22, cw2, 18, TRUE);
+        ::MoveWindow(hLblEncoding_, rx, y + 50, 76, 18, TRUE);
+        ::MoveWindow(hCmbEncoding_, rx + 78, y + 46, 220, 200, TRUE);
+        y += GH + 8;
+
+        ::MoveWindow(hGrpWinMerge_, M, y, gw, GH, TRUE);
+        ::MoveWindow(hLblWinMerge_, rx, y + 26, 130, 18, TRUE);
+        int ww = rw - 130 - 80 - 12;
+        if (ww < 100) ww = 100;
+        ::MoveWindow(hEditWinMerge_, rx + 132, y + 22, ww, 22, TRUE);
+        ::MoveWindow(hBtnWinMergeBrowse_, rx + 132 + ww + 6, y + 22, 74, 22, TRUE);
+        y += GH + 8;
+
+        ::MoveWindow(hGrpUndoOpt_, M, y, gw, 58, TRUE);
+        ::MoveWindow(hLblUndoMax_, rx, y + 26, 150, 18, TRUE);
+        ::MoveWindow(hEditUndoMax_, rx + 152, y + 22, 60, 22, TRUE);
+        y += 58 + 8;
+
+        int ih = H - y - M;
+        if (ih < 18) ih = 18;
+        ::MoveWindow(hLblSearchInfo_, M, y, gw, ih, TRUE);
+        break;
+    }
     case PG_RESULT: {
         int top = M;
         ::MoveWindow(hBtnSelectAll_, M, top, 100, 26, TRUE);
         ::MoveWindow(hBtnClearSel_,  M + 106, top, 100, 26, TRUE);
-        ::MoveWindow(hLblResultInfo_, M + 216, top + 5, W - M * 2 - 216, 18, TRUE);
+        ::MoveWindow(hBtnExportCsv_, M + 212, top, 92, 26, TRUE);
+        ::MoveWindow(hBtnExportMd_,  M + 308, top, 92, 26, TRUE);
+        ::MoveWindow(hBtnExportJson_, M + 404, top, 92, 26, TRUE);
+        int iw = W - M * 2 - 506;
+        if (iw < 60) iw = 60;
+        ::MoveWindow(hLblResultInfo_, M + 506, top + 5, iw, 18, TRUE);
         ::MoveWindow(hListView_, M, top + 32, W - M * 2, H - top - 32 - M, TRUE);
         break;
     }
@@ -840,6 +961,7 @@ void App::LayoutPage(int index, const RECT& rc)
         int top = M;
         ::MoveWindow(hCmbPreviewMode_, M, top, 220, 200, TRUE);
         ::MoveWindow(hBtnOpenHtml_, M + 230, top, 180, 24, TRUE);
+        ::MoveWindow(hBtnWinMerge_, M + 416, top, 190, 24, TRUE);
         ::MoveWindow(hPreviewEdit_, M, top + 32, W - M * 2, H - top - 32 - M, TRUE);
         break;
     }
@@ -1125,6 +1247,8 @@ void App::LoadConfigToUi()
     RefreshScanInfo();
     RefreshResolvedHeaderPath();
     if (util::PathExists(CurrentSwitchHeaderPath())) DoSwitchHeaderLoad();
+
+    LoadSearchOptionsFromConfig();
 }
 
 void App::SaveUiToConfig()
@@ -1178,6 +1302,8 @@ void App::SaveUiToConfig()
     cfg_.last_spec_report_path = last_spec_report_path_;
 
     cfgmgr_.Save(cfg_);
+
+    SaveSearchOptionsToConfig();
 }
 
 // -----------------------------------------------------------------------------
@@ -1313,6 +1439,31 @@ void App::OnNotify(NMHDR* nm)
 
 void App::OnCommand(int id, int code, HWND ctrl)
 {
+    // ---- オプションのチェック状態を即座に保存する ----
+    // （保存は終了時のみだったため、チェックを付けても次回起動時に戻っていた）
+    if (!suppress_events_ &&
+        (id == IDC_CHK_WARNCOMMENT || id == IDC_CHK_WARNPREPROC ||
+         id == IDC_CHK_BACKUP || id == IDC_CHK_REPORT || id == IDC_CHK_LOG ||
+         id == IDC_CHK_OPENREPORT || id == IDC_CHK_DRYRUNONLY || id == IDC_CHK_AUTOINDENT)) {
+        SaveUiToConfig();
+    }
+
+    // ---- 後続版: 検索条件 / エクスポート / WinMerge 連携 ----
+    if (id == IDC_CHK_SIMILAR || id == IDC_CHK_LINERANGE || id == IDC_CHK_FUNCSCOPE ||
+        id == IDC_CHK_REPORTMD || id == IDC_CHK_REPORTJSON) {
+        SaveSearchOptionsToConfig();
+        return;
+    }
+    if (id == IDC_CMB_ENCODING) {
+        if (code == CBN_SELCHANGE) SaveSearchOptionsToConfig();
+        return;
+    }
+    if (id == IDC_BTN_EXPORTCSV)      { DoExportResults(0); return; }
+    if (id == IDC_BTN_EXPORTMD)       { DoExportResults(1); return; }
+    if (id == IDC_BTN_EXPORTJSON)     { DoExportResults(2); return; }
+    if (id == IDC_BTN_WINMERGE)       { DoWinMerge(); return; }
+    if (id == IDC_BTN_WINMERGEBROWSE) { DoWinMergeBrowse(); return; }
+
     (void)ctrl;
 
     switch (id) {

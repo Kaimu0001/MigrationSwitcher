@@ -150,6 +150,43 @@
 #define IDC_LBL_AIPROVIDER      1936
 #define IDC_CMB_AIPROVIDER      1937
 
+// ---- 検索条件タブ（後続版: 類似一致 / 指定行範囲 / 関数単位 / 出力形式 / WinMerge）----
+#define IDC_GRP_SIMILAR         1150
+#define IDC_CHK_SIMILAR         1151
+#define IDC_LBL_SIMTHRESHOLD    1152
+#define IDC_EDIT_SIMTHRESHOLD   1153
+#define IDC_GRP_LINERANGE       1154
+#define IDC_CHK_LINERANGE       1155
+#define IDC_LBL_LINEFROM        1156
+#define IDC_EDIT_LINEFROM       1157
+#define IDC_LBL_LINETO          1158
+#define IDC_EDIT_LINETO         1159
+#define IDC_GRP_FUNCSCOPE       1160
+#define IDC_CHK_FUNCSCOPE       1161
+#define IDC_LBL_FUNCNAME        1162
+#define IDC_EDIT_FUNCNAME       1163
+#define IDC_GRP_OUTPUT          1164
+#define IDC_CHK_REPORTMD        1165
+#define IDC_CHK_REPORTJSON      1166
+#define IDC_LBL_ENCODING        1167
+#define IDC_CMB_ENCODING        1168
+#define IDC_GRP_WINMERGE        1169
+#define IDC_LBL_WINMERGE        1170
+#define IDC_EDIT_WINMERGE       1171
+#define IDC_BTN_WINMERGEBROWSE  1172
+#define IDC_GRP_UNDOOPT         1173
+#define IDC_LBL_UNDOMAX         1174
+#define IDC_EDIT_UNDOMAX        1175
+#define IDC_LBL_SEARCHINFO      1176
+
+// ---- 検索結果タブ（後続版: エクスポート）----
+#define IDC_BTN_EXPORTCSV       1404
+#define IDC_BTN_EXPORTMD        1405
+#define IDC_BTN_EXPORTJSON      1406
+
+// ---- プレビュータブ（後続版: WinMerge 連携）----
+#define IDC_BTN_WINMERGE        1503
+
 // ---- メニュー ----
 #define IDM_FILE_OPEN           2001
 #define IDM_FILE_EXIT           2002
