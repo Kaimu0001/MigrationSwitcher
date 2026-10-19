@@ -4,6 +4,14 @@
 // Phase 4: 17章 複数ファイル一括処理 対応
 // =============================================================================
 #include "App.h"
+#include "CodeLogger.h"
+#include "HistoryManager.h"
+#include "IndentFormatter.h"
+#include <fstream>
+#include <cstring>
+#include "ScopeReportGenerator.h"
+#include "GTestGenerator.h"
+#include "LogRuntimeGenerator.h"
 #include "resource.h"
 #include "Utils.h"
 #include "BackupManager.h"
@@ -1054,11 +1062,29 @@ void App::DoBatchSearch()
 std::wstring App::MakeBlockFor(const MatchResult& m, const OperationContext& ctx,
                                const std::wstring& text) const
 {
-    std::vector<std::wstring> gw;
+    // 一致行のインデント（行頭から一致箇所までが空白のときのみ有効）
     std::wstring hint = SearchEngine::IndentHintAt(text, m);
+
+    // 追加コードモード: 一致した「直前コード」の直後へ、整形した追加コードを置く
+    if (add_code_mode_) {
+        std::wstring body = ctx.auto_indent
+            ? IndentFormatter::FormatBlock(add_code_, hint)
+            : add_code_;
+        std::wstring base = m.matched_text.empty() ? ctx.old_code : m.matched_text;
+        return base + L"\n" + body;
+    }
+
+    std::wstring oc = ctx.old_code;
+    std::wstring nc = ctx.new_code;
+    if (ctx.auto_indent) {
+        // 相対的な深さ（IF 文の内側など）を保ったまま、一致行のインデントへ合わせる
+        oc = IndentFormatter::FormatBlock(oc, hint);
+        nc = IndentFormatter::FormatBlock(nc, hint);
+    }
+    std::vector<std::wstring> gw;
     return SwitchGenerator::GenerateEx(
-        ctx.switch_style, ctx.switch_name, ctx.old_code, ctx.new_code,
-        ctx.auto_indent, GetEditText(hEditTemplate_), hint, gw);
+        ctx.switch_style, ctx.switch_name, oc, nc,
+        false, GetEditText(hEditTemplate_), hint, gw);
 }
 
 std::vector<std::wstring> App::MakeBlocksFor(const std::vector<MatchResult>& ms,
@@ -1097,6 +1123,7 @@ bool App::BuildPreviewInternal(std::wstring& out_error)
 
     std::vector<std::wstring> blocks = MakeBlocksFor(sel, ctx, file_text_);
     std::wstring after = PreviewGenerator::BuildAfterTextEach(file_text_, sel, blocks);
+    ApplyLogInsertion(after, sel);
 
     std::wstring before_ex, after_ex;
     if (!PreviewGenerator::BuildExcerpts(file_text_, after, sel, 4, before_ex, after_ex)) {
@@ -1254,8 +1281,14 @@ void App::DoExecute()
         else                RunOperation(ExecutionMode::DryRun);
         return;
     }
+    // 変更前スナップショット（履歴 / 比較用）
+    std::vector<HistoryFileEntry> captured;
+    CaptureBeforeSnapshot(captured);
+
     if (IsFolderMode()) RunBatchOperation(ExecutionMode::Real);
     else                RunOperation(ExecutionMode::Real);
+
+    RecordHistoryAfterRun(captured, L"Real");
 }
 
 // -----------------------------------------------------------------------------
@@ -1309,6 +1342,7 @@ void App::RunOperation(ExecutionMode mode)
 
     std::vector<std::wstring> blocks = MakeBlocksFor(sel, ctx, file_text_);
     std::wstring after = PreviewGenerator::BuildAfterTextEach(file_text_, sel, blocks);
+    ApplyLogInsertion(after, sel);
 
     // スイッチ定義ヘッダの #include を追加する
     bool inc_added = false;
@@ -2169,6 +2203,14 @@ void App::DoUndo()
 // -----------------------------------------------------------------------------
 void App::DoOpenHtml()
 {
+    // 比較範囲が選ばれていれば、その範囲のレポートを作る（無ければ新規作成）
+    {
+        std::wstring fid, tid;
+        if (GetPairIds(hCmbPairFrom_, hCmbPairTo_, fid, tid)) {
+            BuildPairReport(fid, tid, L"preview");
+            return;
+        }
+    }
     std::vector<MatchResult> sel = GetSelectedMatches();
     if (matches_.empty() || sel.empty()) {
         ShowError(L"置換対象が選択されていません。先に検索と対象選択を行ってください。");
@@ -2244,6 +2286,7 @@ void App::DoOpenHtml()
         ctx.newline = file_info_.newline;
         std::vector<std::wstring> blocks = MakeBlocksFor(sel, ctx, file_text_);
         std::wstring after = PreviewGenerator::BuildAfterTextEach(file_text_, sel, blocks);
+    ApplyLogInsertion(after, sel);
 
         ReplaceResult result;
         result.operation_id = ctx.operation_id;
@@ -2471,6 +2514,7 @@ void App::LoadSearchOptionsFromConfig()
     ::SendMessageW(hCmbEncoding_, CB_SETCURSEL, sel, 0);
 
     undo_.SetMaxGenerations(cfg_.undo_max_generations);
+    LoadBasicExtrasFromConfig();
 
     if (hLblSearchInfo_) {
         std::wstring info =
@@ -2694,6 +2738,7 @@ bool App::GetCompareItems(std::vector<CompareItem>& out, std::wstring& out_error
 
         std::vector<std::wstring> blocks = MakeBlocksFor(mine, ctx, text);
         std::wstring after = PreviewGenerator::BuildAfterTextEach(text, mine, blocks);
+        ApplyLogInsertion(after, mine);
         if (ctx.add_switch_header_include && !ctx.switch_header_path.empty()) {
             bool added = false;
             int line = 0;
@@ -2797,6 +2842,9 @@ void App::DoWinMergeBrowse()
 
 void App::WriteExtraReportsAfterRun(bool batch_mode)
 {
+    // 追加機能: 変更単位以外（ファイル / プロジェクト単位）のレポートを先に出す
+    WriteScopeReports(batch_mode);
+
     if (!cfg_.report_markdown && !cfg_.report_json) return;
 
     OperationContext ctx;
@@ -2847,6 +2895,7 @@ void App::WriteExtraReportsAfterRun(bool batch_mode)
         sec.before_text = e.text;
         std::vector<std::wstring> blocks = MakeBlocksFor(sel, ctx, e.text);
         sec.after_text = PreviewGenerator::BuildAfterTextEach(e.text, sel, blocks);
+        ApplyLogInsertion(sec.after_text, sel);
         sec.encoding_name = EncodingDetector::EncodingName(e.info.encoding);
         sec.newline_name = util::NewlineString(e.info.newline);
         sec.include_added = e.include_added;
@@ -3099,4 +3148,999 @@ void App::DoMakeReportFromText(int kind)
     if (IsChecked(hChkAiOpenReport_) || cfg_.ai_open_report) OpenPath(path);
 }
 
+
+// =============================================================================
+// 追加機能: ログ出力 / レポート作成単位 / GoogleTest
+// =============================================================================
+ReportScope App::ReadReportScopeFromUi() const
+{
+    int sel = (int)::SendMessageW(hCmbReportScope_, CB_GETCURSEL, 0, 0);
+    if (sel == 1) return ReportScope::File;
+    if (sel == 2) return ReportScope::Project;
+    return ReportScope::Change;
+}
+
+void App::LoadBasicExtrasFromConfig()
+{
+    if (!hChkLogEnabled_) return;
+    suppress_events_ = true;
+    SetChecked(hChkLogEnabled_, cfg_.log_enabled);
+    SetChecked(hChkLogTemp_, cfg_.log_insert_temp);
+    SetChecked(hChkLogRet_, cfg_.log_return_value);
+    int sel = 0;
+    if (cfg_.report_scope == ReportScope::File)         sel = 1;
+    else if (cfg_.report_scope == ReportScope::Project) sel = 2;
+    ::SendMessageW(hCmbReportScope_, CB_SETCURSEL, sel, 0);
+    SetChecked(hChkGTest_, cfg_.gtest_enabled);
+    SetEditText(hEditLoadIter_, std::to_wstring(cfg_.gtest_load_iterations));
+    suppress_events_ = false;
+}
+
+void App::SaveBasicExtrasToConfig()
+{
+    if (suppress_events_) return;
+    if (!hChkLogEnabled_) return;
+    cfg_.log_enabled      = IsChecked(hChkLogEnabled_);
+    cfg_.log_insert_temp  = IsChecked(hChkLogTemp_);
+    cfg_.log_return_value = IsChecked(hChkLogRet_);
+    cfg_.report_scope     = ReadReportScopeFromUi();
+    cfg_.gtest_enabled    = IsChecked(hChkGTest_);
+    int v = ParseIntOr(util::Trim(GetEditText(hEditLoadIter_)), 1000);
+    if (v < 0) v = 0;
+    cfg_.gtest_load_iterations = v;
+    cfgmgr_.SaveExtras(cfg_);
+}
+
+void App::ApplyLogInsertion(std::wstring& text, const std::vector<MatchResult>& sel)
+{
+    if (!cfg_.log_enabled || sel.empty()) return;
+
+    LogInsertOptions o;
+    o.header_name = cfg_.log_header_name.empty()
+                  ? std::wstring(L"ms_migration_log.h") : cfg_.log_header_name;
+    o.switch_name = util::Trim(GetEditText(hSwitchEdit_));
+    o.insert_input = true;
+    o.insert_output = true;
+    o.insert_temp = cfg_.log_insert_temp;
+    o.log_return_value = cfg_.log_return_value;
+
+    LogInsertResult r;
+    std::wstring err;
+    if (!CodeLogger::Apply(text, sel, o, r, err)) {
+        log_.Warn(L"ログ挿入に失敗しました: " + err);
+        return;
+    }
+    log_.Info(L"ログ挿入: 関数 " + std::to_wstring(r.functions) +
+              L" / INPUT " + std::to_wstring(r.input_logs) +
+              L" / OUTPUT " + std::to_wstring(r.output_logs) +
+              L" / TEMP " + std::to_wstring(r.temp_logs));
+    for (size_t i = 0; i < r.warnings.size(); ++i) log_.Warn(r.warnings[i]);
+}
+
+void App::DoWriteLogHeader()
+{
+    std::wstring dir;
+    if (IsFolderMode()) {
+        dir = util::Trim(GetEditText(hFolderEdit_));
+    } else {
+        std::wstring t = util::Trim(GetEditText(hTargetEdit_));
+        if (!t.empty()) dir = util::GetDirectoryOf(util::MakeAbsolute(t));
+    }
+    if (dir.empty()) {
+        ShowError(L"出力先を決められません。対象ファイルまたは対象フォルダを指定してください。");
+        return;
+    }
+
+    SaveExtraUi();          // 画面の設定（拡張子・ON/OFF）を確定させる
+    LogRuntimeOptions o;
+    if (!cfg_.log_header_name.empty()) o.header_name = cfg_.log_header_name;
+    o.default_enabled = cfg_.log_enabled;
+    o.source_is_cpp   = cfg_.log_source_cpp;
+    o.source_name     = cfg_.log_source_cpp ? L"ms_migration_log.cpp" : L"ms_migration_log.c";
+
+    std::vector<std::wstring> files;
+    std::wstring err;
+    if (!LogRuntimeGenerator::WriteTo(dir, o, files, err)) {
+        ShowError(err);
+        log_.Error(err);
+        return;
+    }
+    std::wstring msg = L"次のファイルを出力しました。\n\n";
+    for (size_t i = 0; i < files.size(); ++i) {
+        msg += files[i] + L"\n";
+        log_.Info(L"ログ定義を出力しました: " + files[i]);
+    }
+    msg += L"\n" + LogRuntimeGenerator::UsageText();
+    ShowInfo(msg);
+}
+
+// =============================================================================
+// GoogleTest の対象範囲（実行履歴の差分から対象関数を決める）
+// =============================================================================
+static void ChangedLinesOfAfter(const std::wstring& before, const std::wstring& after,
+                                std::vector<int>& out)
+{
+    std::vector<std::wstring> lb, la;
+    std::wstring cur;
+    for (size_t i = 0; i < before.size(); ++i) {
+        if (before[i] == L'\n') { lb.push_back(cur); cur.clear(); }
+        else if (before[i] != L'\r') cur.push_back(before[i]);
+    }
+    lb.push_back(cur);
+    cur.clear();
+    for (size_t i = 0; i < after.size(); ++i) {
+        if (after[i] == L'\n') { la.push_back(cur); cur.clear(); }
+        else if (after[i] != L'\r') cur.push_back(after[i]);
+    }
+    la.push_back(cur);
+
+    const size_t n = lb.size(), m = la.size();
+    if (n > 6000 || m > 6000) {   // 大きすぎるファイルは全行を対象にする
+        for (size_t j = 0; j < m; ++j) out.push_back((int)j);
+        return;
+    }
+
+    std::vector<std::vector<int> > dp(n + 1, std::vector<int>(m + 1, 0));
+    for (size_t i = 1; i <= n; ++i) {
+        for (size_t j = 1; j <= m; ++j) {
+            if (lb[i - 1] == la[j - 1]) dp[i][j] = dp[i - 1][j - 1] + 1;
+            else dp[i][j] = (dp[i - 1][j] >= dp[i][j - 1]) ? dp[i - 1][j] : dp[i][j - 1];
+        }
+    }
+
+    size_t i = n, j = m;
+    while (i > 0 || j > 0) {
+        if (i > 0 && j > 0 && lb[i - 1] == la[j - 1]) { --i; --j; }
+        else if (j > 0 && (i == 0 || dp[i][j - 1] >= dp[i - 1][j])) {
+            out.push_back((int)(j - 1));   // 変更後の行
+            --j;
+        } else if (i > 0) {
+            --i;                           // 削除行は対象外
+        }
+    }
+}
+
+bool App::CollectRangeGTestTargets(std::vector<GTestTarget>& out, std::wstring& out_error)
+{
+    out.clear();
+    out_error.clear();
+
+    std::wstring fid, tid;
+    if (!GetPairIds(hCmbGtRangeFrom_, hCmbGtRangeTo_, fid, tid)) {
+        // 「指定なし」のいずれか → 範囲指定なし（呼び出し側で従来処理）
+        return false;
+    }
+
+    std::wstring base = HistoryBaseDir();
+    std::vector<HistoryFileEntry> rf = HistoryManager::ListFiles(base, fid);
+    std::vector<HistoryFileEntry> rt = HistoryManager::ListFiles(base, tid);
+    if (rf.empty() || rt.empty()) {
+        out_error = L"指定した範囲のスナップショットがありません。";
+        return true;
+    }
+
+    for (size_t a = 0; a < rt.size(); ++a) {
+        const HistoryFileEntry* b = nullptr;
+        for (size_t k = 0; k < rf.size(); ++k)
+            if (rf[k].path == rt[a].path) { b = &rf[k]; break; }
+        if (!b || !b->has_before || !rt[a].has_after) continue;
+
+        std::wstring tb, ta, err;
+        if (!HistoryManager::LoadText(b->before, tb, err)) continue;
+        if (!HistoryManager::LoadText(rt[a].after, ta, err)) continue;
+        if (tb == ta) continue;
+
+        std::vector<int> changed;
+        ChangedLinesOfAfter(tb, ta, changed);
+        if (changed.empty()) continue;
+
+        // 変更行の先頭オフセットから、その行を含む関数を対象にする
+        std::vector<size_t> line_start;
+        line_start.push_back(0);
+        for (size_t i = 0; i < ta.size(); ++i)
+            if (ta[i] == L'\n') line_start.push_back(i + 1);
+
+        std::vector<MatchResult> ms;
+        for (size_t c = 0; c < changed.size(); ++c) {
+            size_t li = (size_t)changed[c];
+            if (li >= line_start.size()) continue;
+            MatchResult m;
+            m.match_id = (int)ms.size();
+            m.file_path = rt[a].path;
+            m.start_offset = line_start[li];
+            size_t le = ta.find(L'\n', m.start_offset);
+            m.end_offset = (le == std::wstring::npos) ? ta.size() : le;
+            m.start_line = (int)li + 1;
+            m.selected = true;
+            ms.push_back(m);
+        }
+        if (ms.empty()) continue;
+
+        std::vector<GTestTarget> t = GTestGenerator::CollectTargets(ta, rt[a].path, ms);
+        out.insert(out.end(), t.begin(), t.end());
+    }
+
+    // 関数の重複を除去
+    std::vector<GTestTarget> uniq;
+    for (size_t i = 0; i < out.size(); ++i) {
+        bool dup = false;
+        for (size_t k = 0; k < uniq.size(); ++k)
+            if (uniq[k].file_path == out[i].file_path && uniq[k].func_name == out[i].func_name)
+                { dup = true; break; }
+        if (!dup) uniq.push_back(out[i]);
+    }
+    out.swap(uniq);
+    if (out.empty()) {
+        out_error = L"指定した範囲に、テスト対象となる関数の変更がありません。";
+    }
+    return true;
+}
+
+void App::DoGenerateGTest()
+{
+    std::vector<GTestTarget> targets;
+    std::wstring range_err;
+    bool range_used = CollectRangeGTestTargets(targets, range_err);
+
+    if (range_used) {
+        if (targets.empty()) {
+            ShowError(range_err.empty() ? L"テスト対象の関数がありません。" : range_err);
+            return;
+        }
+    } else if (IsFolderMode()) {
+        for (size_t i = 0; i < batch_entries_.size(); ++i) {
+            std::vector<MatchResult> sel;
+            for (size_t k = 0; k < matches_.size(); ++k)
+                if (matches_[k].selected && matches_[k].file_path == batch_entries_[i].path)
+                    sel.push_back(matches_[k]);
+            if (sel.empty()) continue;
+            std::vector<GTestTarget> t = GTestGenerator::CollectTargets(
+                batch_entries_[i].text, batch_entries_[i].path, sel);
+            targets.insert(targets.end(), t.begin(), t.end());
+        }
+    } else {
+        std::vector<MatchResult> sel = GetSelectedMatches();
+        if (sel.empty()) {
+            ShowError(L"置換対象が選択されていません。検索結果タブで対象を選択してください。\n"
+                      L"（履歴タブの範囲を指定して、過去の変更分から生成することもできます）");
+            return;
+        }
+        targets = GTestGenerator::CollectTargets(file_text_, target_path_, sel);
+    }
+
+    if (targets.empty()) {
+        ShowError(L"テスト対象の関数がありません（関数を判定できない一致のみです）。");
+        return;
+    }
+
+    std::wstring root = IsFolderMode()
+        ? util::Trim(GetEditText(hFolderEdit_))
+        : util::GetDirectoryOf(target_path_);
+    if (root.empty()) root = HistoryBaseDir();
+
+    GTestOptions o;
+    o.out_dir = cfg_.gtest_dir.empty() ? GTestGenerator::DefaultOutDir(root) : cfg_.gtest_dir;
+    o.load_iterations = cfg_.gtest_load_iterations;
+    o.generate_load   = cfg_.gtest_load_enabled;
+    o.switch_name     = util::Trim(GetEditText(hSwitchEdit_));
+
+    std::vector<std::wstring> files;
+    std::wstring err;
+    if (!GTestGenerator::WriteProject(root, targets, o, files, err)) {
+        ShowError(err);
+        log_.Error(err);
+        return;
+    }
+    std::wstring msg = L"GoogleTest を生成しました（" + std::to_wstring((int)targets.size()) +
+                       L" 関数）。\n";
+    if (range_used) {
+        std::wstring fid, tid;
+        GetPairIds(hCmbGtRangeFrom_, hCmbGtRangeTo_, fid, tid);
+        msg += L"対象範囲: " + fid + L" ～ " + tid + L" の変更箇所\n";
+    }
+    msg += L"\n";
+    for (size_t i = 0; i < files.size(); ++i) msg += files[i] + L"\n";
+    msg += L"\n「テスト実行」ボタンでビルドと実行を行えます。";
+    ShowInfo(msg);
+    log_.Info(L"GoogleTest generated: " + std::to_wstring((int)targets.size()) + L" functions");
+}
+
+
+void App::DoRunGTest()
+{
+    std::wstring root = IsFolderMode()
+        ? util::Trim(GetEditText(hFolderEdit_))
+        : util::GetDirectoryOf(target_path_);
+    if (root.empty()) {
+        ShowError(L"対象フォルダ / 対象ファイルを指定してください。");
+        return;
+    }
+    GTestOptions o;
+    o.out_dir = cfg_.gtest_dir.empty() ? GTestGenerator::DefaultOutDir(root) : cfg_.gtest_dir;
+    o.load_iterations = cfg_.gtest_load_iterations;
+    if (!util::PathExists(util::JoinPath(o.out_dir, L"CMakeLists.txt"))) {
+        ShowError(L"テストプロジェクトがありません。先に「テスト生成」を実行してください。");
+        return;
+    }
+
+    SetStatus(L"GoogleTest をビルドしています...");
+    log_.Info(L"GoogleTest: build & run 開始 (" + o.out_dir + L")");
+
+    GTestRunResult r;
+    std::wstring err;
+    if (!GTestGenerator::BuildAndRun(root, o, r, err)) {
+        ShowError(err);
+        log_.Error(err);
+        SetStatus(L"GoogleTest のビルドに失敗しました。");
+        return;
+    }
+
+    std::wstring msg = L"GoogleTest を実行しました。\n\n" + r.summary + L"\n\n";
+    msg += L"実行ファイル: " + r.exe_path + L"\n";
+    msg += L"結果 JSON: " + r.json_path + L"\n";
+    msg += L"実行ログ: " + r.run_log + L"\n";
+    ShowInfo(msg);
+    log_.Info(L"GoogleTest: " + r.summary);
+    SetStatus(L"GoogleTest: " + r.summary);
+}
+
+void App::WriteScopeReports(bool batch_mode)
+{
+    if (cfg_.report_scope == ReportScope::Change) return;
+
+    std::vector<ScopeEntry> entries;
+    OperationContext ctx;
+    ReadInputs(ctx);
+
+    if (!batch_mode) {
+        if (target_path_.empty() || last_result_.status.empty()) return;
+        ScopeEntry e;
+        e.file_path = target_path_;
+        e.before_text = last_result_.before_text;
+        e.after_text = last_result_.after_text;
+        e.encoding_name = EncodingDetector::EncodingName(file_info_.encoding);
+        e.newline_name = util::NewlineString(file_info_.newline);
+        e.status = last_result_.status;
+        for (size_t i = 0; i < matches_.size(); ++i)
+            if (matches_[i].selected) e.matches.push_back(matches_[i]);
+        if (e.matches.empty()) return;
+        entries.push_back(e);
+    } else {
+        for (size_t i = 0; i < batch_entries_.size(); ++i) {
+            BatchFileEntry& b = batch_entries_[i];
+            ScopeEntry e;
+            e.file_path = b.path;
+            e.before_text = b.text;
+            e.encoding_name = EncodingDetector::EncodingName(b.info.encoding);
+            e.newline_name = util::NewlineString(b.info.newline);
+            e.status = b.status;
+            e.error = b.error;
+            for (size_t k = 0; k < matches_.size(); ++k)
+                if (matches_[k].selected && matches_[k].file_path == b.path)
+                    e.matches.push_back(matches_[k]);
+            if (e.matches.empty()) continue;
+            std::vector<std::wstring> blocks = MakeBlocksFor(e.matches, ctx, b.text);
+            e.after_text = PreviewGenerator::BuildAfterTextEach(b.text, e.matches, blocks);
+            ApplyLogInsertion(e.after_text, e.matches);
+            entries.push_back(e);
+        }
+        if (entries.empty()) return;
+    }
+
+    std::wstring dir = ReportDirectory();
+    if (!util::EnsureDirectory(dir)) {
+        log_.Warn(L"レポート出力先を作成できません: " + dir);
+        return;
+    }
+    std::wstring stamp = util::TimestampFileName();
+    std::wstring base;
+    if (IsFolderMode()) base = util::GetFileNameOf(util::Trim(GetEditText(hFolderEdit_)));
+    else                base = util::GetFileNameOf(target_path_);
+    if (base.empty()) base = L"migration";
+
+    std::wstring sysname = util::Trim(GetEditText(hEditSysName_));
+    std::wstring md = ScopeReportGenerator::BuildMarkdown(
+        sysname, ctx.switch_name, util::NowDateTime(), cfg_.report_scope, entries);
+
+    std::wstring err;
+    std::wstring p = util::JoinPath(dir, ScopeReportGenerator::MakeFileName(
+        base, cfg_.report_scope, stamp, L".md"));
+    if (ScopeReportGenerator::Write(p, md, err))
+        log_.Info(L"スコープレポート (Markdown) を出力しました: " + p);
+    else
+        log_.Warn(L"スコープレポートの出力に失敗しました: " + err);
+
+    std::wstring html = ScopeReportGenerator::BuildHtmlFromEntries(
+        base, ctx.switch_name, util::NowDateTime(), cfg_.report_scope, entries);
+    std::wstring ph = util::JoinPath(dir, ScopeReportGenerator::MakeFileName(
+        base, cfg_.report_scope, stamp, L".html"));
+    if (ScopeReportGenerator::Write(ph, html, err))
+        log_.Info(L"スコープレポート (HTML) を出力しました: " + ph);
+    else
+        log_.Warn(L"スコープレポート (HTML) の出力に失敗しました: " + err);
+
+    if (IsChecked(hChkOpenReport_) && util::PathExists(ph)) OpenPath(ph);
+}
+
+
+// =============================================================================
+// 履歴（undobak） / 比較範囲 / 追加コード
+// =============================================================================
+static bool FilesEqual(const std::wstring& a, const std::wstring& b)
+{
+    std::ifstream fa(a.c_str(), std::ios::binary);
+    std::ifstream fb(b.c_str(), std::ios::binary);
+    if (!fa || !fb) return false;
+    char ba[8192], bb[8192];
+    while (true) {
+        fa.read(ba, sizeof(ba));
+        fb.read(bb, sizeof(bb));
+        std::streamsize na = fa.gcount(), nb = fb.gcount();
+        if (na != nb) return false;
+        if (na == 0) return true;
+        if (memcmp(ba, bb, (size_t)na) != 0) return false;
+    }
+}
+
+static std::wstring TempSnapshotPath(const std::wstring& tag, int idx)
+{
+    wchar_t dir[MAX_PATH];
+    DWORD n = ::GetTempPathW(MAX_PATH, dir);
+    std::wstring base = (n > 0) ? std::wstring(dir) : std::wstring(L".\\");
+    wchar_t buf[64];
+    swprintf(buf, 64, L"ms_snap_%d_%03d_%d.tmp", (int)::GetCurrentProcessId(), idx,
+             (int)::GetTickCount64());
+    return util::JoinPath(base, buf);
+}
+
+std::wstring App::HistoryBaseDir() const
+{
+    if (IsFolderMode()) {
+        std::wstring f = util::Trim(GetEditText(hFolderEdit_));
+        if (!f.empty()) return util::MakeAbsolute(f);
+    }
+    if (!target_path_.empty()) return util::GetDirectoryOf(target_path_);
+    std::wstring b = BackupDirectory();
+    return b.empty() ? util::ModuleDirectory() : b;
+}
+
+void App::LoadExtraUi()
+{
+    if (!hChkLogEnabled_) return;
+    SetChecked(hChkLogEnabled_, cfg_.log_enabled);
+    SetChecked(hChkLogTemp_, cfg_.log_insert_temp);
+    SetChecked(hChkLogRet_, cfg_.log_return_value);
+    SetChecked(hChkGTest_, cfg_.gtest_enabled);
+    SetChecked(hChkLoadTest_, cfg_.gtest_load_enabled);
+    SetEditText(hEditLoadIter_, std::to_wstring(cfg_.gtest_load_iterations));
+    int rs = 0;
+    if (cfg_.report_scope == ReportScope::File) rs = 1;
+    else if (cfg_.report_scope == ReportScope::Project) rs = 2;
+    ::SendMessageW(hCmbReportScope_, CB_SETCURSEL, rs, 0);
+    ::SendMessageW(hCmbLogExt_, CB_SETCURSEL, cfg_.log_source_cpp ? 1 : 0, 0);
+    if (hEditLoadIter_) ::EnableWindow(hEditLoadIter_, cfg_.gtest_load_enabled ? TRUE : FALSE);
+    RefreshPairCombos();
+    RefreshHistoryPage();
+}
+
+void App::SaveExtraUi()
+{
+    if (!hChkLogEnabled_) return;
+    cfg_.log_enabled      = IsChecked(hChkLogEnabled_);
+    cfg_.log_insert_temp  = IsChecked(hChkLogTemp_);
+    cfg_.log_return_value = IsChecked(hChkLogRet_);
+    cfg_.gtest_enabled    = IsChecked(hChkGTest_);
+    cfg_.gtest_load_enabled = IsChecked(hChkLoadTest_);
+    int li = _wtoi(util::Trim(GetEditText(hEditLoadIter_)).c_str());
+    if (li < 0) li = 0;
+    if (li > 1000000) li = 1000000;
+    cfg_.gtest_load_iterations = li;
+    int rs = (int)::SendMessageW(hCmbReportScope_, CB_GETCURSEL, 0, 0);
+    cfg_.report_scope = (rs == 1) ? ReportScope::File :
+                        (rs == 2) ? ReportScope::Project : ReportScope::Change;
+    cfg_.log_source_cpp = ((int)::SendMessageW(hCmbLogExt_, CB_GETCURSEL, 0, 0) == 1);
+    if (hEditLoadIter_) ::EnableWindow(hEditLoadIter_, cfg_.gtest_load_enabled ? TRUE : FALSE);
+    cfgmgr_.SaveExtras(cfg_);
+}
+
+bool App::HandleExtraCommand(int id, int code, HWND ctrl)
+{
+    (void)ctrl;
+    switch (id) {
+    case IDC_CHK_LOADTEST:
+    case IDC_CMB_LOGEXT:
+        if (code == BN_CLICKED || code == CBN_SELCHANGE) SaveExtraUi();
+        return true;
+    case IDC_CHK_ADDENABLE:
+        if (code == BN_CLICKED) {
+            add_code_mode_ = IsChecked(hChkAddEnable_) ? true : false;
+            SetStatus(add_code_mode_ ? L"追加コードモード: ON" : L"追加コードモード: OFF");
+        }
+        return true;
+    case IDC_BTN_ADDSEARCH:
+        if (code == BN_CLICKED) DoAddCodeSearch();
+        return true;
+    case IDC_BTN_HISTREFRESH:
+        if (code == BN_CLICKED) { RefreshHistoryPage(); RefreshPairCombos(); }
+        return true;
+    case IDC_CMB_HISTRUN:
+        if (code == CBN_SELCHANGE) RefreshHistoryPage();
+        return true;
+    case IDC_BTN_HISTRESTORE:
+        if (code == BN_CLICKED) DoHistoryRestore();
+        return true;
+    case IDC_BTN_HISTCOMPARE:
+        if (code == BN_CLICKED) DoHistoryCompare();
+        return true;
+    case IDC_BTN_HISTREPORT:
+        if (code == BN_CLICKED) DoHistoryReport();
+        return true;
+    case IDC_BTN_UNDO:
+        // 履歴タブでファイルを選んでいれば「その変更だけ」を戻す
+        if (code == BN_CLICKED && HasHistorySelection()) { DoHistoryRestore(); return true; }
+        return false;
+    default:
+        return false;
+    }
+}
+
+void App::RefreshPairCombos()
+{
+    if (!hCmbPairFrom_) return;
+    struct Item { HWND h; bool allow_none; };
+    Item combos[6] = {
+        { hCmbPairFrom_, false }, { hCmbPairTo_, false },
+        { hCmbSysPairFrom_, false }, { hCmbSysPairTo_, false },
+        { hCmbGtRangeFrom_, true }, { hCmbGtRangeTo_, true }
+    };
+    for (int c = 0; c < 6; ++c) {
+        if (!combos[c].h) continue;
+        DWORD_PTR keep = (DWORD_PTR)::SendMessageW(combos[c].h, CB_GETCURSEL, 0, 0);
+        ::SendMessageW(combos[c].h, CB_RESETCONTENT, 0, 0);
+        if (combos[c].allow_none)
+            ::SendMessageW(combos[c].h, CB_ADDSTRING, 0, (LPARAM)L"指定なし（現在の検索結果）");
+        if (history_runs_.empty()) {
+            if (!combos[c].allow_none) {
+                ::SendMessageW(combos[c].h, CB_ADDSTRING, 0, (LPARAM)L"（履歴なし）");
+                ::SendMessageW(combos[c].h, CB_SETCURSEL, 0, 0);
+            } else {
+                ::SendMessageW(combos[c].h, CB_SETCURSEL, 0, 0);
+            }
+            continue;
+        }
+        int base = combos[c].allow_none ? 1 : 0;
+        for (size_t i = 0; i < history_runs_.size(); ++i) {
+            std::wstring lab = std::to_wstring((int)i + 1) + L": " +
+                               HistoryManager::RunLabel(history_runs_[i]);
+            ::SendMessageW(combos[c].h, CB_ADDSTRING, 0, (LPARAM)lab.c_str());
+        }
+        if (keep > 0 && keep < (DWORD_PTR)(base + (int)history_runs_.size()))
+            ::SendMessageW(combos[c].h, CB_SETCURSEL, (WPARAM)keep, 0);
+        else
+            ::SendMessageW(combos[c].h, CB_SETCURSEL, 0, 0);
+    }
+}
+
+
+bool App::GetPairIds(HWND from, HWND to, std::wstring& out_from, std::wstring& out_to) const
+{
+    out_from.clear();
+    out_to.clear();
+    if (!from || !to || history_runs_.empty()) return false;
+    int a = (int)::SendMessageW(from, CB_GETCURSEL, 0, 0);
+    int b = (int)::SendMessageW(to, CB_GETCURSEL, 0, 0);
+    if (a < 0 || b < 0) return false;
+    if (a >= (int)history_runs_.size() || b >= (int)history_runs_.size()) return false;
+    out_from = history_runs_[a].id;
+    out_to = history_runs_[b].id;
+    return !out_from.empty() && !out_to.empty();
+}
+
+void App::RefreshHistoryPage()
+{
+    if (!hCmbHistRun_) return;
+    history_runs_ = HistoryManager::ListRuns(HistoryBaseDir());
+    ::SendMessageW(hCmbHistRun_, CB_RESETCONTENT, 0, 0);
+    if (history_runs_.empty()) {
+        ::SendMessageW(hCmbHistRun_, CB_ADDSTRING, 0, (LPARAM)L"（履歴がありません）");
+        ::SendMessageW(hCmbHistRun_, CB_SETCURSEL, 0, 0);
+        ::SendMessageW(hListHistFiles_, LVM_DELETEALLITEMS, 0, 0);
+        if (hLblHistInfo_) ::SetWindowTextW(hLblHistInfo_, L"");
+        return;
+    }
+    for (size_t i = 0; i < history_runs_.size(); ++i) {
+        std::wstring lab = std::to_wstring((int)i + 1) + L": " +
+                           HistoryManager::RunLabel(history_runs_[i]);
+        ::SendMessageW(hCmbHistRun_, CB_ADDSTRING, 0, (LPARAM)lab.c_str());
+    }
+    int sel = (int)::SendMessageW(hCmbHistRun_, CB_GETCURSEL, 0, 0);
+    if (sel < 0) { sel = 0; ::SendMessageW(hCmbHistRun_, CB_SETCURSEL, 0, 0); }
+
+    ::SendMessageW(hListHistFiles_, LVM_DELETEALLITEMS, 0, 0);
+    std::vector<HistoryFileEntry> files =
+        HistoryManager::ListFiles(HistoryBaseDir(), history_runs_[sel].id);
+    for (size_t i = 0; i < files.size(); ++i) {
+        LVITEMW it;
+        ::ZeroMemory(&it, sizeof(it));
+        it.mask = LVIF_TEXT;
+        it.iItem = (int)i;
+        it.iSubItem = 0;
+        std::wstring no = std::to_wstring((int)i + 1);
+        it.pszText = (LPWSTR)no.c_str();
+        ::SendMessageW(hListHistFiles_, LVM_INSERTITEMW, 0, (LPARAM)&it);
+        LVITEMW sub;
+        ::ZeroMemory(&sub, sizeof(sub));
+        sub.mask = LVIF_TEXT;
+        sub.iItem = (int)i;
+        sub.iSubItem = 1;
+        sub.pszText = (LPWSTR)files[i].path.c_str();
+        ::SendMessageW(hListHistFiles_, LVM_SETITEMW, 0, (LPARAM)&sub);
+        sub.iSubItem = 2;
+        sub.pszText = (LPWSTR)(files[i].has_before ? L"あり" : L"-");
+        ::SendMessageW(hListHistFiles_, LVM_SETITEMW, 0, (LPARAM)&sub);
+        sub.iSubItem = 3;
+        sub.pszText = (LPWSTR)(files[i].has_after ? L"あり" : L"-");
+        ::SendMessageW(hListHistFiles_, LVM_SETITEMW, 0, (LPARAM)&sub);
+    }
+    if (hLblHistInfo_) {
+        std::wstring info = history_runs_[sel].time + L"  " + history_runs_[sel].mode +
+                            L"  " + std::to_wstring((int)files.size()) + L" ファイル";
+        ::SetWindowTextW(hLblHistInfo_, info.c_str());
+    }
+}
+
+bool App::HasHistorySelection() const
+{
+    HistoryFileEntry e;
+    return SelectedHistoryFile(e) && e.has_before;
+}
+
+bool App::SelectedHistoryFile(HistoryFileEntry& out) const
+{
+    out = HistoryFileEntry();
+    if (!hCmbHistRun_ || !hListHistFiles_) return false;
+    int rs = (int)::SendMessageW(hCmbHistRun_, CB_GETCURSEL, 0, 0);
+    if (rs < 0 || rs >= (int)history_runs_.size()) return false;
+    int li = (int)::SendMessageW(hListHistFiles_, LVM_GETNEXTITEM, (WPARAM)-1, LVNI_SELECTED);
+    if (li < 0) return false;
+    std::vector<HistoryFileEntry> files =
+        HistoryManager::ListFiles(HistoryBaseDir(), history_runs_[rs].id);
+    if (li >= (int)files.size()) return false;
+    out = files[li];
+    return true;
+}
+
+void App::DoHistoryRestore()
+{
+    HistoryFileEntry e;
+    if (!SelectedHistoryFile(e) || !e.has_before) {
+        ShowInfo(L"履歴タブで対象ファイルを選択してください。\n"
+                 L"（変更前スナップショットがある行だけ元に戻せます）");
+        return;
+    }
+    std::wstring msg = L"この変更だけを元に戻します。よろしいですか？\n\n" + e.path +
+                       L"\n\n復元元: " + e.before;
+    if (!Confirm(msg)) return;
+
+    std::wstring base = HistoryBaseDir();
+    std::wstring side = HistoryManager::SidecarDirectory(base);
+    util::EnsureDirectory(side);
+    std::wstring err;
+    std::wstring sp = util::JoinPath(side, util::GetFileNameOf(e.path) + L"." +
+                                     util::TimestampFileName() + L".undobak");
+    bool had_current = util::PathExists(e.path);
+    if (had_current) FileManager::CopyFileTo(e.path, sp, err);
+
+    if (!FileManager::CopyFileTo(e.before, e.path, err)) {
+        ShowError(L"復元に失敗しました。\n" + err);
+        return;
+    }
+
+    // 復元も履歴として残す（連続して戻せるように）
+    if (had_current) {
+        HistoryFileEntry h;
+        h.path = e.path;
+        h.before = sp;
+        h.has_before = util::PathExists(sp);
+        h.after = e.before;
+        h.has_after = true;
+        std::vector<HistoryFileEntry> v;
+        v.push_back(h);
+        HistoryRunInfo run;
+        if (HistoryManager::Record(base, util::NewOperationId(), L"Undo", 1, v, run, err)) {
+            log_.Info(L"Undo recorded: " + run.id);
+        }
+    }
+
+    if (!IsFolderMode()) {
+        target_path_ = util::MakeAbsolute(util::Trim(GetEditText(hTargetEdit_)));
+        FileManager::ReadText(target_path_, cfg_.encoding_mode, file_text_, file_info_);
+    }
+    matches_.clear();
+    RefreshListView();
+    RefreshHistoryPage();
+    RefreshPairCombos();
+    ShowInfo(L"指定した変更だけを元に戻しました。\n（退避: " + sp + L"）");
+}
+
+void App::DoHistoryCompare()
+{
+    HistoryFileEntry e;
+    if (!SelectedHistoryFile(e)) {
+        ShowInfo(L"履歴タブで比較するファイルを選択してください。");
+        return;
+    }
+    std::wstring exe = FindWinMergePath();
+    if (exe.empty()) { ShowError(L"WinMerge が見つかりません。検索条件タブで場所を指定してください。"); return; }
+    if (!e.has_before || !e.has_after) { ShowError(L"比較できるスナップショットがありません。"); return; }
+    std::wstring tb = TempSnapshotPath(L"b", 1), ta = TempSnapshotPath(L"a", 2);
+    std::wstring err;
+    FileManager::CopyFileTo(e.before, tb, err);
+    FileManager::CopyFileTo(e.after, ta, err);
+    std::wstring cmd = L"\"" + tb + L"\" \"" + ta + L"\"";
+    ::ShellExecuteW(nullptr, L"open", exe.c_str(), cmd.c_str(), nullptr, SW_SHOWNORMAL);
+}
+
+void App::DoHistoryReport()
+{
+    if (!hCmbHistRun_) return;
+    int rs = (int)::SendMessageW(hCmbHistRun_, CB_GETCURSEL, 0, 0);
+    if (rs < 0 || rs >= (int)history_runs_.size()) {
+        ShowInfo(L"履歴がありません。");
+        return;
+    }
+    BuildPairReport(history_runs_[rs].id, history_runs_[rs].id, L"history");
+}
+
+bool App::BuildPairCompareItems(const std::wstring& from_id, const std::wstring& to_id,
+                                std::vector<CompareItem>& out, std::wstring& out_error)
+{
+    out.clear();
+    out_error.clear();
+    std::wstring base = HistoryBaseDir();
+    std::vector<HistoryFileEntry> rf = HistoryManager::ListFiles(base, from_id);
+    std::vector<HistoryFileEntry> rt = HistoryManager::ListFiles(base, to_id);
+    if (rf.empty() || rt.empty()) {
+        out_error = L"指定した範囲のスナップショットがありません。";
+        return false;
+    }
+    for (size_t i = 0; i < rf.size(); ++i) {
+        const HistoryFileEntry* b = nullptr;
+        for (size_t j = 0; j < rt.size(); ++j)
+            if (rt[j].path == rf[i].path) { b = &rt[j]; break; }
+        if (!b || !rf[i].has_before || !b->has_after) continue;
+        std::wstring tb, ta, err;
+        if (!HistoryManager::LoadText(rf[i].before, tb, err)) continue;
+        if (!HistoryManager::LoadText(b->after, ta, err)) continue;
+        if (tb == ta) continue;
+        CompareItem c;
+        c.path = rf[i].path;
+        c.before = tb;
+        c.after = ta;
+        out.push_back(c);
+    }
+    if (out.empty()) { out_error = L"指定した範囲に差分がありません。"; return false; }
+    return true;
+}
+
+bool App::BuildPairReport(const std::wstring& from_id, const std::wstring& to_id,
+                          const std::wstring& tag)
+{
+    std::wstring err;
+    std::vector<CompareItem> items;
+    if (!BuildPairCompareItems(from_id, to_id, items, err)) { ShowInfo(err); return false; }
+
+    std::wstring md;
+    md += L"# 変更範囲レポート\n\n";
+    md += L"- 変更前: " + from_id + L"\n";
+    md += L"- 変更後: " + to_id + L"\n";
+    md += L"- 作成日時: " + util::NowDateTime() + L"\n";
+    md += L"- 対象ファイル: " + std::to_wstring((int)items.size()) + L" 件\n\n";
+
+    for (size_t i = 0; i < items.size(); ++i) {
+        md += L"## " + items[i].path + L"\n\n";
+        md += L"```diff\n";
+        md += HistoryManager::BuildDiffText(items[i].before, items[i].after, 400);
+        md += L"```\n\n";
+    }
+
+    std::wstring esc;
+    for (size_t i = 0; i < md.size(); ++i) {
+        wchar_t c = md[i];
+        if (c == L'<') esc += L"&lt;";
+        else if (c == L'>') esc += L"&gt;";
+        else if (c == L'&') esc += L"&amp;";
+        else esc.push_back(c);
+    }
+    std::wstring html = L"<!DOCTYPE html><html><head><meta charset=\"utf-8\">"
+                        L"<title>変更範囲レポート</title><style>body{font-family:sans-serif;"
+                        L"margin:24px}pre{background:#f6f8fa;padding:12px;overflow:auto}</style>"
+                        L"</head><body><pre>" + esc + L"</pre></body></html>";
+
+    std::wstring dir = ReportDirectory();
+    util::EnsureDirectory(dir);
+    std::wstring stem = L"pair_" + tag + L"_" + from_id + L"_to_" + to_id + L"_" +
+                        util::TimestampFileName();
+    std::wstring mdPath = util::JoinPath(dir, stem + L".md");
+    std::wstring htmlPath = util::JoinPath(dir, stem + L".html");
+    if (!FileManager::WriteTextAtomic(mdPath, md, TextEncoding::UTF8, true, NewlineKind::CRLF, err)) {
+        ShowError(L"レポートを書き出せません。\n" + err);
+        return false;
+    }
+    FileManager::WriteTextAtomic(htmlPath, html, TextEncoding::UTF8, true, NewlineKind::CRLF, err);
+    last_report_path_ = htmlPath;
+    log_.Info(L"Pair report: " + htmlPath);
+    ShowInfo(L"比較レポートを作成しました。\n" + htmlPath);
+    OpenPath(htmlPath);
+    return true;
+}
+
+void App::CaptureBeforeSnapshot(std::vector<HistoryFileEntry>& out)
+{
+    out.clear();
+    std::wstring err;
+    if (!IsFolderMode()) {
+        if (target_path_.empty() || !util::PathExists(target_path_)) return;
+        HistoryFileEntry e;
+        e.path = target_path_;
+        e.before = TempSnapshotPath(L"b", (int)out.size() + 1);
+        if (FileManager::CopyFileTo(target_path_, e.before, err)) {
+            e.has_before = true;
+            out.push_back(e);
+        }
+        return;
+    }
+    for (size_t i = 0; i < batch_entries_.size(); ++i) {
+        if (!batch_entries_[i].selected) continue;
+        if (!util::PathExists(batch_entries_[i].path)) continue;
+        HistoryFileEntry e;
+        e.path = batch_entries_[i].path;
+        e.before = TempSnapshotPath(L"b", (int)out.size() + 1);
+        if (FileManager::CopyFileTo(e.path, e.before, err)) {
+            e.has_before = true;
+            out.push_back(e);
+        }
+    }
+}
+
+void App::RecordHistoryAfterRun(const std::vector<HistoryFileEntry>& captured,
+                                const std::wstring& mode)
+{
+    if (captured.empty()) return;
+    std::vector<HistoryFileEntry> changed;
+    std::wstring err;
+    for (size_t i = 0; i < captured.size(); ++i) {
+        HistoryFileEntry e = captured[i];
+        if (!util::PathExists(e.path)) continue;
+        e.after = TempSnapshotPath(L"a", (int)i + 1000);
+        if (!FileManager::CopyFileTo(e.path, e.after, err)) continue;
+        e.has_after = true;
+        if (e.has_before && FilesEqual(e.before, e.after)) {
+            ::DeleteFileW(e.after.c_str());
+            continue;
+        }
+        changed.push_back(e);
+    }
+    if (changed.empty()) return;
+
+    HistoryRunInfo run;
+    if (!HistoryManager::Record(HistoryBaseDir(), util::NewOperationId(), mode,
+                                (int)changed.size(), changed, run, err)) {
+        log_.Warn(L"履歴の記録に失敗しました: " + err);
+        return;
+    }
+    log_.Info(L"履歴を記録しました: " + run.id);
+    history_runs_.insert(history_runs_.begin(), run);
+    RefreshHistoryPage();
+    RefreshPairCombos();
+}
+
+void App::ReadAddCodeInputs()
+{
+    add_before_ = util::NormalizeNewlines(GetEditText(hEditAddBefore_));
+    add_after_  = util::NormalizeNewlines(GetEditText(hEditAddAfter_));
+    add_code_   = util::NormalizeNewlines(GetEditText(hEditAddCode_));
+    while (!add_before_.empty() && (add_before_[add_before_.size() - 1] == L'\n' ||
+                                    add_before_[add_before_.size() - 1] == L'\r'))
+        add_before_.erase(add_before_.size() - 1);
+    while (!add_after_.empty() && (add_after_[add_after_.size() - 1] == L'\n' ||
+                                   add_after_[add_after_.size() - 1] == L'\r'))
+        add_after_.erase(add_after_.size() - 1);
+}
+
+// needle の非空白文字を、text の pos 以降で空白を読み飛ばしながら順に照合する
+static bool NormalizedStartsWith(const std::wstring& text, size_t pos, const std::wstring& needle)
+{
+    size_t i = pos, k = 0;
+    while (k < needle.size()) {
+        while (k < needle.size() && (needle[k] == L' ' || needle[k] == L'\t' ||
+                                     needle[k] == L'\r' || needle[k] == L'\n')) ++k;
+        if (k >= needle.size()) break;
+        while (i < text.size() && (text[i] == L' ' || text[i] == L'\t' ||
+                                   text[i] == L'\r' || text[i] == L'\n')) ++i;
+        if (i >= text.size()) return false;
+        if (text[i] != needle[k]) return false;
+        ++i; ++k;
+    }
+    return true;
+}
+
+int App::CollectAddMatches(const std::wstring& text, const std::wstring& file_path,
+                           std::vector<MatchResult>& out) const
+{
+    if (add_before_.empty()) return 0;
+    int count = 0;
+    size_t pos = 0;
+    while (pos <= text.size()) {
+        size_t p = text.find(add_before_, pos);
+        if (p == std::wstring::npos) break;
+        size_t ap = p + add_before_.size();
+        // 「直後のコード」は空白・改行の違いを無視して照合する
+        bool ok = add_after_.empty() || NormalizedStartsWith(text, ap, add_after_);
+        if (ok) {
+            MatchResult m;
+            m.match_id = (int)out.size();
+            m.file_path = file_path;
+            m.start_offset = p;
+            m.end_offset = ap;
+            m.matched_text = add_before_;
+            int line = 1, col = 1;
+            for (size_t k = 0; k < p && k < text.size(); ++k) {
+                if (text[k] == L'\n') { ++line; col = 1; } else ++col;
+            }
+            m.start_line = line;
+            m.start_column = col;
+            m.end_line = line;
+            m.end_column = col + (int)add_before_.size();
+            m.selected = true;
+            m.match_rate = 100;
+            out.push_back(m);
+            ++count;
+        }
+        pos = ap;
+    }
+    return count;
+}
+
+void App::DoAddCodeSearch()
+{
+    ReadAddCodeInputs();
+    add_code_mode_ = IsChecked(hChkAddEnable_) ? true : false;
+    if (add_before_.empty()) {
+        ShowError(L"「直前のコード」を入力してください。");
+        return;
+    }
+    if (add_code_.empty()) {
+        ShowError(L"「追加するコード」を入力してください。");
+        return;
+    }
+
+    matches_.clear();
+    int total = 0;
+    if (!IsFolderMode()) {
+        target_path_ = util::MakeAbsolute(util::Trim(GetEditText(hTargetEdit_)));
+        if (target_path_.empty() || !FileManager::ReadText(target_path_, cfg_.encoding_mode,
+                                                           file_text_, file_info_)) {
+            ShowError(L"対象ファイルを読み取れません。");
+            return;
+        }
+        total = CollectAddMatches(file_text_, target_path_, matches_);
+    } else {
+        for (size_t i = 0; i < batch_entries_.size(); ++i) {
+            BatchFileEntry& e = batch_entries_[i];
+            if (!e.selected) continue;
+            total += CollectAddMatches(e.text, e.path, matches_);
+            e.hit_count = total;
+        }
+    }
+
+    RefreshListView();
+    UpdateSelectionColumn();
+    std::wstring msg = L"追加位置: " + std::to_wstring(total) + L" 件";
+    if (hLblAddInfo_) ::SetWindowTextW(hLblAddInfo_, msg.c_str());
+    SetStatus(msg);
+    SetState(AppState::SEARCHED);   // プレビュー / ドライラン / 実行を有効化
+    log_.Info(L"追加コード検索: " + msg);
+    if (total == 0) ShowInfo(L"追加位置が見つかりませんでした。\n「直前のコード」と「直後のコード」を確認してください。");
+}
 } // namespace ms

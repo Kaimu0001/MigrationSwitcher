@@ -187,6 +187,63 @@
 // ---- プレビュータブ（後続版: WinMerge 連携）----
 #define IDC_BTN_WINMERGE        1503
 
+// ---- 追加機能: ログ出力 / レポート作成単位 / GoogleTest ----
+#define IDC_GRP_OUTCONF         1940
+#define IDC_CHK_LOGENABLED      1941
+#define IDC_CHK_LOGTEMP         1942
+#define IDC_CHK_LOGRET          1943
+#define IDC_LBL_REPORTSCOPE     1944
+#define IDC_CMB_REPORTSCOPE     1945
+#define IDC_LBL_LOADITER        1946
+#define IDC_EDIT_LOADITER       1947
+#define IDC_CHK_GTEST           1948
+#define IDC_BTN_LOGHEADER       1949
+#define IDC_BTN_GTESTGEN        1950
+#define IDC_BTN_GTESTRUN        1951
+
+// ---- 追加コードタブ ----
+#define IDC_GRP_ADDMODE         1990
+#define IDC_CHK_ADDENABLE       1991
+#define IDC_LBL_ADDBEFORE       1992
+#define IDC_EDIT_ADDBEFORE      1993
+#define IDC_LBL_ADDAFTER        1994
+#define IDC_EDIT_ADDAFTER       1995
+#define IDC_LBL_ADDCODE         1996
+#define IDC_EDIT_ADDCODE        1997
+#define IDC_BTN_ADDSEARCH       1998
+#define IDC_LBL_ADDINFO         1999
+
+// ---- 履歴タブ ----
+#define IDC_LBL_HISTRUN         2100
+#define IDC_CMB_HISTRUN         2101
+#define IDC_BTN_HISTREFRESH     2102
+#define IDC_LIST_HISTFILES      2103
+#define IDC_EDIT_HISTPREVIEW    2104
+#define IDC_BTN_HISTRESTORE     2105
+#define IDC_BTN_HISTCOMPARE     2106
+#define IDC_BTN_HISTREPORT      2107
+#define IDC_LBL_HISTINFO        2108
+
+// ---- 比較範囲の選択（プレビュー / システム情報）----
+#define IDC_LBL_PAIRFROM        2110
+#define IDC_CMB_PAIRFROM        2111
+#define IDC_LBL_PAIRTO          2112
+#define IDC_CMB_PAIRTO          2113
+#define IDC_LBL_SYSPAIRFROM     2114
+#define IDC_CMB_SYSPAIRFROM     2115
+#define IDC_LBL_SYSPAIRTO       2116
+#define IDC_CMB_SYSPAIRTO       2117
+
+// ---- 基本設定タブ追加 ----
+#define IDC_LBL_LOGEXT          2120
+#define IDC_CMB_LOGEXT          2121
+#define IDC_CHK_LOADTEST        2122
+
+// ---- GoogleTest の対象範囲 ----
+#define IDC_LBL_GTRANGE         2130
+#define IDC_CMB_GTRANGEFROM     2131
+#define IDC_CMB_GTRANGETO       2132
+
 // ---- メニュー ----
 #define IDM_FILE_OPEN           2001
 #define IDM_FILE_EXIT           2002

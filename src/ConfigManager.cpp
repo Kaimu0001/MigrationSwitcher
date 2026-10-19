@@ -38,6 +38,12 @@ static int GetInt(const std::wstring& ini, const wchar_t* section,
 
 void ConfigManager::Load(AppConfig& c)
 {
+    {
+        std::wstring ini = ini_path_.empty() ? DefaultIniPath() : ini_path_;
+        c.log_source_cpp = ::GetPrivateProfileIntW(L"Log", L"SourceCpp", 0, ini.c_str()) != 0;
+        c.gtest_load_enabled = ::GetPrivateProfileIntW(L"GTest", L"LoadEnabled", 1, ini.c_str()) != 0;
+    }
+
     if (ini_path_.empty()) ini_path_ = DefaultIniPath();
     if (!util::PathExists(ini_path_)) return;
 
@@ -99,6 +105,24 @@ void ConfigManager::Load(AppConfig& c)
     if (c.undo_max_generations < 1)   c.undo_max_generations = 1;
     if (c.undo_max_generations > 100) c.undo_max_generations = 100;
     c.last_export_path = GetStr(ini_path_, L"Search", L"LastExportPath", L"");
+
+    // ---- 追加機能: ログ出力 / レポート作成単位 / GoogleTest ----
+    c.log_enabled       = GetInt(ini_path_, L"Log", L"Enabled", 0) != 0;
+    c.log_insert_temp   = GetInt(ini_path_, L"Log", L"InsertTempLog", 0) != 0;
+    c.log_return_value  = GetInt(ini_path_, L"Log", L"LogReturnValue", 0) != 0;
+    c.log_header_name   = GetStr(ini_path_, L"Log", L"HeaderName", L"ms_migration_log.h");
+    if (c.log_header_name.empty()) c.log_header_name = L"ms_migration_log.h";
+
+    std::wstring rscope = util::ToUpper(GetStr(ini_path_, L"Report", L"Scope", L"CHANGE"));
+    if      (rscope == L"FILE")    c.report_scope = ReportScope::File;
+    else if (rscope == L"PROJECT") c.report_scope = ReportScope::Project;
+    else                           c.report_scope = ReportScope::Change;
+
+    c.gtest_enabled = GetInt(ini_path_, L"GTest", L"Enabled", 0) != 0;
+    c.gtest_load_iterations = GetInt(ini_path_, L"GTest", L"LoadIterations", 1000);
+    if (c.gtest_load_iterations < 0) c.gtest_load_iterations = 0;
+    if (c.gtest_load_iterations > 100000000) c.gtest_load_iterations = 100000000;
+    c.gtest_dir = GetStr(ini_path_, L"GTest", L"OutputDirectory", L"");
 
     // ---- 17章 複数ファイル一括処理（Phase 4）----
     std::wstring tk = GetStr(ini_path_, L"Batch", L"TargetKind", L"SINGLE_FILE");
@@ -270,6 +294,38 @@ void ConfigManager::Save(const AppConfig& c)
     put(L"SystemInfo", L"ModificationSummary", c.sys_modification);
     put(L"SystemInfo", L"ExtraInstruction", c.sys_extra);
     put(L"SystemInfo", L"LastSpecReportPath", c.last_spec_report_path);
+}
+
+// -----------------------------------------------------------------------------
+// 追加機能の設定を書き出す（既存の Save から呼ばれる）
+// -----------------------------------------------------------------------------
+void ConfigManager::SaveExtras(const AppConfig& c)
+{
+    if (ini_path_.empty()) ini_path_ = DefaultIniPath();
+    const wchar_t* ini = ini_path_.c_str();
+
+    ::WritePrivateProfileStringW(L"Log", L"Enabled",
+        c.log_enabled ? L"1" : L"0", ini);
+    ::WritePrivateProfileStringW(L"Log", L"InsertTempLog",
+        c.log_insert_temp ? L"1" : L"0", ini);
+    ::WritePrivateProfileStringW(L"Log", L"LogReturnValue",
+        c.log_return_value ? L"1" : L"0", ini);
+    ::WritePrivateProfileStringW(L"Log", L"HeaderName", c.log_header_name.c_str(), ini);
+
+    const wchar_t* rs = L"CHANGE";
+    if (c.report_scope == ReportScope::File)         rs = L"FILE";
+    else if (c.report_scope == ReportScope::Project) rs = L"PROJECT";
+    ::WritePrivateProfileStringW(L"Report", L"Scope", rs, ini);
+
+    ::WritePrivateProfileStringW(L"GTest", L"Enabled",
+        c.gtest_enabled ? L"1" : L"0", ini);
+    ::WritePrivateProfileStringW(L"GTest", L"LoadIterations",
+        std::to_wstring(c.gtest_load_iterations).c_str(), ini);
+    ::WritePrivateProfileStringW(L"GTest", L"LoadEnabled",
+        c.gtest_load_enabled ? L"1" : L"0", ini);
+    ::WritePrivateProfileStringW(L"GTest", L"OutputDirectory", c.gtest_dir.c_str(), ini);
+    ::WritePrivateProfileStringW(L"Log", L"SourceCpp",
+        c.log_source_cpp ? L"1" : L"0", ini);
 }
 
 } // namespace ms

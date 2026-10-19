@@ -18,6 +18,11 @@
 #include "LogManager.h"
 #include "SwitchHeaderManager.h"
 #include "UndoManager.h"
+#include "CodeLogger.h"
+#include "ScopeReportGenerator.h"
+#include "GTestGenerator.h"
+#include "LogRuntimeGenerator.h"
+#include "HistoryManager.h"
 
 namespace ms {
 
@@ -28,12 +33,14 @@ enum PageIndex {
     PG_SEARCH  = 2,   // 検索条件（類似一致 / 指定行範囲 / 関数単位 / 出力形式 / WinMerge）
     PG_OLD     = 3,   // 旧コード
     PG_NEW     = 4,   // 新コード
-    PG_RESULT  = 5,   // 検索結果
-    PG_PREVIEW = 6,   // プレビュー
-    PG_SWITCH  = 7,   // スイッチ管理
-    PG_SYSTEM  = 8,   // システム情報（仕様書生成）
-    PG_LOG     = 9,   // ログ
-    PG_COUNT   = 10
+    PG_ADD     = 5,   // 追加コード
+    PG_RESULT  = 6,   // 検索結果
+    PG_PREVIEW = 7,   // プレビュー
+    PG_SWITCH  = 8,   // スイッチ管理
+    PG_SYSTEM  = 9,   // システム情報（仕様書生成）
+    PG_HISTORY = 10,  // 履歴（undobak の参照 / 特定変更の復元）
+    PG_LOG     = 11,  // ログ
+    PG_COUNT   = 12
 };
 
 class App {
@@ -45,6 +52,13 @@ public:
     int  Run();
 
 private:
+    // 比較用の内容（ファイル単位）
+    struct CompareItem {
+        std::wstring path;
+        std::wstring before;
+        std::wstring after;
+    };
+
     static LRESULT CALLBACK WndProcStatic(HWND, UINT, WPARAM, LPARAM);
     // タブページ用。ページ上のコントロールの WM_COMMAND / WM_NOTIFY を
     // アプリ本体（hWnd_）と同じハンドラへ転送するために必要。
@@ -61,6 +75,8 @@ private:
     void CreateOldCodePage();
     void CreateSearchPage();
     void CreateNewCodePage();
+    void CreateAddCodePage();
+    void CreateHistoryPage();
     void CreateResultPage();
     void CreatePreviewPage();
     void CreateSwitchPage();
@@ -150,13 +166,41 @@ private:
     void LoadSearchOptionsFromConfig();
     void SaveSearchOptionsToConfig();
     void WriteExtraReportsAfterRun(bool batch_mode);
+    // ---- 追加機能 ----
+    void DoWriteLogHeader();
+    void DoGenerateGTest();
+    void DoRunGTest();
+    void ApplyLogInsertion(std::wstring& text, const std::vector<MatchResult>& sel);
+    // ---- 履歴 / 比較範囲 / 追加コード ----
+    std::wstring HistoryBaseDir() const;
+    void LoadExtraUi();
+    void SaveExtraUi();
+    bool HandleExtraCommand(int id, int code, HWND ctrl);
+    void RefreshHistoryPage();
+    void RefreshPairCombos();
+    bool HasHistorySelection() const;
+    void DoHistoryRestore();
+    void DoHistoryCompare();
+    void DoHistoryReport();
+    bool SelectedHistoryFile(HistoryFileEntry& out) const;
+    bool GetPairIds(HWND from, HWND to, std::wstring& out_from, std::wstring& out_to) const;
+    bool BuildPairReport(const std::wstring& from_id, const std::wstring& to_id,
+                         const std::wstring& tag);
+    bool BuildPairCompareItems(const std::wstring& from_id, const std::wstring& to_id,
+                               std::vector<CompareItem>& out, std::wstring& out_error);
+    void CaptureBeforeSnapshot(std::vector<HistoryFileEntry>& out);
+    void RecordHistoryAfterRun(const std::vector<HistoryFileEntry>& captured,
+                               const std::wstring& mode);
+    bool CollectRangeGTestTargets(std::vector<GTestTarget>& out, std::wstring& out_error);
+    void ReadAddCodeInputs();
+    void DoAddCodeSearch();
+    int  CollectAddMatches(const std::wstring& text, const std::wstring& file_path,
+                           std::vector<MatchResult>& out) const;
+    void WriteScopeReports(bool batch_mode);
+    ReportScope ReadReportScopeFromUi() const;
+    void LoadBasicExtrasFromConfig();
+    void SaveBasicExtrasToConfig();
     std::wstring FindWinMergePath() const;
-    // 比較用の内容（ファイル単位）
-    struct CompareItem {
-        std::wstring path;
-        std::wstring before;
-        std::wstring after;
-    };
     // 選択された置換対象をファイル単位にまとめ、比較用の内容を作る
     bool GetCompareItems(std::vector<CompareItem>& out, std::wstring& out_error);
     bool SearchOptionsEnabled() const;
@@ -234,6 +278,11 @@ private:
     HWND hGrpOption_, hChkBackup_, hChkReport_, hChkLog_, hChkOpenReport_;
     HWND hChkDryRunOnly_, hChkAutoIndent_, hChkWarnComment_, hChkWarnPreproc_;
     HWND hGrpHit_, hRadHit_[4];
+    // 追加機能: ログ出力 / レポート作成単位 / GoogleTest
+    HWND hGrpOutCfg_, hChkLogEnabled_, hChkLogTemp_, hChkLogRet_;
+    HWND hLblReportScope_, hCmbReportScope_;
+    HWND hLblLoadIter_, hEditLoadIter_, hChkGTest_;
+    HWND hBtnLogHeader_, hBtnGTestGen_, hBtnGTestRun_;
 
     // page PG_BATCH: 一括処理（設計書 17.2.1 追加UI）
     HWND hGrpTargetKind_, hRadTargetKind_[2];
@@ -245,6 +294,18 @@ private:
     // page PG_OLD / PG_NEW
     HWND hOldEdit_, hLblOldInfo_;
     HWND hNewEdit_, hLblNewInfo_;
+    // page PG_ADD: 追加コード
+    HWND hChkAddEnable_, hLblAddBefore_, hEditAddBefore_, hLblAddAfter_, hEditAddAfter_;
+    HWND hLblAddCode_, hEditAddCode_, hBtnAddSearch_, hLblAddInfo_;
+    // page PG_HISTORY: 履歴
+    HWND hLblHistRun_, hCmbHistRun_, hBtnHistRefresh_, hListHistFiles_;
+    HWND hEditHistPreview_, hBtnHistRestore_, hBtnHistCompare_, hBtnHistReport_, hLblHistInfo_;
+    // 比較範囲（プレビュー / システム情報）
+    HWND hLblPairFrom_, hCmbPairFrom_, hLblPairTo_, hCmbPairTo_;
+    HWND hLblSysPairFrom_, hCmbSysPairFrom_, hLblSysPairTo_, hCmbSysPairTo_;
+    // 基本設定の追加項目
+    HWND hLblLogExt_, hCmbLogExt_, hChkLoadTest_;
+    HWND hLblGtRange_, hCmbGtRangeFrom_, hCmbGtRangeTo_;
 
     // page PG_RESULT
     HWND hListView_, hLblResultInfo_, hBtnSelectAll_, hBtnClearSel_;
@@ -323,6 +384,9 @@ private:
     bool          suppress_events_;
     bool          generating_;
     std::wstring  last_spec_report_path_;
+    std::vector<HistoryRunInfo> history_runs_;
+    bool          add_code_mode_ = false;
+    std::wstring  add_before_, add_after_, add_code_;
 
     static App* s_instance_;
 };

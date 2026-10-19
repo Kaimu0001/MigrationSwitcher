@@ -117,6 +117,15 @@ enum class ReportFormat {
 };
 
 // -----------------------------------------------------------------------------
+// レポート / 仕様書の作成単位（追加機能）
+// -----------------------------------------------------------------------------
+enum class ReportScope {
+    Change = 0,     // 変更単位（従来）
+    File,           // ファイル単位
+    Project         // プロジェクト単位
+};
+
+// -----------------------------------------------------------------------------
 // 検索条件の種別（類似一致 / 指定行範囲 / 関数単位）
 // -----------------------------------------------------------------------------
 enum class SearchMode {
@@ -230,6 +239,18 @@ struct AppConfig {
     // ---- レポート出力形式（HTML に加えて Markdown / JSON）----
     bool         report_markdown = false;
     bool         report_json = false;
+
+    // ---- 追加機能: ログ出力 / レポート作成単位 / GoogleTest ----
+    bool         log_enabled = false;            // ログ出力（INPUT/OUTPUT_LOG 挿入）
+    bool         log_insert_temp = false;        // TEMP_LOG を差し替え箇所へ挿入
+    bool         log_return_value = false;       // 戻り値も記録（整数型のみ）
+    std::wstring log_header_name = L"ms_migration_log.h";
+    bool         log_source_cpp = false;         // ログ実装を .cpp にする
+    ReportScope  report_scope = ReportScope::Change;
+    bool         gtest_enabled = false;          // GoogleTest を生成する
+    bool         gtest_load_enabled = true;      // 負荷試験を行う
+    int          gtest_load_iterations = 1000;   // 負荷試験の反復回数
+    std::wstring gtest_dir;                      // 空 = <root>/tests/gtest
 
     // ---- 複数世代 Undo ----
     int          undo_max_generations = 10;             // 保持する操作世代数

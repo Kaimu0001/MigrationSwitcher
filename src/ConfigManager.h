@@ -20,6 +20,8 @@ public:
 
     void Load(AppConfig& config);
     void Save(const AppConfig& config);
+    // 追加機能（[Log] / [Report] Scope / [GTest]）の書き出し
+    void SaveExtras(const AppConfig& config);
 
     static std::wstring DefaultIniPath();
 

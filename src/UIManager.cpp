@@ -223,6 +223,14 @@ LRESULT CALLBACK App::PageWndProcStatic(HWND hWnd, UINT msg, WPARAM wp, LPARAM l
     case WM_NOTIFY:
         self->OnNotify((NMHDR*)lp);
         return 0;
+    case WM_ERASEBKGND: {
+        // 背景を自前で塗る（初回表示時に未描画のまま白く残るのを防ぐ）
+        HDC dc = (HDC)wp;
+        RECT rc;
+        ::GetClientRect(hWnd, &rc);
+        ::FillRect(dc, &rc, ::GetSysColorBrush(COLOR_3DFACE));
+        return 1;
+    }
     default:
         break;
     }
@@ -264,7 +272,7 @@ bool App::CreateMainWindow(int nCmdShow)
         kMainClass,
         L"CopyMigration Switcher - Migration Switch Tool",
         WS_OVERLAPPEDWINDOW,
-        CW_USEDEFAULT, CW_USEDEFAULT, 1060, 780,
+        CW_USEDEFAULT, CW_USEDEFAULT, 1240, 860,
         nullptr, nullptr, hInst_, this);
     if (!hWnd_) return false;
     ::ShowWindow(hWnd_, nCmdShow);
@@ -309,6 +317,13 @@ void App::ApplyFont(HWND h, bool mono)
 // -----------------------------------------------------------------------------
 void App::OnCreate()
 {
+    // 初回表示を確実に描画する
+    LayoutControls();
+    ::InvalidateRect(hWnd_, nullptr, TRUE);
+    ::UpdateWindow(hWnd_);
+    ::RedrawWindow(hWnd_, nullptr, nullptr,
+                   RDW_INVALIDATE | RDW_ERASE | RDW_ALLCHILDREN | RDW_UPDATENOW);
+
     CreateFonts();
     CreateControls();
     LoadConfigToUi();
@@ -335,13 +350,13 @@ void App::CreateControls()
 
     // ---- タブコントロール ----
     hTab_ = ::CreateWindowExW(0, WC_TABCONTROLW, L"",
-        WS_CHILD | WS_VISIBLE | WS_CLIPCHILDREN | TCS_TABS | TCS_SINGLELINE,
+        WS_CHILD | WS_VISIBLE | WS_CLIPCHILDREN | WS_CLIPSIBLINGS | TCS_TABS | TCS_SINGLELINE,
         0, 0, 10, 10, hWnd_, (HMENU)IDC_TAB_MAIN, hInst_, nullptr);
     ApplyFont(hTab_);
 
     static const wchar_t* titles[PG_COUNT] = {
-        L"基本設定", L"一括処理", L"検索条件", L"旧コード", L"新コード",
-        L"検索結果", L"プレビュー", L"スイッチ管理", L"システム情報", L"ログ"
+        L"基本設定", L"一括処理", L"検索条件", L"旧コード", L"新コード", L"追加コード",
+        L"検索結果", L"プレビュー", L"スイッチ管理", L"システム情報", L"履歴", L"ログ"
     };
     for (int i = 0; i < PG_COUNT; ++i) {
         TCITEMW item;
@@ -353,8 +368,10 @@ void App::CreateControls()
 
     for (int i = 0; i < PG_COUNT; ++i) {
         hPage_[i] = ::CreateWindowExW(0, kPageClass, L"",
-            WS_CHILD | WS_CLIPCHILDREN,
+            WS_CHILD | WS_CLIPCHILDREN | WS_CLIPSIBLINGS,
             0, 0, 10, 10, hWnd_, nullptr, hInst_, this);
+        // ページをタブより手前に置く（タブの再描画でページ上の子が塗りつぶされないように）
+        ::SetWindowPos(hPage_[i], HWND_TOP, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_NOACTIVATE);
         ApplyFont(hPage_[i]);
     }
 
@@ -363,10 +380,12 @@ void App::CreateControls()
     CreateOldCodePage();
     CreateSearchPage();
     CreateNewCodePage();
+    CreateAddCodePage();
     CreateResultPage();
     CreatePreviewPage();
     CreateSwitchPage();
     CreateSystemPage();
+    CreateHistoryPage();
     CreateLogPage();
 
     // ---- 下部ボタン ----
@@ -446,6 +465,52 @@ void App::CreateBasicPage()
     hRadHit_[1] = MakeRadio(p, L"最初の1件を対象にする",     IDC_RAD_HIT_FIRST,  0, hFontUi_);
     hRadHit_[2] = MakeRadio(p, L"すべての一致を対象にする", IDC_RAD_HIT_ALL,    0, hFontUi_);
     hRadHit_[3] = MakeRadio(p, L"ユーザーが一覧から選択する", IDC_RAD_HIT_MANUAL, 0, hFontUi_);
+
+    // ---- 追加機能: ログ出力 / レポート作成単位 / GoogleTest ----
+    hGrpOutCfg_ = MakeGroup(p, L"ログ / レポート / テスト", IDC_GRP_OUTCONF, hFontUi_);
+    hChkLogEnabled_ = MakeCheck(p, L"ログ出力を有効にする（INPUT/OUTPUT_LOG を挿入）",
+                                IDC_CHK_LOGENABLED, hFontUi_);
+    hChkLogTemp_ = MakeCheck(p, L"TEMP_LOG を差し替え箇所に挿入する",
+                             IDC_CHK_LOGTEMP, hFontUi_);
+    hChkLogRet_ = MakeCheck(p, L"戻り値も記録する（整数型のみ）",
+                            IDC_CHK_LOGRET, hFontUi_);
+    hLblReportScope_ = MakeStatic(p, L"レポート作成単位", IDC_LBL_REPORTSCOPE, hFontUi_);
+    hCmbReportScope_ = ::CreateWindowExW(0, L"COMBOBOX", L"",
+        WS_CHILD | WS_VISIBLE | WS_TABSTOP | CBS_DROPDOWNLIST | WS_VSCROLL,
+        0, 0, 10, 200, p, (HMENU)IDC_CMB_REPORTSCOPE, hInst_, nullptr);
+    ApplyFont(hCmbReportScope_);
+    ::SendMessageW(hCmbReportScope_, CB_ADDSTRING, 0, (LPARAM)L"変更単位（従来）");
+    ::SendMessageW(hCmbReportScope_, CB_ADDSTRING, 0, (LPARAM)L"ファイル単位");
+    ::SendMessageW(hCmbReportScope_, CB_ADDSTRING, 0, (LPARAM)L"プロジェクト単位");
+    ::SendMessageW(hCmbReportScope_, CB_SETCURSEL, 0, 0);
+    hLblLoadIter_ = MakeStatic(p, L"負荷試験 反復", IDC_LBL_LOADITER, hFontUi_);
+    hEditLoadIter_ = MakeEdit(p, IDC_EDIT_LOADITER, ES_AUTOHSCROLL | ES_NUMBER, hFontUi_);
+    hChkGTest_ = MakeCheck(p, L"GoogleTest を生成する", IDC_CHK_GTEST, hFontUi_);
+    hBtnLogHeader_ = MakeButton(p, L"ログ定義を出力", IDC_BTN_LOGHEADER, BS_PUSHBUTTON, hFontUi_);
+    hBtnGTestGen_ = MakeButton(p, L"テスト生成", IDC_BTN_GTESTGEN, BS_PUSHBUTTON, hFontUi_);
+    hBtnGTestRun_ = MakeButton(p, L"テスト実行", IDC_BTN_GTESTRUN, BS_PUSHBUTTON, hFontUi_);
+
+    // ---- 追加機能: ログ実装の拡張子 / 負荷試験トグル ----
+    hLblLogExt_ = MakeStatic(p, L"ログ実装の拡張子", IDC_LBL_LOGEXT, hFontUi_);
+    hCmbLogExt_ = ::CreateWindowExW(0, L"COMBOBOX", L"",
+        WS_CHILD | WS_VISIBLE | WS_TABSTOP | CBS_DROPDOWNLIST | WS_VSCROLL,
+        0, 0, 10, 200, p, (HMENU)IDC_CMB_LOGEXT, hInst_, nullptr);
+    ApplyFont(hCmbLogExt_);
+    ::SendMessageW(hCmbLogExt_, CB_ADDSTRING, 0, (LPARAM)L".c（C として出力）");
+    ::SendMessageW(hCmbLogExt_, CB_ADDSTRING, 0, (LPARAM)L".cpp（C++ として出力）");
+    ::SendMessageW(hCmbLogExt_, CB_SETCURSEL, 0, 0);
+    hChkLoadTest_ = MakeCheck(p, L"負荷試験を行う", IDC_CHK_LOADTEST, hFontUi_);
+
+    // GoogleTest の対象範囲（実行履歴の組み合わせ）
+    hLblGtRange_ = MakeStatic(p, L"テスト対象範囲", IDC_LBL_GTRANGE, hFontUi_);
+    hCmbGtRangeFrom_ = ::CreateWindowExW(0, L"COMBOBOX", L"",
+        WS_CHILD | WS_VISIBLE | WS_TABSTOP | CBS_DROPDOWNLIST | WS_VSCROLL,
+        0, 0, 10, 220, p, (HMENU)IDC_CMB_GTRANGEFROM, hInst_, nullptr);
+    ApplyFont(hCmbGtRangeFrom_);
+    hCmbGtRangeTo_ = ::CreateWindowExW(0, L"COMBOBOX", L"",
+        WS_CHILD | WS_VISIBLE | WS_TABSTOP | CBS_DROPDOWNLIST | WS_VSCROLL,
+        0, 0, 10, 220, p, (HMENU)IDC_CMB_GTRANGETO, hInst_, nullptr);
+    ApplyFont(hCmbGtRangeTo_);
 }
 
 // -----------------------------------------------------------------------------
@@ -591,6 +656,18 @@ void App::CreatePreviewPage()
     hPreviewEdit_ = MakeEdit(p, IDC_EDIT_PREVIEW,
         ES_MULTILINE | ES_READONLY | ES_AUTOVSCROLL | ES_AUTOHSCROLL |
         WS_VSCROLL | WS_HSCROLL, hFontMono_);
+
+    // 比較する範囲（実行履歴の組み合わせ）
+    hLblPairFrom_ = MakeStatic(p, L"比較範囲", IDC_LBL_PAIRFROM, hFontUi_);
+    hCmbPairFrom_ = ::CreateWindowExW(0, L"COMBOBOX", L"",
+        WS_CHILD | WS_VISIBLE | WS_TABSTOP | CBS_DROPDOWNLIST | WS_VSCROLL,
+        0, 0, 10, 220, p, (HMENU)IDC_CMB_PAIRFROM, hInst_, nullptr);
+    ApplyFont(hCmbPairFrom_);
+    hLblPairTo_ = MakeStatic(p, L"～", IDC_LBL_PAIRTO, hFontUi_);
+    hCmbPairTo_ = ::CreateWindowExW(0, L"COMBOBOX", L"",
+        WS_CHILD | WS_VISIBLE | WS_TABSTOP | CBS_DROPDOWNLIST | WS_VSCROLL,
+        0, 0, 10, 220, p, (HMENU)IDC_CMB_PAIRTO, hInst_, nullptr);
+    ApplyFont(hCmbPairTo_);
 }
 
 
@@ -767,6 +844,18 @@ void App::CreateSystemPage()
     hEditSpecOut_ = MakeEdit(p, IDC_EDIT_SPECOUT,
         ES_MULTILINE | ES_AUTOVSCROLL | ES_AUTOHSCROLL |
         WS_VSCROLL | WS_HSCROLL | ES_WANTRETURN, hFontMono_);
+
+    // AI に渡す変更範囲（実行履歴の組み合わせ）
+    hLblSysPairFrom_ = MakeStatic(p, L"変更範囲(前)", IDC_LBL_SYSPAIRFROM, hFontUi_);
+    hCmbSysPairFrom_ = ::CreateWindowExW(0, L"COMBOBOX", L"",
+        WS_CHILD | WS_VISIBLE | WS_TABSTOP | CBS_DROPDOWNLIST | WS_VSCROLL,
+        0, 0, 10, 220, p, (HMENU)IDC_CMB_SYSPAIRFROM, hInst_, nullptr);
+    ApplyFont(hCmbSysPairFrom_);
+    hLblSysPairTo_ = MakeStatic(p, L"～", IDC_LBL_SYSPAIRTO, hFontUi_);
+    hCmbSysPairTo_ = ::CreateWindowExW(0, L"COMBOBOX", L"",
+        WS_CHILD | WS_VISIBLE | WS_TABSTOP | CBS_DROPDOWNLIST | WS_VSCROLL,
+        0, 0, 10, 220, p, (HMENU)IDC_CMB_SYSPAIRTO, hInst_, nullptr);
+    ApplyFont(hCmbSysPairTo_);
 }
 
 // -----------------------------------------------------------------------------
@@ -781,66 +870,94 @@ void App::LayoutPage(int index, const RECT& rc)
 
     switch (index) {
     case PG_BASIC: {
+        // 2 カラム配置: 左=置換方式 / オプション / ヒット時の動作、右=ログ・レポート・テスト / AI 連携
+        const int M = 10;
         int gw = W - M * 2;
-        int gy = M;
+        int gap = 12;
+        int colW = (gw - gap) / 2;
+        int lx = M, rx2 = M + colW + gap;
+
+        int y = M;
+        // ---- 左 1: 置換方式 ----
         int gh = 178;
-        ::MoveWindow(hGrpStyle_, M, gy, gw, gh, TRUE);
-        int rx = M + 14;
-        int rw = gw - 28;
-        ::MoveWindow(hRadStyle_[0], rx, gy + 22, rw, 18, TRUE);
-        ::MoveWindow(hRadStyle_[1], rx, gy + 44, rw, 18, TRUE);
-        ::MoveWindow(hRadStyle_[2], rx, gy + 66, rw, 18, TRUE);
-        ::MoveWindow(hRadStyle_[3], rx, gy + 88, rw, 18, TRUE);
-        ::MoveWindow(hLblTemplate_, rx, gy + 110, rw, 16, TRUE);
-        ::MoveWindow(hEditTemplate_, rx, gy + 126, rw, 44, TRUE);
-        gy += gh + 10;
+        ::MoveWindow(hGrpStyle_, lx, y, colW, gh, TRUE);
+        int ix = lx + 12, iw = colW - 24;
+        ::MoveWindow(hRadStyle_[0], ix, y + 22, iw, 18, TRUE);
+        ::MoveWindow(hRadStyle_[1], ix, y + 44, iw, 18, TRUE);
+        ::MoveWindow(hRadStyle_[2], ix, y + 66, iw, 18, TRUE);
+        ::MoveWindow(hRadStyle_[3], ix, y + 88, iw, 18, TRUE);
+        ::MoveWindow(hLblTemplate_, ix, y + 110, iw, 16, TRUE);
+        ::MoveWindow(hEditTemplate_, ix, y + 126, iw, 42, TRUE);
+        y += gh + 10;
 
+        // ---- 左 2: オプション ----
         int oh = 116;
-        ::MoveWindow(hGrpOption_, M, gy, gw, oh, TRUE);
-        int cw = (gw - 28) / 2;
-        ::MoveWindow(hChkBackup_,      rx,      gy + 22, cw, 18, TRUE);
-        ::MoveWindow(hChkReport_,      rx,      gy + 44, cw, 18, TRUE);
-        ::MoveWindow(hChkLog_,         rx,      gy + 66, cw, 18, TRUE);
-        ::MoveWindow(hChkOpenReport_,  rx,      gy + 88, cw, 18, TRUE);
-        ::MoveWindow(hChkDryRunOnly_,  rx + cw, gy + 22, cw, 18, TRUE);
-        ::MoveWindow(hChkAutoIndent_,  rx + cw, gy + 44, cw, 18, TRUE);
-        ::MoveWindow(hChkWarnComment_, rx + cw, gy + 66, cw, 18, TRUE);
-        ::MoveWindow(hChkWarnPreproc_, rx + cw, gy + 88, cw, 18, TRUE);
-        gy += oh + 10;
+        ::MoveWindow(hGrpOption_, lx, y, colW, oh, TRUE);
+        int cw = (colW - 24) / 2;
+        ::MoveWindow(hChkBackup_,      ix,          y + 22, cw, 18, TRUE);
+        ::MoveWindow(hChkReport_,      ix,          y + 44, cw, 18, TRUE);
+        ::MoveWindow(hChkLog_,         ix,          y + 66, cw, 18, TRUE);
+        ::MoveWindow(hChkOpenReport_,  ix,          y + 88, cw, 18, TRUE);
+        ::MoveWindow(hChkDryRunOnly_,  ix + cw,     y + 22, cw, 18, TRUE);
+        ::MoveWindow(hChkAutoIndent_,  ix + cw,     y + 44, cw, 18, TRUE);
+        ::MoveWindow(hChkWarnComment_, ix + cw,     y + 66, cw, 18, TRUE);
+        ::MoveWindow(hChkWarnPreproc_, ix + cw,     y + 88, cw, 18, TRUE);
+        y += oh + 10;
 
-        const int aih = 132;
-        int hh = H - gy - M - aih - 10;
+        // ---- 左 3: ヒット時の動作（残り高さ）----
+        int hh = H - M - y;
         if (hh < 96) hh = 96;
-        ::MoveWindow(hGrpHit_, M, gy, gw, hh, TRUE);
-        ::MoveWindow(hRadHit_[0], rx, gy + 22, rw, 18, TRUE);
-        ::MoveWindow(hRadHit_[1], rx, gy + 44, rw, 18, TRUE);
-        ::MoveWindow(hRadHit_[2], rx, gy + 66, rw, 18, TRUE);
-        ::MoveWindow(hRadHit_[3], rx, gy + 88, rw, 18, TRUE);
+        ::MoveWindow(hGrpHit_, lx, y, colW, hh, TRUE);
+        ::MoveWindow(hRadHit_[0], ix, y + 22, iw, 18, TRUE);
+        ::MoveWindow(hRadHit_[1], ix, y + 44, iw, 18, TRUE);
+        ::MoveWindow(hRadHit_[2], ix, y + 66, iw, 18, TRUE);
+        ::MoveWindow(hRadHit_[3], ix, y + 88, iw, 18, TRUE);
 
-        // ---- AI 連携（仕様書生成）----
-        int ay = gy + hh + 10;
-        if (ay + aih > H - M) ay = H - M - aih;
-        if (ay < gy + 96 + 10) ay = gy + 96 + 10;
-        ::MoveWindow(hGrpAi_, M, ay, gw, aih, TRUE);
-        ::MoveWindow(hLblAiProvider_, rx, ay + 22, 96, 18, TRUE);
-        // API 種別コンボと「接続テスト」ボタンがグループ内に収まるよう幅を配分する。
-        // （以前はボタン右端がグループ右端を約 92px 越えて画面外に出ていた）
-        const int aiBtnW = 112;
-        const int aiGap  = 12;
-        int aiComboW = gw - 28 - 96 - aiGap - aiBtnW;
-        if (aiComboW < 160) aiComboW = 160;
-        ::MoveWindow(hCmbAiProvider_, rx + 96, ay + 18, aiComboW, 200, TRUE);
-        ::MoveWindow(hBtnAiTest_, rx + 96 + aiComboW + aiGap, ay + 18, aiBtnW, 22, TRUE);
-        ::MoveWindow(hLblAiKey_, rx, ay + 50, 96, 18, TRUE);
-        ::MoveWindow(hEditAiKey_, rx + 96, ay + 46, gw - 28 - 96, 22, TRUE);
-        ::MoveWindow(hLblAiEndpoint_, rx, ay + 78, 96, 18, TRUE);
-        ::MoveWindow(hEditAiEndpoint_, rx + 96, ay + 74, gw - 28 - 96, 22, TRUE);
-        ::MoveWindow(hLblAiModel_, rx, ay + 106, 96, 18, TRUE);
-        int mw2 = (gw - 28 - 96) / 2 - 70;
-        if (mw2 < 100) mw2 = 100;
-        ::MoveWindow(hEditAiModel_, rx + 96, ay + 102, mw2, 22, TRUE);
-        ::MoveWindow(hLblAiTimeout_, rx + 96 + mw2 + 12, ay + 106, 110, 18, TRUE);
-        ::MoveWindow(hEditAiTimeout_, rx + 96 + mw2 + 126, ay + 102, 70, 22, TRUE);
+        // ---- 右 1: ログ / レポート / テスト（上から操作順）----
+        int ry = M;
+        int och = 236;
+        ::MoveWindow(hGrpOutCfg_, rx2, ry, colW, och, TRUE);
+        int jx = rx2 + 12, jw = colW - 24;
+        ::MoveWindow(hChkLogEnabled_, jx,     ry + 22, jw - 90, 18, TRUE);
+        ::MoveWindow(hChkLogRet_,     jx,     ry + 44, jw, 18, TRUE);
+        ::MoveWindow(hChkLogTemp_,    jx,     ry + 66, jw, 18, TRUE);
+        ::MoveWindow(hLblLogExt_,     jx,          ry + 96, 110, 18, TRUE);
+        ::MoveWindow(hCmbLogExt_,     jx + 112,    ry + 92, 110, 200, TRUE);
+        ::MoveWindow(hBtnLogHeader_,  jx + 230,    ry + 90, 130, 24, TRUE);
+        ::MoveWindow(hLblReportScope_, jx,         ry + 126, 110, 18, TRUE);
+        ::MoveWindow(hCmbReportScope_, jx + 112,   ry + 122, jw - 112, 200, TRUE);
+        ::MoveWindow(hLblGtRange_,     jx,         ry + 156, 110, 18, TRUE);
+        ::MoveWindow(hCmbGtRangeFrom_, jx + 112,   ry + 152, (jw - 112 - 8) / 2, 200, TRUE);
+        ::MoveWindow(hCmbGtRangeTo_,   jx + 112 + (jw - 112 - 8) / 2 + 8,
+                     ry + 152, (jw - 112 - 8) / 2, 200, TRUE);
+        ::MoveWindow(hChkGTest_,     jx,        ry + 182, 150, 18, TRUE);
+        ::MoveWindow(hChkLoadTest_,  jx + 156,  ry + 182, 110, 18, TRUE);
+        ::MoveWindow(hLblLoadIter_,  jx + 270,  ry + 182, 70, 18, TRUE);
+        ::MoveWindow(hEditLoadIter_, jx + 340,  ry + 178, 60, 22, TRUE);
+        ::MoveWindow(hBtnGTestGen_,  jx,        ry + 208, 130, 24, TRUE);
+        ::MoveWindow(hBtnGTestRun_,  jx + 138,  ry + 208, 130, 24, TRUE);
+        ry += och + 10;
+
+        // ---- 右 2: AI 連携 ----
+        int aih = 132;
+        ::MoveWindow(hGrpAi_, rx2, ry, colW, aih, TRUE);
+        ::MoveWindow(hLblAiProvider_, jx, ry + 22, 84, 18, TRUE);
+        const int aiBtnW = 96;
+        const int aiGap  = 8;
+        int aiComboW = jw - 84 - aiGap - aiBtnW;
+        if (aiComboW < 120) aiComboW = 120;
+        ::MoveWindow(hCmbAiProvider_, jx + 84, ry + 18, aiComboW, 200, TRUE);
+        ::MoveWindow(hBtnAiTest_, jx + 84 + aiComboW + aiGap, ry + 18, aiBtnW, 22, TRUE);
+        ::MoveWindow(hLblAiKey_, jx, ry + 50, 84, 18, TRUE);
+        ::MoveWindow(hEditAiKey_, jx + 84, ry + 46, jw - 84, 22, TRUE);
+        ::MoveWindow(hLblAiEndpoint_, jx, ry + 78, 84, 18, TRUE);
+        ::MoveWindow(hEditAiEndpoint_, jx + 84, ry + 74, jw - 84, 22, TRUE);
+        ::MoveWindow(hLblAiModel_, jx, ry + 106, 84, 18, TRUE);
+        int mw2 = (jw - 84) / 2 - 60;
+        if (mw2 < 80) mw2 = 80;
+        ::MoveWindow(hEditAiModel_, jx + 84, ry + 102, mw2, 22, TRUE);
+        ::MoveWindow(hLblAiTimeout_, jx + 84 + mw2 + 8, ry + 106, 96, 18, TRUE);
+        ::MoveWindow(hEditAiTimeout_, jx + 84 + mw2 + 106, ry + 102, 60, 22, TRUE);
         break;
     }
     case PG_BATCH: {   // 17.2.1 追加UI
@@ -959,10 +1076,65 @@ void App::LayoutPage(int index, const RECT& rc)
     }
     case PG_PREVIEW: {
         int top = M;
-        ::MoveWindow(hCmbPreviewMode_, M, top, 220, 200, TRUE);
-        ::MoveWindow(hBtnOpenHtml_, M + 230, top, 180, 24, TRUE);
-        ::MoveWindow(hBtnWinMerge_, M + 416, top, 190, 24, TRUE);
-        ::MoveWindow(hPreviewEdit_, M, top + 32, W - M * 2, H - top - 32 - M, TRUE);
+        int gw = W - M * 2;
+        // 1 行目: 表示モードと出力ボタン
+        ::MoveWindow(hCmbPreviewMode_, M, top, 200, 200, TRUE);
+        ::MoveWindow(hBtnWinMerge_, M + gw - 180, top, 180, 24, TRUE);
+        ::MoveWindow(hBtnOpenHtml_, M + gw - 372, top, 184, 24, TRUE);
+        // 2 行目: 比較する範囲（何回目の変更前 ～ 何回目の変更後）
+        int row2 = top + 32;
+        ::MoveWindow(hLblPairFrom_, M, row2 + 4, 96, 18, TRUE);
+        int combW = (gw - 96 - 26 - 20) / 2;
+        if (combW < 120) combW = 120;
+        ::MoveWindow(hCmbPairFrom_, M + 98, row2, combW, 200, TRUE);
+        ::MoveWindow(hLblPairTo_, M + 98 + combW + 6, row2 + 4, 20, 18, TRUE);
+        ::MoveWindow(hCmbPairTo_, M + 98 + combW + 28, row2, combW, 200, TRUE);
+        ::MoveWindow(hPreviewEdit_, M, row2 + 32, gw, H - row2 - 32 - M, TRUE);
+        break;
+    }
+    case PG_ADD: {
+        int gw = W - M * 2;
+        int y = M;
+        ::MoveWindow(hChkAddEnable_, M, y + 4, gw, 20, TRUE);
+        y += 28;
+        int lw = (gw - 20) / 2;
+        int lh = (H - y - M - 44) / 2;
+        if (lh < 60) lh = 60;
+        ::MoveWindow(hLblAddBefore_, M, y, lw, 18, TRUE);
+        ::MoveWindow(hLblAddAfter_, M + lw + 20, y, lw, 18, TRUE);
+        y += 20;
+        ::MoveWindow(hEditAddBefore_, M, y, lw, lh, TRUE);
+        ::MoveWindow(hEditAddAfter_, M + lw + 20, y, lw, lh, TRUE);
+        y += lh + 8;
+        ::MoveWindow(hLblAddCode_, M, y, gw, 18, TRUE);
+        y += 20;
+        int ch = H - y - M - 34;
+        if (ch < 50) ch = 50;
+        ::MoveWindow(hEditAddCode_, M, y, gw, ch, TRUE);
+        y += ch + 6;
+        ::MoveWindow(hBtnAddSearch_, M, y, 190, 26, TRUE);
+        ::MoveWindow(hLblAddInfo_, M + 200, y + 5, gw - 200, 18, TRUE);
+        break;
+    }
+    case PG_HISTORY: {
+        int gw = W - M * 2;
+        int y = M;
+        ::MoveWindow(hLblHistRun_, M, y + 4, 96, 18, TRUE);
+        ::MoveWindow(hCmbHistRun_, M + 98, y, gw - 98 - 96 - 10, 200, TRUE);
+        ::MoveWindow(hBtnHistRefresh_, M + gw - 90, y, 90, 24, TRUE);
+        y += 30;
+        int lh = (H - y - M - 40) / 3;
+        if (lh < 80) lh = 80;
+        ::MoveWindow(hListHistFiles_, M, y, gw, lh, TRUE);
+        y += lh + 6;
+        ::MoveWindow(hBtnHistRestore_, M, y, 210, 26, TRUE);
+        ::MoveWindow(hBtnHistCompare_, M + 218, y, 150, 26, TRUE);
+        ::MoveWindow(hBtnHistReport_, M + 376, y, 150, 26, TRUE);
+        ::MoveWindow(hLblHistInfo_, M + 536, y + 5, gw - 536, 18, TRUE);
+        y += 30;
+        int eh = H - y - M;
+        if (eh < 60) eh = 60;
+        ::MoveWindow(hEditHistPreview_, M, y, gw, eh, TRUE);
         break;
     }
     case PG_SWITCH: {
@@ -1013,7 +1185,12 @@ void App::LayoutPage(int index, const RECT& rc)
     }
     case PG_SYSTEM: {
         int gw = W - M * 2;
-        int y = M;
+        int combW2 = (gw - 210) / 2;
+        ::MoveWindow(hLblSysPairFrom_, M, M + 4, 104, 18, TRUE);
+        ::MoveWindow(hCmbSysPairFrom_, M + 106, M, combW2, 200, TRUE);
+        ::MoveWindow(hLblSysPairTo_, M + 106 + combW2 + 4, M + 4, 20, 18, TRUE);
+        ::MoveWindow(hCmbSysPairTo_, M + 106 + combW2 + 26, M, combW2 - 26, 200, TRUE);
+        int y = M + 30;
 
         ::MoveWindow(hLblSysName_, M, y + 4, 130, 18, TRUE);
         ::MoveWindow(hEditSysName_, M + 130, y, gw - 130, 24, TRUE);
@@ -1178,6 +1355,7 @@ void App::LayoutControls()
 // -----------------------------------------------------------------------------
 void App::LoadConfigToUi()
 {
+    LoadExtraUi();
     suppress_events_ = true;
 
     SetChecked(hChkBackup_,      cfg_.create_backup);
@@ -1253,6 +1431,7 @@ void App::LoadConfigToUi()
 
 void App::SaveUiToConfig()
 {
+    SaveExtraUi();
     cfg_.create_backup = IsChecked(hChkBackup_);
     cfg_.create_html_report = IsChecked(hChkReport_);
     cfg_.create_log = IsChecked(hChkLog_);
@@ -1399,6 +1578,15 @@ void App::OnTabChange()
     if (sel < 0 || sel >= PG_COUNT) return;
     for (int i = 0; i < PG_COUNT; ++i)
         ::ShowWindow(hPage_[i], (i == sel) ? SW_SHOW : SW_HIDE);
+    // 起動直後やタブ切替時に画面が描画されない問題への対策。
+    // ShowWindow の直後にページとすべての子ウィンドウへ WM_PAINT を発生させる。
+    RECT pr;
+    ::GetClientRect(hPage_[sel], &pr);
+    ::InvalidateRect(hPage_[sel], &pr, TRUE);
+    ::UpdateWindow(hPage_[sel]);
+    ::RedrawWindow(hPage_[sel], nullptr, nullptr,
+                   RDW_INVALIDATE | RDW_ERASE | RDW_ALLCHILDREN | RDW_UPDATENOW);
+    ::RedrawWindow(hWnd_, nullptr, nullptr, RDW_INVALIDATE | RDW_ALLCHILDREN);
     if (sel == PG_RESULT) UpdateSelectionColumn();
     if (sel == PG_SYSTEM && !last_spec_report_path_.empty())
         SetEditText(hLblSpecInfo_, L"出力: " + last_spec_report_path_);
@@ -1439,6 +1627,34 @@ void App::OnNotify(NMHDR* nm)
 
 void App::OnCommand(int id, int code, HWND ctrl)
 {
+    if (HandleExtraCommand(id, code, ctrl)) return;
+    // ---- 追加機能: ログ / レポート作成単位 / GoogleTest ----
+    switch (id) {
+    case IDC_CHK_LOGENABLED:
+    case IDC_CHK_LOGTEMP:
+    case IDC_CHK_LOGRET:
+    case IDC_CHK_GTEST:
+        if (!suppress_events_) SaveBasicExtrasToConfig();
+        break;
+    case IDC_CMB_REPORTSCOPE:
+        if (code == CBN_SELCHANGE && !suppress_events_) SaveBasicExtrasToConfig();
+        break;
+    case IDC_EDIT_LOADITER:
+        if (code == EN_KILLFOCUS && !suppress_events_) SaveBasicExtrasToConfig();
+        break;
+    case IDC_BTN_LOGHEADER:
+        DoWriteLogHeader();
+        return;
+    case IDC_BTN_GTESTGEN:
+        DoGenerateGTest();
+        return;
+    case IDC_BTN_GTESTRUN:
+        DoRunGTest();
+        return;
+    default:
+        break;
+    }
+
     // ---- オプションのチェック状態を即座に保存する ----
     // （保存は終了時のみだったため、チェックを付けても次回起動時に戻っていた）
     if (!suppress_events_ &&
@@ -1681,6 +1897,75 @@ void App::UpdateInputInfo()
     swprintf(buf, 256, L"行数: %d / 文字数: %d",
              util::CountLines(newc), (int)newc.size());
     SetEditText(hLblNewInfo_, buf);
+}
+
+
+// =============================================================================
+// 追加コードタブ
+// =============================================================================
+void App::CreateAddCodePage()
+{
+    HWND p = hPage_[PG_ADD];
+
+    hChkAddEnable_ = MakeCheck(p, L"追加コードモードを使う（「直前」と「直後」の間にコードを挿入する）",
+                               IDC_CHK_ADDENABLE, hFontUi_);
+    hLblAddBefore_ = MakeStatic(p, L"直前のコード（この直後に挿入されます）", IDC_LBL_ADDBEFORE, hFontUi_);
+    hEditAddBefore_ = MakeEdit(p, IDC_EDIT_ADDBEFORE,
+        ES_MULTILINE | ES_AUTOVSCROLL | WS_VSCROLL | ES_WANTRETURN, hFontMono_);
+    hLblAddAfter_ = MakeStatic(p, L"直後のコード（一致の判定に使います / 空でも可）", IDC_LBL_ADDAFTER, hFontUi_);
+    hEditAddAfter_ = MakeEdit(p, IDC_EDIT_ADDAFTER,
+        ES_MULTILINE | ES_AUTOVSCROLL | WS_VSCROLL | ES_WANTRETURN, hFontMono_);
+    hLblAddCode_ = MakeStatic(p, L"追加するコード（既存コードのインデントに合わせて整形されます）",
+                              IDC_LBL_ADDCODE, hFontUi_);
+    hEditAddCode_ = MakeEdit(p, IDC_EDIT_ADDCODE,
+        ES_MULTILINE | ES_AUTOVSCROLL | WS_VSCROLL | ES_WANTRETURN, hFontMono_);
+    hBtnAddSearch_ = MakeButton(p, L"追加位置を検索", IDC_BTN_ADDSEARCH, BS_PUSHBUTTON, hFontUi_);
+    hLblAddInfo_ = MakeStatic(p, L"", IDC_LBL_ADDINFO, hFontUi_);
+}
+
+// =============================================================================
+// 履歴タブ（undobak の参照 / 特定変更の復元）
+// =============================================================================
+void App::CreateHistoryPage()
+{
+    HWND p = hPage_[PG_HISTORY];
+
+    hLblHistRun_ = MakeStatic(p, L"実行履歴", IDC_LBL_HISTRUN, hFontUi_);
+    hCmbHistRun_ = ::CreateWindowExW(0, L"COMBOBOX", L"",
+        WS_CHILD | WS_VISIBLE | WS_TABSTOP | CBS_DROPDOWNLIST | WS_VSCROLL,
+        0, 0, 10, 200, p, (HMENU)IDC_CMB_HISTRUN, hInst_, nullptr);
+    ApplyFont(hCmbHistRun_);
+    hBtnHistRefresh_ = MakeButton(p, L"更新", IDC_BTN_HISTREFRESH, BS_PUSHBUTTON, hFontUi_);
+
+    hListHistFiles_ = ::CreateWindowExW(WS_EX_CLIENTEDGE, WC_LISTVIEWW, L"",
+        WS_CHILD | WS_VISIBLE | WS_TABSTOP | LVS_REPORT | LVS_SHOWSELALWAYS | LVS_SINGLESEL,
+        0, 0, 10, 10, p, (HMENU)IDC_LIST_HISTFILES, hInst_, nullptr);
+    ApplyFont(hListHistFiles_);
+    ::SendMessageW(hListHistFiles_, LVM_SETEXTENDEDLISTVIEWSTYLE,
+                   LVS_EX_FULLROWSELECT | LVS_EX_GRIDLINES,
+                   LVS_EX_FULLROWSELECT | LVS_EX_GRIDLINES);
+    struct Col { const wchar_t* name; int width; };
+    static const Col cols[] = {
+        { L"No", 44 }, { L"ファイル", 420 }, { L"変更前", 80 }, { L"変更後", 80 }
+    };
+    for (int i = 0; i < (int)(sizeof(cols) / sizeof(cols[0])); ++i) {
+        LVCOLUMNW c;
+        ::ZeroMemory(&c, sizeof(c));
+        c.mask = LVCF_TEXT | LVCF_WIDTH | LVCF_SUBITEM;
+        c.pszText = (LPWSTR)cols[i].name;
+        c.cx = cols[i].width;
+        c.iSubItem = i;
+        ::SendMessageW(hListHistFiles_, LVM_INSERTCOLUMNW, (WPARAM)i, (LPARAM)&c);
+    }
+
+    hBtnHistRestore_ = MakeButton(p, L"この変更だけ元に戻す", IDC_BTN_HISTRESTORE, BS_PUSHBUTTON, hFontUi_);
+    hBtnHistCompare_ = MakeButton(p, L"WinMerge で比較", IDC_BTN_HISTCOMPARE, BS_PUSHBUTTON, hFontUi_);
+    hBtnHistReport_  = MakeButton(p, L"レポート作成", IDC_BTN_HISTREPORT, BS_PUSHBUTTON, hFontUi_);
+    hLblHistInfo_    = MakeStatic(p, L"", IDC_LBL_HISTINFO, hFontUi_);
+
+    hEditHistPreview_ = MakeEdit(p, IDC_EDIT_HISTPREVIEW,
+        ES_MULTILINE | ES_READONLY | ES_AUTOVSCROLL | ES_AUTOHSCROLL |
+        WS_VSCROLL | WS_HSCROLL, hFontMono_);
 }
 
 } // namespace ms

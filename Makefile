@@ -66,3 +66,19 @@ $(BUILDDIR)/console_test.o: test/console_test.cpp | $(BUILDDIR)
 $(TEST_TARGET): $(TEST_OBJS)
 	$(CXX) $(TEST_OBJS) -o $@ -static -static-libgcc -static-libstdc++ \
 	    -lcomctl32 -lcomdlg32 -lshlwapi -lole32 -lshell32 -lgdi32 -luser32 -ladvapi32 -lwinhttp
+
+# ---------------------------------------------------------------------------
+# 受け入れテスト（全機能の一通り確認）: make acceptance
+# ---------------------------------------------------------------------------
+ACC_OBJS   := $(filter-out $(BUILDDIR)/main.o,$(OBJS)) $(BUILDDIR)/acceptance_test.o
+ACC_TARGET := $(BUILDDIR)/acceptance_test.exe
+
+$(BUILDDIR)/acceptance_test.o: test/acceptance_test.cpp | $(BUILDDIR)
+	$(CXX) $(CXXFLAGS) -DMS_BUILD_ACCEPTANCE_TESTS -c $< -o $@
+
+$(ACC_TARGET): $(ACC_OBJS)
+	$(CXX) $(ACC_OBJS) -o $@ -static -static-libgcc -static-libstdc++ \
+		-lcomctl32 -lcomdlg32 -lshlwapi -lole32 -lshell32 -lgdi32 -luser32 -ladvapi32 -lwinhttp
+	@echo "==> Built: $@"
+
+acceptance: $(ACC_TARGET)

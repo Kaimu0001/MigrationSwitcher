@@ -285,9 +285,84 @@
 | メッセージ | 内側か近傍かを区別し、検出した指令の行番号・種別・マクロ名を含める |
 | テスト | `TestWarningDetection`（include guard 単独・`#if !defined()` 形式・内側・近傍・走査行数 0・guard と併存する本物のスイッチ） |
 
+## 8.11 追加機能（ログ出力 / レポート作成単位 / GoogleTest）
+
+### ログ出力
+
+| 項目 | 実装 |
+|---|---|
+| 挿入マクロ | `INPUT_LOG`（関数本体 `{` の直後）/ `OUTPUT_LOG`（各 `return` の直前）/ `TEMP_LOG`（追加した `#ifdef` の直後） |
+| 挿入処理 | `CodeLogger::Apply`。既に `INPUT_LOG` / `OUTPUT_LOG` を含む関数はスキップし重複挿入を防ぐ。`#include "<header>"` は最終 include 行の後に 1 回だけ追加（`HasInclude` / `AddInclude`） |
+| 戻り値記録 | `log_return_value` が真のとき `OUTPUT_LOG("return %ld", (long)(式))` を生成。単純な識別子・数値リテラルのみ対象 |
+| ランタイム生成 | `LogRuntimeGenerator::HeaderText` / `SourceText` / `WriteTo` が `ms_migration_log.h` / `.c` を出力。**ASCII のみ**（文字コード非依存） |
+| ランタイム API | `ms_log_init` / `ms_log_shutdown` / `ms_log_flush` / `ms_log_set_enabled` / `ms_log_is_enabled` / `ms_log_write` / `ms_log_count` / `ms_log_reset_count` / `ms_log_kind_name` |
+| 出力形式 | CSV `timestamp,kind,function,file,line,message` |
+| 無効時のコスト | volatile 読み取り 1 回で即 return。負荷試験で計測に影響しない |
+| 実行時制御 | `ms_log_set_enabled(0)` / 環境変数 `MS_LOG_ENABLED=0` |
+| スレッド安全 | Windows は `CRITICAL_SECTION` + `InterlockedIncrement`、POSIX は `pthread_mutex` |
+| 設定 | `[Log] Enabled` / `InsertTempLog` / `LogReturnValue` / `HeaderName`（既定 `ms_migration_log.h`） |
+
+### レポート作成単位
+
+| 項目 | 実装 |
+|---|---|
+| 単位 | `ReportScope::Change`（従来の変更単位）/ `File` / `Project` |
+| 生成 | `ScopeReportGenerator::BuildMarkdown` / `BuildHtml` / `MakeFileName` / `ScopeLabel` / `ScopeTag` |
+| 集約 | `App::WriteScopeReports`。バッチ実行時の `BatchFileEntry`（text / info / status）からファイル別サマリを構築し、`MakeBlocksFor` で差分ブロックを生成 |
+| 出力先 | `reports\`（`MakeFileName` が `<tag>_<name>_<timestamp>.md` / `.html` を生成） |
+| 設定 | `[Report] Scope`（`CHANGE` / `FILE` / `PROJECT`） |
+
+### GoogleTest 生成・自動実行
+
+| 項目 | 実装 |
+|---|---|
+| 対象抽出 | `GTestGenerator::CollectTargets`（置換対象を含む関数を `CodeScope::EnclosingFunctionName` で特定） |
+| シグネチャ解析 | `GTestGenerator::ParseSignature`。戻り型・引数型/名を解析。`...` / 参照引数 / 関数ポインタは `callable = false` |
+| 生成物 | `tests\gtest\generated_tests.cpp`（`Smoke` + `Load`）と `CMakeLists.txt` |
+| 未対応シグネチャ | `DISABLED_Smoke` として生成し、理由をコメントに残す（ビルドを壊さない） |
+| CMake | `find_package(GTest CONFIG QUIET)` → 無ければ `FetchContent` で googletest v1.14.0。`MS_SOURCES` に絶対パス、`extern "C"` 宣言で C ソースにも対応 |
+| 負荷試験 | `MS_LOAD_ITERATIONS`（既定 `gtest_load_iterations`、初期値 1000）。`0` で `GTEST_SKIP()`。合計時間と 1 回あたり µs を出力 |
+| 自動実行 | `GTestGenerator::BuildAndRun` が `cmake -S -B` → `cmake --build --config Release` → `--gtest_output=json:` で実行。JSON から tests / failures / disabled / time を集計 |
+| ログ | `<root>\reports\gtest\*.log`（構成・ビルド・実行）と結果 JSON |
+| 設定 | `[GTest] Enabled` / `LoadIterations` / `OutputDirectory` |
+
+### コントロール ID
+
+| ID | コントロール |
+|---|---|
+| 1940 | グループ「ログ / レポート / テスト」（基本設定タブ） |
+| 1941 | ログ出力を有効にする |
+| 1942 | `TEMP_LOG` を挿入する |
+| 1943 | 戻り値も記録する（整数型のみ） |
+| 1944 / 1945 | 「レポート作成単位」ラベル / コンボ |
+| 1946 / 1947 | 「負荷試験 反復回数」ラベル / エディット |
+| 1948 | GoogleTest を生成する |
+| 1949 | ログ定義を出力 |
+| 1950 / 1951 | テスト生成 / テスト実行 |
+
+### テスト
+
+`TestLogRuntime` / `TestCodeLogger`（重複挿入防止・include 追加・戻り値記録）/ `TestScopeReport`（Markdown・HTML・ファイル名）/ `TestGTestSignature`（void・int・引数付き・可変長・参照）。
+
+## 8.12 履歴 / 比較範囲 / 追加コード
+
+| 項目 | 実装 |
+|---|---|
+| 履歴保存 | `HistoryManager::Record` が `<base>\undobak\runs\<id>\` に before / after と `meta.ini` / `files.tsv` を保存 |
+| 一覧 | `HistoryManager::ListRuns` / `ListFiles`、表示は `App::RefreshHistoryPage` |
+| 特定変更の復元 | `App::DoHistoryRestore`（`undobak\sidecars` へ退避してから復元、復元も履歴に記録） |
+| 比較範囲 | `App::GetPairIds` / `BuildPairCompareItems` / `BuildPairReport`。プレビュー・システム情報のコンボから選択 |
+| 追加コード | タブ `PG_ADD`、`App::CollectAddMatches` / `DoAddCodeSearch`、`MakeBlockFor` の追加モード分岐 |
+| インデント整形 | `IndentFormatter::Dedent` / `FormatBlock` |
+| ログ実装の拡張子 | `LogRuntimeOptions::source_is_cpp`、`[Log] SourceCpp` |
+| 負荷試験トグル | `[GTest] LoadEnabled`、OFF 時は `MS_LOAD_ITERATIONS=0` 相当でスキップ |
+| スイッチ外部切替 | 生成 `CMakeLists.txt` に `MS_SWITCH_ON` キャッシュ変数 |
+| コントロール ID | 1990〜1999（追加コード）/ 2100〜2108（履歴）/ 2110〜2117（比較範囲）/ 2120〜2122（基本設定）/ 2130〜2132（GoogleTest 対象範囲） |
+| GTest 対象範囲 | `App::CollectRangeGTestTargets`。`ChangedLinesOfAfter` で変更後の行を求め、その行を含む関数を `GTestGenerator::CollectTargets` へ渡す。左右コンボが「指定なし」なら従来動作 |
+
 ## 9. 後続版として残した項目
 
-設計書で「後続版」とされている機能は未実装です。拡張ポイントは以下です。
+設計書で「後続版」とされていた機能のうち、CSV / Markdown / JSON レポート、WinMerge 連携、複数世代 Undo、類似一致・行範囲・関数単位検索、EUC-JP 対応は**後続版で実装済み**です（8.4〜8.10 および付録を参照）。以下は未実装の項目です。
 
 | 機能 | 追加方針 |
 |---|---|

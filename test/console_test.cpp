@@ -20,6 +20,10 @@
 
 #include "Models.h"
 #include "Utils.h"
+#include "LogRuntimeGenerator.h"
+#include "CodeLogger.h"
+#include "ScopeReportGenerator.h"
+#include "GTestGenerator.h"
 #include "EncodingDetector.h"
 #include "FileManager.h"
 #include "SearchEngine.h"
@@ -2388,8 +2392,123 @@ static void TestAiLive(const std::wstring& keyfile)
 }
 
 // -----------------------------------------------------------------------------
+// =============================================================================
+// 追加機能のテスト
+// =============================================================================
+static void TestLogRuntime()
+{
+    Out(L"\n== ログ出力ランタイム ==\n");
+    LogRuntimeOptions o;
+    std::string h = LogRuntimeGenerator::HeaderText(o);
+    Check(h.find("INPUT_LOG") != std::string::npos, L"ヘッダに INPUT_LOG がある");
+    Check(h.find("OUTPUT_LOG") != std::string::npos, L"ヘッダに OUTPUT_LOG がある");
+    Check(h.find("TEMP_LOG") != std::string::npos, L"ヘッダに TEMP_LOG がある");
+    Check(h.find("ms_log_set_enabled") != std::string::npos, L"実行時 ON/OFF がある");
+    Check(h.find("ms_log_count") != std::string::npos, L"件数カウンタがある");
+    std::string c = LogRuntimeGenerator::SourceText(o);
+    Check(c.find("ms_log_write") != std::string::npos, L"実装に書き出し関数がある");
+    Check(c.find("MS_LOG_ENABLED") != std::string::npos, L"環境変数で無効化できる");
+
+    std::wstring dir = util::JoinPath(VerifyDir(), L"logrt");
+    std::vector<std::wstring> files; std::wstring err;
+    Check(LogRuntimeGenerator::WriteTo(dir, o, files, err) && files.size() == 2,
+          L"ヘッダと実装を書き出せる");
+}
+
+static void TestCodeLogger()
+{
+    Out(L"\n== ログ挿入 ==\n");
+    std::wstring text =
+        L"#include <stdio.h>\n\n"
+        L"int add(int a, int b)\n{\n    int rc = a + b;\n    return rc;\n}\n";
+    MatchResult m;
+    m.file_path = L"x.c";
+    m.start_offset = text.find(L"a + b");
+    m.start_line = 5;
+    m.selected = true;
+    std::vector<MatchResult> sel; sel.push_back(m);
+
+    LogInsertOptions o;
+    o.header_name = L"ms_migration_log.h";
+    o.switch_name = L"SW";
+    LogInsertResult r; std::wstring err;
+    Check(CodeLogger::Apply(text, sel, o, r, err), L"ログ挿入が成功する");
+    Check(r.input_logs == 1 && r.output_logs == 1, L"INPUT 1 件 / OUTPUT 1 件を挿入する");
+    Check(text.find(L"INPUT_LOG(\"add: enter\")") != std::wstring::npos, L"INPUT_LOG が入る");
+    Check(text.find(L"OUTPUT_LOG(") != std::wstring::npos, L"OUTPUT_LOG が入る");
+    Check(text.find(L"#include \"ms_migration_log.h\"") != std::wstring::npos, L"include が追加される");
+
+    MatchResult m2 = m;
+    m2.start_offset = text.find(L"a + b");
+    std::vector<MatchResult> sel2; sel2.push_back(m2);
+    LogInsertResult r2;
+    CodeLogger::Apply(text, sel2, o, r2, err);
+    size_t first = text.find(L"INPUT_LOG(\"add: enter\")");
+    Check(first != std::wstring::npos && first == text.rfind(L"INPUT_LOG(\"add: enter\")"),
+          L"再適用しても重複しない");
+}
+
+static void TestScopeReport()
+{
+    Out(L"\n== レポート作成単位 ==\n");
+    ScopeEntry e;
+    e.file_path = L"D:\\work\\order_alloc.c";
+    e.encoding_name = L"Shift_JIS";
+    e.newline_name = L"CRLF";
+    e.before_text = L"a\nb\n";
+    e.after_text = L"a\nB\n";
+    MatchResult m;
+    m.file_path = e.file_path;
+    m.start_line = 2;
+    m.matched_text = L"stock_alloc(item, qty);";
+    m.matched_text = L"new_stock_alloc(item, qty, 0);";
+    m.selected = true;
+    e.matches.push_back(m);
+
+    std::vector<ScopeEntry> entries; entries.push_back(e);
+    std::wstring md = ScopeReportGenerator::BuildMarkdown(
+        L"在庫管理", L"MIGRATION_001", L"2026-10-19 09:00:00", ReportScope::File, entries);
+    Check(md.find(L"ファイル単位レポート") != std::wstring::npos, L"作成単位がファイル単位になる");
+    Check(md.find(L"order_alloc.c") != std::wstring::npos, L"ファイル名を含む");
+    Check(md.find(L"ファイル別サマリ") != std::wstring::npos, L"サマリ表がある");
+    Check(md.find(L"new_stock_alloc") != std::wstring::npos, L"置換内容を含む");
+
+    std::wstring html = ScopeReportGenerator::BuildHtml(L"t", md);
+    Check(html.find(L"<!DOCTYPE html>") != std::wstring::npos, L"HTML を生成できる");
+    Check(std::wstring(ScopeReportGenerator::ScopeLabel(ReportScope::Project)) == L"プロジェクト単位",
+          L"単位名を返す");
+}
+
+static void TestGTestSignature()
+{
+    Out(L"\n== GoogleTest 生成 ==\n");
+    std::wstring src =
+        L"int order_reserve(int item, int qty)\n{\n    return 0;\n}\n\n"
+        L"void order_reset(void)\n{\n}\n";
+    GTestTarget t;
+    Check(GTestGenerator::ParseSignature(src, L"order_reserve", t), L"関数シグネチャを解析できる");
+    Check(t.return_type == L"int", L"戻り値型を取り出す");
+    Check(t.param_names.size() == 2 && t.param_names[0] == L"item", L"引数名を取り出す");
+    Check(t.callable, L"呼び出し可能と判定する");
+
+    GTestTarget t2;
+    Check(GTestGenerator::ParseSignature(src, L"order_reset", t2) && t2.param_decls.empty(),
+          L"引数なし関数を解析できる");
+
+    // 参照引数は対象外
+    std::wstring src2 = L"int f(int& r)\n{\n    return r;\n}\n";
+    GTestTarget t3;
+    GTestGenerator::ParseSignature(src2, L"f", t3);
+    Check(!t3.callable, L"参照引数は対象外にする");
+}
+
 int main(int argc, char** argv)
 {
+    TestLogRuntime();
+    TestCodeLogger();
+    TestScopeReport();
+    TestGTestSignature();
+
     std::wstring a1 = (argc > 1) ? util::Utf8ToWide(argv[1]) : std::wstring();
     std::wstring a2 = (argc > 2) ? util::Utf8ToWide(argv[2]) : std::wstring();
     bool live = (a1 == L"--live");

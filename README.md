@@ -551,3 +551,68 @@ Markdown・JSON レポート / EUC-JP 対応
 
 拡張ポイントは各モジュールに集約しているため、たとえば一括処理は
 `SearchEngine::Search` を複数ファイルへ繰り返し適用し、`DiffReportGenerator` を統合レポート化する形で追加できます。
+
+## 9. 追加機能（ログ / レポート単位 / GoogleTest)
+
+### 9.1 ログ出力（INPUT_LOG / OUTPUT_LOG / TEMP_LOG）
+
+基本設定タブの「ログ / レポート / テスト」で **ログ出力を有効にする** を ON にすると、
+置換対象を含む関数へ次のログ呼び出しを挿入します。
+
+| マクロ | 挿入位置 | 例 |
+|---|---|---|
+| `INPUT_LOG` | 関数本体の `{` の直後 | `INPUT_LOG("order_reserve: enter");` |
+| `OUTPUT_LOG` | 各 `return` の直前 | `OUTPUT_LOG("return");` |
+| `TEMP_LOG` | 追加した `#ifdef` の直後（任意） | `TEMP_LOG("MIGRATION_001: new branch");` |
+
+「ログ定義を出力」ボタンで `ms_migration_log.h` / `ms_migration_log.c` を対象フォルダへ書き出します。
+実行時の ON/OFF は `ms_log_set_enabled(0)`、環境変数 `MS_LOG_ENABLED=0`、
+件数は `ms_log_count()` で取得できます（無効時のコストは volatile 読み取り 1 回）。
+出力は CSV（timestamp, kind, function, file, line, message）です。
+
+戻り値の記録は「戻り値も記録する（整数型のみ）」を ON にすると
+`OUTPUT_LOG("return %ld", (long)(rc));` の形式で出力します（整数型を想定）。
+
+### 9.2 レポート / 仕様書の作成単位
+
+「レポート作成単位」で **変更単位 / ファイル単位 / プロジェクト単位** を選択できます。
+変更単位以外では、対象全体をまとめた Markdown と HTML を `reports\` に出力します
+（ファイル別サマリ、一致・置換件数、警告・エラー、差分付き）。
+
+### 9.3 GoogleTest の生成と自動実行
+
+「テスト生成」は、置換対象を含む関数ごとに GoogleTest を生成します。
+
+- `tests\gtest\generated_tests.cpp` … 関数単位の `Smoke` テストと `Load` テスト
+- `tests\gtest\CMakeLists.txt` … `find_package(GTest)`、無ければ `FetchContent` で取得
+- `Load` テストは `MS_LOAD_ITERATIONS`（既定は基本設定の「負荷試験 反復」）で反復し、
+  合計時間と 1 回あたりの µs を出力します。`0` でスキップします。
+
+「テスト実行」は CMake でビルド → 実行 → 結果 JSON を集計し、
+`reports\gtest\` にログと JSON を残します。関数シグネチャを解析できない場合
+（参照引数・可変長引数・関数ポインタ）は `DISABLED_` テストとして生成し、理由をコメントに残します。
+
+> 生成されるテストは**骨組み**です。引数の実値は `TODO` の箇所を埋めてください。
+> CMake と GoogleTest（またはネットワーク経由の FetchContent）が必要です。
+
+## 10. 履歴 / 比較範囲 / 追加コード
+
+- **実行履歴**: 実行ごとに変更前・変更後を `<対象>\undobak\runs\` へ保存。`.undobak` は `undobak\sidecars\` へ。
+- **履歴タブ**: 実行とファイルを選び、**その変更だけ**を元に戻す / WinMerge 比較 / レポート作成。
+- **比較範囲**: プレビューとシステム情報タブのコンボで「何回目の変更前 ～ 何回目の変更後」を選択。レポートが無ければ新規作成。
+- **追加コードタブ**: 直前 / 直後 / 追加するコードを入力して、差分置換ではなく挿入を行う。インデントは既存行に合わせて整形。
+- **ログ実装**: `.c` / `.cpp` を選択可。生成物はコメントも ASCII のみ。
+- **負荷試験**: 基本設定のトグルで ON/OFF。
+- **GoogleTest**: `CMakeLists.txt` に `MS_SWITCH_ON` を追加し、外部からスイッチを切り替えて比較できる。
+- **GoogleTest の対象範囲**: 基本設定の「テスト対象範囲」で「何回目～何回目」の変更箇所に限定して生成できる。
+
+## 11. 受け入れテスト
+
+全機能を一通り確認する自動テストを同梱しています。
+
+```
+make acceptance          # ビルド
+run_acceptance.bat       # 既存 454 項目 + 受け入れ 143 項目を実行
+```
+
+詳細と手動確認チェックリストは `docs/ACCEPTANCE_TEST.md` を参照してください。

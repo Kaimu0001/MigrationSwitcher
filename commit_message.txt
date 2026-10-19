@@ -1,0 +1,19 @@
+EUC-JP 判定の OS 依存を解消し、UI と挙動の不具合 4 件を修正
+
+- 文字コード: src/ と test/ のソース、Makefile、CMakeLists.txt を UTF-8 に統一。
+  C/C++ と app.rc は BOM 付き、Makefile と CMakeLists.txt は BOM なし。
+  GitHub が UTF-8 前提で表示するため、CP932 のままでは日本語コメントが文字化けしていた。
+  実行文字セットは従来どおり CP932 を維持する（MinGW は fexec-charset=CP932、MSVC は execution-charset:.932）。
+  .bat は cmd.exe の都合で作業ツリーを CP932 のままにし、.gitattributes の working-tree-encoding=CP932 でリポジトリには UTF-8 で格納する。
+- EUC-JP: kernel32 にコードページ 51932 が無く判定が常に失敗していた問題を修正。
+  JIS X 0208 と JIS X 0212 の内蔵テーブル src/EucJpTable.h と .cpp で判定と変換を行うよう変更。
+- 警告: include guard を既存コンパイルスイッチ警告から除外し、内側判定を優先。
+- 警告オプションの既定を有効に修正し、チェック時に即保存するよう変更。
+- 基本設定タブ: AI 連携の接続テストボタンがグループ枠の外に出ていたのを修正。
+- タブ順を 検索条件 旧コード 新コード の順に変更。PG_SEARCH=2 / PG_OLD=3。
+- 置換後も検索結果を保持。クリアは再走査と再検索を実行したときだけ。
+- WinMerge: 選択した全ファイルをファイル単位で比較するよう変更。1 ファイル 1 ウィンドウ、上限 10。
+- MSVC で不足していた標準ヘッダ iterator cstdio cwchar を追加。
+- docs: 操作手順書に警告判定ルール 16.9、EUC-JP の扱い、文字コードの統一を追記。
+
+テスト: 428 PASS / 0 FAIL
